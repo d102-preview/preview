@@ -1,5 +1,3 @@
-import React from 'react';
-
 const InterviewPage = () => {
   return <div>인터뷰 페이지 입니다</div>;
 };
