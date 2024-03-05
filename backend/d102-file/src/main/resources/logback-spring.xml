@@ -1,17 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<configuration scan="true">
-    <property name="PROFILE" value="${spring.profiles.active}" />
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="FILENAME" value="./logs/d102/file"/>
+    <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
 
-    <!-- Console Appender -->
+    <property name="LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %t | %level | %logger{36} | %msg%n</Pattern>
-        </layout>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
     </appender>
 
+    <springProfile name="prod">
+        <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${FILENAME}.log</file>
+            <encoder>
+                <pattern>${LOG_PATTERN}</pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${FILENAME}.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+                <maxFileSize>100MB</maxFileSize>
+                <totalSizeCap>1GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+    </springProfile>
+
     <root level="INFO">
-        <springProfile name="local">
-            <appender-ref ref="CONSOLE" />
-        </springProfile>
+        <appender-ref ref="CONSOLE"/>
     </root>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="file"/>
+        </root>
+    </springProfile>
 </configuration>
