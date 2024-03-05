@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true">
+    <property name="PROFILE" value="${spring.profiles.active}" />
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %t | %level | %logger{36} | %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <root level="INFO">
+        <springProfile name="local">
+            <appender-ref ref="CONSOLE" />
+        </springProfile>
+    </root>
+</configuration>
