@@ -33,7 +33,7 @@ springdoc:
     tags-sorter: alpha
     operations-sorter: alpha
     info:
-      title: D102 FILE Server
+      title: D102 API Server
       description: Sweet rain fell in class 4
       version: 0.0.1
 
