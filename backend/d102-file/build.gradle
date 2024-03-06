@@ -4,7 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.danbi.core'
+group = 'com.d102.file'
 sourceCompatibility = '21'
 
 repositories {
@@ -12,18 +12,37 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-devtools:3.2.3'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.3'
-    implementation 'org.springframework.boot:spring-boot-starter-web:3.2.3'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    implementation project(':d102-common')
+    // web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+    // swagger
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
+    implementation 'io.swagger:swagger-annotations:1.6.2'
+
+    // mariadb
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
 
-    compileOnly 'org.projectlombok:lombok:1.18.30'
 
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
+    // boot test
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.3'
+    // set test db
+    testImplementation 'com.h2database:h2'
 }
 
 dependencyManagement {
@@ -37,7 +56,7 @@ bootJar {
 }
 
 jar {
-    enabled = false
+    enabled = true
 }
 
 tasks.named('test') {
