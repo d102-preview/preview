@@ -23,7 +23,7 @@ spring:
 
 # Swagger
 springdoc:
-  packages-to-scan: com.d102.file.controller
+  packages-to-scan: com.d102.api.controller
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
