@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
-interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps {
   width?: string;
   height?: string;
   text: string;
@@ -29,7 +29,7 @@ const Button = ({
 }: PropsWithChildren<IButtonProps>) => {
   return (
     <button
-      className={`text-center font-bold ${width} ${height} ${backgroundColor} ${borderColor} ${borderRadius} ${hoverBackgroundColor} ${hoverTextColor} ${textColor} ${textSize}`}
+      className={`text-center   ${width} ${height} ${backgroundColor} ${borderColor} ${borderRadius} ${hoverBackgroundColor} ${hoverTextColor} ${textColor} ${textSize}`}
       {...props}
     >
       {text}
