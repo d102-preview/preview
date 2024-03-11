@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Header from './Header';
 
 const meta = {
-  title: 'Header',
+  title: 'common/Header',
   component: Header,
   tags: ['autodocs'],
   decorators: [
