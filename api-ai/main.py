@@ -5,8 +5,10 @@ Author: cheesecat47 <cheesecat47@gmail.com>
 from core.settings import settings
 from fastapi import FastAPI
 from loguru import logger
-from models.item import Item, ReadItemByItemIdResponse
+from routes import analysis_router
 
 logger.info("Run server")
 
 app = FastAPI()
+
+app.include_router(analysis_router, prefix=settings.API_V1_STR)
