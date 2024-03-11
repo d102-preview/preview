@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import HeaderLink from './HeaderLink';
 
 const meta = {
-  title: 'HeaderLink',
+  title: 'common/HeaderLink',
   component: HeaderLink,
   decorators: [
     Story => (

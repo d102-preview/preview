@@ -33,7 +33,7 @@ const InterviewPage = () => {
             />
           </InterviewStartItem>
           <InterviewStartItem
-            tittle="실전 면접"
+            tittle="면접 연습"
             imgSrc={IMAGE2}
             subTitle="내 면접 실력을 쌓고 싶다면?"
             advantageList={[
