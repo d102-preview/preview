@@ -1,0 +1,25 @@
+pipeline {
+  agent any
+  
+  environment {
+      CI = false
+  }
+ 
+  stages {
+	stage ('backend build') {
+      steps {
+        sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
+      }
+    }
+	
+	stage('docker build and push'){
+      steps {
+		withCredentials([file(credentialsId: 'back_profile', variable: 'SECRETS_FILE')]) {
+		    script {
+			    sh 'cd deploy/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
+		    }
+        } 
+      }
+    }		
+  }
+}
