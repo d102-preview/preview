@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=gradle
 
+### application-prod ###
+application-prod.yml
+
 ### Gradle ###
 .gradle
 **/build/
