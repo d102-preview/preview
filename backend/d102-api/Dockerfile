@@ -7,6 +7,6 @@ WORKDIR /app
 VOLUME /logs
 VOLUME /files
 
-ADD ./build/libs/*SHOT.jar /app.jar
+ADD ./build/libs/*.jar /app.jar
 
 ENTRYPOINT ["java", "-Dspring.profiles.active=${SECRETS_FILE}", "-jar", "/app.jar"]
