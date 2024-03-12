@@ -20,6 +20,31 @@ pipeline {
 		    }
         } 
       }
-    }		
+    }
+
+    stage('docker deploy over ssh') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'd102', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                    sourceFiles: 'exec/deploy-backend/*',
+                    removePrefix: 'exec/deploy-backend/',
+                    remoteDirectory: 'S10P22D102/exec',
+                    execCommand: 'cd S10P22D102/exec && chmod 755 *.sh; \
+                                  ./stop-backend.sh; \
+                                  ./start-backend.sh'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }	
   }
 }
