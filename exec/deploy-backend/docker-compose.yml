@@ -33,6 +33,8 @@ services:
     command: redis-server --requirepass ${REDIS_PASSWORD} --maxmemory 512M  
     
   backend-api:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-api
     image: ${REGISTRY}/backend-api:${TAG}
     volumes:
@@ -41,6 +43,8 @@ services:
     restart: unless-stopped  
     
   backend-file:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-file
     image: ${REGISTRY}/backend-file:${TAG}
     volumes:
