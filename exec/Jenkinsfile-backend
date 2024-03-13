@@ -15,8 +15,10 @@ pipeline {
     
     stage('docker build and push') {
       steps {
-        withCredentials([file(credentialsId: 'back_profile', variable: 'SECRETS_FILE')]) {
+        withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
           script {
+            sh 'cp ${PROD_YML} backend/d102-api/src/main/resources/'
+            sh 'cp ${PROD_YML} backend/d102-api/src/main/resources/'
             sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
           }
         } 
