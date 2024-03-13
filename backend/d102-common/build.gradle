@@ -1,12 +1,14 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.d102.common'
-sourceCompatibility = '21'
 
+java {
+    sourceCompatibility = '21'
+}
 repositories {
     mavenCentral()
 }
@@ -57,7 +59,7 @@ dependencyManagement {
 }
 
 bootJar {
-    enabled = true
+    enabled = false
 }
 
 jar {
