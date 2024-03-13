@@ -10,14 +10,14 @@ services:
     networks:
       - d102-network
     ports:
-      - "${MARIADB_EXTERNAL_PORT}:${MARIADB_PORT}"
+      - ${MARIADB_EXTERNAL_PORT}:${MARIADB_PORT}
     volumes:
-      - $HOME/d102/mariadb/var/lib/mysql:/var/lib/mysql"
+      - $HOME/d102/mariadb/var/lib/mysql:/var/lib/mysql
     environment:
-      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
-      MARIADB_USER: "${MARIADB_USER}"
-      MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
-      MARIADB_DATABASE: "${MARIADB_DATABASE}"
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
     command: --character-set-server=utf8mb4  --collation-server=utf8mb4_bin
     
   redis:
