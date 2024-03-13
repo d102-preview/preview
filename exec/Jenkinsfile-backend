@@ -17,8 +17,8 @@ pipeline {
       steps {
         withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
           script {
-            sh 'cp ${PROD_YML} backend/d102-api/src/main/resources/'
-            sh 'cp ${PROD_YML} backend/d102-api/src/main/resources/'
+            sh 'cd backend/d102-api/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML}'
+            sh 'cd backend/d102-file/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML}'
             sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
           }
         } 
