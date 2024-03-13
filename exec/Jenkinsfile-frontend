@@ -18,5 +18,25 @@ pipeline {
         }
       }
     }
+
+    stage('frontend deploy') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                    execCommand: 'docker exec -i nginx bash -c "nginx -s restart"'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }
   }
 }
