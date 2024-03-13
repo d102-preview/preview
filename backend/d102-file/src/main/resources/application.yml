@@ -1,49 +1,6 @@
-server:
-  port: 8082
-  servlet:
-    context-path: /file
-
 spring:
-  # DB Connection Info
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/d102
-    username: danbi
-    password: 1234
-
-  # Jpa Setting
-  jpa:
-    hibernate:
-      ddl-auto: none # none, create, update, create-drop
-    defer-datasource-initialization: true
-    properties:
-      format_sql: true
-    show-sql: false
-    open-in-view: true
-
-# Swagger
-springdoc:
-  packages-to-scan: com.d102.file.controller
-  default-consumes-media-type: application/json;charset=UTF-8
-  default-produces-media-type: application/json;charset=UTF-8
-  swagger-ui:
-    path: /swagger-ui
-    disable-swagger-default-url: true
-    display-request-duration: true
-    tags-sorter: alpha
-    operations-sorter: alpha
-    info:
-      title: D102 FILE Server
-      description: Sweet rain fell in class 4
-      version: 0.0.1
-
-# logging
-logging:
-  level:
-    root: INFO
-    web: DEBUG
-    com.ggums.ggumtle: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web.cors: DEBUG
-    org.hibernate.sql: DEBUG
-    org.hibernate.type.descriptor.sql: trace
+  profiles:
+    active: local
+    group:
+      local: local
+      prod: prod
