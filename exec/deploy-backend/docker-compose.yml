@@ -34,18 +34,18 @@ services:
     
   backend-api:
     container_name: backend-api
-    image: $REGISTRY/backend-api:$TAG
+    image: ${REGISTRY}/backend-api:${TAG}
     volumes:
-      - $HOME/d102/backend/api/logs:/app/logs
-      - $HOME/d102/files:/files
+      - ${HOME}/d102/backend/api/logs:/app/logs
+      - ${HOME}/d102/files:/files
     restart: unless-stopped  
     
   backend-file:
     container_name: backend-file
-    image: $REGISTRY/backend-file:$TAG
+    image: ${REGISTRY}/backend-file:${TAG}
     volumes:
-      - $HOME/d102/backend/file/logs:/app/logs
-      - $HOME/d102/files:/files
+      - ${HOME}/d102/backend/file/logs:/app/logs
+      - ${HOME}/d102/files:/files
     restart: unless-stopped  
 
 networks:
