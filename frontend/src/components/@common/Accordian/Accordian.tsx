@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { IconType } from 'react-icons';
 import { CgFileDocument } from 'react-icons/cg';
-import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 
 interface IAccordianProps {
   titleContent: string | React.ReactNode;
@@ -45,25 +44,23 @@ const Accordian = ({
   const borderColor = isOpen ? 'border-transparent' : 'border-[#5A8AF2]';
 
   return (
-    <div>
+    <div
+      className={`m-4 cursor-pointer ${width} ${backgroundColor} ${borderStyle} ${borderColor} ${borderRadius}`}
+      onClick={onToggle}
+    >
+      <div className={`p-3 mx-3 flex justify-between`}>
+        <div className={` ${textColor} ${textSize} ${textWeight}`}>{titleContent}</div>
+        <div>
+          {isOpen ? <IconOpen size="25" color={iconOpenColor} /> : <IconClose size="25" color={iconCloseColor} />}
+        </div>
+      </div>
+      {/* content wrapper */}
       <div
-        className={`m-4 cursor-pointer ${width} ${backgroundColor} ${borderStyle} ${borderColor} ${borderRadius}`}
-        onClick={onToggle}
+        ref={wrapperRef}
+        className="px-3 mx-3 h-0 overflow-hidden transition"
+        style={{ ...wrapperStyle, transition: 'all 0.3s ease' }}
       >
-        <div className={`p-3 mx-3 flex justify-between`}>
-          <div className={` ${textColor} ${textSize} ${textWeight}`}>{titleContent}</div>
-          <div>
-            {isOpen ? <IconOpen size="25" color={iconOpenColor} /> : <IconClose size="25" color={iconCloseColor} />}
-          </div>
-        </div>
-        {/* content wrapper */}
-        <div
-          ref={wrapperRef}
-          className="px-3 mx-3 h-0 overflow-hidden transition"
-          style={{ ...wrapperStyle, transition: 'all 0.3s ease' }}
-        >
-          <div>{children}</div>
-        </div>
+        <div>{children}</div>
       </div>
     </div>
   );
