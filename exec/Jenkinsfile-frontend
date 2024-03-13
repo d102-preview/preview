@@ -35,7 +35,7 @@ pipeline {
                 sshTransfer(
                     sourceFiles: 'frontend/dist/*',
                     removePrefix: 'frontend/dist/',
-                    remoteDirectory: '/home/ubuntu/nginx/dist/'
+                    remoteDirectory: '/home/jenkins/test'
                 ),
                 sshTransfer(
                     sourceFiles: 'exec/deploy-frontend/*',
