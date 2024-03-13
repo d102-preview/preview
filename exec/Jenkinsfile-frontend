@@ -30,7 +30,12 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                    execCommand: 'docker exec -i nginx bash -c "nginx -s restart"'
+                    sourceFiles: 'exec/deploy-frontend/*',
+                    removePrefix: 'exec/deploy-frontend/',
+                    remoteDirectory: 'S10P22D102/exec',
+                    execCommand: 'cd /home/jenkins/deploy/S10P22D102/exec && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
                 )
               ]
             )
