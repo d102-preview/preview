@@ -1,3 +1,8 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /file
+
 spring:
   profiles:
     active: local
@@ -5,12 +10,6 @@ spring:
       local: local
       prod: prod
 
-server:
-  port: 8082
-  servlet:
-    context-path: /file
-
-spring:
   # Jpa Setting
   jpa:
     hibernate:
