@@ -31,12 +31,12 @@ pipeline {
               transfers: [
                 sshTransfer(
                     execCommand: 'rm -r /home/ubuntu/nginx/dist/*'
-                )
+                ),
                 sshTransfer(
                     sourceFiles: 'frontend/dist/*',
                     removePrefix: 'frontend/dist/',
                     remoteDirectory: '/home/ubuntu/nginx/dist/'
-                )
+                ),
                 sshTransfer(
                     sourceFiles: 'exec/deploy-frontend/*',
                     removePrefix: 'exec/deploy-frontend/',
