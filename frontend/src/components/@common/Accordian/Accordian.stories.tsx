@@ -55,17 +55,18 @@ export const QestionOpen: Story = {
   args: {
     titleContent: 'Qestion Open Accordian',
     children: (
-      <>
-        Open
-        <br />
-        Open
-        <br />
-        Open
-        <br />
-        Open
-        <br />
-        Open
-      </>
+      <div className="my-3 p-3">
+        <p>스크립트</p>
+        <div className="border rounded-xl border-gray-300 p-3 mx-1">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Neque nobis, et numquam laudantium saepe voluptates
+          enim repellendus, quam placeat nihil culpa necessitatibus sunt atque deleniti animi, doloribus omnis
+          recusandae inventore? Fugiat quod, mollitia non ducimus natus doloremque adipisci. Nobis harum voluptate
+          necessitatibus alias voluptates, voluptatum incidunt distinctio debitis dolor laborum corporis tempore
+          blanditiis reprehenderit vero quidem odit explicabo dicta fuga! Soluta obcaecati provident dolorem ex
+          voluptates deleniti non facilis assumenda velit ea officia ut ipsa magnam excepturi voluptatum laborum
+          perferendis ipsum, sunt officiis. Ratione aperiam ipsa delectus sit quia ullam!
+        </div>
+      </div>
     ),
     isOpen: true,
   },
