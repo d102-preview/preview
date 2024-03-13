@@ -30,6 +30,14 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
+                    execCommand: 'rm -r /home/ubuntu/nginx/dist/*'
+                )
+                sshTransfer(
+                    sourceFiles: 'frontend/dist/*',
+                    removePrefix: 'frontend/dist/',
+                    remoteDirectory: '/home/ubuntu/nginx/dist/'
+                )
+                sshTransfer(
                     sourceFiles: 'exec/deploy-frontend/*',
                     removePrefix: 'exec/deploy-frontend/',
                     remoteDirectory: 'S10P22D102/exec',
