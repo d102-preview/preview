@@ -57,11 +57,11 @@ dependencyManagement {
 }
 
 bootJar {
-    enabled = false
+    enabled = true
 }
 
 jar {
-    enabled = true
+    enabled = false
 }
 
 tasks.named('test') {
