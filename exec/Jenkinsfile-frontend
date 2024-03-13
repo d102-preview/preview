@@ -1,0 +1,19 @@
+pipeline {
+  agent any
+
+  environment {
+    CI = false
+  }
+
+  tools {
+    nodejs 'NodeJS 20.11.0'
+  }
+
+  stages {
+    stage ('frontend build') {
+      steps {
+        sh 'node --version'
+      }
+    }
+  }
+}
