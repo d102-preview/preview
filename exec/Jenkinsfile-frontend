@@ -29,9 +29,9 @@ pipeline {
               configName: 'application', 
               verbose: true,
               transfers: [
-                sshTransfer(
-                    execCommand: 'rm -r /home/ubuntu/nginx/dist/*'
-                ),
+                // sshTransfer(
+                //     execCommand: 'rm -r /home/ubuntu/nginx/dist/*'
+                // ),
                 sshTransfer(
                     sourceFiles: 'frontend/dist/*',
                     removePrefix: 'frontend/dist/',
