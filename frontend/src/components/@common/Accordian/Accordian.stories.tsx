@@ -3,7 +3,7 @@ import Accordian from './Accordian';
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 
 const meta = {
-  title: 'Accordian',
+  title: 'common/Accordian',
   component: Accordian,
   tags: ['autodocs'],
   argTypes: {

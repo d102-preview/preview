@@ -42,13 +42,13 @@ const Accordian = ({
   // isOpen 상태에 따라 동적으로 스타일 변경
   const wrapperStyle = isOpen ? { height: 'auto' } : { height: '0px' };
   const borderColor = isOpen ? 'border-transparent' : 'border-[#5A8AF2]';
+  const shadow = isOpen ? 'drop-shadow-lg' : 'drop-shadow-none';
 
   return (
     <div
-      className={`m-4 cursor-pointer ${width} ${backgroundColor} ${borderStyle} ${borderColor} ${borderRadius}`}
-      onClick={onToggle}
+      className={`m-4 cursor-pointer ${width} ${backgroundColor} ${borderStyle} ${borderColor} ${borderRadius} ${shadow}`}
     >
-      <div className={`p-3 mx-3 flex justify-between`}>
+      <div className={`p-3 mx-3 flex justify-between`} onClick={onToggle}>
         <div className={` ${textColor} ${textSize} ${textWeight}`}>{titleContent}</div>
         <div>
           {isOpen ? <IconOpen size="25" color={iconOpenColor} /> : <IconClose size="25" color={iconCloseColor} />}
