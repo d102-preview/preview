@@ -13,7 +13,7 @@ pipeline {
     stage ('frontend build') {
       steps {
         withCredentials([file(credentialsId: 'frontend-env', variable: 'FRONTEND_ENV')]) {
-          sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend'
+          sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
         }
       }
     }
