@@ -2,50 +2,66 @@ pipeline {
   agent any
   
   environment {
-      GRADLE_USER_HOME = "$WORKSPACE/.gradle"
-      CI = false
+    GRADLE_USER_HOME = "$WORKSPACE/.gradle"
+    CI = false
   }
  
   stages {
-	stage ('backend build') {
+    stage ('backend build') {
       steps {
         sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
       }
     }
-	
-	stage('docker build and push'){
+    
+    stage('docker build and push') {
       steps {
-		withCredentials([file(credentialsId: 'back_profile', variable: 'SECRETS_FILE')]) {
-		    script {
-			    sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
-		    }
+        withCredentials([file(credentialsId: 'back_profile', variable: 'SECRETS_FILE')]) {
+          script {
+            sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
+          }
         } 
       }
     }
 
-    stage('docker deploy over ssh') {
-      steps([$class: 'BapSshPromotionPublisherPlugin']) {
-        sshPublisher(
-          continueOnError: false,
-          failOnError: true,
-          publishers: [
-            sshPublisherDesc(
-              configName: 'd102', 
-              verbose: true,
-              transfers: [
-                sshTransfer(
-                    sourceFiles: 'exec/deploy-backend/*',
-                    removePrefix: 'exec/deploy-backend/',
-                    remoteDirectory: 'S10P22D102/exec',
-                    execCommand: 'cd S10P22D102/exec && chmod 755 *.sh; \
-                                  ./stop-backend.sh; \
-                                  ./start-backend.sh'
-                )
-              ]
-            )
-          ]
-        )
+    stage('docker deploy using ssh agent') {
+      steps {
+        withCredentials([string(credentialsId: 'application_host_domain', variable: 'APPLICATION')]) {
+          sshagent(credentials: ['ssh-agent-key']) {
+            sh """
+              ssh ${APPLICATION} '
+                cd S10P22D102/exec && chmod 755 *.sh; \
+                ./stop-backend.sh; \
+                ./start-backend.sh'
+              '
+            """
+          }
+        }
       }
-    }	
+    }
+
+    // stage('docker deploy over ssh') {
+    //   steps([$class: 'BapSshPromotionPublisherPlugin']) {
+    //     sshPublisher(
+    //       continueOnError: false,
+    //       failOnError: true,
+    //       publishers: [
+    //         sshPublisherDesc(
+    //           configName: 'd102', 
+    //           verbose: true,
+    //           transfers: [
+    //             sshTransfer(
+    //                 sourceFiles: 'exec/deploy-backend/*',
+    //                 removePrefix: 'exec/deploy-backend/',
+    //                 remoteDirectory: 'S10P22D102/exec',
+    //                 execCommand: 'cd S10P22D102/exec && chmod 755 *.sh; \
+    //                               ./stop-backend.sh; \
+    //                               ./start-backend.sh'
+    //             )
+    //           ]
+    //         )
+    //       ]
+    //     )
+    //   }
+    // }	
   }
 }
