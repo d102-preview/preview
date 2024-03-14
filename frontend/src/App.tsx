@@ -6,6 +6,7 @@ import MyPage from './pages/my/MyPage';
 import QuestionPage from './pages/question/QuestionPage';
 import ResultPage from './pages/result/ResultPage';
 import SignUpPage from './pages/signup/SignupPage';
+import RecordPage from './pages/record/RecordPage';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/interview',
     element: <InterviewPage />,
+  },
+  {
+    path: '/record',
+    element: <RecordPage />,
   },
   {
     path: '/question',
