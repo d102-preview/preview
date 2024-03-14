@@ -35,13 +35,14 @@ pipeline {
                 sshTransfer(
                     sourceFiles: 'frontend/dist/*',
                     removePrefix: 'frontend/dist/',
-                    remoteDirectory: '/home/jenkins/test'
+                    remoteDirectory: '/home/ubuntu/nginx/dist/'
+					execCommand: 'cd /home/ubuntu/nginx/dist && ls -al'
                 ),
                 sshTransfer(
                     sourceFiles: 'exec/deploy-frontend/*',
                     removePrefix: 'exec/deploy-frontend/',
                     remoteDirectory: 'S10P22D102/exec',
-                    execCommand: 'cd /home/jenkins/deploy/S10P22D102/exec && chmod 755 *.sh; \
+                    execCommand: 'cd /home/ubuntu/deploy/S10P22D102/exec && chmod 755 *.sh; \
                                   ./stop-frontend.sh; \
                                   ./start-frontend.sh'
                 )
