@@ -53,6 +53,8 @@ services:
     restart: unless-stopped  
     networks:
       - d102-network
+    expose:
+      - "8082"    
     image: ${REGISTRY}/backend-file:${TAG}
     volumes:
       - ${HOME}/d102/backend/file/logs:/app/logs
