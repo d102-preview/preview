@@ -35,13 +35,15 @@ pipeline {
                 sshTransfer(
                     sourceFiles: 'frontend/dist/**',
                     removePrefix: 'frontend/dist/',
+                    // remote의 경우에는 system의 remote directory가 앞에 prefix로 붙음
+                    // 그냥 공백으로 둬서 절대경로 그대로 쓸 수 있도록 했음
                     remoteDirectory: '/home/ubuntu/nginx/dist/',
 					          execCommand: 'cd /home/ubuntu/nginx/dist && ls -al'
                 ),
                 sshTransfer(
                     sourceFiles: 'exec/deploy-frontend/*',
                     removePrefix: 'exec/deploy-frontend/',
-                    remoteDirectory: 'S10P22D102/exec',
+                    remoteDirectory: '/home/ubuntu/deploy/S10P22D102/exec',
                     execCommand: 'cd /home/ubuntu/deploy/S10P22D102/exec && chmod 755 *.sh; \
                                   ./stop-frontend.sh; \
                                   ./start-frontend.sh'
