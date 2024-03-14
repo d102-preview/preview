@@ -39,6 +39,8 @@ services:
     restart: unless-stopped  
     networks:
       - d102-network
+    ports:
+      - "8081:8081"
     image: ${REGISTRY}/backend-api:${TAG}
     volumes:
       - ${HOME}/d102/backend/api/logs:/app/logs
