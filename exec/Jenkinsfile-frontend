@@ -35,7 +35,7 @@ pipeline {
                 sshTransfer(
                     sourceFiles: 'frontend/dist/*',
                     removePrefix: 'frontend/dist/',
-                    remoteDirectory: '/home/ubuntu/nginx/dist/'
+                    remoteDirectory: '/home/ubuntu/nginx/dist/',
 					execCommand: 'cd /home/ubuntu/nginx/dist && ls -al'
                 ),
                 sshTransfer(
