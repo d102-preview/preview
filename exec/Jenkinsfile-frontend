@@ -45,7 +45,7 @@ pipeline {
                     removePrefix: 'exec/deploy-frontend/',
                     remoteDirectory: '/ubuntu/deploy/S10P22D102/exec',
                     execCommand: 'cd /home/jenkins/deploy/S10P22D102/frontend/exec && chmod 755 *.sh; \
-                                  ./reload-frontend.sh
+                                  ./reload-frontend.sh'
                 )
               ]
             )
