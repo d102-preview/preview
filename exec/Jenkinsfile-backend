@@ -38,8 +38,8 @@ pipeline {
                 sshTransfer(
                     sourceFiles: 'exec/deploy-backend/*',
                     removePrefix: 'exec/deploy-backend/',
-                    remoteDirectory: 'S10P22D102/exec',
-                    execCommand: 'echo $HOME && cd /home/jenkins/deploy/S10P22D102/exec && chmod 755 *.sh; \
+                    remoteDirectory: '/jenkins/deploy/backend',
+                    execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
                                   ./stop-backend.sh; \
                                   ./start-backend.sh'
                 )
@@ -59,7 +59,7 @@ pipeline {
             def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
             def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
             mattermostSend(color: 'good',
-                          message: "[Backend] Build Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          message: "[Backend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
                           endpoint: "${MM_URL}",
                           channel: 'D102')
           }
@@ -73,7 +73,7 @@ pipeline {
             def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
             def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
             mattermostSend(color: 'danger',
-                          message: "[Backend] Build Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          message: "[Backend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
                           endpoint: "${MM_URL}",
                           channel: 'D102')
           }
