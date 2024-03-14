@@ -12,6 +12,20 @@ export default {
         GRAY: '#FAFAFA',
         UNIMPORTANT_TEXT: '#A7A7A7',
       },
+      keyframes: {
+        FadeIn: {
+          from: { opacity: 0, transform: 'translate(-50%, -40%)' },
+          to: { opacity: 1, transform: 'translate(-50%, -50%)' },
+        },
+        FadeOut: {
+          from: { opacity: 1, transform: 'translate(-50%, -50%)' },
+          to: { opacity: 0, transform: 'translate(-50%, -40%)' },
+        },
+      },
+      animation: {
+        modalOpen: 'FadeIn 0.3s ease-in-out',
+        modalClose: 'FadeOut 0.3s ease-in-out',
+      },
     },
   },
   plugins: [],
