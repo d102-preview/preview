@@ -36,21 +36,25 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-api
+    restart: unless-stopped  
+    networks:
+      - d102-network
     image: ${REGISTRY}/backend-api:${TAG}
     volumes:
       - ${HOME}/d102/backend/api/logs:/app/logs
       - ${HOME}/d102/files:/files
-    restart: unless-stopped  
     
   backend-file:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-file
+    restart: unless-stopped  
+    networks:
+      - d102-network
     image: ${REGISTRY}/backend-file:${TAG}
     volumes:
       - ${HOME}/d102/backend/file/logs:/app/logs
       - ${HOME}/d102/files:/files
-    restart: unless-stopped  
 
 networks:
   d102-network:
