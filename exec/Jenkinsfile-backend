@@ -39,7 +39,7 @@ pipeline {
                     sourceFiles: 'exec/deploy-backend/*',
                     removePrefix: 'exec/deploy-backend/',
                     remoteDirectory: 'S10P22D102/exec',
-                    execCommand: 'cd /home/jenkins/deploy/S10P22D102/exec && chmod 755 *.sh; \
+                    execCommand: 'echo $HOME && cd /home/jenkins/deploy/S10P22D102/exec && chmod 755 *.sh; \
                                   ./stop-backend.sh; \
                                   ./start-backend.sh'
                 )
