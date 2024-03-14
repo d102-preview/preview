@@ -5,7 +5,10 @@ plugins {
 }
 
 group = 'com.d102.api'
-sourceCompatibility = '21'
+
+java {
+    sourceCompatibility = '21'
+}
 
 repositories {
     mavenCentral()
@@ -62,7 +65,7 @@ bootJar {
 }
 
 jar {
-    enabled = true
+    enabled = false
 }
 
 tasks.named('test') {

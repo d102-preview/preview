@@ -4,12 +4,11 @@ server:
     context-path: /api
 
 spring:
-  # DB Connection Info
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/d102
-    username: danbi
-    password: 1234
+  profiles:
+    active: local
+    group:
+      local: local
+      prod: prod
 
   # Jpa Setting
   jpa:

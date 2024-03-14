@@ -1,0 +1,84 @@
+pipeline {
+  agent any
+  
+  environment {
+    GRADLE_USER_HOME = "$WORKSPACE/.gradle"
+    CI = false
+  }
+ 
+  stages {
+    stage ('backend build') {
+      steps {
+        sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
+      }
+    }
+    
+    stage('docker build and push') {
+      steps {
+        withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
+          script {
+            sh 'cd backend/d102-api/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML} .'
+            sh 'cd backend/d102-file/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML} .'
+            sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
+          }
+        } 
+      }
+    }
+
+    stage('backend deploy') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                    sourceFiles: 'exec/deploy-backend/*',
+                    removePrefix: 'exec/deploy-backend/',
+                    remoteDirectory: 'S10P22D102/exec',
+                    execCommand: 'echo $HOME && cd /home/jenkins/deploy/S10P22D102/exec && chmod 755 *.sh; \
+                                  ./stop-backend.sh; \
+                                  ./start-backend.sh'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }	
+  }
+
+  post {
+    success {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'good',
+                          message: "[Backend] Build Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102')
+          }
+        }
+      }
+    }
+    failure {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'danger',
+                          message: "[Backend] Build Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102')
+          }
+        }
+      }
+    }
+  }
+}
