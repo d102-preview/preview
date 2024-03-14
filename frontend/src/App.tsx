@@ -1,5 +1,4 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import './App.css';
 import HomePage from './pages/home/HomePage';
 import InterviewPage from './pages/interview/InterviewPage';
 import LoginPage from './pages/login/LoginPage';
@@ -7,6 +6,7 @@ import MyPage from './pages/my/MyPage';
 import QuestionPage from './pages/question/QuestionPage';
 import ResultPage from './pages/result/ResultPage';
 import SignUpPage from './pages/signup/SignupPage';
+import RecordPage from './pages/record/RecordPage';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/interview',
     element: <InterviewPage />,
+  },
+  {
+    path: '/record',
+    element: <RecordPage />,
   },
   {
     path: '/question',

@@ -3,13 +3,16 @@ import IMAGE2 from '@/assets/images/interview2.png';
 import Button from '@/components/@common/Button/Button';
 import Header from '@/components/@common/Header/Header';
 import InterviewStartItem from '@/components/interview/InterviewStartItem';
+import { useNavigate } from 'react-router-dom';
 
 const InterviewPage = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Header />
       <main className="max-w-5xl mx-auto">
-        <div className="flex flex-col justify-around items-center pt-28 sm:flex-row gap-10">
+        <div className="flex flex-col justify-around items-center pt-20 sm:flex-row gap-10">
           <InterviewStartItem
             tittle="실전 면접"
             imgSrc={IMAGE1}
@@ -29,7 +32,7 @@ const InterviewPage = () => {
               hoverBackgroundColor=""
               textColor="text-white"
               textSize="text-lg"
-              onClick={() => console.log('실전 면접 시작하기 클릭')}
+              onClick={() => navigate('/record')}
             />
           </InterviewStartItem>
           <InterviewStartItem
@@ -50,7 +53,7 @@ const InterviewPage = () => {
               backgroundColor="bg-[#29BA78]"
               textColor="text-white"
               textSize="text-lg"
-              onClick={() => console.log('면접 연습 시작하기 클릭')}
+              onClick={() => navigate('mock')}
             />
           </InterviewStartItem>
         </div>
