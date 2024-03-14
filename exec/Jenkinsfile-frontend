@@ -33,10 +33,10 @@ pipeline {
                 //     execCommand: 'rm -r /home/ubuntu/nginx/dist/*'
                 // ),
                 sshTransfer(
-                    sourceFiles: 'frontend/dist/*',
+                    sourceFiles: 'frontend/dist/**',
                     removePrefix: 'frontend/dist/',
                     remoteDirectory: '/home/ubuntu/nginx/dist/',
-					execCommand: 'cd /home/ubuntu/nginx/dist && ls -al'
+					          execCommand: 'cd /home/ubuntu/nginx/dist && ls -al'
                 ),
                 sshTransfer(
                     sourceFiles: 'exec/deploy-frontend/*',
