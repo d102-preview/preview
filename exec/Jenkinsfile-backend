@@ -7,13 +7,13 @@ pipeline {
   }
  
   stages {
-    stage ('backend build') {
+    stage('Build Backend') {
       steps {
         sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
       }
     }
     
-    stage('docker build and push') {
+    stage('Build and Push Images') {
       steps {
         withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
           script {
@@ -25,7 +25,7 @@ pipeline {
       }
     }
 
-    stage('backend deploy') {
+    stage('Deploy Backend') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
         sshPublisher(
           continueOnError: false,
@@ -48,7 +48,40 @@ pipeline {
           ]
         )
       }
-    }	
+    }
+
+    stage('Health Check Backend') {
+      steps {
+        sh 'sleep 20'
+        script {
+          withCredentials([string(credentialsId: 'backend_api_url', variable: 'BACKEND_API_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${BACKEND_API_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "backend api success"
+            } else {
+              error "backend api fail"
+            }
+          }
+
+          withCredentials([string(credentialsId: 'bakcend_file_url', variable: 'BACKEND_FILE_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${BACKEND_FILE_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "backend file success"
+            } else {
+              error "backend file fail"
+            }
+          }
+        }
+      }
+    }
   }
 
   post {
