@@ -22,8 +22,10 @@ pipeline {
                     remoteDirectory: '/jenkins/deploy/backend-ai',
                     execCommand: 'cd /home/jenkins/deploy/backend-ai && chmod 755 *.sh; \
                                   ./stop-ai.sh; \
-                                  ./start-ai.sh; \
-                                  cd ../frontend && chmod 755 *.sh \
+                                  ./start-ai.sh'
+                )
+                sshTransfer(
+                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
                                   ./stop-frontend.sh; \
                                   ./start-frontend.sh'
                 )
