@@ -41,7 +41,10 @@ pipeline {
                     remoteDirectory: '/jenkins/deploy/backend',
                     execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
                                   ./stop-backend.sh; \
-                                  ./start-backend.sh'
+                                  ./start-backend.sh; \
+                                  cd ../frontend && chmod 755 *.sh \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
                 )
               ]
             )
