@@ -64,7 +64,7 @@ pipeline {
               script: "curl -s -o /dev/null -w '%{http_code}' ${FRONTEND_URL}"
             ).trim()
 
-            if (HEALT == "200") {
+            if (HEALTH == "200") {
               echo "success"
             } else {
               error "fail"
