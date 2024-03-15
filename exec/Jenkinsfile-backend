@@ -67,7 +67,7 @@ pipeline {
             }
           }
 
-          withCredentials([string(credentialsId: 'bakcend_file_url', variable: 'BACKEND_FILE_URL')]) {
+          withCredentials([string(credentialsId: 'backend_file_url', variable: 'BACKEND_FILE_URL')]) {
             def HEALTH = sh(
               returnStdout: true,
               script: "curl -s -o /dev/null -w '%{http_code}' ${BACKEND_FILE_URL}"
