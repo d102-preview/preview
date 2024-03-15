@@ -23,7 +23,7 @@ pipeline {
                     execCommand: 'cd /home/jenkins/deploy/backend-ai && chmod 755 *.sh; \
                                   ./stop-ai.sh; \
                                   ./start-ai.sh'
-                )
+                ),
                 sshTransfer(
                     execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
                                   ./stop-frontend.sh; \
