@@ -22,7 +22,7 @@ public class Response extends HashMap<String, Object> {
 	
 	public Response(String key, Object data)
 	{
-		setData(Response.RESULT, Response.OK);
+		this();
 		setData(key, data);
 	}
 	
