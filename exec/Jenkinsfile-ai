@@ -17,12 +17,12 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                    execCommand: 'cd /home/jenkins/deploy/backend-ai && docker compose -f compose.yml down'
-                ),
-                sshTransfer(
                     sourceFiles: 'api-ai/**',
                     removePrefix: 'api-ai/',
                     remoteDirectory: '/jenkins/deploy/backend-ai',
+                    execCommand: 'cd /home/jenkins/deploy/backend-ai && docker compose -f compose.yml down'
+                ),
+                sshTransfer(
                     execCommand: 'cd /home/jenkins/deploy/backend-ai && docker compose -f compose.yml up -d'
                 )
               ]
