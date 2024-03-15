@@ -13,8 +13,8 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
-      - /home/ubuntu/nginx/conf.d:/etc/nginx/conf.d
-      - /home/ubuntu/nginx/sites-enabled:/etc/nginx/sites-enabled
+      - /home/jenkins/nginx/conf.d:/etc/nginx/conf.d
+      - /home/jenkins/nginx/sites-enabled:/etc/nginx/sites-enabled
       - /home/jenkins/var/jenkins_home/workspace/frontend/frontend/dist:/usr/share/nginx/html
 
 networks:
