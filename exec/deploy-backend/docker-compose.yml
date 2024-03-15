@@ -40,8 +40,6 @@ services:
     container_name: backend-api
     networks:
       - d102-network
-    ports:
-      - "8081:8081"
     image: ${REGISTRY}/backend-api:${TAG}
     volumes:
       - ${HOME}/d102/backend/api/logs:/app/logs
@@ -54,8 +52,6 @@ services:
     container_name: backend-file
     networks:
       - d102-network
-    ports:
-      - "8082:8082"
     image: ${REGISTRY}/backend-file:${TAG}
     volumes:
       - ${HOME}/d102/backend/file/logs:/app/logs
