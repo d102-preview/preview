@@ -56,7 +56,7 @@ pipeline {
 
     stage('Health Check Frontend') {
       steps {
-        sh 'sleep 10'
+        sh 'sleep 20'
         script {
           withCredentials([string(credentialsId: 'frontend_url', variable: 'FRONTEND_URL')]) {
             def HEALTH = sh(
@@ -65,9 +65,9 @@ pipeline {
             ).trim()
 
             if (HEALTH == "200") {
-              echo "success"
+              echo "frontend success"
             } else {
-              error "fail"
+              error "frontend fail"
             }
           }
         }
