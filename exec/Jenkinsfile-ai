@@ -20,10 +20,9 @@ pipeline {
                     sourceFiles: 'api-ai/**',
                     removePrefix: 'api-ai/',
                     remoteDirectory: '/jenkins/deploy/backend-ai',
-                    execCommand: 'cd /home/jenkins/deploy/backend-ai && docker compose down'
-                ),
-                sshTransfer(
-                    execCommand: 'cd /home/jenkins/deploy/backend-ai && docker compose up -d; \
+                    execCommand: 'cd /home/jenkins/deploy/backend-ai && chmod 755 *.sh; \
+                                  ./stop-ai.sh; \
+                                  ./start-ai.sh; \
                                   cd ../frontend && chmod 755 *.sh \
                                   ./stop-frontend.sh; \
                                   ./start-frontend.sh'
