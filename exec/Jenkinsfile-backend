@@ -66,8 +66,6 @@ pipeline {
               error "backend api fail"
             }
           }
-        }
-        script {
           withCredentials([string(credentialsId: 'backend_file_url', variable: 'BACKEND_FILE_URL')]) {
             def HEALTH = sh(
               returnStdout: true,
