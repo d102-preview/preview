@@ -7,12 +7,10 @@ services:
     image: mariadb:10.11.7
     container_name: backend-mariadb
     restart: unless-stopped
-    networks:
-      - d102-network
     ports:
       - ${MARIADB_EXTERNAL_PORT}:${MARIADB_PORT}
     volumes:
-      - $HOME/d102/mariadb/var/lib/mysql:/var/lib/mysql
+      - ${HOME}/d102/mariadb/var/lib/mysql:/var/lib/mysql
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MARIADB_USER: ${MARIADB_USER}
@@ -24,8 +22,8 @@ services:
     image: redis:7.2
     container_name: backend-redis
     restart: unless-stopped
-    networks:
-      - d102-network
+    ports:
+      - ${REDIS_EXTERNAL_PORT}:${REDIS_PORT}
     deploy:
       resources:
         limits:
@@ -36,31 +34,22 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-api
-    restart: unless-stopped  
-    networks:
-      - d102-network
     ports:
-      - "8081:8081"
+      - ${API_EXTERNAL_PORT}:${API_PORT}
     image: ${REGISTRY}/backend-api:${TAG}
     volumes:
       - ${HOME}/d102/backend/api/logs:/app/logs
       - ${HOME}/d102/files:/files
+    restart: unless-stopped  
     
   backend-file:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-file
-    restart: unless-stopped  
-    networks:
-      - d102-network
-    expose:
-      - "8082"    
+    ports:
+      - ${FILE_EXTERNAL_PORT}:${FILE_PORT}
     image: ${REGISTRY}/backend-file:${TAG}
     volumes:
       - ${HOME}/d102/backend/file/logs:/app/logs
       - ${HOME}/d102/files:/files
-
-networks:
-  d102-network:
-    name: d102-network
-    external: true
+    restart: unless-stopped  
