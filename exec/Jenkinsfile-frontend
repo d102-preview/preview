@@ -61,7 +61,7 @@ pipeline {
           withCredentials([string(credentialsId: 'frontend_url', variable: 'FRONTEND_URL')]) {
             def HEALTH = sh(
               returnStdout: true,
-              script: script: "curl -s -o /dev/null -w '%{http_code}' ${FRONTEND_URL}"
+              script: "curl -s -o /dev/null -w '%{http_code}' ${FRONTEND_URL}"
             ).trim()
 
             if (HEALT == "200") {
@@ -72,34 +72,34 @@ pipeline {
           }
         }
       }
+    }
+  }
 
-      post {
-        success {
-          script {
-            withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
-              withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-                def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-                def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-                mattermostSend(color: 'good',
-                              message: "[Frontend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                              endpoint: "${MM_URL}",
-                              channel: 'D102-Alert')
-              }
-            }
+  post {
+    success {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'good',
+                          message: "[Frontend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
           }
         }
-        failure {
-          script {
-            withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
-              withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-                def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-                def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-                mattermostSend(color: 'danger',
-                              message: "[Frontend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                              endpoint: "${MM_URL}",
-                              channel: 'D102-Alert')
-              }
-            }
+      }
+    }
+    failure {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'danger',
+                          message: "[Frontend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
           }
         }
       }
