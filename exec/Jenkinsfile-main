@@ -11,6 +11,16 @@ pipeline {
                 }
             }
         }
+        stage('Pull Main') {
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
+                                     gitToolName: 'git-tool')]) {
+                      sh 'git pull origin main'
+                    }
+                }
+            }
+        }
         stage('Pull Frontend') {
             steps {
                 script {
@@ -37,16 +47,6 @@ pipeline {
                     withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
                                      gitToolName: 'git-tool')]) {
                       sh 'git pull origin backend-ai'
-                    }
-                }
-            }
-        }
-        stage('Pull Main') {
-            steps {
-                script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
-                                     gitToolName: 'git-tool')]) {
-                      sh 'git pull origin main'
                     }
                 }
             }
