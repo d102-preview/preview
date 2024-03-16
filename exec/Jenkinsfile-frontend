@@ -1,0 +1,108 @@
+pipeline {
+  agent any
+
+  environment {
+    NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+    CI = false
+  }
+
+  tools {
+    nodejs 'NodeJS 20.11.0'
+  }
+
+  stages {
+    stage('Build Frontend') {
+      steps {
+        withCredentials([file(credentialsId: 'front_profile', variable: 'FRONTEND_ENV')]) {
+          sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
+        }
+      }
+    }
+
+    stage('Deploy Frontend') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                // sshTransfer(
+                //     execCommand: 'rm -r /home/ubuntu/nginx/dist/*'
+                // ),
+                sshTransfer(
+                    sourceFiles: 'frontend/dist/**',
+                    removePrefix: 'frontend/dist/',
+                    // remote의 경우에는 system의 remote directory가 앞에 prefix로 붙음
+                    // 그냥 공백으로 둬서 절대경로 그대로 쓸 수 있도록 했음
+                    remoteDirectory: '/jenkins/deploy/frontend/dist'
+                ),
+                sshTransfer(
+                    sourceFiles: 'exec/deploy-frontend/*',
+                    removePrefix: 'exec/deploy-frontend/',
+                    remoteDirectory: '/jenkins/deploy/frontend',
+                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }
+
+    stage('Health Check Frontend') {
+      steps {
+        sh 'sleep 20'
+        script {
+          withCredentials([string(credentialsId: 'frontend_url', variable: 'FRONTEND_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${FRONTEND_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "frontend success"
+            } else {
+              error "frontend fail"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'good',
+                          message: "[Frontend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
+          }
+        }
+      }
+    }
+    failure {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'danger',
+                          message: "[Frontend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
+          }
+        }
+      }
+    }
+  }
+}
