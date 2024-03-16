@@ -3,7 +3,7 @@ import Accordian from './Accordian';
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 
 const meta = {
-  title: 'Accordian',
+  title: 'common/Accordian',
   component: Accordian,
   tags: ['autodocs'],
   argTypes: {
@@ -25,7 +25,7 @@ export const ResumeOpen: Story = {
         <p>이력서3</p>
       </>
     ),
-    isOpen: true,
+    defaultOpen: true,
     iconOpen: MdOutlineExpandLess,
     iconClose: MdOutlineExpandMore,
     iconOpenColor: '#5A8AF2',
@@ -40,7 +40,7 @@ export const ResumeClose: Story = {
   args: {
     titleContent: 'Resume Close Accordian',
     children: 'Close',
-    isOpen: false,
+    defaultOpen: false,
     iconOpen: MdOutlineExpandLess,
     iconClose: MdOutlineExpandMore,
     iconOpenColor: '#5A8AF2',
@@ -68,7 +68,7 @@ export const QestionOpen: Story = {
         </div>
       </div>
     ),
-    isOpen: true,
+    defaultOpen: true,
   },
 };
 
@@ -76,6 +76,6 @@ export const QestionClose: Story = {
   args: {
     titleContent: 'Qestion Close Accordian',
     children: 'Close',
-    isOpen: false,
+    defaultOpen: false,
   },
 };
