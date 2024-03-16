@@ -6,7 +6,13 @@ pipeline {
                 script {
                     withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
                                      gitToolName: 'git-tool')]) {
-                      sh 'git config pull.rebase false'
+                        withCredentials([usernamePassword(credentialsId: 'email_name', usernameVariable: 'EMAIL', passwordVariable: 'NAME')]) {
+                          sh """
+                                git config pull.rebase false &&
+                                git config --global user.email ${EMAIL} &&
+                                git config --global user.name ${NAME}
+                            """
+                        }
                     }
                 }
             }
