@@ -12,7 +12,7 @@ services:
     ports:
       - ${MARIADB_EXTERNAL_PORT}:${MARIADB_PORT}
     volumes:
-      - $HOME/d102/mariadb/var/lib/mysql:/var/lib/mysql
+      - ${HOME}/d102/mariadb/var/lib/mysql:/var/lib/mysql
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MARIADB_USER: ${MARIADB_USER}
@@ -26,6 +26,8 @@ services:
     restart: unless-stopped
     networks:
       - d102-network
+    ports:
+      - ${REDIS_EXTERNAL_PORT}:${REDIS_PORT}
     deploy:
       resources:
         limits:
@@ -36,6 +38,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-api
+    networks:
+      - d102-network
     image: ${REGISTRY}/backend-api:${TAG}
     volumes:
       - ${HOME}/d102/backend/api/logs:/app/logs
@@ -46,6 +50,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     container_name: backend-file
+    networks:
+      - d102-network
     image: ${REGISTRY}/backend-file:${TAG}
     volumes:
       - ${HOME}/d102/backend/file/logs:/app/logs
