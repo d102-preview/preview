@@ -7,13 +7,13 @@ pipeline {
   }
  
   stages {
-    stage ('backend build') {
+    stage('Build Backend') {
       steps {
         sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
       }
     }
     
-    stage('docker build and push') {
+    stage('Build and Push Images') {
       steps {
         withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
           script {
@@ -25,7 +25,7 @@ pipeline {
       }
     }
 
-    stage('backend deploy') {
+    stage('Deploy Backend') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
         sshPublisher(
           continueOnError: false,
@@ -38,17 +38,54 @@ pipeline {
                 sshTransfer(
                     sourceFiles: 'exec/deploy-backend/*',
                     removePrefix: 'exec/deploy-backend/',
-                    remoteDirectory: 'S10P22D102/exec',
-                    execCommand: 'echo $HOME && cd /home/jenkins/deploy/S10P22D102/exec && chmod 755 *.sh; \
+                    remoteDirectory: '/jenkins/deploy/backend',
+                    execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
                                   ./stop-backend.sh; \
                                   ./start-backend.sh'
+                ),
+                sshTransfer(
+                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
                 )
               ]
             )
           ]
         )
       }
-    }	
+    }
+
+    stage('Health Check Backend') {
+      steps {
+        sh 'sleep 20'
+        script {
+          withCredentials([string(credentialsId: 'backend_api_url', variable: 'BACKEND_API_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${BACKEND_API_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "backend api success"
+            } else {
+              error "backend api fail"
+            }
+          }
+          withCredentials([string(credentialsId: 'backend_file_url', variable: 'BACKEND_FILE_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${BACKEND_FILE_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "backend file success"
+            } else {
+              error "backend file fail"
+            }
+          }
+        }
+      }
+    }
   }
 
   post {
@@ -59,9 +96,9 @@ pipeline {
             def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
             def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
             mattermostSend(color: 'good',
-                          message: "[Backend] Build Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          message: "[Backend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
                           endpoint: "${MM_URL}",
-                          channel: 'D102')
+                          channel: 'D102-Alert')
           }
         }
       }
@@ -73,9 +110,9 @@ pipeline {
             def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
             def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
             mattermostSend(color: 'danger',
-                          message: "[Backend] Build Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          message: "[Backend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
                           endpoint: "${MM_URL}",
-                          channel: 'D102')
+                          channel: 'D102-Alert')
           }
         }
       }

@@ -18,6 +18,7 @@ public class AuthController implements AuthControllerDocs {
 
     private final AuthService authService;
 
+    @Override
     @PostMapping("/email")
     public Response checkDuplicatedEmail(@Valid @RequestBody EmailDto emailDto){
         return new Response("isDuplicateEmail", authService.checkDuplicatedEmail(emailDto));
