@@ -1,0 +1,121 @@
+pipeline {
+  agent any
+  
+  environment {
+    GRADLE_USER_HOME = "$WORKSPACE/.gradle"
+    CI = false
+  }
+ 
+  stages {
+    stage('Build Backend') {
+      steps {
+        sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
+      }
+    }
+    
+    stage('Build and Push Images') {
+      steps {
+        withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
+          script {
+            sh 'cd backend/d102-api/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML} .'
+            sh 'cd backend/d102-file/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML} .'
+            sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
+          }
+        } 
+      }
+    }
+
+    stage('Deploy Backend') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                    sourceFiles: 'exec/deploy-backend/*',
+                    removePrefix: 'exec/deploy-backend/',
+                    remoteDirectory: '/jenkins/deploy/backend',
+                    execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
+                                  ./stop-backend.sh; \
+                                  ./start-backend.sh'
+                ),
+                sshTransfer(
+                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }
+
+    stage('Health Check Backend') {
+      steps {
+        sh 'sleep 20'
+        script {
+          withCredentials([string(credentialsId: 'backend_api_url', variable: 'BACKEND_API_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${BACKEND_API_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "backend api success"
+            } else {
+              error "backend api fail"
+            }
+          }
+          withCredentials([string(credentialsId: 'backend_file_url', variable: 'BACKEND_FILE_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${BACKEND_FILE_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "backend file success"
+            } else {
+              error "backend file fail"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'good',
+                          message: "[Backend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
+          }
+        }
+      }
+    }
+    failure {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'danger',
+                          message: "[Backend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
+          }
+        }
+      }
+    }
+  }
+}
