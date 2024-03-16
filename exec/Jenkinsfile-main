@@ -46,11 +46,7 @@ pipeline {
                 script {
                     withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
                                       gitToolName: 'git-tool')]) {
-                        withCredentials([string(credentialsId: 'main_merge_email', variable: 'EMAIL')]) {
-                            withCredentials([string(credentialsId: 'main_merge_name', variable: 'NAME')]) {
-                                sh "git push origin main --push-option='author=${NAME} <${EMAIL}>'"
-                            }
-                        }
+                        sh 'git push origin main'
                     }
                 }
             }
