@@ -6,12 +6,14 @@ pipeline {
                 script {
                     withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
                                      gitToolName: 'git-tool')]) {
-                        withCredentials([usernamePassword(credentialsId: 'email_name', usernameVariable: 'EMAIL', passwordVariable: 'NAME')]) {
-                          sh """
-                                git config pull.rebase false &&
-                                git config --global user.email ${EMAIL} &&
-                                git config --global user.name ${NAME}
-                            """
+                        withCredentials([string(credentialsId: 'main_merge_email', variable: 'EMAIL')]) {
+                            withCredentials([string(credentialsId: 'main_merge_name', variable: 'NAME')]) {
+                              sh """
+                                    git config pull.rebase false &&
+                                    git config --global user.email ${EMAIL} &&
+                                    git config --global user.name ${NAME}
+                                """
+                            }
                         }
                     }
                 }
