@@ -41,6 +41,16 @@ pipeline {
                 }
             }
         }
+        stage('Pull Main') {
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
+                                     gitToolName: 'git-tool')]) {
+                      sh 'git pull origin main'
+                    }
+                }
+            }
+        }
         stage('Push Main') {
             steps {
                 script {
