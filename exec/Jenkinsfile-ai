@@ -1,0 +1,70 @@
+pipeline {
+  agent any
+  
+  environment {
+    CI = false
+  }
+ 
+  stages {
+    stage('Deploy Backend AI') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                    sourceFiles: 'api-ai/**',
+                    removePrefix: 'api-ai/',
+                    remoteDirectory: '/jenkins/deploy/backend-ai',
+                    execCommand: 'cd /home/jenkins/deploy/backend-ai && chmod 755 *.sh; \
+                                  ./stop-ai.sh; \
+                                  ./start-ai.sh'
+                ),
+                sshTransfer(
+                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }
+  }
+
+  post {
+    success {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'good',
+                          message: "[AI] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
+          }
+        }
+      }
+    }
+    failure {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+            mattermostSend(color: 'danger',
+                          message: "[AI] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          endpoint: "${MM_URL}",
+                          channel: 'D102-Alert')
+          }
+        }
+      }
+    }
+  }
+}
