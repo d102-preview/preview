@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  nginx:
+    container_name: nginx
+    networks:
+      - d102-network
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - /home/jenkins/nginx/conf.d:/etc/nginx/conf.d
+      - /home/jenkins/nginx/sites-enabled:/etc/nginx/sites-enabled
+      - /home/jenkins/deploy/frontend/dist:/usr/share/nginx/html
+
+networks:
+  d102-network:
+    name: d102-network
+    external: true
