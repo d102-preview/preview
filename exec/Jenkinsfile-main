@@ -1,6 +1,16 @@
 pipeline {
     agent any
     stages {
+        stage('Configure Merge Option') {
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
+                                     gitToolName: 'git-tool')]) {
+                      sh 'git config pull.rebase false'
+                    }
+                }
+            }
+        }
         stage('Pull Frontend') {
             steps {
                 script {
