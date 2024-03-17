@@ -32,7 +32,7 @@ const Keywords = () => {
 
   return (
     <div className="pb-3">
-      <div className="flex justify-between">
+      <div className="flex justify-between  items-center">
         <p className="font-medium text-sm mb-2">핵심 키워드</p>
         <button className="text-xs text-UNIMPORTANT_TEXT border-b border-UNIMPORTANT_TEXT" onClick={toggleEdit}>
           {isEdit ? '저장' : '수정'}
