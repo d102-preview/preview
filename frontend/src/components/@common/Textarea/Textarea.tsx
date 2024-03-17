@@ -92,7 +92,7 @@ const Textarea = ({
         ) : (
           <div className="flex-grow"></div> // subText가 없을 때 이 div가 남은 공간을 차지
         )}
-        <div className="text-xs text-right">{`${text.length}${maxLength ? ` / ${maxLength}` : ''}자`}</div>
+        <div className="text-xs text-right text-UNIMPORTANT_TEXT">{`${text.length}${maxLength ? ` / ${maxLength}` : ''}자`}</div>
       </div>
     </div>
   );
