@@ -16,7 +16,7 @@ pipeline {
                 script {
                     withCredentials([gitUsernamePassword(credentialsId: 'origin_merge_id_token',
                                       gitToolName: 'git-tool')]) {
-                        sh 'git checkout -t origin/main && git pull origin main'
+                        sh 'git checkout main && git pull origin main'
                     }
                 }
             }
