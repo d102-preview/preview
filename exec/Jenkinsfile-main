@@ -11,12 +11,12 @@ pipeline {
                 }
             }
         }
-        stage('Pull Origin Main') {
+        stage('Checkout and Pull Origin Main') {
             steps {
                 script {
                     withCredentials([gitUsernamePassword(credentialsId: 'origin_merge_id_token',
                                       gitToolName: 'git-tool')]) {
-                        sh 'git pull origin main'
+                        sh 'git checkout main && git pull origin main'
                     }
                 }
             }
