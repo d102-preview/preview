@@ -67,7 +67,12 @@ pipeline {
                     withCredentials([gitUsernamePassword(credentialsId: 'upstream_merge_id_token',
                                       gitToolName: 'git-tool')]) {
                         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
-                            sh "git remote add upstream ${GIT_URL} && git push upstream main"
+                            def isUpstreamSet = sh(script: "git remote -v | grep -q upstream", returnStatus: true)
+                            if (isUpstreamSet != 0) {
+                                sh "git remote add upstream ${GIT_URL} && git push upstream main"
+                            } else {
+                                echo "Upstream already set."
+                            }
                         }
                     }
                 }
