@@ -4,60 +4,35 @@ pipeline {
         stage('Configure Merge Option') {
             steps {
                 script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
-                                     gitToolName: 'git-tool')]) {
-                      sh 'git config pull.rebase false'
-                    }
-                }
-            }
-        }
-        stage('Pull Main') {
-            steps {
-                script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
-                                     gitToolName: 'git-tool')]) {
-                      sh 'git checkout main && git pull origin main'
-                    }
+                    sh 'git config pull.rebase false'
                 }
             }
         }
         stage('Pull Frontend') {
             steps {
                 script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
-                                     gitToolName: 'git-tool')]) {
-                      sh 'git pull origin frontend'
-                    }
+                    sh 'git pull origin frontend'
                 }
             }
         }
         stage('Pull Backend') {
             steps {
                 script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
-                                     gitToolName: 'git-tool')]) {
-                      sh 'git pull origin backend'
-                    }
+                    sh 'git pull origin backend'
                 }
             }
         }
         stage('Pull Backend-ai') {
             steps {
                 script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
-                                     gitToolName: 'git-tool')]) {
-                      sh 'git pull origin backend-ai'
-                    }
+                    sh 'git pull origin backend-ai'
                 }
             }
         }
         stage('Push Main') {
             steps {
                 script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'main_merge_id_token',
-                                      gitToolName: 'git-tool')]) {
-                        sh 'git push origin main'
-                    }
+                    sh 'git push origin main'
                 }
             }
         }
@@ -71,7 +46,7 @@ pipeline {
             def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
             def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
             mattermostSend(color: 'good',
-                          message: "[Main] Merge Success (Schedule)\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          message: "[Main] Merge Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
                           endpoint: "${MM_URL}",
                           channel: 'D102-Alert')
           }
@@ -85,7 +60,7 @@ pipeline {
             def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
             def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
             mattermostSend(color: 'danger',
-                          message: "[Main] Merge Fail (Schedule)\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
+                          message: "[Main] Merge Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
                           endpoint: "${MM_URL}",
                           channel: 'D102-Alert')
           }
