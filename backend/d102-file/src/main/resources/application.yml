@@ -4,11 +4,12 @@ server:
     context-path: /file
 
 spring:
-  profiles:
-    active: local
-    group:
-      local: local
-      prod: prod
+  # DB Connection Info
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/d102
+    username: danbi
+    password: 1234
 
   # Jpa Setting
   jpa:
@@ -46,3 +47,7 @@ logging:
     org.springframework.web.cors: DEBUG
     org.hibernate.sql: DEBUG
     org.hibernate.type.descriptor.sql: trace
+
+cors:
+  origins: >
+    http://localhost:5173    
