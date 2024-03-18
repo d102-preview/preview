@@ -28,7 +28,7 @@ public class AuthController implements AuthControllerDocs {
     @Override
     @PostMapping("/join")
     public Response join(@Valid @RequestBody JoinDto joinDto) {
-        return new Response("message", authService.join(joinDto));
+        return new Response("user", authService.join(joinDto));
     }
 
 }
