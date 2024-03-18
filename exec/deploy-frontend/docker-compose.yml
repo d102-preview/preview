@@ -16,6 +16,8 @@ services:
       - /home/jenkins/nginx/conf.d:/etc/nginx/conf.d
       - /home/jenkins/nginx/sites-enabled:/etc/nginx/sites-enabled
       - /home/jenkins/deploy/frontend/dist:/usr/share/nginx/html
+    environment:
+      TZ: "Asia/Seoul"
 
 networks:
   d102-network:
