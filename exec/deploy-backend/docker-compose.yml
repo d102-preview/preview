@@ -46,7 +46,7 @@ services:
       - ${HOME}/d102/backend/api/logs:/app/logs
       - ${HOME}/d102/files:/files
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      SPRING_PROFILES_ACTIVE: prod
       TZ: "Asia/Seoul"
     restart: unless-stopped  
     
@@ -59,7 +59,7 @@ services:
       - ${HOME}/d102/backend/file/logs:/app/logs
       - ${HOME}/d102/files:/files
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      SPRING_PROFILES_ACTIVE: prod
       TZ: "Asia/Seoul"
     restart: unless-stopped  
 
