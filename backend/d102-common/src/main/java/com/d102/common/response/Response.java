@@ -14,16 +14,19 @@ public class Response extends HashMap<String, Object> {
 	public static final String MESSAGE 	= "message";
 	public static final String OK 		= "ok";
 	public static final String FAIL 	= "fail";
+	public static final String DATA = "data";
 	
 	public Response()
 	{
 		setData(Response.RESULT, Response.OK);
 	}
 	
-	public Response(String key, Object data)
+	public Response(String key, Object DATA)
 	{
 		this();
-		setData(key, data);
+		HashMap<Object, Object> response = new HashMap<>();
+		response.put(key, DATA);
+		setData(Response.DATA, response);
 	}
 	
 	public void setData(String key, Object data)
