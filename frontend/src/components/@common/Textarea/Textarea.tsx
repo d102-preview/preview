@@ -60,7 +60,7 @@ const Textarea = ({
     <div className="pb-5">
       {label && <div className="pb-1.5 text-md">{label}</div>}
       <div
-        className={`${width} ${borderType === 'all' ? 'border-2 rounded-lg' : 'border-none'} focus-within:border-MAIN1 overflow-hidden`}
+        className={`${width} ${borderType === 'all' ? 'border-2 rounded-lg' : 'border-none'} border-[#E8E8E8] focus-within:border-[#A7A7A7] overflow-hidden`}
         style={{ padding: '0.75rem' }}
       >
         <textarea

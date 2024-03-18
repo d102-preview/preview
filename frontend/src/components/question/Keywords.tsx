@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Input from '../@common/Input/Input';
 import { IoClose } from 'react-icons/io5';
 
 const Keywords = () => {
@@ -31,7 +30,7 @@ const Keywords = () => {
   };
 
   return (
-    <div className="pb-3">
+    <div className="pb-5">
       <div className="flex justify-between  items-center">
         <p className="font-medium text-sm mb-2">핵심 키워드</p>
         <button className="text-xs text-UNIMPORTANT_TEXT border-b border-UNIMPORTANT_TEXT" onClick={toggleEdit}>
@@ -55,14 +54,12 @@ const Keywords = () => {
           </span>
         ))}
         {isEdit ? (
-          <Input
+          <input
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
-            width="w-24"
             placeholder="키워드를 추가해 보세요"
-            borderType="all"
-            className="text-xs px-3 py-2 border-2 border-[#F1F5FF] rounded-xl"
+            className="w-38 text-xs px-3 py-2 border-2 border-[#F1F5FF] rounded-xl outline-none focus:border-MAIN1"
           />
         ) : (
           <></>
