@@ -79,3 +79,14 @@ export const QestionClose: Story = {
     defaultOpen: false,
   },
 };
+
+export const PlusIcon: Story = {
+  args: {
+    titleContent: 'Qestion Close Accordian',
+    children: 'Close',
+    defaultOpen: false,
+    onPlusClick: () => {},
+    onMinusClick: () => {},
+    hasIcons: true,
+  },
+};

@@ -53,7 +53,7 @@ const Script = ({ initialScript, maxLength }: IScript) => {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center my-1">
         <p className="font-medium text-sm mb-2">스크립트</p>
         {!isEdit ? (
           <button className="text-xs text-UNIMPORTANT_TEXT border-b border-UNIMPORTANT_TEXT" onClick={toggleEdit}>
