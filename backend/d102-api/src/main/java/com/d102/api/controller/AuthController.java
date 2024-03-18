@@ -2,6 +2,7 @@ package com.d102.api.controller;
 
 import com.d102.api.controller.docs.AuthControllerDocs;
 import com.d102.api.dto.request.EmailDto;
+import com.d102.api.dto.request.JoinDto;
 import com.d102.api.service.AuthService;
 import com.d102.common.response.Response;
 import jakarta.validation.Valid;
@@ -23,4 +24,11 @@ public class AuthController implements AuthControllerDocs {
     public Response checkDuplicatedEmail(@Valid @RequestBody EmailDto emailDto){
         return new Response("isDuplicateEmail", authService.checkDuplicatedEmail(emailDto));
     }
+
+    @Override
+    @PostMapping("/join")
+    public Response join(@Valid @RequestBody JoinDto joinDto) {
+        return new Response("user", authService.join(joinDto));
+    }
+
 }

@@ -35,6 +35,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
@@ -45,6 +49,12 @@ dependencies {
 
     // mariadb
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
+
+    // mapstruct
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    testImplementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
 
 
     // boot test
