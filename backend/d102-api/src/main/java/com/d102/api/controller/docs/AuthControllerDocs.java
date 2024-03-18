@@ -1,6 +1,7 @@
 package com.d102.api.controller.docs;
 
 import com.d102.api.dto.request.EmailDto;
+import com.d102.api.dto.request.JoinDto;
 import com.d102.common.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,4 +23,15 @@ public interface AuthControllerDocs {
                     }))
     })
     Response checkDuplicatedEmail(EmailDto emailDto);
+
+    @Operation(summary = "회원가입", description = "회원가입 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "message", schema = @Schema(defaultValue = "join success", description = "회원 가입 성공")),
+                    }))
+    })
+    Response join(JoinDto joinDto);
+
 }
