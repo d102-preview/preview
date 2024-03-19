@@ -20,6 +20,6 @@ public interface HealthControllerDocs {
                     })
             )
     })
-    Response healthCheck();
+    Response checkHealth();
 
 }
