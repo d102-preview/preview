@@ -1,9 +1,8 @@
 import { IoMdMegaphone } from 'react-icons/io';
 
-const RecordPosition = () => {
+const RecordSetting = () => {
   return (
     <>
-      {/* <div className="absolute top-0 w-[40rem] h-[30rem] bg-black/70"></div> */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="w-52 h-52 rounded-full border-2 border-dashed border-white flex justify-center items-center text-white text-xl font-bold text-center">
           <p>
@@ -27,4 +26,4 @@ const RecordPosition = () => {
   );
 };
 
-export default RecordPosition;
+export default RecordSetting;
