@@ -4,12 +4,12 @@ import SignupForm from '@/components/signup/SignupForm';
 
 const SignUpPage = () => {
   return (
-    <div className="w-screen h-screen flex overflow-x-scroll">
-      <div className="w-[55%] min-w-[900px] relative animate-showLeft">
+    <div className="w-screen h-screen flex overflow-y-hidden">
+      <div className="w-[55%] min-w-[600px] relative animate-showLeft">
         <img src={computer} alt="computer" className="w-full h-full object-cover rounded-r-3xl absolute" />
-        <div className="w-full h-full absolute p-20">
-          <img src={logoWhite} alt="white logo" className="w-[30%]" />
-          <div className="text-[120%] font-semibold text-[#DADADA] pt-2">
+        <div className="w-full h-full absolute p-[50px]">
+          <img src={logoWhite} alt="white logo" className="w-[200px]" />
+          <div className="text-[100%] font-semibold text-[#DADADA] pt-2">
             당신만의 질문을 생성하고 <br />
             피드백까지 받아보세요
           </div>
