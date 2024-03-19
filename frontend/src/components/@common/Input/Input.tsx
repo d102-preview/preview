@@ -37,17 +37,17 @@ const Input = ({
   };
 
   return (
-    <>
-      {label && <div className="pb-1.5">{label}</div>}
+    <div className="mb-4">
+      {label && <div className="pb-1 text-sm">{label}</div>}
       <input
         type={type}
         disabled={disabled}
         placeholder={placeholder}
-        className={`${width} h-10 text-sm border-[#D4D4D4] px-2 flex items-center ${borderType === 'all' ? 'border-[2px] rounded-md' : 'border-b-[2px]'} outline-none focus:border-MAIN1`}
+        className={`${width} h-8 text-sm px-2 flex items-center ${borderType === 'all' ? 'border-[2px] rounded-md' : 'border-b-[2px]'} outline-none focus:border-MAIN1`}
         {...props}
       />
       {subText && <div className={`text-xs pt-1 pl-2 ${setSubTextStyle()}`}>{subText.text}</div>}
-    </>
+    </div>
   );
 };
 
