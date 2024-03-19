@@ -38,7 +38,7 @@ const Accordian = ({
   textColor = 'text-gray-800',
   textSize = 'text-sm',
   textWeight = 'font-normal',
-  width = 'w-10/12',
+  width = 'w-full',
   onToggle,
   onPlusClick, // '+' 아이콘 클릭 시 호출될 함수
   onMinusClick, // '-' 아이콘 클릭 시 호출될 함수
@@ -74,21 +74,39 @@ const Accordian = ({
   // isOpen 상태에 따라 동적으로 스타일 변경
   const wrapperStyle = isOpen ? { height: 'auto' } : { height: '0px' };
 
+  // 선택된 상태에 따라 테두리 스타일을 조건부로 적용
+  const selectedBorderStyle = isSelected ? 'border-2 border-MAIN1' : 'border-none';
+
   return (
     <div
-      className={`m-4 cursor-pointer ${width} ${backgroundColor} ${borderStyle} ${borderRadius} drop-shadow-lg hover:border-2 hover:border-MAIN1`}
+      className={`${width} ${backgroundColor} ${borderStyle} ${borderRadius} 
+      m-4 cursor-pointer box-content drop-shadow-lg ${selectedBorderStyle}`}
     >
       <div className={`p-3 mx-3 flex items-center justify-between`} onClick={toggleOpen}>
         <div className={`flex items-center ${textColor} ${textSize} ${textWeight}`}>
           {hasIcons &&
             (isSelected ? (
-              <LuMinusCircle size="35" className="mr-2 p-1 pl-0" color={iconOpenColor} onClick={handleIconClick} />
+              <LuMinusCircle
+                size="35"
+                className="flex-shrink-0 mr-2 p-1 pl-0"
+                color={iconOpenColor}
+                onClick={handleIconClick}
+              />
             ) : (
-              <LuPlusCircle size="35" className="mr-2 p-1  pl-0" color={iconCloseColor} onClick={handleIconClick} />
+              <LuPlusCircle
+                size="35"
+                className="flex-shrink-0 mr-2 p-1 pl-0"
+                color={iconCloseColor}
+                onClick={handleIconClick}
+              />
             ))}
           <div>{titleContent}</div>
         </div>
-        {isOpen ? <IconOpen size="25" color={iconOpenColor} /> : <IconClose size="25" color={iconCloseColor} />}
+        {isOpen ? (
+          <IconOpen size="25" className="flex-shrink-0 ml-2" color={iconOpenColor} />
+        ) : (
+          <IconClose size="25" className="flex-shrink-0 ml-2" color={iconCloseColor} />
+        )}
       </div>
       {/* content wrapper */}
       <div
