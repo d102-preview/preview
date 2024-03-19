@@ -42,7 +42,7 @@ logging:
   level:
     root: INFO
     web: DEBUG
-    com.ggums.ggumtle: DEBUG
+    com.d102.file: DEBUG
     org.springframework.security: DEBUG
     org.springframework.web.cors: DEBUG
     org.hibernate.sql: DEBUG
