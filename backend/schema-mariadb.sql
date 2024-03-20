@@ -117,6 +117,7 @@ CREATE TABLE `resume_keyword` (
   CONSTRAINT `resume_keyword_question_FK` FOREIGN KEY (`question_id`) REFERENCES `resume_question` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
 CREATE TABLE `analysis` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,

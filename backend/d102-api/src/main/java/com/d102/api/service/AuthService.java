@@ -1,12 +1,11 @@
 package com.d102.api.service;
 
-import com.d102.api.dto.request.EmailDto;
 import com.d102.api.dto.request.JoinDto;
 import com.d102.api.dto.response.UserResponseDto;
 
 public interface AuthService {
 
-    Boolean checkDuplicatedEmail(EmailDto emailDto);
+    Boolean checkDuplicatedEmail(String email);
 
     UserResponseDto join(JoinDto joinDto);
 
