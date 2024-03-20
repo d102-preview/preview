@@ -21,10 +21,20 @@ export default {
           from: { opacity: 1, transform: 'translate(-50%, -50%)' },
           to: { opacity: 0, transform: 'translate(-50%, -40%)' },
         },
+        ShowLeft: {
+          from: { opacity: 0, transform: 'translate(-50px, 0px)' },
+          to: { opacity: 1, transform: 'translate(0px, 0px)' },
+        },
+        ShowUp: {
+          from: { opacity: 0, transform: 'translate(0px, 50px)' },
+          to: { opacity: 1, transform: 'translate(0px, 0px)' },
+        },
       },
       animation: {
         modalOpen: 'FadeIn 0.3s ease-in-out',
         modalClose: 'FadeOut 0.3s ease-in-out',
+        showLeft: 'ShowLeft 0.5s ease-in-out',
+        showUp: 'ShowUp 1.2s ease-in-out',
       },
     },
   },
