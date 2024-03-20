@@ -25,6 +25,4 @@ public class ResumeQuestion extends BaseTime {
     @Column(name = "question", length = 512, nullable = false)
     private String question;
 
-    public void
-
 }
