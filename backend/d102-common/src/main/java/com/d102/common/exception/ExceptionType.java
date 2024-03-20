@@ -19,4 +19,5 @@ public enum ExceptionType {
         this.code = code;
         this.message = message;
     }
+
 }
