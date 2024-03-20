@@ -14,4 +14,5 @@ public class ConflictException extends RuntimeException{
     public String getMessage(){
         return exceptionType.getMessage();
     }
+
 }

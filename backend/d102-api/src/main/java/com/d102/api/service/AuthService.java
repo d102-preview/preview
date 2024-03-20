@@ -6,8 +6,10 @@ import com.d102.api.dto.response.UserResponseDto;
 
 public interface AuthService {
 
-    Boolean checkDuplicatedEmail(EmailDto emailDto);
-
     UserResponseDto join(JoinDto joinDto);
+
+    Boolean checkAvailableEmail(String email);
+
+    Boolean sendEmail(EmailDto emailDto);
 
 }
