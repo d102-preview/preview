@@ -1,0 +1,29 @@
+import { IQuestionList } from '@/pages/question/QuestionPage';
+import QuestionItem from './QuestionItem';
+import questionStore from '@/stores/questionStore';
+
+interface QuestionsListProps {
+  questions: IQuestionList[];
+  type: 'common' | 'resume';
+}
+
+const QuestionsList = ({ questions, type }: QuestionsListProps) => {
+  const { selectedQuestions, addQuestion, removeQuestion } = questionStore();
+  return (
+    <div className="pr-7">
+      {questions.map(question => (
+        <QuestionItem
+          key={question.id}
+          question={question.question}
+          id={question.id}
+          isSelected={selectedQuestions.some(q => q.id === question.id)}
+          onAdd={addQuestion}
+          onRemove={removeQuestion}
+          type={type}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default QuestionsList;
