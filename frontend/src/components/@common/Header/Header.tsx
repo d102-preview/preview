@@ -1,3 +1,4 @@
+import logo from '@/assets/images/logo.png';
 import profileImage from '@/assets/images/profile.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLink from '../HeaderLink/HeaderLink';
@@ -18,15 +19,20 @@ const Header = () => {
 
   return (
     <div className="w-full h-14 p-6 flex items-center justify-between">
-      <div>로고</div>
+      <img className="w-24" src={logo} alt="logo" />
       <div className="flex">
+        <HeaderLink
+          label="질문 리스트"
+          link="/question-list"
+          isClicked={isCurrentPage(location.pathname, 'question-list')}
+        />
         <HeaderLink label="모의면접" link="/interview" isClicked={isCurrentPage(location.pathname, 'interview')} />
         <HeaderLink label="분석결과" link="/result" isClicked={isCurrentPage(location.pathname, 'result')} />
         {!isLogin ? (
           <HeaderLink label="로그인" link="/login" isClicked={false} />
         ) : (
-          //   내 이름
           <div className="p-1" onClick={() => navigate('/my')}>
+            {/* @TODO: 프로필 이미지 등록 */}
             <img src={profileImage} alt="default profile" className="w-7 rounded-full cursor-pointer" />
           </div>
         )}
