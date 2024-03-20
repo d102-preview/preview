@@ -19,6 +19,7 @@ interface IAccordianProps {
   textWeight?: string;
   width?: string;
   onToggle?: () => void; // 사용자 정의 토글 함수(추가적인 액션)가 있는 경우
+  isSelected?: boolean;
   onPlusClick?: () => void;
   onMinusClick?: () => void;
   hasIcons?: boolean;
@@ -40,12 +41,12 @@ const Accordian = ({
   textWeight = 'font-normal',
   width = 'w-full',
   onToggle,
+  isSelected,
   onPlusClick, // '+' 아이콘 클릭 시 호출될 함수
   onMinusClick, // '-' 아이콘 클릭 시 호출될 함수
   hasIcons = false, // 아이콘 표시 여부
 }: IAccordianProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
-  const [isSelected, setIsSelected] = useState<boolean>(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // isOpen 상태를 토글하는 함수
@@ -59,14 +60,16 @@ const Accordian = ({
     }
   };
 
-  const handleIconClick = (event: React.MouseEvent) => {
-    // 버블링을 방지하여 아코디언 헤더의 onClick 이벤트가 발생하지 않도록 함
-    event.stopPropagation();
-    setIsSelected(!isSelected);
-
-    if (!isSelected && onPlusClick) {
+  const handlePlusClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onPlusClick) {
       onPlusClick();
-    } else if (isSelected && onMinusClick) {
+    }
+  };
+
+  const handleMinusClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onMinusClick) {
       onMinusClick();
     }
   };
@@ -90,14 +93,14 @@ const Accordian = ({
                 size="35"
                 className="flex-shrink-0 mr-2 p-1 pl-0"
                 color={iconOpenColor}
-                onClick={handleIconClick}
+                onClick={handleMinusClick}
               />
             ) : (
               <LuPlusCircle
                 size="35"
                 className="flex-shrink-0 mr-2 p-1 pl-0"
                 color={iconCloseColor}
-                onClick={handleIconClick}
+                onClick={handlePlusClick}
               />
             ))}
           <div>{titleContent}</div>

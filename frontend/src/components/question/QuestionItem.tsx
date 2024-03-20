@@ -10,12 +10,12 @@ interface IQuestionObj {
 interface IQuestionItemProps {
   question: string;
   id: number;
+  isSelected: boolean;
   onAdd?: (questionObj: IQuestionObj) => void;
   onRemove: (id: number) => void;
-  
 }
 
-const QuestionItem = ({ question, id, onAdd, onRemove }: IQuestionItemProps) => {
+const QuestionItem = ({ question, id, isSelected, onAdd, onRemove }: IQuestionItemProps) => {
   return (
     <div className="mb-2">
       <Accordian
@@ -27,6 +27,7 @@ const QuestionItem = ({ question, id, onAdd, onRemove }: IQuestionItemProps) => 
           </>
         }
         defaultOpen={false}
+        isSelected={isSelected}
         onPlusClick={() => onAdd && onAdd({ id, question })} // '+' 아이콘 클릭 시 호출될 함수
         onMinusClick={() => onRemove(id)} // '-' 아이콘 클릭 시 호출될 함수
         hasIcons={true}
