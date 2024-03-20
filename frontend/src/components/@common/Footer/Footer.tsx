@@ -7,6 +7,8 @@ const Footer = () => {
         © SSAFY 2024
         <br />
         <br />
+        SSAFY 10기 특화 Project
+        <br />
         경북 구미시 3공단3로 302
         <br />
       </div>
