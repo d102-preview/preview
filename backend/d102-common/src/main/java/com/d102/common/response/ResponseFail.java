@@ -26,4 +26,5 @@ public class ResponseFail extends Response {
 			return "{}";
 		}
 	}
+
 }
