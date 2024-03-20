@@ -1,5 +1,6 @@
 package com.d102.api.service.impl;
 
+import com.d102.api.dto.request.EmailDto;
 import com.d102.api.dto.request.JoinDto;
 import com.d102.api.dto.response.UserResponseDto;
 import com.d102.api.mapper.UserMapper;
@@ -22,14 +23,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    @Transactional(readOnly = true)
-    public Boolean checkDuplicatedEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
-    }
-
     @Transactional
     public UserResponseDto join(JoinDto joinDto) {
-        checkIfEmailExists(joinDto.getEmail());
+        checkExistedEmail(joinDto.getEmail());
 
         User user = userMapper.toUser(joinDto);
         user.setPassword(passwordEncoder.encode(joinDto.getPassword()));
@@ -38,7 +34,18 @@ public class AuthServiceImpl implements AuthService {
         return userMapper.toUserResponseDto(userRepository.saveAndFlush(user));
     }
 
-    private void checkIfEmailExists(String email) {
+    @Transactional(readOnly = true)
+    public Boolean checkAvailableEmail(String email) {
+        return userRepository.findByEmail(email).isEmpty();
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean sendEmail(EmailDto emailDto) {
+        checkExistedEmail(emailDto.getEmail());
+        return null;
+    }
+
+    private void checkExistedEmail(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
                     throw new ConflictException(ExceptionType.EmailExistedException);

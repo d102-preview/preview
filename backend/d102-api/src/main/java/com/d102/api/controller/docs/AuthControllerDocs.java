@@ -1,6 +1,8 @@
 package com.d102.api.controller.docs;
 
+import com.d102.api.dto.request.EmailDto;
 import com.d102.api.dto.request.JoinDto;
+import com.d102.api.dto.response.UserResponseDto;
 import com.d102.common.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,26 +21,38 @@ import org.springframework.validation.annotation.Validated;
 @Tag(name = "1. 인증 관련 API", description = "JWT 토큰을 요구하지 않는 API (회원가입, 이메일 중복확인 등)")
 public interface AuthControllerDocs {
 
-    @Operation(summary = "이메일 중복확인", description = "이메일의 중복을 확인한다.")
+    @Operation(summary = "회원가입", description = "회원가입에 필요한 API를 호출한다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "이메일 중복 여부 판단",
+            @ApiResponse(responseCode = "200", description = "성공시 가입한 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "isDuplicateEmail", schema = @Schema(defaultValue = "true", description = "중복으로 사용 불가")),
-                    }))
-    })
-    Response checkDuplicatedEmail(@NotBlank(message = "not blank")
-                                  @Email(message = "not email form")
-                                  @Size(max = 64, message = "email max length is 64") String email);
-
-    @Operation(summary = "회원가입", description = "회원가입 API를 호출한다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원",
-                    content = @Content(schemaProperties = {
-                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "message", schema = @Schema(defaultValue = "join success", description = "회원 가입 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResponseDto.class)),
                     }))
     })
     Response join(@Valid JoinDto joinDto);
 
+    @Operation(summary = "이메일 중복확인", description = "이메일 중복확인 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 이메일 사용 가능여부를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "사용가능 여부", description = "true: 사용 가능, false: 사용 불가")),
+                    }))
+    })
+    Response checkAvailableEmail(
+            @NotBlank(message = "not blank")
+            @Email(message = "not email form")
+            @Size(max = 64, message = "email max length is 64") String email
+    );
+
+    @Operation(summary = "이메일 인증번호 전송", description = "회원가입에 필요한 인증번호 전송한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 이메일 전송 성공 여부를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "전송 성공 여부", description = "true: 전송 성공, false: 전송 불가")),
+                    }))
+    })
+    Response sendEmail(@Valid EmailDto emailDto);
+    
 }
