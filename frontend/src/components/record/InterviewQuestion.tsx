@@ -8,7 +8,7 @@ const InterviewQuestion = () => {
         <p className="text-white">지원자의 강점(장점)은 무엇입니까?</p>
         <div className="flex justify-center items-center gap-2 text-white border border-white rounded-2xl py-1 px-3">
           <div className="w-[0.3rem] h-[0.3rem] bg-red-700 rounded-full"></div>
-          <p>00:27</p>
+          <p>00:30</p>
         </div>
       </div>
     </div>

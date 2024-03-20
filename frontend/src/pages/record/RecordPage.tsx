@@ -88,6 +88,12 @@ const RecordPage = () => {
             <>
               <InterviewQuestion />
               <BackgroundOpacity />
+              <div className="absolute bottom-0 w-[40rem] ">
+                <div className=" text-white m-6 p-5 text-center bg-black/70 rounded-lg">
+                  <p>질문당 30초의 시간이 주어집니다</p>
+                  <p>준비됐으면 녹화시작 버튼을 눌러주세요</p>
+                </div>
+              </div>
             </>
           )}
           {status === 'recording' && (
