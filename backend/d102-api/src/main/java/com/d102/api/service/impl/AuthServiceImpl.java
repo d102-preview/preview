@@ -1,6 +1,5 @@
 package com.d102.api.service.impl;
 
-import com.d102.api.dto.request.EmailDto;
 import com.d102.api.dto.request.JoinDto;
 import com.d102.api.dto.response.UserResponseDto;
 import com.d102.api.mapper.UserMapper;
@@ -24,8 +23,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicatedEmail(EmailDto emailDto) {
-        return userRepository.findByEmail(emailDto.getEmail()).isPresent();
+    public Boolean checkDuplicatedEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     @Transactional
