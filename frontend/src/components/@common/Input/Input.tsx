@@ -30,14 +30,14 @@ const Input = ({
     if (subText?.type === 'success') {
       return 'text-green-700';
     } else if (subText?.type === 'info') {
-      return 'text-gray-800';
+      return 'text-gray-400';
     } else if (subText?.type === 'error') {
       return 'text-red-500';
     }
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-2">
       {label && <div className="pb-1 text-sm">{label}</div>}
       <input
         type={type}
@@ -46,7 +46,7 @@ const Input = ({
         className={`${width} h-8 text-sm px-2 flex items-center ${borderType === 'all' ? 'border-[2px] rounded-md' : 'border-b-[2px]'} outline-none ${subText?.type === 'error' ? 'focus:border-red-500' : 'focus:border-MAIN1'} `}
         {...props}
       />
-      {subText && <div className={`text-xs pt-1 pl-2 ${setSubTextStyle()}`}>{subText.text}</div>}
+      {subText && <div className={`text-xs pt-1 pl-2 ${setSubTextStyle()}`}>{subText.text}&nbsp;</div>}
     </div>
   );
 };
