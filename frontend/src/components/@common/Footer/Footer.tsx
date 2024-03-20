@@ -7,8 +7,6 @@ const Footer = () => {
         © SSAFY 2024
         <br />
         <br />
-        4반에 내린 단비 <span className="text-gray-300">•</span> 팀장 신주용
-        <br />
         경북 구미시 3공단3로 302
         <br />
       </div>
