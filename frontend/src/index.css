@@ -19,3 +19,7 @@
 body {
   font-family: 'Pretendard-Regular';
 }
+
+::-webkit-scrollbar {
+  width: 0px;
+}
