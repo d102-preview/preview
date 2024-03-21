@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class EmailDto {
+public class EmailRequest {
 
     @NotNull
     @Size(max = 64)
