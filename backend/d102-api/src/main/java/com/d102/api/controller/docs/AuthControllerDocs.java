@@ -1,8 +1,7 @@
 package com.d102.api.controller.docs;
 
-import com.d102.api.dto.request.EmailDto;
-import com.d102.api.dto.request.JoinDto;
-import com.d102.api.dto.response.UserResponseDto;
+import com.d102.api.dto.EmailDto;
+import com.d102.api.dto.UserDto;
 import com.d102.common.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,10 +25,10 @@ public interface AuthControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 가입한 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResponseDto.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
                     }))
     })
-    Response join(@Valid JoinDto joinDto);
+    Response join(@Valid UserDto.JoinRequest joinRequestDto);
 
     @Operation(summary = "이메일 중복확인", description = "이메일 중복확인 API를 호출한다.")
     @ApiResponses({
@@ -53,6 +52,6 @@ public interface AuthControllerDocs {
                             @SchemaProperty(name = "data", schema = @Schema(defaultValue = "전송 성공 여부", description = "true: 전송 성공, false: 전송 불가")),
                     }))
     })
-    Response sendEmail(@Valid EmailDto emailDto);
+    Response sendEmail(@Valid EmailDto.Request requestDto);
     
 }

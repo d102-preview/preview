@@ -15,4 +15,5 @@ public class HealthController implements HealthControllerDocs {
     public Response checkHealth() {
         return new Response();
     }
+
 }
