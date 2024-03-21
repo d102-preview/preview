@@ -28,6 +28,14 @@ isort = "^5.13.2"
 black = "^24.2.0"
 jupyter = "^1.0.0"
 
+
+[tool.poetry.group.ai.dependencies]
+mxnet = "^1.9.1"
+gluonnlp = "0.8.0"
+sentencepiece = "^0.2.0"
+transformers = "^4.38.2"
+ipywidgets = "^8.1.2"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
