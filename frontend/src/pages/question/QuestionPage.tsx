@@ -3,7 +3,8 @@ import QuestionTab from '@/components/question/QuestionTab';
 import SelectedQuestions from '@/components/question/SelectedQuestions';
 import CommonQuestions from '@/components/question/CommonQuestions';
 import ResumeQuestions from '@/components/question/ResumeQuestions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { IQuestionList, interviewType } from '@/types/model';
 
 // 더미 데이터
@@ -15,9 +16,14 @@ const questions: IQuestionList[] = [
   { id: 5, question: '동료와 친구들은 본인을 어떻게 생각하나요?', type: 'common', keywordList: [] },
 ];
 
-
 const QuestionPage = () => {
   const [activeTab, setActiveTab] = useState<interviewType>('common');
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.pathname);
+  }, [location]);
+
   return (
     <>
       <Header />
@@ -34,7 +40,7 @@ const QuestionPage = () => {
               {activeTab === 'resume' && <ResumeQuestions questions={questions} type={activeTab} />}
             </div>
           </div>
-          <SelectedQuestions />
+          {location.pathname === '/question' ? <SelectedQuestions /> : ''}
         </div>
       </main>
     </>
