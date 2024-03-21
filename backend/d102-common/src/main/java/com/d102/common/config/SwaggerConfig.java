@@ -41,4 +41,5 @@ public class SwaggerConfig {
                 .description(description)
                 .version(version);
     }
+
 }

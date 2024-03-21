@@ -1,15 +1,14 @@
 package com.d102.api.service;
 
-import com.d102.api.dto.request.EmailRequest;
-import com.d102.api.dto.request.JoinRequest;
-import com.d102.api.dto.response.UserResponse;
+import com.d102.api.dto.EmailDto;
+import com.d102.api.dto.UserDto;
 
 public interface AuthService {
 
-    UserResponse join(JoinRequest joinRequest);
+    UserDto.Response join(UserDto.JoinRequest joinRequestDto);
 
     Boolean checkAvailableEmail(String email);
 
-    Boolean sendEmail(EmailRequest emailRequest);
+    Boolean sendEmail(EmailDto.Request requestDto);
 
 }
