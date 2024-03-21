@@ -1,21 +1,22 @@
 import Textarea from '@/components/@common/Textarea/Textarea';
 import { useState, useEffect } from 'react';
 
-interface ISubTextProps {
+// @TODO: 추후 삭제하기
+interface ISubText {
   text: string;
   type: 'success' | 'info' | 'error';
 }
 
-interface IScript {
+interface IScriptProps {
   initialScript: string;
   maxLength: number;
 }
 
-const Script = ({ initialScript, maxLength }: IScript) => {
+const Script = ({ initialScript, maxLength }: IScriptProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [script, setScript] = useState(initialScript || '');
   const [tempScript, setTempScript] = useState('');
-  const [subText, setSubText] = useState<ISubTextProps>({ text: '', type: 'info' });
+  const [subText, setSubText] = useState<ISubText>({ text: '', type: 'info' });
 
   useEffect(() => {
     setScript(initialScript);

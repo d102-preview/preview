@@ -1,7 +1,7 @@
 import Accordian from '@/components/@common/Accordian/Accordian';
 import Keywords from '@/components/question/Keywords';
 import Script from '@/components/question/Script';
-import { IQuestionList } from '@/pages/question/QuestionPage';
+import { IQuestionList, interviewType } from '@/types/model';
 
 interface IQuestionItemProps {
   question: string;
@@ -9,7 +9,7 @@ interface IQuestionItemProps {
   isSelected: boolean;
   onAdd?: (questionObj: IQuestionList) => void;
   onRemove: (id: number) => void;
-  type: 'common' | 'resume';
+  type: interviewType;
 }
 
 const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQuestionItemProps) => {
@@ -25,7 +25,7 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
         }
         defaultOpen={false}
         isSelected={isSelected}
-        onPlusClick={() => onAdd && onAdd({ id, question, type })} // '+' 아이콘 클릭 시 호출될 함수
+        onPlusClick={() => onAdd && onAdd({ id, question, type, keywordList: [] })} // '+' 아이콘 클릭 시 호출될 함수
         onMinusClick={() => onRemove(id)} // '-' 아이콘 클릭 시 호출될 함수
         hasIcons={true}
         textSize="text-base"

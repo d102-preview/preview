@@ -4,27 +4,20 @@ import SelectedQuestions from '@/components/question/SelectedQuestions';
 import CommonQuestions from '@/components/question/CommonQuestions';
 import ResumeQuestions from '@/components/question/ResumeQuestions';
 import { useState } from 'react';
+import { IQuestionList, interviewType } from '@/types/model';
 
 // 더미 데이터
 const questions: IQuestionList[] = [
-  { id: 1, question: '1분 자기소개 해주세요', type: 'common' },
-  { id: 2, question: '본인 성격의 장단점에 대해 말해주세요', type: 'common' },
-  { id: 3, question: '인생에서 가장 중요한 것은 무엇인가요?', type: 'common' },
-  { id: 4, question: '리더쉽을 발휘했던 경험에 대해서 말씀해주세요.', type: 'common' },
-  { id: 5, question: '동료와 친구들은 본인을 어떻게 생각하나요?', type: 'common' },
+  { id: 1, question: '1분 자기소개 해주세요', type: 'common', keywordList: [] },
+  { id: 2, question: '본인 성격의 장단점에 대해 말해주세요', type: 'common', keywordList: [] },
+  { id: 3, question: '인생에서 가장 중요한 것은 무엇인가요?', type: 'common', keywordList: [] },
+  { id: 4, question: '리더쉽을 발휘했던 경험에 대해서 말씀해주세요.', type: 'common', keywordList: [] },
+  { id: 5, question: '동료와 친구들은 본인을 어떻게 생각하나요?', type: 'common', keywordList: [] },
 ];
 
-// 면접 질문 리스트 타입
-export interface IQuestionList {
-  id: number;
-  question: string;
-  type: 'common' | 'resume';
-}
-
-type QuestionTabType = 'common' | 'resume';
 
 const QuestionPage = () => {
-  const [activeTab, setActiveTab] = useState<QuestionTabType>('common');
+  const [activeTab, setActiveTab] = useState<interviewType>('common');
   return (
     <>
       <Header />

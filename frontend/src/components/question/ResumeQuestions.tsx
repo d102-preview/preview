@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import QuestionsList from './QuestionsList';
-import { IQuestionList } from '@/pages/question/QuestionPage';
+import { IQuestionList, interviewType, IResumeList } from '@/types/model';
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 
 // 더미 데이터
@@ -19,15 +19,10 @@ const resumes: IResumeList[] = [
   },
 ];
 
-// 이력서 리스트 타입
-export interface IResumeList {
-  name: string;
-  filePath: string;
-}
 
 interface QuestionsProps {
   questions: IQuestionList[];
-  type: 'common' | 'resume';
+  type: interviewType;
 }
 
 const ResumeQuestions = ({ questions, type }: QuestionsProps) => {
