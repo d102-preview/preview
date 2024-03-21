@@ -1,8 +1,7 @@
 package com.d102.api.service.impl;
 
-import com.d102.api.dto.request.EmailRequest;
-import com.d102.api.dto.request.JoinRequest;
-import com.d102.api.dto.response.UserResponse;
+import com.d102.api.dto.EmailDto;
+import com.d102.api.dto.UserDto;
 import com.d102.api.mapper.UserMapper;
 import com.d102.api.service.AuthService;
 import com.d102.common.constant.RoleName;
@@ -24,11 +23,11 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     @Transactional
-    public UserResponse join(JoinRequest joinRequest) {
-        checkExistedEmail(joinRequest.getEmail());
+    public UserDto.Response join(UserDto.JoinRequest joinRequestDto) {
+        checkExistedEmail(joinRequestDto.getEmail());
 
-        User user = userMapper.toUser(joinRequest);
-        user.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
+        User user = userMapper.toUser(joinRequestDto);
+        user.setPassword(passwordEncoder.encode(joinRequestDto.getPassword()));
         user.setRole(RoleName.USER);
 
         return userMapper.toUserResponseDto(userRepository.saveAndFlush(user));
@@ -40,8 +39,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean sendEmail(EmailRequest emailRequest) {
-        checkExistedEmail(emailRequest.getEmail());
+    public Boolean sendEmail(EmailDto.Request requestDto) {
+        checkExistedEmail(requestDto.getEmail());
         return null;
     }
 
