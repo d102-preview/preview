@@ -22,9 +22,6 @@ const RecordTimer = () => {
 
   return (
     <>
-      {/* 여기서 play를 언제시킬지 제어해야함 */}
-      {!isStart && <div className="absolute top-0 w-[40rem] h-[30rem] bg-black/70"></div>}
-
       {!isStart && (
         <div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-bold text-center">
