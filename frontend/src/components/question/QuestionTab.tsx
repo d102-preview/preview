@@ -1,13 +1,13 @@
-type QuestionTabType = 'common' | 'resume';
+import { interviewType } from '@/types/model';
 
 interface QuestionTabProps {
-  activeTab: QuestionTabType;
-  setActiveTab: (tab: QuestionTabType) => void;
+  activeTab: interviewType;
+  setActiveTab: (tab: interviewType) => void;
 }
 
 const QuestionTab = ({ activeTab, setActiveTab }: QuestionTabProps) => {
   // Tab 클릭 핸들러
-  const handleTabClick = (tabName: QuestionTabType) => {
+  const handleTabClick = (tabName: interviewType) => {
     setActiveTab(tabName);
   };
 
@@ -15,7 +15,7 @@ const QuestionTab = ({ activeTab, setActiveTab }: QuestionTabProps) => {
   const buttonStyle = 'w-64 h-14 text-lg text-left font-semibold p-3 transition-colors duration-300 rounded-lg';
 
   // 조건부 스타일 적용
-  const getButtonClasses = (tabName: QuestionTabType) => {
+  const getButtonClasses = (tabName: interviewType) => {
     return `${buttonStyle} ${
       activeTab === tabName ? 'bg-SUB text-MAIN1' : 'bg-white text-[#D5D5D5]'
     } hover:bg-[#E9EFFD] hover:text-MAIN1`;
