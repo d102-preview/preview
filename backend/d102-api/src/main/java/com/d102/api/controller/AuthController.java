@@ -1,8 +1,8 @@
 package com.d102.api.controller;
 
 import com.d102.api.controller.docs.AuthControllerDocs;
-import com.d102.api.dto.request.EmailDto;
-import com.d102.api.dto.request.JoinDto;
+import com.d102.api.dto.request.EmailRequest;
+import com.d102.api.dto.request.JoinRequest;
 import com.d102.api.service.AuthService;
 import com.d102.common.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ public class AuthController implements AuthControllerDocs {
     private final AuthService authService;
 
     @PostMapping("/join")
-    public Response join(@RequestBody JoinDto joinDto) {
-        return new Response("user", authService.join(joinDto));
+    public Response join(@RequestBody JoinRequest joinRequest) {
+        return new Response("user", authService.join(joinRequest));
     }
 
     @GetMapping("/email")
@@ -27,8 +27,8 @@ public class AuthController implements AuthControllerDocs {
     }
 
     @PostMapping("/email")
-    public Response sendEmail(@RequestBody EmailDto emailDto) {
-        return new Response("send", authService.sendEmail(emailDto));
+    public Response sendEmail(@RequestBody EmailRequest emailRequest) {
+        return new Response("send", authService.sendEmail(emailRequest));
     }
 
 }

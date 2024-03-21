@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 @Getter
-public class JoinDto {
+public class JoinRequest {
 
     @NotNull
     @Size(max = 64)
