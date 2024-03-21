@@ -1,48 +1,48 @@
 import Header from '@/components/@common/Header/Header';
-import Accordian from '@/components/@common/Accordian/Accordian';
-import Textarea from '@/components/@common/Textarea/Textarea';
-import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
+import QuestionTab from '@/components/question/QuestionTab';
+import SelectedQuestions from '@/components/question/SelectedQuestions';
+import CommonQuestions from '@/components/question/CommonQuestions';
+import ResumeQuestions from '@/components/question/ResumeQuestions';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { IQuestionList, interviewType } from '@/types/model';
+
+// 더미 데이터
+const questions: IQuestionList[] = [
+  { id: 1, question: '1분 자기소개 해주세요', type: 'common', keywordList: [] },
+  { id: 2, question: '본인 성격의 장단점에 대해 말해주세요', type: 'common', keywordList: [] },
+  { id: 3, question: '인생에서 가장 중요한 것은 무엇인가요?', type: 'common', keywordList: [] },
+  { id: 4, question: '리더쉽을 발휘했던 경험에 대해서 말씀해주세요.', type: 'common', keywordList: [] },
+  { id: 5, question: '동료와 친구들은 본인을 어떻게 생각하나요?', type: 'common', keywordList: [] },
+];
 
 const QuestionPage = () => {
+  const [activeTab, setActiveTab] = useState<interviewType>('common');
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.pathname);
+  }, [location]);
+
   return (
     <>
       <Header />
-      <div>질문 페이지 입니다</div>
-
-      {/* 첫 번째 아코디언 */}
-      <Accordian titleContent="첫 번째 아코디언" children={<Textarea />} defaultOpen={true} />
-      {/* 두 번째 아코디언 */}
-      <Accordian
-        titleContent="두 번째 아코디언"
-        children={
-          <Textarea
-            placeholder="해당 질문에 대한 스크립트를 미리 작성해보세요!"
-            maxLength={10}
-            subText={{ text: '최대 10자까지 입력 가능합니다.', type: 'info' }}
-          />
-        }
-        defaultOpen={false}
-        iconOpen={MdOutlineExpandLess}
-        iconClose={MdOutlineExpandMore}
-        iconOpenColor="#5A8AF2"
-        iconCloseColor="#5A8AF2"
-        backgroundColor="bg-[#F1F5FF]"
-        textColor="text-[#5A8AF2]"
-        textWeight="font-bold"
-      />
-      {/* 세 번째 아코디언 */}
-      <Accordian
-        titleContent="세 번째 아코디언"
-        children={<Textarea maxLength={30} label="스크립트" />}
-        defaultOpen={true}
-        iconOpen={MdOutlineExpandLess}
-        iconClose={MdOutlineExpandMore}
-        iconOpenColor="#5A8AF2"
-        iconCloseColor="#5A8AF2"
-        backgroundColor="bg-[#F1F5FF]"
-        textColor="text-[#5A8AF2]"
-        textWeight="font-bold"
-      />
+      <main className="w-10/12 mx-auto h-[calc(100vh-3.5rem)]">
+        <div>
+          <h3 className="text-xl font-semibold mb-1">면접 질문 리스트</h3>
+          <p className="text-sm text-[#B0B0B0]">면접 연습을 진행할 리스트를 생성해주세요</p>
+        </div>
+        <div className="mt-3 flex h-5/6 overflow-visible">
+          <div className="flex rounded-2xl shadow-lg bg-GRAY w-10/12">
+            <QuestionTab activeTab={activeTab} setActiveTab={setActiveTab} />
+            <div className="p-7 w-11/12 overflow-auto">
+              {activeTab === 'common' && <CommonQuestions questions={questions} type={activeTab} />}
+              {activeTab === 'resume' && <ResumeQuestions questions={questions} type={activeTab} />}
+            </div>
+          </div>
+          {location.pathname === '/question' ? <SelectedQuestions /> : ''}
+        </div>
+      </main>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes, useState, useEffect, useRef } from 'react';
+import { TextareaHTMLAttributes, useEffect, useRef } from 'react';
 
 interface ISubTextProps {
   text: string;
@@ -14,6 +14,7 @@ interface ITextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   disabled?: boolean;
   subText?: ISubTextProps;
   maxLength?: number;
+  value: string;
 }
 
 const Textarea = ({
@@ -24,10 +25,10 @@ const Textarea = ({
   disabled,
   subText,
   maxLength,
+  value = '', // 외부에서 전달받은 value 사용
+  onChange, // 외부에서 전달받은 onChange 사용
   ...props
 }: ITextareaProps) => {
-  // useState를 사용하여 text 상태를 관리
-  const [text, setText] = useState((props.defaultValue as string) || '');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // textarea의 높이를 조절하는 함수
@@ -37,22 +38,10 @@ const Textarea = ({
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // scrollHeight 값을 이용해 높이 조절
   };
 
-  // text 상태가 변화할 때마다 높이 조절
+  // 컴포넌트 마운트 및 value 변경 시 높이 조절
   useEffect(() => {
     adjustHeight();
-  }, [text]);
-
-  // 사용자 입력을 처리하고 상태를 업데이트하는 handleChange 함수
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const inputValue = event.target.value;
-    // maxLength가 정의되어 있고, 입력값의 길이가 maxLength를 초과하는 경우 입력값을 잘라냄
-    if (maxLength && inputValue.length > maxLength) {
-      setText(inputValue.slice(0, maxLength));
-    } else {
-      setText(inputValue);
-    }
-    adjustHeight(); // 입력 상태가 변화할 때마다 높이 조절
-  };
+  }, [value]);
 
   const setSubTextStyle = () => {
     switch (subText?.type) {
@@ -71,17 +60,16 @@ const Textarea = ({
     <div className="pb-5">
       {label && <div className="pb-1.5 text-md">{label}</div>}
       <div
-        className={`${width} ${borderType === 'all' ? 'border-2 rounded-lg' : 'border-none'} 
-        ${disabled ? 'bg-gray-100' : 'bg-white'}  focus-within:border-MAIN1 overflow-hidden`}
+        className={`${width} ${borderType === 'all' ? 'border-2 rounded-lg' : 'border-none'} border-[#E8E8E8] focus-within:border-[#A7A7A7] overflow-hidden`}
         style={{ padding: '0.75rem' }}
       >
         <textarea
           {...props}
           ref={textareaRef}
-          value={text}
+          value={value} // 외부에서 받은 value 사용
           disabled={disabled}
-          onChange={handleChange}
-          className="w-full h-6 text-sm resize-none outline-none overflow-y-hidden"
+          onChange={onChange}
+          className={`w-full h-6 text-sm resize-none outline-none overflow-y-hidden bg-inherit`}
           maxLength={maxLength}
           placeholder={placeholder}
         />
@@ -92,7 +80,7 @@ const Textarea = ({
         ) : (
           <div className="flex-grow"></div> // subText가 없을 때 이 div가 남은 공간을 차지
         )}
-        <div className="text-xs text-right">{`${text.length}${maxLength ? ` / ${maxLength}` : ''}자`}</div>
+        <div className="text-xs text-right text-UNIMPORTANT_TEXT">{`${value.length}${maxLength ? ` / ${maxLength}` : ''}자`}</div>
       </div>
     </div>
   );
