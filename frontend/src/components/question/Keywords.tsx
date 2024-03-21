@@ -53,7 +53,7 @@ const Keywords = () => {
             )}
           </span>
         ))}
-        {isEdit ? (
+        {isEdit && (
           <input
             value={inputValue}
             onChange={handleInputChange}
@@ -61,8 +61,6 @@ const Keywords = () => {
             placeholder="키워드를 추가해 보세요"
             className="w-38 text-xs px-3 py-2 border-2 border-[#F1F5FF] rounded-xl outline-none focus:border-MAIN1"
           />
-        ) : (
-          <></>
         )}
       </div>
     </div>
