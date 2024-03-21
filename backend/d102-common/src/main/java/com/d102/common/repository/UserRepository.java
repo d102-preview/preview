@@ -10,4 +10,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     Optional<User> findByEmail(String email);
+
 }
