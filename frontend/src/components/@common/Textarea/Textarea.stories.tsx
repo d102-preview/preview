@@ -15,6 +15,7 @@ export const Default: Story = {
   args: {
     width: 'w-full',
     label: 'default',
+    value: '',
     placeholder: 'placeholder',
     disabled: false,
   },
@@ -24,6 +25,7 @@ export const MaxLenth: Story = {
   args: {
     width: 'w-full',
     label: 'default',
+    value: '',
     placeholder: 'placeholder',
     disabled: false,
     maxLength: 500,
@@ -34,6 +36,7 @@ export const BorderNone: Story = {
   args: {
     width: 'w-full',
     label: 'boder none',
+    value: '',
     placeholder: 'placeholder',
     borderType: 'none',
     disabled: false,
@@ -44,6 +47,7 @@ export const Disabled: Story = {
   args: {
     width: 'w-full',
     label: 'disabled',
+    value: '',
     placeholder: 'placeholder',
     disabled: true,
   },
@@ -53,6 +57,7 @@ export const Success: Story = {
   args: {
     width: 'w-full',
     label: 'default',
+    value: '',
     placeholder: 'placeholder',
     disabled: false,
     subText: {
@@ -66,6 +71,7 @@ export const Info: Story = {
   args: {
     width: 'w-full',
     label: 'default',
+    value: '',
     placeholder: 'placeholder',
     disabled: false,
     subText: {
@@ -79,6 +85,7 @@ export const Error: Story = {
   args: {
     width: 'w-full',
     label: 'default',
+    value: '',
     placeholder: 'placeholder',
     disabled: false,
     subText: {
