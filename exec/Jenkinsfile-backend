@@ -19,7 +19,7 @@ pipeline {
       steps {
         withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
           script {
-            sh 'cd exec/ && chmod +x project-set-environment.sh && ./project-set-environment.sh'
+            sh 'cd exec/ && chmod +x project-setup-backend.sh && ./project-setup-backend.sh'
             sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
           }
         }
