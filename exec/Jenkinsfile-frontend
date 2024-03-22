@@ -90,7 +90,7 @@ pipeline {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
             mattermostSend(
               color: 'good',
-              message: "[Frontend] Deploy Success: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              message: "[FE] Deploy Success: ${env.BUILD_URL}\n${GIT_MESSAGE}",
               endpoint: "${MM_URL}",
               channel: "${CHANNEL}",
               icon: "${SUCCESS_ICON}"
@@ -105,7 +105,7 @@ pipeline {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
             mattermostSend(
               color: 'danger',
-              message: "[Frontend] Deploy Fail: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              message: "[FE] Deploy Fail: ${env.BUILD_URL}\n${GIT_MESSAGE}",
               endpoint: "${MM_URL}",
               channel: "${CHANNEL}",
               icon: "${FAIL_ICON}"
