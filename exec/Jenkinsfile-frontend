@@ -14,8 +14,10 @@ pipeline {
     stage('Build Frontend') {
       steps {
         withCredentials([file(credentialsId: 'front_profile', variable: 'PROD_ENV')]) {
-          sh 'cd frontend/ && chmod -R 755 . && cp ${PROD_ENV} .'
-          sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
+          script {
+            sh 'cd frontend/ && chmod -R 755 . && cp ${PROD_ENV} .'
+            sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
+          }
         }
       }
     }
