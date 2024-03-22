@@ -50,6 +50,9 @@ dependencies {
     // mariadb
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
 
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     // mapstruct
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
