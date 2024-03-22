@@ -9,7 +9,10 @@ public enum ExceptionType {
     InvalidParamException("INVALID", "Invalid param"),
 
     /* conflict exception */
-    EmailExistedException("CONFLICT", "Email already exists");
+    EmailExistedException("CONFLICT", "Email already exists"),
+
+    /* Too many request exception */
+    EmailSendLimitException("TOO MANY REQUEST", "Limits for mail sending");
 
     private final String code;
     private final String message;
