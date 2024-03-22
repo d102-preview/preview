@@ -38,6 +38,10 @@ const router = createBrowserRouter([
     element: <QuestionPage />,
   },
   {
+    path: '/question-list',
+    element: <QuestionPage />,
+  },
+  {
     path: '/result',
     element: <ResultPage />,
   },
