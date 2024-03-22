@@ -23,7 +23,7 @@ pipeline {
       steps {
         withCredentials([file(credentialsId: 'front_profile', variable: 'PROD_ENV')]) {
           script {
-            sh 'cd exec/ && chmod +x project-set-environment.sh && ./project-set-environment.sh'
+            sh 'cd exec/ && chmod +x project-setup-frontend.sh && ./project-setup-frontend.sh'
             sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
           }
         }
