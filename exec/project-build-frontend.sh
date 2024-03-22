@@ -1,1 +1,1 @@
-cd ../frontend && rm -rf dist && chmod -R 755 . && cp ${PROD_ENV} . && ls -al && npm install && npm run build
+cd ../frontend && npm install && npm run build
