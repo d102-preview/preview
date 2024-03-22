@@ -53,7 +53,7 @@ const InterviewPage = () => {
               backgroundColor="bg-[#29BA78]"
               textColor="text-white"
               textSize="text-lg"
-              onClick={() => navigate('mock')}
+              onClick={() => navigate('/question')}
             />
           </InterviewStartItem>
         </div>

@@ -5,19 +5,28 @@ import RecordSetting from '@/components/record/RecordSetting';
 import { useInterview } from '@/hooks/interview/useInterview';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import BackgroundOpacity from '@/components/record/BackgroundOpacity';
+import RecordUploading from '@/components/record/RecordUploading';
+
+export type recordStatusType = 'pending' | 'preparing' | 'recording' | 'proceeding' | 'uploading';
 
 const RecordPage = () => {
   const { useGetMainInterviewQuestionList } = useInterview();
   const { data: questionList, mutate, isSuccess } = useGetMainInterviewQuestionList();
+  const [questionIndex, setQuestionIndex] = useState<number>(0); // 질문 인덱스 상태 관리
   /*
     stream 연결 전 상태는 stream으로 판단
     pending -> 카메라, 마이크 세팅 중 (사용자가 파란색 다음버튼을 눌렀을 때 다음 상태로 변경)
     preparing -> 질문을 받아와 녹화대기 중인 상태 (사용자가 녹화시작 버튼을 눌렀을 때 다음 상태로 변경)
     recording -> 이후 RecordTimer 컴포넌트에서 카운트 다운 시작하고 종료하면 녹화 시작
+    proceeding -> 녹화 진행중인 상태
     uploading -> 녹화한 영상을 서버에 업로드하는 중 (사용자가 직접 다음을 누르거나 타이머가 다 지났을 때 다시 recording 상태로 변경)
   */
-  const [status, setStatus] = useState<'pending' | 'preparing' | 'recording' | 'uploading'>('pending');
+  const [status, setStatus] = useState<recordStatusType>('pending');
+
+  // "거울",  화면에 보여지는 역할
   const videoRef = useRef<HTMLVideoElement>(null);
+  // dom내부에선 보여지지 않지만, 내부에서 "녹화"에 대한 기능만을 수행합니다.
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   const [stream, setStream] = useState<MediaStream | null>(null);
 
@@ -37,14 +46,22 @@ const RecordPage = () => {
   }, []);
 
   const nextButtonClick = async () => {
-    if (stream && !isSuccess) {
+    if (!stream) {
+      alert('카메라와 마이크를 확인해보세요');
+      return;
+    }
+
+    if (status === 'pending') {
       mutate();
       setStatus('preparing');
-    } else if (stream && isSuccess) {
-      console.log('녹화하기');
+    } else if (status === 'preparing') {
       setStatus('recording');
-    } else {
-      alert('카메라와 마이크를 확인해보세요');
+    } else if (status === 'recording') {
+      setStatus('proceeding');
+    } else if (status === 'proceeding') {
+      setStatus('uploading');
+    } else if (status === 'uploading') {
+      handleStartRecording();
     }
   };
 
@@ -63,37 +80,122 @@ const RecordPage = () => {
   }, [stream]);
 
   useEffect(() => {
-    console.log(questionList);
+    console.log(questionList?.data.questionList);
   }, [questionList]);
+
+  useEffect(() => {
+    console.log(status);
+  }, [status]);
+
+  const [btnText, setBtnText] = useState<string>('다음');
+
+  // 상태에 따른 버튼 text 수정
+  useEffect(() => {
+    switch (status) {
+      case 'preparing':
+        setBtnText('녹화시작');
+        break;
+      case 'uploading':
+        setBtnText('');
+        break;
+      case 'proceeding':
+        setBtnText('녹화종료');
+        break;
+      case 'recording':
+        setBtnText('');
+        break;
+    }
+  }, [status]);
+
+  const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
+
+  const handleStartRecording = () => {
+    setRecordedBlobs([]);
+    try {
+      mediaRecorderRef.current = new MediaRecorder(stream as MediaStream);
+      console.log('1');
+      mediaRecorderRef.current.ondataavailable = event => {
+        if (event.data && event.data.size > 0) {
+          setRecordedBlobs(prev => [...prev, event.data]);
+          console.log('2');
+        }
+      };
+      mediaRecorderRef.current.start();
+    } catch (e) {
+      console.log('MediaRecorder error');
+    }
+  };
+
+  useEffect(() => {
+    console.log(recordedBlobs);
+  }, [recordedBlobs]);
 
   return (
     <div>
       <div className="flex flex-col justify-center items-center w-full h-screen pb-10">
-        <div className="w-[58rem] relative flex justify-end pb-5 text-center">
+        <div className="w-[58rem] h-14 relative flex justify-end pb-5 text-center">
           <p className="absolute top-0 left-1/2 -translate-x-1/2 font-bold text-3xl">
             {!stream ? '카메라, 마이크를 준비중입니다' : !isSuccess ? '다음 버튼을 눌러주세요' : ''}
           </p>
-          <Button
-            text={isSuccess ? '녹화시작' : '다음'}
-            height="h-9"
-            backgroundColor={stream ? 'bg-MAIN1' : 'bg-gray-200'}
-            textColor="text-white"
-            onClick={() => nextButtonClick()}
-          />
+          {btnText && (
+            <Button
+              text={btnText}
+              height="h-9"
+              backgroundColor={stream ? 'bg-MAIN1' : 'bg-gray-200'}
+              textColor="text-white"
+              onClick={() => nextButtonClick()}
+            />
+          )}
         </div>
         <div className="relative bg-black px-[9rem]">
-          <video className="w-[40rem] h-[30rem]" ref={videoRef} autoPlay />
+          <video className="w-[40rem] h-[30rem] -scale-x-100" ref={videoRef} autoPlay />
+
           {stream && status === 'pending' && <RecordSetting />}
+
           {stream && status === 'preparing' && (
             <>
-              <InterviewQuestion />
               <BackgroundOpacity />
+              {questionList && (
+                <InterviewQuestion
+                  question={questionList.data.questionList[questionIndex]}
+                  setStatus={setStatus}
+                  status={status}
+                />
+              )}
+
+              <div className="absolute bottom-0 w-[40rem] ">
+                <div className=" text-white m-6 p-5 text-center bg-black/50 rounded-lg">
+                  <p>질문당 30초의 시간이 주어집니다</p>
+                  <p>준비됐으면 녹화시작 버튼을 눌러주세요</p>
+                </div>
+              </div>
             </>
           )}
-          {status === 'recording' && (
+          {stream && status === 'recording' && (
             <>
               <BackgroundOpacity />
-              <RecordTimer />
+              <RecordTimer setStatus={setStatus} />
+            </>
+          )}
+
+          {stream && questionList && status === 'proceeding' && (
+            <>
+              <InterviewQuestion
+                question={questionList.data.questionList[questionIndex]}
+                setStatus={setStatus}
+                status={status}
+              />
+            </>
+          )}
+
+          {stream && questionList && status === 'uploading' && (
+            <>
+              <RecordUploading
+                questionList={questionList.data.questionList}
+                questionIndex={questionIndex}
+                setQuestionIndex={setQuestionIndex}
+                setStatus={setStatus}
+              />
             </>
           )}
         </div>
