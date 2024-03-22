@@ -32,15 +32,6 @@ const SelectedQuestions = () => {
 
       <div className="flex flex-end justify-end gap-2">
         <Button
-          text="취소하기"
-          width="w-20"
-          height="h-8"
-          backgroundColor="bg-[#F3F3F3]"
-          hoverBackgroundColor="hover:bg-[#bebebe]"
-          textColor="text-white"
-          //   onClick={() => navigate('/record')}
-        />
-        <Button
           text="시작하기"
           width="w-20"
           height="h-8"
