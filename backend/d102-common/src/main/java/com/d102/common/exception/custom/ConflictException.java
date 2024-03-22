@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ConflictException extends RuntimeException{
+public class ConflictException extends RuntimeException {
 
     private final ExceptionType exceptionType;
 
