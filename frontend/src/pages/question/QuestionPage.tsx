@@ -5,10 +5,10 @@ import CommonQuestions from '@/components/question/CommonQuestions';
 import ResumeQuestions from '@/components/question/ResumeQuestions';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { IQuestionList, interviewType } from '@/types/model';
+import { IQuestionItem, interviewType } from '@/types/model';
 
 // 더미 데이터
-const questions: IQuestionList[] = [
+const questions: IQuestionItem[] = [
   { id: 1, question: '1분 자기소개 해주세요', type: 'common', keywordList: [] },
   { id: 2, question: '본인 성격의 장단점에 대해 말해주세요', type: 'common', keywordList: [] },
   { id: 3, question: '인생에서 가장 중요한 것은 무엇인가요?', type: 'common', keywordList: [] },
