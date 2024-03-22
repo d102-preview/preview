@@ -1,9 +1,9 @@
-import { IQuestionList, interviewType } from '@/types/model';
+import { IQuestionItem, interviewType } from '@/types/model';
 import QuestionItem from './QuestionItem';
 import questionStore from '@/stores/questionStore';
 
 interface QuestionsListProps {
-  questions: IQuestionList[];
+  questions: IQuestionItem[];
   type: interviewType;
 }
 

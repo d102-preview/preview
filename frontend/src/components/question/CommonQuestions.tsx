@@ -1,9 +1,9 @@
 import QuestionsList from './QuestionsList';
-import { IQuestionList, interviewType } from '@/types/model';
+import { IQuestionItem, interviewType } from '@/types/model';
 
 interface QuestionsProps {
-  questions: IQuestionList[];
-  type: interviewType
+  questions: IQuestionItem[];
+  type: interviewType;
 }
 
 const CommonQuestions = ({ questions, type }: QuestionsProps) => {

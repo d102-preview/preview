@@ -1,14 +1,14 @@
 import Accordian from '@/components/@common/Accordian/Accordian';
 import Keywords from '@/components/question/Keywords';
 import Script from '@/components/question/Script';
-import { IQuestionList, interviewType } from '@/types/model';
+import { IQuestionItem, interviewType } from '@/types/model';
 import { useLocation } from 'react-router-dom';
 
 interface IQuestionItemProps {
   question: string;
   id: number;
   isSelected: boolean;
-  onAdd?: (questionObj: IQuestionList) => void;
+  onAdd?: (questionObj: IQuestionItem) => void;
   onRemove: (id: number) => void;
   type: interviewType;
 }
