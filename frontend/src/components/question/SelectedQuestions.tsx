@@ -20,7 +20,7 @@ const SelectedQuestions = () => {
             >
               <LuMinusCircle
                 size="35"
-                className="flex-shrink-0 mr-2 p-1 pl-0 text-MAIN1"
+                className="flex-shrink-0 mr-2 p-1 pl-0 text-[#EA8888]"
                 onClick={() => removeQuestion(questionObj.id)}
               />
               <div>{questionObj.question}</div>
