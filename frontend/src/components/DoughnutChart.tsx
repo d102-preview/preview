@@ -5,6 +5,11 @@ import bad from '@/assets/images/bad.png';
 import soso from '@/assets/images/soso.png';
 import good from '@/assets/images/good.png';
 import very_good from '@/assets/images/very_good.png';
+import { ChartOptions } from 'chart.js/auto';
+
+interface IDoughnutChartProps {
+  percent: number;
+}
 
 const getBackgroundImage = (percent: number) => {
   if (percent >= 0 && percent <= 20) {
@@ -20,7 +25,7 @@ const getBackgroundImage = (percent: number) => {
   }
 };
 
-const DoughnutChart = ({ percent }) => {
+const DoughnutChart = ({ percent }: IDoughnutChartProps) => {
   const backgroundImage = getBackgroundImage(percent);
 
   const data = {
@@ -37,7 +42,7 @@ const DoughnutChart = ({ percent }) => {
     ],
   };
 
-  const options = {
+  const options: ChartOptions<'doughnut'> = {
     cutout: '90%',
     plugins: {
       legend: {
@@ -47,21 +52,19 @@ const DoughnutChart = ({ percent }) => {
         enabled: false,
       },
     },
-    hover: {
-      mode: null,
-    },
+    hover: {},
   };
 
   return (
-    <div className="flex flex-col p-3">
-      <div className="relative w-72 h-72">
+    <div className="flex flex-col p-5 ml-10">
+      <div className="relative w-60 h-60">
         <div className="relative z-10">
           <Doughnut data={data} options={options} />
         </div>
         <img src={backgroundImage} className="absolute inset-0 w-full h-full z-0" />
-        <div className="flex text-center justify-center items-center text-lg mt-3">
+        <div className="flex text-center justify-center items-center text-xl p-5">
           <p className="text-[#B0B0B0] mr-2">면접 합격 가능성</p>
-          <p className="text-UNIMPORTANT_TEXT font-bold">{percent}%</p>
+          <p className="text-[#696969] font-bold">{percent}%</p>
         </div>
       </div>
     </div>
