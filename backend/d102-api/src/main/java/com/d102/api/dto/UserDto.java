@@ -1,6 +1,6 @@
 package com.d102.api.dto;
 
-import com.d102.common.utils.RegExpressions;
+import com.d102.common.util.RegExpressions;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
