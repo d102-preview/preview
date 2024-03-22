@@ -36,7 +36,7 @@ const QuestionPage = () => {
         <div className="mt-3 flex h-5/6 overflow-visible">
           <div className={`flex rounded-2xl shadow-lg bg-GRAY ${isShow ? 'w-8/12' : 'w-full'} `}>
             <QuestionTab activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className={`p-7 ${isShow ? 'w-11/12' : 'w-full'}  overflow-auto`}>
+            <div className={`p-7 ${isShow ? 'w-11/12' : 'w-full'} overflow-auto`}>
               {activeTab === 'common' && <CommonQuestions questions={questions} type={activeTab} />}
               {activeTab === 'resume' && <ResumeQuestions questions={questions} type={activeTab} />}
             </div>
