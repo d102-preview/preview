@@ -45,6 +45,10 @@ const router = createBrowserRouter([
     path: '/result',
     element: <ResultPage />,
   },
+  {
+    path: '/result-report',
+    element: <ResultPage />,
+  },
 ]);
 function App() {
   return (
