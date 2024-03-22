@@ -132,7 +132,7 @@ const RecordPage = () => {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center w-full h-screen pb-10">
+      <div className="flex flex-col justify-center items-center min-w-[58rem] h-screen pb-10">
         <div className="w-[58rem] h-14 relative flex justify-end pb-5 text-center">
           <p className="absolute top-0 left-1/2 -translate-x-1/2 font-bold text-3xl">
             {!stream ? '카메라, 마이크를 준비중입니다' : !isSuccess ? '다음 버튼을 눌러주세요' : ''}
