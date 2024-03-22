@@ -8,12 +8,20 @@ export interface APIResponse<T> {
 export interface IQuestionItem {
   id: number;
   question: string;
-  type: 'common' | 'resume';
+  type: interviewType;
   keywordList: IKeywordItem[] | null;
 }
+
+export type interviewType = 'common' | 'resume';
 
 // 면접 키워드 리스트 타입
 export interface IKeywordItem {
   id: number;
   keyword: string;
+}
+
+// 이력서 리스트 타입
+export interface IResumeList {
+  name: string;
+  filePath: string;
 }
