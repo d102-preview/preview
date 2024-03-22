@@ -1,5 +1,5 @@
+import { getIsEmailDuplicateRes } from '@/mocks/api/data/auth';
 import { HttpResponse, http } from 'msw';
-import { getIsEmailDuplicateRes } from '../data/auth';
 
 export const authHandlers = [
   http.get('/api/auth/email', ({ request }) => {
