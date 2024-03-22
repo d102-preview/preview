@@ -1,5 +1,4 @@
 import { IGetIsEmailDuplicateRes } from '@/types/auth';
-// import { axiosAuthInstance } from '@/apis/axiosInstance';
 import { APIResponse } from '@/types/model';
 import axios from 'axios';
 

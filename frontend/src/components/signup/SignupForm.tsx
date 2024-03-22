@@ -23,7 +23,7 @@ interface ISignupInfo {
 
 const SignupForm = () => {
   const { useGetIsDuplicateEmail } = useSignup();
-  const { mutate, isSuccess, isError } = useGetIsDuplicateEmail();
+  const { mutate } = useGetIsDuplicateEmail();
 
   const [signupInfo, setSignupInfo] = useState<ISignupInfo>({
     name: {
@@ -80,9 +80,9 @@ const SignupForm = () => {
   };
 
   const checkValidation = (type: keyof ISignupInfo) => {
-    const nameRegex = /[^a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣 ]/; // 대소문자 문자만 있어야 함
+    const nameRegex = /[a-zA-Z가-힣]/; // 대소문자 문자만 있어야 함
     const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/; // 이메일 정규식
-    const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{6,15}$/; // 비밀번호 정규식
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g; // 비밀번호 정규식
 
     switch (type) {
       case 'name': {
@@ -93,7 +93,7 @@ const SignupForm = () => {
           return;
         }
 
-        if (name.length < 2 || name.length > 4 || nameRegex.test(name)) {
+        if (name.length < 2 || name.length > 4 || !nameRegex.test(name)) {
           setSubTextAndStatus(type, '입력 형식이 틀립니다. 다시 입력해주세요.', 'error');
           return;
         }
@@ -197,23 +197,16 @@ const SignupForm = () => {
         }
       },
     });
-
-    console.log(isSuccess, isError);
-
-    // 이메일 중복 요청 성공 시 수행 로직
-    // 이메일 중복 요청 실패 시 useSignup 훅에서 실패 로직으로 걸러질 것임
-    // service 함수 실행 -> hook에 있는 onSuccess, onError 둘 중에 하나 실행
   };
 
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">
       {/* 상단 텍스트 */}
       <div>
-        <div className="text-xl font-semibold">
+        <div className="text-xl font-semibold pb-2">
           가입 후<br />
           <span className="text-MAIN1">프리뷰</span>를 마음껏 사용하세요
         </div>
-        <div className="text-md text-[GRAY] pt-1 pb-3">회원가입을 진행해주세요</div>
       </div>
       {/* 폼 */}
       <form>
