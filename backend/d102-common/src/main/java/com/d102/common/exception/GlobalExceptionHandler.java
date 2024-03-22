@@ -1,6 +1,7 @@
 package com.d102.common.exception;
 
 import com.d102.common.exception.custom.ConflictException;
+import com.d102.common.exception.custom.TooManyException;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
 import jakarta.validation.ConstraintViolationException;
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler(value = ConflictException.class)
     public Response handleConflictException(ConflictException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(value = TooManyException.class)
+    public Response handleTooManyException(TooManyException e) {
         return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }
 
