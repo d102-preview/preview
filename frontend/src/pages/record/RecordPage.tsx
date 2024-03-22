@@ -88,6 +88,8 @@ const RecordPage = () => {
   }, [status]);
 
   const [btnText, setBtnText] = useState<string>('다음');
+
+  // 상태에 따른 버튼 text 수정
   useEffect(() => {
     switch (status) {
       case 'preparing':
@@ -176,21 +178,20 @@ const RecordPage = () => {
             </>
           )}
 
-          {stream && status === 'proceeding' && (
+          {stream && questionList && status === 'proceeding' && (
             <>
-              {questionList && (
-                <InterviewQuestion
-                  question={questionList.data.questionList[questionIndex]}
-                  setStatus={setStatus}
-                  status={status}
-                />
-              )}
+              <InterviewQuestion
+                question={questionList.data.questionList[questionIndex]}
+                setStatus={setStatus}
+                status={status}
+              />
             </>
           )}
 
-          {stream && status === 'uploading' && (
+          {stream && questionList && status === 'uploading' && (
             <>
               <RecordUploading
+                questionList={questionList.data.questionList}
                 questionIndex={questionIndex}
                 setQuestionIndex={setQuestionIndex}
                 setStatus={setStatus}
