@@ -75,6 +75,7 @@ const Script = ({ initialScript, maxLength }: IScriptProps) => {
         )}
       </div>
       <Textarea
+        className="whitespace-pre"
         disabled={!isEdit}
         value={script}
         onChange={handleScriptChange}
