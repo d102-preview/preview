@@ -3,6 +3,14 @@ pipeline {
   
   environment {
     CI = false
+
+    GIT_MESSAGE = """${sh(
+        script: 'git show -s --pretty="* Commit %h by %cn <%ce>%n* Title: %s%n* Date: %cI"',
+        returnStdout: true
+    )}"""
+    CHANNEL = 'D102-Alert'
+    SUCCESS_ICON = 'https://www.jenkins.io/images/logos/seonbi/256.png'
+    FAIL_ICON = 'https://www.jenkins.io/images/logos/fire/256.png'
   }
  
   stages {
@@ -42,12 +50,13 @@ pipeline {
       script {
         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-            mattermostSend(color: 'good',
-                          message: "[AI] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                          endpoint: "${MM_URL}",
-                          channel: 'D102-Alert')
+            mattermostSend(
+              color: 'good',
+              message: "[AI] Deploy Success: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${SUCCESS_ICON}"
+            )
           }
         }
       }
@@ -56,12 +65,13 @@ pipeline {
       script {
         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-            mattermostSend(color: 'danger',
-                          message: "[AI] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                          endpoint: "${MM_URL}",
-                          channel: 'D102-Alert')
+            mattermostSend(
+              color: 'danger',
+              message: "[AI] Deploy Fail: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${FAIL_ICON}"
+            )
           }
         }
       }
