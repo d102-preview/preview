@@ -1,8 +1,11 @@
 import kakao from '@/assets/images/kakao.png';
+import { useSignup } from '@/hooks/auth/useSignup';
+import axios from 'axios';
 import { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../@common/Button/Button';
 import Input from '../@common/Input/Input';
+import Toast from '../@common/Toast/Toast';
 
 interface signupInfo {
   value: string;
@@ -19,6 +22,9 @@ interface ISignupInfo {
 }
 
 const SignupForm = () => {
+  const { useGetIsDuplicateEmail } = useSignup();
+  const { mutate } = useGetIsDuplicateEmail();
+
   const [signupInfo, setSignupInfo] = useState<ISignupInfo>({
     name: {
       value: '',
@@ -74,9 +80,9 @@ const SignupForm = () => {
   };
 
   const checkValidation = (type: keyof ISignupInfo) => {
-    const nameRegex = /[^a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣 ]/; // 대소문자 문자만 있어야 함
+    const nameRegex = /[a-zA-Z가-힣]/; // 대소문자 문자만 있어야 함
     const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/; // 이메일 정규식
-    const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{6,15}$/; // 비밀번호 정규식
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g; // 비밀번호 정규식
 
     switch (type) {
       case 'name': {
@@ -87,7 +93,7 @@ const SignupForm = () => {
           return;
         }
 
-        if (name.length < 2 || name.length > 4 || nameRegex.test(name)) {
+        if (name.length < 2 || name.length > 4 || !nameRegex.test(name)) {
           setSubTextAndStatus(type, '입력 형식이 틀립니다. 다시 입력해주세요.', 'error');
           return;
         }
@@ -142,7 +148,6 @@ const SignupForm = () => {
           return;
         }
 
-        // @TODO: 인증 전/후로 나누기
         setSubTextAndStatus(type, '사용 가능한 비밀번호입니다.', 'success');
         break;
       }
@@ -160,7 +165,6 @@ const SignupForm = () => {
           return;
         }
 
-        // @TODO: 인증 전/후로 나누기
         setSubTextAndStatus(type, '비밀번호가 일치합니다.', 'success');
         break;
       }
@@ -170,102 +174,129 @@ const SignupForm = () => {
     }
   };
 
+  // 인증번호 발송 버튼 클릭 이벤트
+  const handleSendCertifNum = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (signupInfo.email.status !== 'success') {
+      Toast.error('올바른 이메일을 입력해주세요.');
+      return;
+    }
+
+    mutate(signupInfo.email.value, {
+      onSuccess: (data, variables) => {
+        // @TODO: 이메일 인증번호 전송 로직
+      },
+      onError: (error, variables) => {
+        console.log('실패', error, variables);
+
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 409) {
+            setSubTextAndStatus('email', '중복된 이메일입니다.', 'error');
+          }
+        }
+      },
+    });
+  };
+
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">
       {/* 상단 텍스트 */}
       <div>
-        <div className="text-xl font-semibold">
+        <div className="text-xl font-semibold pb-2">
           가입 후<br />
           <span className="text-MAIN1">프리뷰</span>를 마음껏 사용하세요
         </div>
-        <div className="text-md text-[GRAY] pt-1 pb-3">회원가입을 진행해주세요</div>
       </div>
       {/* 폼 */}
-      <Input
-        label="이름"
-        placeholder="2~4자리/특수문자,숫자 제외"
-        type="text"
-        onChange={e => handleChange(e, 'name')}
-        onBlur={() => checkValidation('name')}
-        subText={{
-          text: signupInfo.name.subText,
-          type: signupInfo.name.status,
-        }}
-      />
-      <div className="relative">
-        <div className="grid w-[80%]">
-          <Input
-            label="이메일"
-            placeholder="ex) email@preview.com"
-            type="email"
-            onChange={e => handleChange(e, 'email')}
-            onBlur={() => checkValidation('email')}
-            subText={{
-              text: signupInfo.email.subText,
-              type: signupInfo.email.status,
-            }}
-          />
+      <form>
+        <Input
+          label="이름"
+          placeholder="2~4자리/특수문자,숫자 제외"
+          type="text"
+          onChange={e => handleChange(e, 'name')}
+          onBlur={() => checkValidation('name')}
+          subText={{
+            text: signupInfo.name.subText,
+            type: signupInfo.name.status,
+          }}
+        />
+        <div className="relative">
+          <div className="grid w-[80%]">
+            <Input
+              label="이메일"
+              placeholder="ex) email@preview.com"
+              type="email"
+              onChange={e => handleChange(e, 'email')}
+              onBlur={() => checkValidation('email')}
+              subText={{
+                text: signupInfo.email.subText,
+                type: signupInfo.email.status,
+              }}
+            />
+          </div>
+          <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
+            <Button
+              text="발송하기"
+              width="w-[72px]"
+              height="h-9"
+              backgroundColor="bg-[#EEF3FF]"
+              textColor="text-MAIN1"
+              hoverBackgroundColor="hover:bg-[#D8E2FC]"
+              hoverTextColor="hover:text-[#3273FF]"
+              onClick={handleSendCertifNum}
+            />
+          </div>
         </div>
-        <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
-          <Button
-            text="발송하기"
-            width="w-[72px]"
-            height="h-9"
-            backgroundColor="bg-[#EEF3FF]"
-            textColor="text-MAIN1"
-            hoverBackgroundColor="hover:bg-[#D8E2FC]"
-            hoverTextColor="hover:text-[#3273FF]"
-          />
+        <div className="relative">
+          <div className="grid w-[80%]">
+            <Input
+              label="인증번호"
+              placeholder="6자리/숫자"
+              type="number"
+              onChange={e => handleChange(e, 'certifNum')}
+              onBlur={() => checkValidation('certifNum')}
+              subText={{
+                text: signupInfo.certifNum.subText,
+                type: signupInfo.certifNum.status,
+              }}
+            />
+          </div>
+          <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
+            <Button
+              text="인증하기"
+              width="w-[72px]"
+              height="h-9"
+              backgroundColor="bg-[#EEF3FF]"
+              textColor="text-MAIN1"
+              hoverBackgroundColor="hover:bg-[#D8E2FC]"
+              hoverTextColor="hover:text-[#3273FF]"
+            />
+          </div>
         </div>
-      </div>
-      <div className="relative">
-        <div className="grid w-[80%]">
-          <Input
-            label="인증번호"
-            placeholder="6자리/숫자"
-            type="number"
-            onChange={e => handleChange(e, 'certifNum')}
-            onBlur={() => checkValidation('certifNum')}
-            subText={{
-              text: signupInfo.certifNum.subText,
-              type: signupInfo.certifNum.status,
-            }}
-          />
-        </div>
-        <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
-          <Button
-            text="인증하기"
-            width="w-[72px]"
-            height="h-9"
-            backgroundColor="bg-[#EEF3FF]"
-            textColor="text-MAIN1"
-            hoverBackgroundColor="hover:bg-[#D8E2FC]"
-            hoverTextColor="hover:text-[#3273FF]"
-          />
-        </div>
-      </div>
-      <Input
-        label="비밀번호"
-        placeholder="6~15자리/영문,숫자,특수문자 조합"
-        type="password"
-        onChange={e => handleChange(e, 'password')}
-        onBlur={() => checkValidation('password')}
-        subText={{
-          text: signupInfo.password.subText,
-          type: signupInfo.password.status,
-        }}
-      />
-      <Input
-        label="비밀번호 확인"
-        placeholder="비밀번호 재입력"
-        type="password"
-        onChange={e => handleChange(e, 'passwordCheck')}
-        onBlur={() => checkValidation('passwordCheck')}
-        subText={{
-          text: signupInfo.passwordCheck.subText,
-          type: signupInfo.passwordCheck.status,
-        }}
-      />
+        <Input
+          label="비밀번호"
+          placeholder="6~15자리/영문,숫자,특수문자 조합"
+          type="password"
+          onChange={e => handleChange(e, 'password')}
+          onBlur={() => checkValidation('password')}
+          subText={{
+            text: signupInfo.password.subText,
+            type: signupInfo.password.status,
+          }}
+        />
+        <Input
+          label="비밀번호 확인"
+          placeholder="비밀번호 재입력"
+          type="password"
+          onChange={e => handleChange(e, 'passwordCheck')}
+          onBlur={() => checkValidation('passwordCheck')}
+          subText={{
+            text: signupInfo.passwordCheck.subText,
+            type: signupInfo.passwordCheck.status,
+          }}
+        />
+      </form>
       <Button
         text="회원가입"
         width="w-full"

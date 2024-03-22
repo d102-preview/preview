@@ -19,7 +19,7 @@ const Header = () => {
 
   return (
     <div className="w-full h-14 p-6 flex items-center justify-between">
-      <img className="w-24" src={logo} alt="logo" />
+      <img className="w-24 cursor-pointer" src={logo} alt="logo" onClick={() => navigate('/')} />
       <div className="flex">
         <HeaderLink
           label="질문 리스트"

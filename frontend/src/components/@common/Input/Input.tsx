@@ -44,6 +44,7 @@ const Input = ({
         disabled={disabled}
         placeholder={placeholder}
         className={`${width} h-8 text-sm px-2 flex items-center ${borderType === 'all' ? 'border-[2px] rounded-md' : 'border-b-[2px]'} outline-none ${subText?.type === 'error' ? 'focus:border-red-500' : 'focus:border-MAIN1'} `}
+        autoComplete="false"
         {...props}
       />
       {subText && <div className={`text-xs pt-1 pl-2 ${setSubTextStyle()}`}>{subText.text}&nbsp;</div>}
