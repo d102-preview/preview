@@ -116,7 +116,7 @@ pipeline {
         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
             mattermostSend(
-              color: 'dange',
+              color: 'danger',
               message: "[Backend] Deploy Fail: ${env.BUILD_URL}\n${GIT_MESSAGE}",
               endpoint: "${MM_URL}",
               channel: "${CHANNEL}",
