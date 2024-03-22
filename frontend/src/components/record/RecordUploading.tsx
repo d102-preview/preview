@@ -1,18 +1,26 @@
 import { recordStatusType } from '@/pages/record/RecordPage';
+import { IQuestionItem } from '@/types/model';
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface IRecordUploadingProps {
+  questionList: IQuestionItem[];
   questionIndex: number;
   setQuestionIndex: Dispatch<SetStateAction<number>>;
   setStatus: Dispatch<SetStateAction<recordStatusType>>;
 }
 
-const RecordUploading = ({ questionIndex, setQuestionIndex, setStatus }: IRecordUploadingProps) => {
+const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setStatus }: IRecordUploadingProps) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     setTimeout(() => {
-      // #TODO 마지막 질문 처리
-      setQuestionIndex(questionIndex + 1);
-      setStatus('preparing');
+      if (questionIndex + 1 === questionList.length) {
+        navigate('/');
+      } else {
+        setQuestionIndex(questionIndex + 1);
+        setStatus('preparing');
+      }
     }, 1500);
     console.log('업로드 완료');
   }, []);
