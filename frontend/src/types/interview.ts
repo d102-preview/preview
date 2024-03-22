@@ -1,5 +1,5 @@
-import { IQuestionList } from './model';
+import { IQuestionItem } from './model';
 
 export interface IInterviewQuestionRes {
-  questionList: IQuestionList[];
+  questionList: IQuestionItem[];
 }

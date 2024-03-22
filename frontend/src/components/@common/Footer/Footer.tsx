@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <div className="w-full h-40 flex items-center pl-6 text-sm text-gray-600 bg-gray-100">
       <div>
-        <span className="text-gray-600 font-semibold">Preview</span>
+        <span className="text-gray-600 font-semibold">preview</span>
         <br />
         © SSAFY 2024
         <br />

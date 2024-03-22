@@ -78,7 +78,7 @@ const Accordian = ({
   const wrapperStyle = isOpen ? { height: 'auto' } : { height: '0px' };
 
   // 선택된 상태에 따라 테두리 스타일을 조건부로 적용
-  const selectedBorderStyle = isSelected ? 'border-2 border-MAIN1' : 'border-none';
+  const selectedBorderStyle = isSelected && hasIcons ? 'border-2 border-MAIN1' : 'border-none';
 
   return (
     <div
@@ -86,7 +86,7 @@ const Accordian = ({
       m-4 cursor-pointer box-content drop-shadow-lg ${selectedBorderStyle}`}
     >
       <div className={`p-3 mx-3 flex items-center justify-between`} onClick={toggleOpen}>
-        <div className={`flex items-center ${textColor} ${textSize} ${textWeight}`}>
+        <div className={`flex items-center ${textColor} ${textSize} ${textWeight} h-8`}>
           {hasIcons &&
             (isSelected ? (
               <LuMinusCircle
