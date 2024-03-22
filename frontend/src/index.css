@@ -23,3 +23,31 @@ body {
 ::-webkit-scrollbar {
   width: 0px;
 }
+
+.Toastify__toast {
+  position: fixed;
+  top: 25px;
+  left: 0px;
+  right: 0px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  margin: auto;
+  width: 280px;
+  padding: 0px 10px;
+  height: auto;
+  font-size: 15px;
+  font-family: 'Pretendard-Regular';
+}
+
+.Toastify__toast--info {
+  background-color: rgb(73, 73, 73);
+}
+
+.Toastify__toast--success {
+  background-color: #3273ff;
+}
+
+.Toastify__toast--error {
+  background-color: rgb(255, 114, 114);
+}
