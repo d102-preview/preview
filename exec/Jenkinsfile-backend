@@ -4,24 +4,31 @@ pipeline {
   environment {
     GRADLE_USER_HOME = "$WORKSPACE/.gradle"
     CI = false
+
+    GIT_MESSAGE = """${sh(
+        script: 'git show -s --pretty="* Commit %h by %cn <%ce>%n* Title: %s%n* Date: %cI"',
+        returnStdout: true
+    )}"""
+    CHANNEL = 'D102-Alert'
+    SUCCESS_ICON = 'https://www.jenkins.io/images/logos/seonbi/256.png'
+    FAIL_ICON = 'https://www.jenkins.io/images/logos/fire/256.png'
   }
  
   stages {
     stage('Build Backend') {
       steps {
-        sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
+        script {
+          withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
+            sh 'cd exec/ && chmod +x project-setup-backend.sh && ./project-setup-backend.sh'
+            sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
+          }
+        }
       }
     }
     
     stage('Build and Push Images') {
       steps {
-        withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
-          script {
-            sh 'cd backend/d102-api/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML} .'
-            sh 'cd backend/d102-file/src/main/resources/ && chmod -R 755 . && cp ${PROD_YML} .'
-            sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
-          }
-        } 
+        sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
       }
     }
 
@@ -36,17 +43,17 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                    sourceFiles: 'exec/deploy-backend/*',
-                    removePrefix: 'exec/deploy-backend/',
-                    remoteDirectory: '/jenkins/deploy/backend',
-                    execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
-                                  ./stop-backend.sh; \
-                                  ./start-backend.sh'
+                  sourceFiles: 'exec/deploy-backend/*',
+                  removePrefix: 'exec/deploy-backend/',
+                  remoteDirectory: '/jenkins/deploy/backend',
+                  execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
+                                ./stop-backend.sh; \
+                                ./start-backend.sh'
                 ),
                 sshTransfer(
-                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
-                                  ./stop-frontend.sh; \
-                                  ./start-frontend.sh'
+                  execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                ./stop-frontend.sh; \
+                                ./start-frontend.sh'
                 )
               ]
             )
@@ -93,12 +100,13 @@ pipeline {
       script {
         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-            mattermostSend(color: 'good',
-                          message: "[Backend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                          endpoint: "${MM_URL}",
-                          channel: 'D102-Alert')
+            mattermostSend(
+              color: 'good',
+              message: "[BE] Deploy Success: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${SUCCESS_ICON}"
+            )
           }
         }
       }
@@ -107,12 +115,13 @@ pipeline {
       script {
         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-            mattermostSend(color: 'danger',
-                          message: "[Backend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                          endpoint: "${MM_URL}",
-                          channel: 'D102-Alert')
+            mattermostSend(
+              color: 'danger',
+              message: "[BE] Deploy Fail: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${FAIL_ICON}"
+            )
           }
         }
       }
