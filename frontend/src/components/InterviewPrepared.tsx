@@ -53,7 +53,7 @@ const InterviewPrepared = ({ state, name }: IInterviewPreparedProps) => {
 
   // 상태바의 색상을 결정하는 함수
   const getBarColor = (isActive: boolean) => {
-    return isActive ? 'bg-MAIN1' : 'bg-gray-300'; // 활성화 시 'bg-MAIN1', 비활성화 시 'bg-gray-300'
+    return isActive ? 'bg-MAIN1' : 'bg-gray-300';
   };
 
   const textClass = getTextClass(state);
@@ -61,16 +61,16 @@ const InterviewPrepared = ({ state, name }: IInterviewPreparedProps) => {
   const activeStates = getBarActiveStates(state);
 
   return (
-    <div className="p-14">
+    <div className="mt-5 p-5 w-full">
       <div className="flex font-bold text-2xl">
         <h3 className="mr-2 text-[#727272]">면접 준비</h3>
         <h3 className={textClass}>{text}</h3>
       </div>
       <p className="text-UNIMPORTANT_TEXT text-lg">면접 합격 가능성으로 본 나의 면접 준비 상태</p>
-      <div className="">
+      <div className="w-5/6">
         <div className="flex gap-2 my-5">
           {activeStates.map((isActive, index) => (
-            <div key={index} className={`w-36 h-5 rounded-full ${getBarColor(isActive)}`}></div>
+            <div key={index} className={`w-48 h-5 rounded-full ${getBarColor(isActive)}`}></div>
           ))}
         </div>
         <SpeechBubble
