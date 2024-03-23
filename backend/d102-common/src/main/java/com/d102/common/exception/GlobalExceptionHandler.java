@@ -1,6 +1,8 @@
 package com.d102.common.exception;
 
 import com.d102.common.exception.custom.ConflictException;
+import com.d102.common.exception.custom.NotFoundException;
+import com.d102.common.exception.custom.TooManyException;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
 import jakarta.validation.ConstraintViolationException;
@@ -21,9 +23,21 @@ public class GlobalExceptionHandler {
         return new ResponseFail(InvalidParamException.getCode(), e.getMessage());
     }
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = NotFoundException.class)
+    public Response handleNotFoundException(NotFoundException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
+    }
+
     @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler(value = ConflictException.class)
     public Response handleConflictException(ConflictException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(value = TooManyException.class)
+    public Response handleTooManyException(TooManyException e) {
         return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }
 
