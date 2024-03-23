@@ -25,7 +25,19 @@ public class UserDto {
         @NotBlank
         @Size(max = 8)
         private String name;
+    }
 
+    @Data
+    public static class loginRequest {
+
+        @NotBlank
+        @Size(max = 64)
+        @Email
+        private String email;
+
+        @NotBlank
+        @Size(min = 8, max = 20)
+        private String password;
     }
 
     @Data
@@ -34,7 +46,6 @@ public class UserDto {
         private String email;
         private String profileImage;
         private String name;
-
     }
 
 }

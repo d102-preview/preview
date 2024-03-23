@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @Tag(name = "2. 인증 관련 API", description = "JWT 토큰을 요구하지 않는 API (회원가입, 로그인 등)")
@@ -23,5 +24,15 @@ public interface AuthControllerDocs {
                     }))
     })
     Response join(@Valid UserDto.JoinRequest joinRequestDto);
+
+    @Operation(summary = "로그인", description = "로그인에 필요한 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 로그인한 유저 정보를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
+                    }))
+    })
+    Response login(@Valid UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse);
     
 }
