@@ -6,16 +6,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadDto {
 
     @Data
-    public static class ImageRequest {
+    public static class profileImageRequest {
 
-        private MultipartFile multipartFile;
+        private MultipartFile profileImage;
 
     }
 
     @Data
-    public static class ImageResponse {
+    public static class profileImageResponse {
 
-        private String imageUrl;
+        private String profileImageUrl;
 
     }
 
