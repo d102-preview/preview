@@ -17,12 +17,12 @@ public interface UploadControllerDocs {
 
     @Operation(summary = "프로필 이미지 업로드", description = "프로필 이미지를 업로드한다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공시 업로드한 이미지 URL을 반환한다.",
+            @ApiResponse(responseCode = "200", description = "성공시 업로드한 프로필 이미지 URL을 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UploadDto.ImageResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "업로드한 프로필 이미지 URL", description = "업로드한 프로필 이미지 URL"))
                     }))
     })
-    Response uploadProfileImage(UploadDto.ImageRequest imageRequestDto);
+    Response uploadProfileImage(UploadDto.profileImageRequest profileImageRequest);
 
 }

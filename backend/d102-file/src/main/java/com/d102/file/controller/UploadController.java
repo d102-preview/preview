@@ -1,14 +1,13 @@
 package com.d102.file.controller;
 
+import com.d102.common.constant.UploadConstant;
 import com.d102.common.response.Response;
 import com.d102.file.controller.docs.UploadControllerDocs;
 import com.d102.file.dto.UploadDto;
 import com.d102.file.service.UploadService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/upload")
 @RequiredArgsConstructor
@@ -17,9 +16,9 @@ public class UploadController implements UploadControllerDocs {
 
     private final UploadService uploadService;
 
-    @PostMapping("/profile/image")
-    public Response uploadProfileImage(@RequestBody UploadDto.ImageRequest imageRequestDto) {
-        return new Response("data", uploadService.uploadProfileImage(imageRequestDto));
+    @PostMapping(value = "/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response uploadProfileImage(@ModelAttribute UploadDto.profileImageRequest profileImageRequest) {
+        return new Response(UploadConstant.PROFILE_IMAGE, uploadService.uploadProfileImage(profileImageRequest));
     }
 
 }

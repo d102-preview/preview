@@ -30,6 +30,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             /* health */
             "/health/**",
+            /* file */
+            "/upload/**"
     };
 
     @Value("${cors.origins}")

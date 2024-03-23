@@ -32,8 +32,11 @@ public class User extends BaseTime {
     @Column(name = "name", length = 8, nullable = false)
     private String name;
 
-    @Column(name = "profile_image", length = 512)
-    private String profileImage;
+    @Column(name = "profile_image_name", length = 128)
+    private String profileImageName;
+
+    @Column(name = "profile_image_url", length = 512)
+    private String profileImageUrl;
 
     @Column(name = "deleted_time")
     private LocalDateTime deletedTime;
