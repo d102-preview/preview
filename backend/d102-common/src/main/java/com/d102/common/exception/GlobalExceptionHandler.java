@@ -1,8 +1,6 @@
 package com.d102.common.exception;
 
-import com.d102.common.exception.custom.ConflictException;
-import com.d102.common.exception.custom.NotFoundException;
-import com.d102.common.exception.custom.TooManyException;
+import com.d102.common.exception.custom.*;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
 import jakarta.validation.ConstraintViolationException;
@@ -21,6 +19,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, ConstraintViolationException.class})
     public Response handleParamsException(Exception e) {
         return new ResponseFail(InvalidParamException.getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = UnAuthorizeException.class)
+    public Response handleUnAuthorizeException(UnAuthorizeException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = ForbiddenException.class)
+    public Response handleForbiddenException(ForbiddenException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
