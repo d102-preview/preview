@@ -1,12 +1,16 @@
 package com.d102.api.controller;
 
 import com.d102.api.controller.docs.AuthControllerDocs;
-import com.d102.api.dto.EmailDto;
 import com.d102.api.dto.UserDto;
 import com.d102.api.service.AuthService;
+import com.d102.common.constant.AuthConstant;
 import com.d102.common.response.Response;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -17,17 +21,12 @@ public class AuthController implements AuthControllerDocs {
 
     @PostMapping("/join")
     public Response join(@RequestBody UserDto.JoinRequest joinRequestDto) {
-        return new Response("user", authService.join(joinRequestDto));
+        return new Response(AuthConstant.USER, authService.join(joinRequestDto));
     }
 
-    @GetMapping("/email")
-    public Response checkAvailableEmail(@RequestParam String email) {
-        return new Response("available", authService.checkAvailableEmail(email));
-    }
-
-    @PostMapping("/email")
-    public Response sendEmail(@RequestBody EmailDto.Request requestDto) {
-        return new Response("send", authService.sendEmail(requestDto));
+    @PostMapping("/login")
+    public Response login(@RequestBody UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse) {
+        return new Response(AuthConstant.USER, authService.login(loginRequestDto, servletResponse));
     }
 
 }
