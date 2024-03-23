@@ -8,4 +8,6 @@ public interface EmailService {
 
     void sendAuthorizationCode(EmailDto.Request requestDto);
 
+    Boolean verifyAuthorizationCode(EmailDto.VerifyRequest verifyRequestDto);
+
 }

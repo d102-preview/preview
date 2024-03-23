@@ -17,4 +17,15 @@ public class EmailDto {
 
     }
 
+    @Data
+    public static class VerifyRequest {
+
+        @NotBlank
+        @Size(max = 64)
+        @Email
+        private String email;
+
+        private int authorizationCode;
+    }
+
 }
