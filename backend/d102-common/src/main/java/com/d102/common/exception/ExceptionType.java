@@ -9,7 +9,12 @@ public enum ExceptionType {
     InvalidParamException("INVALID", "Invalid param"),
 
     /* Not found request */
+    InvalidLoginUserException("UnAuthorize", "Invalid email or password"),
+
+    /* Not found request */
     EmailHashNotFoundException("NOT FOUND", "Invalid email"),
+    LoginUserNotFoundException("NOT FOUND", "Invalid email or password"),
+    UserNotFoundException("NOT FOUND", "Invalid user"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),
