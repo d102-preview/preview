@@ -7,6 +7,7 @@ import com.d102.api.service.EmailService;
 import com.d102.common.constant.EmailConstant;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.ConflictException;
+import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.TooManyException;
 import com.d102.common.repository.UserRepository;
 import com.d102.common.util.RandomGenerator;
@@ -29,7 +30,7 @@ public class EmailServiceImpl implements EmailService {
         return userRepository.findByEmail(email).isEmpty();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void sendAuthorizationCode(EmailDto.Request requestDto) {
         checkExistedEmail(requestDto.getEmail());
         checkEmailSendLimit(requestDto.getEmail());
@@ -46,6 +47,13 @@ public class EmailServiceImpl implements EmailService {
         emailHash.setAuthorizationCode(authorizationCode);
 
         emailHashRepository.save(emailHash);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean verifyAuthorizationCode(EmailDto.VerifyRequest verifyRequestDto) {
+        return emailHashRepository.findById(verifyRequestDto.getEmail())
+                .map(emailHash -> emailHash.getAuthorizationCode() == verifyRequestDto.getAuthorizationCode())
+                .orElseThrow(() -> new NotFoundException(ExceptionType.EmailHashNotFoundException));
     }
 
     private void sendEmail(String email, String subject, String content) {

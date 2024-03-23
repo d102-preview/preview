@@ -43,4 +43,14 @@ public interface EmailControllerDocs {
     })
     Response sendAuthorizationCode(@Valid EmailDto.Request requestDto);
 
+    @Operation(summary = "이메일 인증번호 확인", description = "회원가입을 위한 인증번호를 확인한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 이메일 전송 성공 여부를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "전송 성공 여부", description = "true: 전송 성공, false: 전송 불가")),
+                    }))
+    })
+    Response verifyAuthorizationCode(@Valid EmailDto.VerifyRequest verifyRequestDto);
+
 }

@@ -1,6 +1,7 @@
 package com.d102.common.exception;
 
 import com.d102.common.exception.custom.ConflictException;
+import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.TooManyException;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, ConstraintViolationException.class})
     public Response handleParamsException(Exception e) {
         return new ResponseFail(InvalidParamException.getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = NotFoundException.class)
+    public Response handleNotFoundException(NotFoundException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.CONFLICT)

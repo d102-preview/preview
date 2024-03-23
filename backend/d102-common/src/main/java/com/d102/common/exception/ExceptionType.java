@@ -5,10 +5,13 @@ import lombok.Getter;
 @Getter
 public enum ExceptionType {
 
-    /* invalid request */
+    /* Invalid request */
     InvalidParamException("INVALID", "Invalid param"),
 
-    /* conflict exception */
+    /* Not found request */
+    EmailHashNotFoundException("NOT FOUND", "Invalid email"),
+
+    /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),
 
     /* Too many request exception */
