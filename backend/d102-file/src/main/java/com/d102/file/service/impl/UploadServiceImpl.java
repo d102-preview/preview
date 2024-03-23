@@ -1,5 +1,6 @@
 package com.d102.file.service.impl;
 
+import com.d102.common.constant.UploadConstant;
 import com.d102.file.dto.UploadDto;
 import com.d102.file.service.UploadService;
 import jakarta.transaction.Transactional;
@@ -20,7 +21,7 @@ public class UploadServiceImpl implements UploadService {
         System.out.println("uploadProfileImage");
         System.out.println(profileImageRequestDto.getProfileImage().getOriginalFilename());
         System.out.println(profileImageRequestDto.getProfileImage().getSize());
-        String path = System.getProperty("user.dir") + "/profile";
+        String path = System.getProperty("user.dir");
         saveFile(path, profileImageRequestDto.getProfileImage());
         return path;
     }
