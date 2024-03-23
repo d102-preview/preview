@@ -60,14 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         String uri = request.getRequestURI();
 
-//        if (StringUtils.hasText(token) && jwtManager.validateToken(token)) {
-//            Authentication authentication = jwtManager.getAuthentication(token);
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            log.debug("Token ok : username {}, request {} {}", authentication != null ? authentication.getName() : null, method, uri);
-//        } else {
-//            log.debug("No token : uri {} {}", method, uri);
-//        }
-
         filterChain.doFilter(request, response);
     }
 

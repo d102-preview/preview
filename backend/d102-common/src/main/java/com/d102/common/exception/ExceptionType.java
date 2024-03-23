@@ -8,8 +8,13 @@ public enum ExceptionType {
     /* Invalid request */
     InvalidParamException("INVALID", "Invalid param"),
 
-    /* Not found request */
+    /* UnAuthorize request */
     InvalidLoginUserException("UnAuthorize", "Invalid email or password"),
+    DisabledUserException("UnAuthorize", "Disabled user"),
+    UnAuthorizedTokenException("UnAuthorize", "UnAuthorized Token"),
+
+    /* Forbidden request */
+    InaccessibleException("Forbidden", "Inaccessible"),
 
     /* Not found request */
     EmailHashNotFoundException("NOT FOUND", "Invalid email"),
