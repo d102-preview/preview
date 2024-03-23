@@ -1,13 +1,12 @@
 import ResultItem from './ResultItem';
-import IMAGE1 from '@/assets/images/interview1.png'; // 이미지 경로는 예시일 뿐입니다.
-// 나머지 이미지들도 이와 같은 방식으로 임포트 해야 합니다.
+import IMAGE1 from '@/assets/images/interview1.png';
 
 const ResultList = () => {
   // 더미 데이터
   const setTime = new Date();
   const resultItemsData = [
     {
-      result: 'ok',
+      result: 'fail',
       id: 1,
       imagePath: IMAGE1,
       type: 'mock',
@@ -16,7 +15,7 @@ const ResultList = () => {
       time: '00:33',
     },
     {
-      result: 'ok',
+      result: 'fail',
       id: 2,
       imagePath: IMAGE1,
       type: 'mock',
