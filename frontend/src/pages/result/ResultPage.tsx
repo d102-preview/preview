@@ -1,6 +1,4 @@
 import Header from '@/components/@common/Header/Header';
-import ResultItem from '@/components/result/ResultItem';
-import IMAGE1 from '@/assets/images/interview1.png';
 import { useState } from 'react';
 import ResultList from '@/components/result/ResultList';
 
