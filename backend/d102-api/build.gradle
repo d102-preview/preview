@@ -44,11 +44,17 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
+    // java mail sender
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     // swagger
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
 
     // mariadb
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // mapstruct
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'

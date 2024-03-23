@@ -5,9 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ResponseFail extends Response {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	

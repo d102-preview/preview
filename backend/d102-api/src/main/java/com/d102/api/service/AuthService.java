@@ -1,14 +1,12 @@
 package com.d102.api.service;
 
-import com.d102.api.dto.EmailDto;
 import com.d102.api.dto.UserDto;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
     UserDto.Response join(UserDto.JoinRequest joinRequestDto);
 
-    Boolean checkAvailableEmail(String email);
-
-    Boolean sendEmail(EmailDto.Request requestDto);
+    UserDto.Response login(UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse);
 
 }
