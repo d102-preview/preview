@@ -10,4 +10,6 @@ public interface UserService {
 
     void changePassword(UserDto.PasswordUpdateRequest passwordUpdateRequestDto);
 
+    void delete();
+
 }

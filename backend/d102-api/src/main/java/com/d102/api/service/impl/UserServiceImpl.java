@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,6 +48,13 @@ public class UserServiceImpl implements UserService {
         checkChagedPassword(passwordUpdateRequestDto.getChangedPassword(), passwordUpdateRequestDto.getCheckChangePassword());
 
         user.setPassword(passwordEncoder.encode(passwordUpdateRequestDto.getChangedPassword()));
+    }
+
+    @Transactional
+    public void delete() {
+        User user = getUser(securityHelper.getLoginUsername());
+
+        user.setDeletedTime(LocalDateTime.now());
     }
 
     private void checkChagedPassword(String changedPassword, String checkChangePassword) {

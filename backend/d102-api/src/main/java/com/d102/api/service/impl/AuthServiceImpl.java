@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private User getLoginUser(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailAndDeletedTimeIsNull(email)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.LoginUserNotFoundException));
     }
 

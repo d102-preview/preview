@@ -31,4 +31,10 @@ public class UserController implements UserControllerDocs {
         return new Response();
     }
 
+    @DeleteMapping
+    public Response delete() {
+        userService.delete();
+        return new Response();
+    }
+
 }

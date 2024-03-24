@@ -43,4 +43,13 @@ public interface UserControllerDocs {
     })
     Response changePassword(@Valid UserDto.PasswordUpdateRequest passwordUpdateRequestDto);
 
+    @Operation(summary = "회원 탈퇴", description = "회원탈퇴하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원탈퇴 성공 여부를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공"))
+                    }))
+    })
+    Response delete();
+
 }
