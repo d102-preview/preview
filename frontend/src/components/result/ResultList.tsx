@@ -52,8 +52,8 @@ const ResultList = () => {
     },
   ];
 
-  const formatDate = dateString => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const formatDate = (dateString: Date) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
     return new Date(dateString).toLocaleDateString('ko-KR', options);
   };
 
@@ -67,10 +67,10 @@ const ResultList = () => {
         {resultItemsData.map(item => (
           <ResultItem
             key={item.id}
-            result={item.result}
+            result={item.result as 'ok' | 'fail'}
             id={item.id}
             imagePath={item.imagePath}
-            type={item.type}
+            type={item.type as 'mock' | 'main'}
             date={item.date}
             question={item.question}
             time={item.time}

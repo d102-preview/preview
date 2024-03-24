@@ -12,9 +12,16 @@ interface IResultItemProps {
 }
 
 const ResultItem = ({ result, id, imagePath, type, date, question, time }: IResultItemProps) => {
-  const formatDate = dateString => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString('ko-KR', options);
+  const formatDate = (dateString: string | Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+    return date.toLocaleDateString('ko-KR', options);
   };
 
   // Lottie 이미지
