@@ -10,13 +10,15 @@ import java.util.Collection;
 public class CustomUser extends User {
 
     private final String name;
-    private final String profileImage;
+    private final String profileImageName;
+    private final String profileImageUrl;
 
-    public CustomUser(String email, String password, String name, String profileImage,  Collection<? extends GrantedAuthority> authorities) {
+    public CustomUser(String email, String password, String name, String profileImageName, String profileImageUrl, Collection<? extends GrantedAuthority> authorities) {
         super(email, password, authorities);
 
         this.name = name;
-        this.profileImage = profileImage;
+        this.profileImageName = profileImageName;
+        this.profileImageUrl = profileImageUrl;
     }
 
 }

@@ -38,7 +38,8 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 		return new CustomUser(user.getEmail(),
 				user.getPassword(),
 				user.getName(),
-				user.getProfileImage(),
+				user.getProfileImageName(),
+				user.getProfileImageUrl(),
 				grantedAuthorities);
 	}
 	
