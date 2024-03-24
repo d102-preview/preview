@@ -24,6 +24,8 @@ public class UploadServiceImpl implements UploadService {
 
     @Transactional
     public String uploadProfile(UploadDto.profileRequest profileRequestDto) {
+
+
         return saveFile(UploadConstant.PROFILE_DIR, profileRequestDto.getProfile());
     }
 
