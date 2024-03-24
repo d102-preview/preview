@@ -1,12 +1,17 @@
 package com.d102.common.security;
 
+import com.d102.common.config.SecurityConfig;
+import com.d102.common.constant.AuthConstant;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -23,50 +28,61 @@ import java.util.stream.Collectors;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String BEARER = "Bearer ";
-    private static final int TOKEN_BEGIN_IDX = 7;
-
-    private static final String[] PERMIT_URL_ARRAY = {
-            /* api */
-            "/email/**",
-            "/auth/**",
-            /* swagger v3 */
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            /* health */
-            "/health/**",
-    };
-
     private final JwtManager jwtManager;
     private final RequestMatcher permitMatcher;
 
     private JwtAuthenticationFilter(JwtManager jwtManager) {
         this.jwtManager = jwtManager;
-        List<RequestMatcher> matchers = Arrays.stream(PERMIT_URL_ARRAY)
+        List<RequestMatcher> matchers = Arrays.stream(SecurityConfig.PERMIT_URL_ARRAY)
                 .map(AntPathRequestMatcher::new)
                 .collect(Collectors.toList());
         this.permitMatcher = new OrRequestMatcher(matchers);
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest servletRequest, @NonNull HttpServletResponse servletResponse, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
-        if (permitMatcher.matches(request)) {
-            filterChain.doFilter(request, response);
+        if (permitMatcher.matches(servletRequest)) {
+            filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
 
-        String token = resolveToken(request);
-        String method = request.getMethod();
-        String uri = request.getRequestURI();
+        String accessToken = resolveAccessToken(servletRequest);
+        String refreshToken = resolveRefreshToken(servletRequest);
+        String method = servletRequest.getMethod();
+        String uri = servletRequest.getRequestURI();
 
-        filterChain.doFilter(request, response);
+        if (StringUtils.hasText(accessToken)) {
+            accessToken = jwtManager.validateToken(accessToken, refreshToken, servletResponse);
+
+            if (!accessToken.isEmpty()) {
+                Authentication authentication = jwtManager.getAuthentication(accessToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.debug("Token ok : username {}, request {} {}", authentication != null ? authentication.getName() : null, method, uri);
+            }
+        } else {
+            log.debug("No token : uri {} {}", method, uri);
+        }
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private String resolveToken(HttpServletRequest request) {
+    private String resolveAccessToken(HttpServletRequest request) {
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(authorization) && authorization.startsWith(BEARER)) {
-            return authorization.substring(TOKEN_BEGIN_IDX);
+        if (StringUtils.hasText(authorization) && authorization.startsWith(AuthConstant.AUTHORIZATION_PREFIX)) {
+            return authorization.substring(AuthConstant.TOKEN_BEGIN_IDX);
+        }
+        return null;
+    }
+
+    private String resolveRefreshToken(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (AuthConstant.REFRESH_TOKEN.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
         }
         return null;
     }
