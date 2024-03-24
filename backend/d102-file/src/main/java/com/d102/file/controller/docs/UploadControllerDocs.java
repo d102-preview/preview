@@ -22,9 +22,9 @@ public interface UploadControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 업로드한 프로필 이미지 URL을 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "업로드한 프로필 이미지 URL", description = "업로드한 프로필 이미지 URL"))
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UploadDto.ProfileResponse.class)),
                     }))
     })
-    Response uploadProfile(UploadDto.profileRequest profileRequestDto);
+    Response uploadProfile(UploadDto.ProfileRequest profileRequestDto);
 
 }

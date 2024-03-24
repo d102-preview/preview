@@ -18,8 +18,8 @@ public class UploadController implements UploadControllerDocs {
 
     private final UploadService uploadService;
 
-    @PostMapping(value = "/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response uploadProfile(@ModelAttribute UploadDto.profileRequest profileRequestDto) {
+    @PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response uploadProfile(@ModelAttribute UploadDto.ProfileRequest profileRequestDto) {
         return new Response(UploadConstant.PROFILE, uploadService.uploadProfile(profileRequestDto));
     }
 
