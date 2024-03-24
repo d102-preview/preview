@@ -28,6 +28,7 @@ public enum ExceptionType {
     EmailHashNotFoundException("NOT FOUND", "Invalid email"),
     LoginUserNotFoundException("NOT FOUND", "Invalid email or password"),
     UserNotFoundException("NOT FOUND", "Invalid user"),
+    CommonQuestionNotFoundException("NOT FOUND", "Invalid common question"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),

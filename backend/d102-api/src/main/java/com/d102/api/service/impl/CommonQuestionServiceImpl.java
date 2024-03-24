@@ -1,11 +1,18 @@
 package com.d102.api.service.impl;
 
+import com.d102.api.domain.CommonQuestion;
+import com.d102.api.domain.CommonScript;
 import com.d102.api.dto.CommonQuestionDto;
+import com.d102.api.dto.CommonScriptDto;
 import com.d102.api.mapper.CommonQuestionMapper;
 import com.d102.api.repository.CommonKeywordRepository;
 import com.d102.api.repository.CommonQuestionRepository;
 import com.d102.api.repository.CommonScriptRepository;
 import com.d102.api.service.CommonQuestionService;
+import com.d102.common.domain.User;
+import com.d102.common.exception.ExceptionType;
+import com.d102.common.exception.custom.NotFoundException;
+import com.d102.common.repository.UserRepository;
 import com.d102.common.util.SecurityHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommonQuestionServiceImpl implements CommonQuestionService {
 
+    private final UserRepository userRepository;
     private final CommonQuestionRepository commonQuestionRepository;
     private final CommonScriptRepository commonScriptRepository;
     private final CommonKeywordRepository commonKeywordRepository;
@@ -36,6 +44,33 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
                 .commonKeywords(commonQuestionMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
                         securityHelper.getLoginUsername(), commonQuestionId)))
                 .build();
+    }
+
+    @Transactional
+    public void writeScript(Long commonQuestionId, CommonScriptDto.Request request) {
+        User user = getUser(securityHelper.getLoginUsername());
+        CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
+        CommonScript commonScript = commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(securityHelper.getLoginUsername(),
+                commonQuestionId).orElse(null);
+
+        if (commonScript == null) {
+            commonScriptRepository.save(commonScriptRepository.save(CommonScript.builder()
+                    .user(user)
+                    .commonQuestion(commonQuestion)
+                    .build()));
+        } else {
+            commonScript.setScript(request.getScript());
+        }
+    }
+
+    public User getUser(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
+    }
+
+    public CommonQuestion getCommonQuestion(Long questionId) {
+        return commonQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new NotFoundException(ExceptionType.CommonQuestionNotFoundException));
     }
 
 }
