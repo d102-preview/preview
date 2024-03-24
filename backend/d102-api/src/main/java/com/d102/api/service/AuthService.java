@@ -7,6 +7,6 @@ public interface AuthService {
 
     UserDto.Response join(UserDto.JoinRequest joinRequestDto);
 
-    UserDto.Response login(UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse);
+    UserDto.Response login(UserDto.LoginRequest loginRequestDto, HttpServletResponse servletResponse);
 
 }

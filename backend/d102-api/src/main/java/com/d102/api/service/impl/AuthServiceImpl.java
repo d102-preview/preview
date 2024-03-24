@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public UserDto.Response login(UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse) {
+    public UserDto.Response login(UserDto.LoginRequest loginRequestDto, HttpServletResponse servletResponse) {
         User loginUser = getLoginUser(loginRequestDto.getEmail());
 
         checkPassword(loginRequestDto.getPassword(), loginUser.getPassword());
