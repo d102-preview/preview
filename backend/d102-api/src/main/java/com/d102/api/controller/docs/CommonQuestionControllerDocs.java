@@ -1,5 +1,6 @@
 package com.d102.api.controller.docs;
 
+import com.d102.api.dto.CommonQuestionDto;
 import com.d102.api.dto.UserDto;
 import com.d102.common.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,9 +20,19 @@ public interface CommonQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 공통 질문 리스트를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = CommonQuestionDto.ListResponse.class)),
                     }))
     })
     Response getList(Pageable pageable);
+
+    @Operation(summary = "공통 질문 상세 조회", description = "공통 질문 상세 조회하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 공통 질문과 질문 스크립트, 키워드를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = CommonQuestionDto.Response.class)),
+                    }))
+    })
+    Response get(Long commonQuestionId);
 
 }

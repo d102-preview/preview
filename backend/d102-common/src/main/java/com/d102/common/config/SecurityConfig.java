@@ -29,6 +29,7 @@ public class SecurityConfig {
             /* api */
             "/email/**",
             "/auth/**",
+            "/common/question/list",
             /* swagger v3 */
             "/v3/api-docs/**",
             "/swagger-ui/**",
