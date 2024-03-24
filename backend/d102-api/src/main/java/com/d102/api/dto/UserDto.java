@@ -41,10 +41,19 @@ public class UserDto {
     }
 
     @Data
+    public static class UpdateRequest {
+
+        @NotBlank
+        @Size(max = 8)
+        private String name;
+    }
+
+    @Data
     public static class Response {
 
         private String email;
-        private String profileImage;
+        private String profileImageName;
+        private String profileImageUrl;
         private String name;
     }
 
