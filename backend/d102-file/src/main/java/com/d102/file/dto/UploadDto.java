@@ -9,6 +9,7 @@ public class UploadDto {
     public static class profileRequest {
 
         private MultipartFile profile;
+        private String userId;
 
     }
 

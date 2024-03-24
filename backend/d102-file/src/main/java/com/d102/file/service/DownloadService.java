@@ -1,7 +1,11 @@
 package com.d102.file.service;
 
+import com.d102.file.dto.DownloadDto;
+
+import java.nio.file.Path;
+
 public interface DownloadService {
 
-    byte[] downloadProfile(String profileUrl);
+    DownloadDto.ProfileResponse downloadProfile(Path profileUrl);
 
 }
