@@ -1,7 +1,7 @@
 package com.d102.api.controller.docs;
 
 import com.d102.api.dto.CommonQuestionDto;
-import com.d102.api.dto.UserDto;
+import com.d102.api.dto.CommonScriptDto;
 import com.d102.common.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,5 +34,14 @@ public interface CommonQuestionControllerDocs {
                     }))
     })
     Response get(Long commonQuestionId);
+
+    @Operation(summary = "공통 질문 스크립트 작성", description = "공통 질문에 관한 스크립트를 작성하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 ok를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                    }))
+    })
+    Response writeScript(Long commonQuestionId, CommonScriptDto.Request request);
 
 }
