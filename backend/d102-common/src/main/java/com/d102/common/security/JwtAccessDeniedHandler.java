@@ -22,7 +22,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
 					   HttpServletResponse response,
 					   AccessDeniedException accessDeniedException) throws IOException {
-
 		// AccessDeniedException : no access authority by role.
 
 		ResponseFail fail = new ResponseFail(InaccessibleException.getCode(), InaccessibleException.getMessage());

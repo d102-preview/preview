@@ -25,7 +25,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String[] PERMIT_URL_ARRAY = {
+    public static final String[] PERMIT_URL_ARRAY = {
             /* api */
             "/email/**",
             "/auth/**",
