@@ -37,8 +37,7 @@ public interface EmailControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공시 이메일 전송 성공 여부를 반환한다.",
                     content = @Content(schemaProperties = {
-                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "전송 성공 여부", description = "true: 전송 성공, false: 전송 실패")),
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공"))
                     }))
     })
     Response sendAuthorizationCode(@Valid EmailDto.Request requestDto);
