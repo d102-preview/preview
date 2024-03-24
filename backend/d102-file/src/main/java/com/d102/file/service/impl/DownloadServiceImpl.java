@@ -14,13 +14,11 @@ import java.util.Base64;
 public class DownloadServiceImpl implements DownloadService {
 
     public byte[] downloadProfile(String profileUrl) {
-        byte[] profile = null;
         try {
-            profile = Files.readAllBytes(Paths.get(profileUrl));
+            return Files.readAllBytes(Paths.get(profileUrl));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new
         }
-        return Base64.getEncoder().encode(profile);
     }
 
 }

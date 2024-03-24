@@ -5,7 +5,9 @@ import com.d102.common.response.Response;
 import com.d102.file.controller.docs.DownloadControllerDocs;
 import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/download")
@@ -17,8 +19,10 @@ public class DownloadController implements DownloadControllerDocs {
 
     @GetMapping(value = "/profile/image")
     // query parameter로 받아서 처리
-    public Response downloadProfile(@RequestParam("url") String profileUrl) {
-        return new Response(DownloadConstant.PROFILE, downloadService.downloadProfile(profileUrl));
+    public ResponseEntity<ByteArrayResource> downloadProfile(@RequestParam("url") String profileUrl) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.)
+                .body(new ByteArrayResource(downloadService.downloadProfile(profileUrl)));
     }
 
 }
