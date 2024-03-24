@@ -18,4 +18,6 @@ public interface CommonQuestionService {
 
     void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request request);
 
+    void deleteKeyword(Long commonKeywordId);
+
 }

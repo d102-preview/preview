@@ -85,6 +85,14 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
         commonKeyword.setKeyword(request.getKeyword());
     }
 
+    @Transactional
+    public void deleteKeyword(Long commonKeywordId) {
+        CommonKeyword commonKeyword = getCommonKeyword(commonKeywordId);
+        checkLoginUserAndKeywordUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
+
+        commonKeywordRepository.deleteById(commonKeywordId);
+    }
+
     private void checkLoginUserAndKeywordUser(String loginEmail, String keywordEmail) {
         if (!loginEmail.equals(keywordEmail)) {
             throw new NotFoundException(ExceptionType.NotVerifyUserException);
