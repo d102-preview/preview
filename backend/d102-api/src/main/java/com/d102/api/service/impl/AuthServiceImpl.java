@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         checkPassword(loginRequestDto.getPassword(), loginUser.getPassword());
 
         List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(loginUser.getRole().toString()));
-        Authentication authentication = jwtManager.getAuthentication(loginUser.getEmail(), null, grantedAuthorities);
+        Authentication authentication = jwtManager.getAuthentication(loginUser.getEmail(), grantedAuthorities);
 
         jwtManager.createAccessToken(authentication, servletResponse);
         jwtManager.createRefreshToken(authentication, servletResponse);
