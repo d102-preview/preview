@@ -29,7 +29,7 @@ const ResultReport = ({ question, name, percent, prepare }: ResultReportProps) =
       </div>
       {/* 분석 보고서 */}
       <div className="shadow-xl p-14 my-3 rounded-lg w-full">
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-10 pb-5">
           <div>
             <h3 className="p-3 text-3xl font-bold text-BLACK">총평</h3>
             <div className="pl-7 text-[#696969] text-xl leading-9">
@@ -43,11 +43,9 @@ const ResultReport = ({ question, name, percent, prepare }: ResultReportProps) =
           </div>
           <Lottie options={defaultOptions} height={350} width={350} />
         </div>
-        <div className="p-5">
-          <div className="flex items-center gap-20 p-7">
-            <DoughnutChart percent={percent} />
-            <InterviewPrepared state={5} name={name} />
-          </div>
+        <div className="flex items-center px-20 gap-5">
+          <DoughnutChart percent={percent} />
+          <InterviewPrepared state={5} name={name} />
         </div>
       </div>
     </div>
