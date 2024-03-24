@@ -54,4 +54,13 @@ public interface CommonQuestionControllerDocs {
     })
     Response createKeyword(Long commonQuestionId, CommonKeywordDto.Request request);
 
+    @Operation(summary = "공통 질문 키워드 수정", description = "공통 질문에 관한 키워드를 수정하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 ok를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                    }))
+    })
+    Response updateKeyword(Long commonKeywordId, CommonKeywordDto.Request request);
+
 }

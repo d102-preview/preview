@@ -16,4 +16,6 @@ public interface CommonQuestionService {
 
     void createKeyword(Long commonQuestionId, CommonKeywordDto.Request request);
 
+    void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request request);
+
 }

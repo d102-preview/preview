@@ -38,4 +38,11 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
         commonQuestionService.createKeyword(commonQuestionId, request);
         return new Response();
     }
+
+    @PatchMapping("/keyword")
+    public Response updateKeyword(@RequestParam Long commonKeywordId, @RequestBody CommonKeywordDto.Request request) {
+        commonQuestionService.updateKeyword(commonKeywordId, request);
+        return new Response();
+    }
+
 }

@@ -20,6 +20,7 @@ public enum ExceptionType {
     UnAuthorizedTokenException("UNAUTHORIZED", "UnAuthorized Token"),
     InvalidCurrentPasswordException("UNAUTHORIZED", "Invalid current password"),
     WrongChangedPasswordException("UNAUTHORIZED", "Wrong changedPassword and checkChangePassword"),
+    NotVerifyUserException("UNAUTHORIZED", "Not verify user"),
 
     /* Forbidden request */
     InaccessibleException("FORBIDDEN", "Inaccessible"),
@@ -29,6 +30,7 @@ public enum ExceptionType {
     LoginUserNotFoundException("NOT FOUND", "Invalid email or password"),
     UserNotFoundException("NOT FOUND", "Invalid user"),
     CommonQuestionNotFoundException("NOT FOUND", "Invalid common question"),
+    CommonKeywordNotFoundException("NOT FOUND", "Invalid common keyword"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),
