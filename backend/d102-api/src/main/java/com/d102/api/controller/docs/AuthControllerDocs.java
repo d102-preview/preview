@@ -33,6 +33,6 @@ public interface AuthControllerDocs {
                             @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
                     }))
     })
-    Response login(@Valid UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse);
-    
+    Response login(@Valid UserDto.LoginRequest loginRequestDto, HttpServletResponse servletResponse);
+
 }
