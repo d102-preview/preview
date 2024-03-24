@@ -16,7 +16,7 @@ public class SecurityHelper {
 
     private UserDetails getLoginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (UserDetails)authentication.getPrincipal();
+        return (UserDetails) authentication.getPrincipal();
     }
 
 }
