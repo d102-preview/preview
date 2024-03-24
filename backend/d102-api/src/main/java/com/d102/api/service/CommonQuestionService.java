@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommonQuestionService {
 
-    Page<CommonQuestionDto.Response> getList(Pageable pageable);
+    Page<CommonQuestionDto.ListResponse> getList(Pageable pageable);
+
+    CommonQuestionDto.Response get(Long commonQuestionId);
 
 }

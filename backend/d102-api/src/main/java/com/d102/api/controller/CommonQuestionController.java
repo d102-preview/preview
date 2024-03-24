@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/common/question")
@@ -20,6 +21,11 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
     @GetMapping("/list")
     public Response getList(Pageable pageable) {
         return new Response(CommonQuestionConstant.COMMON_QUESTION_LIST, commonQuestionService.getList(pageable));
+    }
+
+    @GetMapping
+    public Response get(@RequestParam Long commonQuestionId) {
+        return new Response(CommonQuestionConstant.QUESTION_DETAIL, commonQuestionService.get(commonQuestionId));
     }
 
 }
