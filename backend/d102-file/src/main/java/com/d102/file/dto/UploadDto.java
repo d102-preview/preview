@@ -19,4 +19,11 @@ public class UploadDto {
         private String url;
     }
 
+    @Data
+    public static class ResumeRequest {
+
+        private int beforeId;
+        private MultipartFile resume;
+    }
+
 }

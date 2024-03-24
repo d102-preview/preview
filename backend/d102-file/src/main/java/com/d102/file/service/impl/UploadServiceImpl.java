@@ -1,6 +1,7 @@
 package com.d102.file.service.impl;
 
 import com.d102.common.constant.UploadConstant;
+import com.d102.common.dto.ResumeDto;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.UploadException;
 import com.d102.common.repository.UserRepository;
@@ -38,7 +39,7 @@ public class UploadServiceImpl implements UploadService {
     public UploadDto.ProfileResponse uploadProfile(UploadDto.ProfileRequest profileRequestDto) {
         Path basePath = UploadConstant.PROFILE_DIR.resolve(securityHelper.getLoginUsername());
         String savePath = saveProfile(basePath, profileRequestDto.getProfile());
-        String profileUrl = makeUrl(savePath);
+        String profileUrl = makeProfileUrl(savePath);
 
         userRepository.findByEmail(securityHelper.getLoginUsername())
                 .ifPresent(user -> {
@@ -52,7 +53,12 @@ public class UploadServiceImpl implements UploadService {
                 .build();
     }
 
-    private String makeUrl(String savePath) {
+    @Override
+    public ResumeDto.Response uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
+        return null;
+    }
+
+    private String makeProfileUrl(String savePath) {
         return new StringBuilder()
                 .append(profileBaseUrl)
                 .append(URLEncoder.encode(savePath))

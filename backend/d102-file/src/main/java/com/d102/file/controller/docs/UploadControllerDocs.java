@@ -1,5 +1,6 @@
 package com.d102.file.controller.docs;
 
+import com.d102.common.dto.ResumeDto;
 import com.d102.common.response.Response;
 import com.d102.file.dto.UploadDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,5 +27,15 @@ public interface UploadControllerDocs {
                     }))
     })
     Response uploadProfile(UploadDto.ProfileRequest profileRequestDto);
+
+    @Operation(summary = "이력서 파일 업로드", description = "이력서 파일을 업로드한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 업로드한 이력서 파일 정보를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = ResumeDto.Response.class)),
+                    }))
+    })
+    Response uploadResume(UploadDto.ResumeRequest resumeRequestDto);
 
 }
