@@ -14,7 +14,6 @@ public class EmailDto {
         @Size(max = 64)
         @Email
         private String email;
-
     }
 
     @Data
