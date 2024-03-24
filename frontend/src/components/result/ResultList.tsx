@@ -1,5 +1,6 @@
 import ResultItem from './ResultItem';
 import IMAGE1 from '@/assets/images/interview1.png';
+import { formatInterviewTime } from '@/utils/formatDateTime';
 
 const ResultList = () => {
   // 더미 데이터
@@ -52,15 +53,10 @@ const ResultList = () => {
     },
   ];
 
-  const formatDate = (dateString: Date) => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dateString).toLocaleDateString('ko-KR', options);
-  };
-
   return (
     <div>
       <div className="flex items-center mb-3">
-        <p className="font-semibold text-[#B0B0B0] text-lg">{formatDate(setTime)}</p>
+        <p className="font-semibold text-[#B0B0B0] text-lg">{formatInterviewTime(setTime)}</p>
         <div className="flex-grow border-t-2 border-[#B0B0B0)] ml-3"></div>
       </div>
       <div className="grid grid-cols-3 gap-9">
