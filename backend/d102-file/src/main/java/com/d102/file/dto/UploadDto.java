@@ -1,23 +1,22 @@
 package com.d102.file.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UploadDto {
 
     @Data
-    public static class profileRequest {
+    public static class ProfileRequest {
 
         private MultipartFile profile;
-        private String userId;
-
     }
 
+    @Builder
     @Data
-    public static class profileResponse {
+    public static class ProfileResponse {
 
-        private String profileUrl;
-
+        private String url;
     }
 
 }

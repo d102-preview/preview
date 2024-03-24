@@ -34,6 +34,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             /* health */
             "/health/**",
+            /* profile */
+            "/download/profile/**",
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

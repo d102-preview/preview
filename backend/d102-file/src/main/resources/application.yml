@@ -30,8 +30,8 @@ spring:
   # MultiPart File Upload
   servlet:
     multipart:
-      max-file-size: 1000MB
-      max-request-size: 1000MB
+      max-file-size: 100MB
+      max-request-size: 100MB
       enabled: true
 
 # Swagger
@@ -70,3 +70,7 @@ jwt:
   refresh-token-key: ZuLXKJgsW29iW2uB5V9xxh0QW8Xihxdm0VP31zginC412xc431c
   access-token-validity-in-seconds: 86400
   refresh-token-validity-in-seconds: 604800
+
+download:
+  profile:
+    base-url: http://localhost:8082/file/download/profile?url=
