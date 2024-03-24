@@ -18,7 +18,6 @@ public class DownloadController implements DownloadControllerDocs {
     private final DownloadService downloadService;
 
     @GetMapping(value = "/profile/image")
-    // query parameter로 받아서 처리
     public ResponseEntity<ByteArrayResource> downloadProfile(@RequestParam("url") String profileUrl) {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
