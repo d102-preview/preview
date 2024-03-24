@@ -31,7 +31,8 @@ public class SecurityConfig {
             /* health */
             "/health/**",
             /* file */
-            "/upload/**"
+            "/upload/**",
+            "/download/**"
     };
 
     @Value("${cors.origins}")

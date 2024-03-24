@@ -8,6 +8,9 @@ public enum ExceptionType {
     /* Invalid request */
     InvalidParamException("INVALID", "Invalid param"),
 
+    /* Profile upload exception */
+    ProfileUploadException("INVALID", "Profile upload failed"),
+
     /* Not found request */
     EmailHashNotFoundException("NOT FOUND", "Invalid email"),
 

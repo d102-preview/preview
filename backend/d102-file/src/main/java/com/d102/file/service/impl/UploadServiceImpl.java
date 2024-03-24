@@ -1,6 +1,8 @@
 package com.d102.file.service.impl;
 
 import com.d102.common.constant.UploadConstant;
+import com.d102.common.exception.ExceptionType;
+import com.d102.common.exception.custom.UploadException;
 import com.d102.file.dto.UploadDto;
 import com.d102.file.service.UploadService;
 import jakarta.transaction.Transactional;
@@ -9,7 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -17,36 +23,24 @@ import java.util.UUID;
 public class UploadServiceImpl implements UploadService {
 
     @Transactional
-    public String uploadProfileImage(UploadDto.profileImageRequest profileImageRequestDto) {
-        System.out.println("uploadProfileImage");
-        System.out.println(profileImageRequestDto.getProfileImage().getOriginalFilename());
-        System.out.println(profileImageRequestDto.getProfileImage().getSize());
-        String path = System.getProperty("user.dir");
-        saveFile(path, profileImageRequestDto.getProfileImage());
-        return path;
+    public String uploadProfile(UploadDto.profileRequest profileRequestDto) {
+        return saveFile(UploadConstant.PROFILE_DIR, profileRequestDto.getProfile());
     }
 
-    private void saveFile(String path, MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        String saveFileName = UUID.randomUUID().toString() + "_" + fileName;
-
-        File folder = new File(path);
-        if (!folder.exists()) {
-            try {
-                folder.mkdirs();
-                System.out.println("folder");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        File saveFile = new File(path, saveFileName);
-        System.out.println(saveFile);
+    private String saveFile(Path dir, MultipartFile file) {
         try {
-            file.transferTo(saveFile);
-            System.out.println("saveFile");
-        } catch (Exception e) {
-            e.printStackTrace();
+            /* 유저별로 디렉토리 생성하는 것도 좋을 듯함 */
+            Files.createDirectories(dir);
+            String fileName = new StringJoiner("_")
+                    .add(UUID.randomUUID().toString())
+                    .add(file.getOriginalFilename())
+                    .toString();
+            Path dest = dir.resolve(fileName);
+            file.transferTo(dest);
+
+            return dest.toString();
+        } catch (IOException e) {
+            throw new UploadException(ExceptionType.ProfileUploadException);
         }
     }
 

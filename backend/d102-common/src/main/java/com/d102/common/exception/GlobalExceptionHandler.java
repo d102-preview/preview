@@ -3,6 +3,7 @@ package com.d102.common.exception;
 import com.d102.common.exception.custom.ConflictException;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.TooManyException;
+import com.d102.common.exception.custom.UploadException;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
 import jakarta.validation.ConstraintViolationException;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.io.IOException;
 
 import static com.d102.common.exception.ExceptionType.InvalidParamException;
 
@@ -22,6 +25,13 @@ public class GlobalExceptionHandler {
     public Response handleParamsException(Exception e) {
         return new ResponseFail(InvalidParamException.getCode(), e.getMessage());
     }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = UploadException.class)
+    public Response handleUploadException(UploadException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
+    }
+
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NotFoundException.class)
