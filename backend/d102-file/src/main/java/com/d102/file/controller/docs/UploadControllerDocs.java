@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Tag(name = "1. 파일 업로드 관련 API", description = "파일을 업로드할 수 있는 API")
 public interface UploadControllerDocs {
 
@@ -23,6 +25,6 @@ public interface UploadControllerDocs {
                             @SchemaProperty(name = "data", schema = @Schema(defaultValue = "업로드한 프로필 이미지 URL", description = "업로드한 프로필 이미지 URL"))
                     }))
     })
-    Response uploadProfileImage(UploadDto.profileImageRequest profileImageRequest);
+    Response uploadProfile(UploadDto.profileRequest profileRequestDto);
 
 }
