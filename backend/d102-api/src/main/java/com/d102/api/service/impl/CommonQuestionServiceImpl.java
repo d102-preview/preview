@@ -1,7 +1,9 @@
 package com.d102.api.service.impl;
 
+import com.d102.api.domain.CommonKeyword;
 import com.d102.api.domain.CommonQuestion;
 import com.d102.api.domain.CommonScript;
+import com.d102.api.dto.CommonKeywordDto;
 import com.d102.api.dto.CommonQuestionDto;
 import com.d102.api.dto.CommonScriptDto;
 import com.d102.api.mapper.CommonQuestionMapper;
@@ -61,6 +63,18 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
         } else {
             commonScript.setScript(request.getScript());
         }
+    }
+
+    @Transactional
+    public void createKeyword(Long commonQuestionId, CommonKeywordDto.Request request) {
+        User user = getUser(securityHelper.getLoginUsername());
+        CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
+
+        commonKeywordRepository.save(CommonKeyword.builder()
+                .user(user)
+                .commonQuestion(commonQuestion)
+                .keyword(request.getKeyword())
+                .build());
     }
 
     public User getUser(String email) {

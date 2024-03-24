@@ -1,6 +1,7 @@
 package com.d102.api.controller;
 
 import com.d102.api.controller.docs.CommonQuestionControllerDocs;
+import com.d102.api.dto.CommonKeywordDto;
 import com.d102.api.dto.CommonScriptDto;
 import com.d102.api.service.CommonQuestionService;
 import com.d102.common.constant.CommonQuestionConstant;
@@ -32,4 +33,9 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
         return new Response();
     }
 
+    @PostMapping("/keyword")
+    public Response createKeyword(@RequestParam Long commonQuestionId, @RequestBody CommonKeywordDto.Request request) {
+        commonQuestionService.createKeyword(commonQuestionId, request);
+        return new Response();
+    }
 }
