@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface UploadService {
 
-    String uploadProfile(UploadDto.profileRequest profileRequestDto);
+    UploadDto.ProfileResponse uploadProfile(UploadDto.ProfileRequest profileRequestDto);
 
 }
