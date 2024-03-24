@@ -72,7 +72,6 @@ public class UploadServiceImpl implements UploadService {
 
             return dest.toString();
         } catch (IOException e) {
-            e.printStackTrace();
             throw new UploadException(ExceptionType.ProfileUploadException);
         }
     }
