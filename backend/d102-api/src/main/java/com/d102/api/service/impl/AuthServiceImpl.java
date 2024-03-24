@@ -44,13 +44,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public UserDto.Response login(UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse) {
+    public UserDto.Response login(UserDto.LoginRequest loginRequestDto, HttpServletResponse servletResponse) {
         User loginUser = getLoginUser(loginRequestDto.getEmail());
 
         checkPassword(loginRequestDto.getPassword(), loginUser.getPassword());
 
         List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(loginUser.getRole().toString()));
-        Authentication authentication = jwtManager.getAuthentication(loginUser.getEmail(), null, grantedAuthorities);
+        Authentication authentication = jwtManager.getAuthentication(loginUser.getEmail(), grantedAuthorities);
 
         jwtManager.createAccessToken(authentication, servletResponse);
         jwtManager.createRefreshToken(authentication, servletResponse);
@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private User getLoginUser(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailAndDeletedTimeIsNull(email)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.LoginUserNotFoundException));
     }
 

@@ -25,15 +25,18 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String[] PERMIT_URL_ARRAY = {
+    public static final String[] PERMIT_URL_ARRAY = {
             /* api */
             "/email/**",
             "/auth/**",
+            "/common/question/list",
             /* swagger v3 */
             "/v3/api-docs/**",
             "/swagger-ui/**",
             /* health */
             "/health/**",
+            /* profile */
+            "/download/profile/**",
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
