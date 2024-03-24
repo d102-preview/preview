@@ -13,7 +13,6 @@ public class DownloadDto {
 
         private MediaType profileType;
         private byte[] profile;
-
     }
 
 }

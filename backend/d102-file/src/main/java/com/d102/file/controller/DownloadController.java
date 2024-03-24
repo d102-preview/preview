@@ -20,7 +20,7 @@ public class DownloadController implements DownloadControllerDocs {
 
     private final DownloadService downloadService;
 
-    @GetMapping(value = "/profile/image")
+    @GetMapping(value = "/profile")
     public ResponseEntity<ByteArrayResource> downloadProfile(@RequestParam("url") String profileUrl) {
         DownloadDto.ProfileResponse profileResponseDto = downloadService.downloadProfile(Paths.get(profileUrl));
         return ResponseEntity.ok()
