@@ -11,6 +11,8 @@ public class UploadException extends RuntimeException {
     private final ExceptionType exceptionType;
 
     @Override
-    public String getMessage() { return exceptionType.getMessage(); }
+    public String getMessage() {
+        return exceptionType.getMessage();
+    }
 
 }
