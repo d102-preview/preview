@@ -25,7 +25,7 @@ public class AuthController implements AuthControllerDocs {
     }
 
     @PostMapping("/login")
-    public Response login(@RequestBody UserDto.loginRequest loginRequestDto, HttpServletResponse servletResponse) {
+    public Response login(@RequestBody UserDto.LoginRequest loginRequestDto, HttpServletResponse servletResponse) {
         return new Response(AuthConstant.USER, authService.login(loginRequestDto, servletResponse));
     }
 
