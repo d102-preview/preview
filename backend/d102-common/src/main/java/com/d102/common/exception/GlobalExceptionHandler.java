@@ -8,6 +8,7 @@ import com.d102.common.exception.custom.*;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +49,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NotFoundException.class)
     public Response handleNotFoundException(NotFoundException e) {
+        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = DownloadException.class)
+    public Response handleNotFoundException(DownloadException e) {
         return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }
 

@@ -21,7 +21,7 @@ public class DownloadController implements DownloadControllerDocs {
     // query parameter로 받아서 처리
     public ResponseEntity<ByteArrayResource> downloadProfile(@RequestParam("url") String profileUrl) {
         return ResponseEntity.ok()
-                .contentType(MediaType.)
+                .contentType(MediaType.IMAGE_JPEG)
                 .body(new ByteArrayResource(downloadService.downloadProfile(profileUrl)));
     }
 
