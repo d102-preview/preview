@@ -11,7 +11,7 @@ public class TooManyException extends RuntimeException {
     private final ExceptionType exceptionType;
 
     @Override
-    public String getMessage(){
+    public String getMessage() {
         return exceptionType.getMessage();
     }
 

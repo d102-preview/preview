@@ -8,18 +8,29 @@ public enum ExceptionType {
     /* Invalid request */
     InvalidParamException("INVALID", "Invalid param"),
 
+    /* Upload exception */
+    ProfileUploadException("INVALID", "Profile upload failed"),
+
+    /* Download exception */
+    ProfileDownloadException("NOT FOUND", "Profile download failed"),
+
     /* UnAuthorize request */
-    InvalidLoginUserException("UnAuthorize", "Invalid email or password"),
-    DisabledUserException("UnAuthorize", "Disabled user"),
-    UnAuthorizedTokenException("UnAuthorize", "UnAuthorized Token"),
+    InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),
+    DisabledUserException("UNAUTHORIZED", "Disabled user"),
+    UnAuthorizedTokenException("UNAUTHORIZED", "UnAuthorized Token"),
+    InvalidCurrentPasswordException("UNAUTHORIZED", "Invalid current password"),
+    WrongChangedPasswordException("UNAUTHORIZED", "Wrong changedPassword and checkChangePassword"),
+    NotVerifyUserException("UNAUTHORIZED", "Not verify user"),
 
     /* Forbidden request */
-    InaccessibleException("Forbidden", "Inaccessible"),
+    InaccessibleException("FORBIDDEN", "Inaccessible"),
 
     /* Not found request */
     EmailHashNotFoundException("NOT FOUND", "Invalid email"),
     LoginUserNotFoundException("NOT FOUND", "Invalid email or password"),
     UserNotFoundException("NOT FOUND", "Invalid user"),
+    CommonQuestionNotFoundException("NOT FOUND", "Invalid common question"),
+    CommonKeywordNotFoundException("NOT FOUND", "Invalid common keyword"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),

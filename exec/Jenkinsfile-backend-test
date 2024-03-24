@@ -1,0 +1,57 @@
+pipeline {
+  agent any
+  
+  environment {
+    GRADLE_USER_HOME = "$WORKSPACE/.gradle"
+    CI = false
+  }
+ 
+  stages {
+    stage('Build Backend') {
+      steps {
+        script {
+          withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
+            sh 'cd exec/ && chmod +x project-setup-backend.sh && ./project-setup-backend.sh'
+            sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
+          }
+        }
+      }
+    }
+    
+    stage('Build and Push Images') {
+      steps {
+        sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
+      }
+    }
+
+    stage('Deploy Backend') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                  sourceFiles: 'exec/deploy-backend/*',
+                  removePrefix: 'exec/deploy-backend/',
+                  remoteDirectory: '/jenkins/deploy/backend',
+                  execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
+                                ./stop-backend.sh; \
+                                ./start-backend.sh'
+                ),
+                sshTransfer(
+                  execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                ./stop-frontend.sh; \
+                                ./start-frontend.sh'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }
+  }
+}
