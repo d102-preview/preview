@@ -77,6 +77,20 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
                 .build());
     }
 
+    @Transactional
+    public void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request request) {
+        CommonKeyword commonKeyword = getCommonKeyword(commonKeywordId);
+        checkLoginUserAndKeywordUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
+
+        commonKeyword.setKeyword(request.getKeyword());
+    }
+
+    private void checkLoginUserAndKeywordUser(String loginEmail, String keywordEmail) {
+        if (!loginEmail.equals(keywordEmail)) {
+            throw new NotFoundException(ExceptionType.NotVerifyUserException);
+        }
+    }
+
     public User getUser(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
@@ -85,6 +99,11 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     public CommonQuestion getCommonQuestion(Long questionId) {
         return commonQuestionRepository.findById(questionId)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.CommonQuestionNotFoundException));
+    }
+
+    public CommonKeyword getCommonKeyword(Long commonKeywordId) {
+        return commonKeywordRepository.findById(commonKeywordId)
+                .orElseThrow(() -> new NotFoundException(ExceptionType.CommonKeywordNotFoundException));
     }
 
 }
