@@ -3,6 +3,8 @@ package com.d102.api.service.impl;
 import com.d102.api.dto.UserDto;
 import com.d102.api.mapper.UserMapper;
 import com.d102.api.service.UserService;
+import com.d102.common.exception.ExceptionType;
+import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.UserRepository;
 import com.d102.common.util.SecurityHelper;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,15 @@ public class UserServiceImpl implements UserService {
     public UserDto.Response get() {
         return userMapper.toUserResponseDto(userRepository.findByEmail(
                 securityHelper.getLoginUsername()).orElse(null));
+    }
+
+    @Transactional
+    public UserDto.Response update(UserDto.UpdateRequest updateRequestDto) {
+        return userRepository.findByEmail(securityHelper.getLoginUsername())
+                .map(user -> {
+                    user.setName(updateRequestDto.getName());
+                    return userMapper.toUserResponseDto(user);
+                }).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
     }
     
 }

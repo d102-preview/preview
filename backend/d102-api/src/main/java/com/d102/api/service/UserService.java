@@ -6,4 +6,6 @@ public interface UserService {
 
     UserDto.Response get();
 
+    UserDto.Response update(UserDto.UpdateRequest updateRequestDto);
+
 }
