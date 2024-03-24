@@ -1,5 +1,6 @@
 import Lottie from 'react-lottie';
-import loading1 from '../../assets/lotties/loading.json';
+import loading1 from '@/assets/lotties/loading.json';
+import { formatInterviewSetTime } from '@/utils/formatDateTime';
 
 interface IResultItemProps {
   result: 'ok' | 'fail';
@@ -12,18 +13,6 @@ interface IResultItemProps {
 }
 
 const ResultItem = ({ result, id, imagePath, type, date, question, time }: IResultItemProps) => {
-  const formatDate = (dateString: string | Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    };
-    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
-    return date.toLocaleDateString('ko-KR', options);
-  };
-
   // Lottie 이미지
   const defaultOptions = {
     loop: true,
@@ -57,7 +46,7 @@ const ResultItem = ({ result, id, imagePath, type, date, question, time }: IResu
       </div>
       <div className="flex justify-between mx-1 mt-2">
         <span className="text-sm text-MAIN1">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
-        <span className="text-xs text-UNIMPORTANT_TEXT mr-1">{formatDate(date)}</span>
+        <span className="text-xs text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
       </div>
       <span className="font-semibold text-BLACK text-lg mx-1">Q. {question}</span>
     </div>
