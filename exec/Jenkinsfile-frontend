@@ -4,6 +4,14 @@ pipeline {
   environment {
     NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
     CI = false
+
+    GIT_MESSAGE = """${sh(
+        script: 'git show -s --pretty="* Commit %h by %cn <%ce>%n* Title: %s%n* Date: %cI"',
+        returnStdout: true
+    )}"""
+    CHANNEL = 'D102-Alert'
+    SUCCESS_ICON = 'https://www.jenkins.io/images/logos/seonbi/256.png'
+    FAIL_ICON = 'https://www.jenkins.io/images/logos/fire/256.png'
   }
 
   tools {
@@ -13,8 +21,11 @@ pipeline {
   stages {
     stage('Build Frontend') {
       steps {
-        withCredentials([file(credentialsId: 'front_profile', variable: 'FRONTEND_ENV')]) {
-          sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
+        script {
+          withCredentials([file(credentialsId: 'front_profile', variable: 'PROD_ENV')]) {
+            sh 'cd exec/ && chmod +x project-setup-frontend.sh && ./project-setup-frontend.sh'
+            sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
+          }
         }
       }
     }
@@ -29,23 +40,20 @@ pipeline {
               configName: 'application', 
               verbose: true,
               transfers: [
-                // sshTransfer(
-                //     execCommand: 'rm -r /home/ubuntu/nginx/dist/*'
-                // ),
                 sshTransfer(
-                    sourceFiles: 'frontend/dist/**',
-                    removePrefix: 'frontend/dist/',
-                    // remote의 경우에는 system의 remote directory가 앞에 prefix로 붙음
-                    // 그냥 공백으로 둬서 절대경로 그대로 쓸 수 있도록 했음
-                    remoteDirectory: '/jenkins/deploy/frontend/dist'
+                  sourceFiles: 'frontend/dist/**',
+                  removePrefix: 'frontend/dist/',
+                  // remote의 경우에는 system의 remote directory가 앞에 prefix로 붙음
+                  // "/home"으로 해서 사용자에 따라 다르게 갈 수 있도록 했음
+                  remoteDirectory: '/jenkins/deploy/frontend/dist'
                 ),
                 sshTransfer(
-                    sourceFiles: 'exec/deploy-frontend/*',
-                    removePrefix: 'exec/deploy-frontend/',
-                    remoteDirectory: '/jenkins/deploy/frontend',
-                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
-                                  ./stop-frontend.sh; \
-                                  ./start-frontend.sh'
+                  sourceFiles: 'exec/deploy-frontend/*',
+                  removePrefix: 'exec/deploy-frontend/',
+                  remoteDirectory: '/jenkins/deploy/frontend',
+                  execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                ./stop-frontend.sh; \
+                                ./start-frontend.sh'
                 )
               ]
             )
@@ -80,12 +88,13 @@ pipeline {
       script {
         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-            mattermostSend(color: 'good',
-                          message: "[Frontend] Deploy Success\nby ${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                          endpoint: "${MM_URL}",
-                          channel: 'D102-Alert')
+            mattermostSend(
+              color: 'good',
+              message: "[FE] Deploy Success: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${SUCCESS_ICON}"
+            )
           }
         }
       }
@@ -94,12 +103,13 @@ pipeline {
       script {
         withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
           withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
-            def Author_ID = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
-            def Author_Name = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
-            mattermostSend(color: 'danger',
-                          message: "[Frontend] Deploy Fail\n${Author_ID} (${Author_Name})\n(<${GIT_URL}|Details>)",
-                          endpoint: "${MM_URL}",
-                          channel: 'D102-Alert')
+            mattermostSend(
+              color: 'danger',
+              message: "[FE] Deploy Fail: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${FAIL_ICON}"
+            )
           }
         }
       }

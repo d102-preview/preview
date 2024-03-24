@@ -5,17 +5,17 @@ export interface APIResponse<T> {
 }
 
 // 면접 질문 리스트 타입
-export interface IQuestionList {
+export interface IQuestionItem {
   id: number;
   question: string;
   type: interviewType;
-  keywordList: IKeywordList[] | null;
+  keywordList: IKeywordItem[] | null;
 }
 
 export type interviewType = 'common' | 'resume';
 
 // 면접 키워드 리스트 타입
-export interface IKeywordList {
+export interface IKeywordItem {
   id: number;
   keyword: string;
 }
