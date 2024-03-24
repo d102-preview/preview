@@ -5,15 +5,15 @@ import CommonQuestions from '@/components/question/CommonQuestions';
 import ResumeQuestions from '@/components/question/ResumeQuestions';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { IQuestionItem, interviewType } from '@/types/model';
+import { interviewType, IQuestionItem } from '@/types/model';
 
-// 더미 데이터
+// // 더미 데이터
 const questions: IQuestionItem[] = [
-  { id: 1, question: '1분 자기소개 해주세요', type: 'common', keywordList: [] },
-  { id: 2, question: '본인 성격의 장단점에 대해 말해주세요', type: 'common', keywordList: [] },
-  { id: 3, question: '인생에서 가장 중요한 것은 무엇인가요?', type: 'common', keywordList: [] },
-  { id: 4, question: '리더쉽을 발휘했던 경험에 대해서 말씀해주세요.', type: 'common', keywordList: [] },
-  { id: 5, question: '동료와 친구들은 본인을 어떻게 생각하나요?', type: 'common', keywordList: [] },
+  { id: 1, question: '1분 자기소개 해주세요', type: 'resume', keywordList: [] },
+  { id: 2, question: '본인 성격의 장단점에 대해 말해주세요', type: 'resume', keywordList: [] },
+  { id: 3, question: '인생에서 가장 중요한 것은 무엇인가요?', type: 'resume', keywordList: [] },
+  { id: 4, question: '리더쉽을 발휘했던 경험에 대해서 말씀해주세요.', type: 'resume', keywordList: [] },
+  { id: 5, question: '동료와 친구들은 본인을 어떻게 생각하나요?', type: 'resume', keywordList: [] },
 ];
 
 const QuestionPage = () => {
@@ -37,7 +37,7 @@ const QuestionPage = () => {
           <div className={`flex rounded-2xl shadow-lg bg-GRAY ${isShow ? 'w-8/12' : 'w-full'} `}>
             <QuestionTab activeTab={activeTab} setActiveTab={setActiveTab} />
             <div className={`p-7 ${isShow ? 'w-11/12' : 'w-full'}  overflow-auto`}>
-              {activeTab === 'common' && <CommonQuestions questions={questions} type={activeTab} />}
+              {activeTab === 'common' && <CommonQuestions />}
               {activeTab === 'resume' && <ResumeQuestions questions={questions} type={activeTab} />}
             </div>
           </div>
