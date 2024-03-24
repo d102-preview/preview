@@ -25,3 +25,37 @@ export interface IResumeList {
   name: string;
   filePath: string;
 }
+
+export interface IQuestionListItem {
+  id: number;
+  question: string;
+}
+
+// 페이지네이션 정보 타입
+export interface PaginationResponse {
+  pageable: IPageable;
+  last: boolean;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  sort: ISort;
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
+
+export interface IPageable {
+  pageNumber: number;
+  pageSize: number;
+  sort: ISort;
+  offset: number;
+  paged: boolean;
+  unpaged: boolean;
+}
+
+export interface ISort {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+}
