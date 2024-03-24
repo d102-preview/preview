@@ -2,11 +2,11 @@ FROM openjdk:21
 
 EXPOSE 8081
 
-WORKDIR /app
+# WORKDIR /app
 
-VOLUME /logs
-VOLUME /files
+# VOLUME /logs
+# VOLUME /files
 
-ADD ./build/libs/*.jar /app.jar
+ADD ./build/libs/*.jar /app/app.jar
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "/app/app.jar"]

@@ -8,6 +8,12 @@ public enum ExceptionType {
     /* Invalid request */
     InvalidParamException("INVALID", "Invalid param"),
 
+    /* Upload exception */
+    ProfileUploadException("INVALID", "Profile upload failed"),
+
+    /* Download exception */
+    ProfileDownloadException("NOT FOUND", "Profile download failed"),
+    
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),
     DisabledUserException("UNAUTHORIZED", "Disabled user"),
