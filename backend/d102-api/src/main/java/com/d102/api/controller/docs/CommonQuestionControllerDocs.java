@@ -1,5 +1,6 @@
 package com.d102.api.controller.docs;
 
+import com.d102.api.dto.CommonKeywordDto;
 import com.d102.api.dto.CommonQuestionDto;
 import com.d102.api.dto.CommonScriptDto;
 import com.d102.common.response.Response;
@@ -43,5 +44,14 @@ public interface CommonQuestionControllerDocs {
                     }))
     })
     Response writeScript(Long commonQuestionId, CommonScriptDto.Request request);
+
+    @Operation(summary = "공통 질문 키워드 작성", description = "공통 질문에 관한 키워드를 작성하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 ok를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                    }))
+    })
+    Response createKeyword(Long commonQuestionId, CommonKeywordDto.Request request);
 
 }

@@ -1,5 +1,6 @@
 package com.d102.api.service;
 
+import com.d102.api.dto.CommonKeywordDto;
 import com.d102.api.dto.CommonQuestionDto;
 import com.d102.api.dto.CommonScriptDto;
 import org.springframework.data.domain.Page;
@@ -12,5 +13,7 @@ public interface CommonQuestionService {
     CommonQuestionDto.Response get(Long commonQuestionId);
 
     void writeScript(Long commonQuestionId, CommonScriptDto.Request request);
+
+    void createKeyword(Long commonQuestionId, CommonKeywordDto.Request request);
 
 }
