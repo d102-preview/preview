@@ -1,12 +1,14 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import HomePage from './pages/home/HomePage';
 import InterviewPage from './pages/interview/InterviewPage';
 import LoginPage from './pages/login/LoginPage';
 import MyPage from './pages/my/MyPage';
 import QuestionPage from './pages/question/QuestionPage';
+import RecordPage from './pages/record/RecordPage';
 import ResultPage from './pages/result/ResultPage';
 import SignUpPage from './pages/signup/SignupPage';
-import RecordPage from './pages/record/RecordPage';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={router} />
     </>
   );
