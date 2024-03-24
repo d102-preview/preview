@@ -7,6 +7,6 @@ import java.nio.file.Paths;
 public class UploadConstant {
 
     public static final String PROFILE = "profile";
-    public static final Path PROFILE_DIR = Paths.get(System.getProperty("user.dir"), PROFILE).toAbsolutePath().normalize();
+    public static final Path PROFILE_DIR = Paths.get(System.getProperty("user.dir"), "app", "files", "profile").toAbsolutePath().normalize();
 
 }
