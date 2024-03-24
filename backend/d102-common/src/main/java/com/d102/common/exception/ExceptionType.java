@@ -13,11 +13,13 @@ public enum ExceptionType {
 
     /* Download exception */
     ProfileDownloadException("NOT FOUND", "Profile download failed"),
-    
+
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),
     DisabledUserException("UNAUTHORIZED", "Disabled user"),
     UnAuthorizedTokenException("UNAUTHORIZED", "UnAuthorized Token"),
+    InvalidCurrentPasswordException("UNAUTHORIZED", "Invalid current password"),
+    WrongChangedPasswordException("UNAUTHORIZED", "Wrong changedPassword and checkChangePassword"),
 
     /* Forbidden request */
     InaccessibleException("FORBIDDEN", "Inaccessible"),
