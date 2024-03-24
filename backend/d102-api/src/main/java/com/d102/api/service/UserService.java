@@ -8,4 +8,6 @@ public interface UserService {
 
     UserDto.Response update(UserDto.UpdateRequest updateRequestDto);
 
+    void changePassword(UserDto.PasswordUpdateRequest passwordUpdateRequestDto);
+
 }

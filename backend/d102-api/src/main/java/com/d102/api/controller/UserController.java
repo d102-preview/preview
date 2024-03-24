@@ -24,4 +24,11 @@ public class UserController implements UserControllerDocs {
     public Response update(@RequestBody UserDto.UpdateRequest updateRequestDto) {
         return new Response(UserConstant.USER, userService.update(updateRequestDto));
     }
+
+    @PostMapping("/password")
+    public Response changePassword(@RequestBody UserDto.PasswordUpdateRequest passwordUpdateRequestDto) {
+        userService.changePassword(passwordUpdateRequestDto);
+        return new Response();
+    }
+
 }

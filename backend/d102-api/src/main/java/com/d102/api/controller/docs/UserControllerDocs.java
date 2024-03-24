@@ -34,4 +34,13 @@ public interface UserControllerDocs {
     })
     Response update(@Valid UserDto.UpdateRequest updateRequestDto);
 
+    @Operation(summary = "비밀번호 수정", description = "비밀번호를 갱신하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 비밀번호 수정 성공 여부를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공"))
+                    }))
+    })
+    Response changePassword(@Valid UserDto.PasswordUpdateRequest passwordUpdateRequestDto);
+
 }

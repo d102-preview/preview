@@ -28,7 +28,7 @@ public class UserDto {
     }
 
     @Data
-    public static class loginRequest {
+    public static class LoginRequest {
 
         @NotBlank
         @Size(max = 64)
@@ -46,6 +46,22 @@ public class UserDto {
         @NotBlank
         @Size(max = 8)
         private String name;
+    }
+
+    @Data
+    public static class PasswordUpdateRequest {
+
+        @NotBlank
+        @Size(min = 8, max = 20)
+        private String currentPassword;
+
+        @NotBlank
+        @Size(min = 8, max = 20)
+        private String changedPassword;
+
+        @NotBlank
+        @Size(min = 8, max = 20)
+        private String checkChangePassword;
     }
 
     @Data
