@@ -29,12 +29,17 @@ export default {
           from: { opacity: 0, transform: 'translate(0px, 50px)' },
           to: { opacity: 1, transform: 'translate(0px, 0px)' },
         },
+        Uploading: {
+          from: { width: '0%' },
+          to: { width: '100%' },
+        },
       },
       animation: {
         modalOpen: 'FadeIn 0.3s ease-in-out',
         modalClose: 'FadeOut 0.3s ease-in-out',
         showLeft: 'ShowLeft 0.5s ease-in-out',
         showUp: 'ShowUp 1.2s ease-in-out',
+        uploading: 'Uploading 1.5s ease-in-out',
       },
     },
   },
