@@ -1,5 +1,5 @@
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `role` varchar(8) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(72) NOT NULL,
@@ -15,10 +15,10 @@ CREATE TABLE `user` (
 
 
 CREATE TABLE `social` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
   `provider` varchar(8) NOT NULL,
-  `provider_id` int(11) NOT NULL,
+  `provider_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `social_user_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   UNIQUE KEY `provider_provider_id_unique` (`provider`, `provider_id`)
@@ -26,8 +26,8 @@ CREATE TABLE `social` (
 
 
 CREATE TABLE `resume` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
   `name` varchar(16) NOT NULL,
   `file_path` varchar(512) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
@@ -38,7 +38,7 @@ CREATE TABLE `resume` (
 
 
 CREATE TABLE `common_category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `category` varchar(16) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE `common_category` (
 
 
 CREATE TABLE `common_question` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `category_id` int(11),
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `category_id` bigint,
   `question` varchar(512) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -59,9 +59,9 @@ CREATE TABLE `common_question` (
 
 
 CREATE TABLE `common_script` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `question_id` bigint NOT NULL,
   `script` varchar(512) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -72,9 +72,9 @@ CREATE TABLE `common_script` (
 
 
 CREATE TABLE `common_keyword` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `question_id` bigint NOT NULL,
   `keyword` varchar(16) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -85,8 +85,8 @@ CREATE TABLE `common_keyword` (
 
 
 CREATE TABLE `resume_question` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `resume_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `resume_id` bigint NOT NULL,
   `question` varchar(512) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -96,9 +96,9 @@ CREATE TABLE `resume_question` (
 
 
 CREATE TABLE `resume_script` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `question_id` bigint NOT NULL,
   `script` varchar(512) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -109,8 +109,8 @@ CREATE TABLE `resume_script` (
 
 
 CREATE TABLE `resume_keyword` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `question_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `question_id` bigint NOT NULL,
   `keyword` varchar(16) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -120,8 +120,8 @@ CREATE TABLE `resume_keyword` (
 
 
 CREATE TABLE `analysis` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
   `type` varchar(16) NOT NULL,
   `question` varchar(512) NOT NULL,
   `video_path` varchar(512) NOT NULL,

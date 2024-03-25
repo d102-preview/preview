@@ -15,7 +15,7 @@ public interface UserMapper {
     @Mapping(target = "profileImageName", ignore = true)
     @Mapping(target = "profileImageUrl", ignore = true)
     @Mapping(target = "deletedTime", ignore = true)
-    User toUser(UserDto.JoinRequest joinRequest);
+    User toUser(UserDto.JoinRequest joinRequestDto);
 
 }
 

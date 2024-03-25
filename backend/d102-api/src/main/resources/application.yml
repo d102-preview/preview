@@ -56,7 +56,9 @@ springdoc:
       title: D102 API Server
       description: Sweet rain fell in class 4
       version: 0.0.1
+  override-with-generic-response: false
   use-fqn: true
+
 
 # logging
 logging:
