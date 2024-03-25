@@ -22,7 +22,7 @@ public class UploadDto {
     @Data
     public static class ResumeRequest {
 
-        private Long beforeId;
+        private String name;
         private MultipartFile resume;
     }
 

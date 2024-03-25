@@ -26,4 +26,8 @@ public class Resume extends BaseTime {
     @Column(name = "file_path", length = 512, nullable = false)
     private String filePath;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }

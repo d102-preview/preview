@@ -15,4 +15,12 @@ public class DownloadDto {
         private byte[] profile;
     }
 
+    @Builder
+    @Data
+    public static class ResumeResponse {
+
+        private MediaType resumeType;
+        private byte[] resume;
+    }
+
 }
