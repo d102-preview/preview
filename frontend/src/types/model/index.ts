@@ -25,3 +25,13 @@ export interface IResumeList {
   name: string;
   filePath: string;
 }
+
+export interface ResultItemData {
+  result: 'ok' | 'fail';
+  id: number;
+  imagePath: string;
+  type: 'mock' | 'main';
+  date: Date;
+  question: string;
+  time: string;
+}
