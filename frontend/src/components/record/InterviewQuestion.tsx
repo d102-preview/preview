@@ -6,9 +6,10 @@ interface IInterviewQuestionProps {
   question: IQuestionItem;
   status: recordStatusType;
   setStatus: Dispatch<SetStateAction<recordStatusType>>;
+  handleStopRecording: () => void;
 }
 
-const InterviewQuestion = ({ question, status, setStatus }: IInterviewQuestionProps) => {
+const InterviewQuestion = ({ question, status, setStatus, handleStopRecording }: IInterviewQuestionProps) => {
   const [count, setCount] = useState<number>(30);
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const InterviewQuestion = ({ question, status, setStatus }: IInterviewQuestionPr
 
       if (count <= 0) {
         clearInterval(timer);
+        handleStopRecording();
         setStatus('uploading');
         console.log('타이머가 종료되었습니다.');
       }
