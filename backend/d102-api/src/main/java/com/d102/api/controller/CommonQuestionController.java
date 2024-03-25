@@ -28,20 +28,20 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
     }
 
     @PostMapping("/script")
-    public Response writeScript(@RequestParam Long commonQuestionId, @RequestBody CommonScriptDto.Request request) {
-        commonQuestionService.writeScript(commonQuestionId, request);
+    public Response writeScript(@RequestParam Long commonQuestionId, @RequestBody CommonScriptDto.Request requestDto) {
+        commonQuestionService.writeScript(commonQuestionId, requestDto);
         return new Response();
     }
 
     @PostMapping("/keyword")
-    public Response createKeyword(@RequestParam Long commonQuestionId, @RequestBody CommonKeywordDto.Request request) {
-        commonQuestionService.createKeyword(commonQuestionId, request);
+    public Response createKeyword(@RequestParam Long commonQuestionId, @RequestBody CommonKeywordDto.Request requestDto) {
+        commonQuestionService.createKeyword(commonQuestionId, requestDto);
         return new Response();
     }
 
     @PatchMapping("/keyword")
-    public Response updateKeyword(@RequestParam Long commonKeywordId, @RequestBody CommonKeywordDto.Request request) {
-        commonQuestionService.updateKeyword(commonKeywordId, request);
+    public Response updateKeyword(@RequestParam Long commonKeywordId, @RequestBody CommonKeywordDto.Request requestDto) {
+        commonQuestionService.updateKeyword(commonKeywordId, requestDto);
         return new Response();
     }
 

@@ -49,7 +49,7 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     }
 
     @Transactional
-    public void writeScript(Long commonQuestionId, CommonScriptDto.Request request) {
+    public void writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto) {
         User user = getUser(securityHelper.getLoginUsername());
         CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
         CommonScript commonScript = commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(securityHelper.getLoginUsername(),
@@ -61,28 +61,28 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
                     .commonQuestion(commonQuestion)
                     .build()));
         } else {
-            commonScript.setScript(request.getScript());
+            commonScript.setScript(requestDto.getScript());
         }
     }
 
     @Transactional
-    public void createKeyword(Long commonQuestionId, CommonKeywordDto.Request request) {
+    public void createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto) {
         User user = getUser(securityHelper.getLoginUsername());
         CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
 
         commonKeywordRepository.save(CommonKeyword.builder()
                 .user(user)
                 .commonQuestion(commonQuestion)
-                .keyword(request.getKeyword())
+                .keyword(requestDto.getKeyword())
                 .build());
     }
 
     @Transactional
-    public void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request request) {
+    public void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto) {
         CommonKeyword commonKeyword = getCommonKeyword(commonKeywordId);
         checkLoginUserAndKeywordUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
 
-        commonKeyword.setKeyword(request.getKeyword());
+        commonKeyword.setKeyword(requestDto.getKeyword());
     }
 
     @Transactional
