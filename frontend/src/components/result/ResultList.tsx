@@ -1,11 +1,12 @@
 import ResultItem from './ResultItem';
 import IMAGE1 from '@/assets/images/interview1.png';
 import { formatInterviewTime } from '@/utils/formatDateTime';
+import { ResultItemData } from '@/types/model/index';
 
 const ResultList = () => {
   // 더미 데이터
   const setTime = new Date();
-  const resultItemsData = [
+  const resultItemsData: ResultItemData[] = [
     {
       result: 'fail',
       id: 1,
@@ -63,10 +64,10 @@ const ResultList = () => {
         {resultItemsData.map(item => (
           <ResultItem
             key={item.id}
-            result={item.result as 'ok' | 'fail'}
+            result={item.result}
             id={item.id}
             imagePath={item.imagePath}
-            type={item.type as 'mock' | 'main'}
+            type={item.type}
             date={item.date}
             question={item.question}
             time={item.time}

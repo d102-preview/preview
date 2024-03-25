@@ -1,23 +1,14 @@
 import Lottie from 'react-lottie';
-import loading1 from '@/assets/lotties/loading.json';
+import loading from '@/assets/lotties/loading.json';
 import { formatInterviewSetTime } from '@/utils/formatDateTime';
+import { ResultItemData } from '@/types/model/index';
 
-interface IResultItemProps {
-  result: 'ok' | 'fail';
-  id: number;
-  imagePath: string;
-  type: 'mock' | 'main';
-  date: Date;
-  question: string;
-  time: string;
-}
-
-const ResultItem = ({ result, id, imagePath, type, date, question, time }: IResultItemProps) => {
+const ResultItem = ({ result, id, imagePath, type, date, question, time }: ResultItemData) => {
   // Lottie 이미지
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: loading1,
+    animationData: loading,
     rendererSettings: {
       preserveAspectRatio: 'xMidYMid slice',
     },
@@ -28,10 +19,10 @@ const ResultItem = ({ result, id, imagePath, type, date, question, time }: IResu
       <div className="relative">
         {result === 'fail' && (
           <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-65 rounded-lg">
-            <Lottie options={defaultOptions} height={100} width={100} />
-            <div className="text-center">
+            <Lottie options={defaultOptions} height={50} width={150} />
+            <div className="text-center pt-2">
               <span className="text-white text-xl font-semibold">결과 분석 중</span>
-              <p className="text-white">5분 이내에 완료됩니다.</p>
+              <p className="text-white text-sm">5분 이내에 완료됩니다.</p>
             </div>
           </div>
         )}
