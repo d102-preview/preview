@@ -1,7 +1,3 @@
-"""
-Author: cheesecat47 <cheesecat47@gmail.com>
-"""
-
 from pydantic_settings import BaseSettings
 
 

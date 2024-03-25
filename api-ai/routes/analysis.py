@@ -1,7 +1,3 @@
-"""
-Author: cheesecat47 <cheesecat47@gmail.com>
-"""
-
 from fastapi import APIRouter, status
 from loguru import logger
 from models.analysis import AnalysisRequest, AnalysisResponse

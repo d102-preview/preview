@@ -1,7 +1,3 @@
-"""
-Author: cheesecat47 <cheesecat47@gmail.com>
-"""
-
 from models.common import CommonResponse
 from pydantic import BaseModel, Field
 
