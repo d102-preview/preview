@@ -25,8 +25,6 @@ const RecordPage = () => {
 
   // "거울",  화면에 보여지는 역할
   const videoRef = useRef<HTMLVideoElement>(null);
-  // dom내부에선 보여지지 않지만, 내부에서 "녹화"에 대한 기능만을 수행합니다.
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   const [stream, setStream] = useState<MediaStream | null>(null);
 
@@ -56,14 +54,71 @@ const RecordPage = () => {
       setStatus('preparing');
     } else if (status === 'preparing') {
       setStatus('recording');
-    } else if (status === 'recording') {
-      setStatus('proceeding');
     } else if (status === 'proceeding') {
       setStatus('uploading');
-    } else if (status === 'uploading') {
-      handleStartRecording();
+      handleStopRecording();
     }
   };
+
+  const [btnText, setBtnText] = useState<string>('다음');
+
+  // 상태에 따른 버튼 text 수정
+  useEffect(() => {
+    switch (status) {
+      case 'preparing':
+        setBtnText('녹화시작');
+        break;
+      case 'uploading':
+        setBtnText('');
+        break;
+      case 'proceeding':
+        setBtnText('녹화종료');
+        handleStartRecording();
+        break;
+      case 'recording':
+        setBtnText('');
+        break;
+    }
+  }, [status]);
+
+  // dom내부에선 보여지지 않지만, 내부에서 "녹화"에 대한 기능만을 수행합니다.
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
+
+  const handleStartRecording = () => {
+    setRecordedBlobs([]);
+
+    try {
+      // MediaRecorder 생성자 호출
+      mediaRecorderRef.current = new MediaRecorder(stream as MediaStream, {
+        mimeType: 'video/webm; codecs=vp9',
+      });
+
+      console.log(mediaRecorderRef.current);
+
+      // 전달받는 데이터를 처리
+      // 녹화된 미디어 데이터가 사용 가능할 때 트리거됩니다. (handleStopRecording 호출 시)
+      mediaRecorderRef.current.ondataavailable = event => {
+        if (event.data && event.data.size > 0) {
+          setRecordedBlobs(prev => [...prev, event.data]);
+        }
+      };
+      mediaRecorderRef.current.start();
+    } catch (e) {
+      console.log('MediaRecorder error');
+    }
+  };
+
+  const handleStopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setRecordedBlobs([]);
+    }
+  };
+
+  useEffect(() => {
+    console.log(recordedBlobs);
+  }, [recordedBlobs]);
 
   useEffect(() => {
     // 아직 media stream이 설정되지 않았다면 호출
@@ -79,60 +134,9 @@ const RecordPage = () => {
     };
   }, [stream]);
 
-  useEffect(() => {
-    console.log(questionList?.data.questionList);
-  }, [questionList]);
-
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
-
-  const [btnText, setBtnText] = useState<string>('다음');
-
-  // 상태에 따른 버튼 text 수정
-  useEffect(() => {
-    switch (status) {
-      case 'preparing':
-        setBtnText('녹화시작');
-        break;
-      case 'uploading':
-        setBtnText('');
-        break;
-      case 'proceeding':
-        setBtnText('녹화종료');
-        break;
-      case 'recording':
-        setBtnText('');
-        break;
-    }
-  }, [status]);
-
-  const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
-
-  const handleStartRecording = () => {
-    setRecordedBlobs([]);
-    try {
-      mediaRecorderRef.current = new MediaRecorder(stream as MediaStream);
-      console.log('1');
-      mediaRecorderRef.current.ondataavailable = event => {
-        if (event.data && event.data.size > 0) {
-          setRecordedBlobs(prev => [...prev, event.data]);
-          console.log('2');
-        }
-      };
-      mediaRecorderRef.current.start();
-    } catch (e) {
-      console.log('MediaRecorder error');
-    }
-  };
-
-  useEffect(() => {
-    console.log(recordedBlobs);
-  }, [recordedBlobs]);
-
   return (
     <div>
-      <div className="flex flex-col justify-center items-center w-full h-screen pb-10">
+      <div className="flex flex-col justify-center items-center min-w-[58rem] h-screen pb-10">
         <div className="w-[58rem] h-14 relative flex justify-end pb-5 text-center">
           <p className="absolute top-0 left-1/2 -translate-x-1/2 font-bold text-3xl">
             {!stream ? '카메라, 마이크를 준비중입니다' : !isSuccess ? '다음 버튼을 눌러주세요' : ''}
@@ -160,6 +164,7 @@ const RecordPage = () => {
                   question={questionList.data.questionList[questionIndex]}
                   setStatus={setStatus}
                   status={status}
+                  handleStopRecording={handleStopRecording}
                 />
               )}
 
@@ -184,6 +189,7 @@ const RecordPage = () => {
                 question={questionList.data.questionList[questionIndex]}
                 setStatus={setStatus}
                 status={status}
+                handleStopRecording={handleStopRecording}
               />
             </>
           )}
