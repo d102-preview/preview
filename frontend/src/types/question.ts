@@ -1,4 +1,4 @@
-import { IQuestionListItem, PaginationResponse } from './model';
+import { IQuestionDetail, IQuestionListItem, PaginationResponse } from './model';
 
 export interface IQuestionListPaginationResponse extends PaginationResponse {
   content: IQuestionListItem[];
@@ -7,3 +7,7 @@ export interface IQuestionListPaginationResponse extends PaginationResponse {
 export interface ICommonQuestionsRes {
   commonQuestionList: IQuestionListPaginationResponse;
 }
+
+export interface ICommonQuestionRes {
+  questionDetail: IQuestionDetail
+}  
