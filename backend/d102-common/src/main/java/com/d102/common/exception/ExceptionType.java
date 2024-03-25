@@ -9,6 +9,7 @@ public enum ExceptionType {
     InvalidParamException("INVALID", "Invalid param"),
 
     /* Upload exception */
+    ProfileTypeException("INVALID", "Invalid profile type"),
     ProfileUploadException("INVALID", "Profile upload failed"),
 
     /* Download exception */
