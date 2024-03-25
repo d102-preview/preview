@@ -8,6 +8,10 @@ class Status(Enum):
     FAIL = "fail"
 
 
+class Code(Enum):
+    INVALID = "INVALID"
+
+
 class CommonResponse(BaseModel):
     """공통 응답"""
 
