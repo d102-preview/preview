@@ -1,8 +1,8 @@
 package com.d102.file.service.impl;
 
-import com.d102.common.constant.UploadConstant;
+import com.d102.common.constant.FileConstant;
 import com.d102.common.domain.Resume;
-import com.d102.common.dto.ResumeDto;
+import com.d102.common.domain.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.UploadException;
@@ -41,32 +41,24 @@ public class UploadServiceImpl implements UploadService {
 
     @Transactional
     public UploadDto.ProfileResponse uploadProfile(UploadDto.ProfileRequest profileRequestDto) {
-        checkType(profileRequestDto.getProfile(), UploadConstant.ALLOWED_PROFILE_EXTENSIONS, ExceptionType.ProfileTypeException);
-
-        Path basePath = UploadConstant.PROFILE_DIR.resolve(securityHelper.getLoginUsername());
+        Path basePath = FileConstant.PROFILE_SAVE_DIR.resolve(securityHelper.getLoginUsername());
         String savePath = saveProfile(basePath, profileRequestDto.getProfile());
         String profileUrl = makeProfileUrl(savePath);
 
-        userRepository.findByEmail(securityHelper.getLoginUsername())
-                .ifPresent(user -> {
-                    user.setProfileImageName(profileRequestDto.getProfile().getOriginalFilename());
-                    user.setProfileImageUrl(profileUrl);
-                    userRepository.save(user);
-                });
+        User user = userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
+        user.setProfileImageName(profileRequestDto.getProfile().getOriginalFilename());
+        user.setProfileImageUrl(profileUrl);
 
-        return UploadDto.ProfileResponse.builder()
-                .url(profileUrl)
-                .build();
+        return uploadMapper.toProfileResponseDto(userRepository.saveAndFlush(user));
     }
 
     @Transactional
-    public ResumeDto.Response uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
-        checkType(resumeRequestDto.getResume(), UploadConstant.ALLOWED_RESUME_EXTENSIONS, ExceptionType.ResumeTypeException);
-
-        Path basePath = UploadConstant.RESUME_DIR.resolve(securityHelper.getLoginUsername());
+    public UploadDto.ResumeResponse uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
+        Path basePath = FileConstant.RESUME_SAVE_DIR.resolve(securityHelper.getLoginUsername());
         String savePath = saveResume(basePath, resumeRequestDto.getResume());
 
         Resume resume = uploadMapper.toResume(resumeRequestDto);
+        resume.setName(resumeRequestDto.getResume().getOriginalFilename());
         resume.setFilePath(savePath);
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
 
@@ -77,15 +69,11 @@ public class UploadServiceImpl implements UploadService {
         try {
             Files.createDirectories(basePath);
             List<File> files = Files.list(basePath).map(Path::toFile).toList();
-            if (files.size() > UploadConstant.RESUME_LIMIT) {
+            if (files.size() >= FileConstant.RESUME_UPLOAD_LIMIT) {
                 throw new UploadException(ExceptionType.ResumeLimitException);
             }
 
-            String fileName = new StringJoiner("_")
-                    .add(UUID.randomUUID().toString())
-                    .add(resume.getOriginalFilename())
-                    .toString();
-            Path dest = basePath.resolve(fileName);
+            Path dest = makeSavePath(basePath, resume);
             resume.transferTo(dest);
 
             return dest.toString();
@@ -105,16 +93,13 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
-    private String saveProfile(Path dir, MultipartFile file) {
+    private String saveProfile(Path dir, MultipartFile profile) {
         try {
             Files.createDirectories(dir);
             FileUtils.cleanDirectory(new File(dir.toString()));
-            String fileName = new StringJoiner("_")
-                    .add(UUID.randomUUID().toString())
-                    .add(file.getOriginalFilename())
-                    .toString();
-            Path dest = dir.resolve(fileName);
-            file.transferTo(dest);
+
+            Path dest = makeSavePath(dir, profile);
+            profile.transferTo(dest);
 
             return dest.toString();
         } catch (IOException e) {
@@ -122,10 +107,12 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
-    private void checkType(MultipartFile file, List<String> allowedExtensions, ExceptionType exceptionType) {
-        if (!allowedExtensions.contains(file.getContentType())) {
-            throw new UploadException(exceptionType);
-        }
+    private Path makeSavePath(Path dir, MultipartFile file) {
+        String fileName = new StringJoiner("_")
+                .add(UUID.randomUUID().toString())
+                .add(file.getOriginalFilename())
+                .toString();
+        return dir.resolve(fileName);
     }
 
 }

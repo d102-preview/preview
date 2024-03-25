@@ -24,7 +24,7 @@ public class DownloadServiceImpl implements DownloadService {
     public DownloadDto.ProfileResponse downloadProfile(Path profilePath) {
         try {
             return DownloadDto.ProfileResponse.builder()
-                    .profileType(MediaType.parseMediaType(Files.probeContentType(profilePath)))
+                    .profileType(MediaType.parseMediaType(Files.probeContentType(profilePath)).toString())
                     .profile(Files.readAllBytes(profilePath))
                     .build();
         } catch (IOException e) {
@@ -36,9 +36,11 @@ public class DownloadServiceImpl implements DownloadService {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new DownloadException(ExceptionType.ResumeNotFoundException));
 
         try {
-            Path resumePath = Paths.get(resume.getFilePath());
+            Path resumePath = Path.of(resume.getFilePath());
             return DownloadDto.ResumeResponse.builder()
-                    .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)))
+                    .name(resume.getName())
+                    .length(String.valueOf(Files.size(resumePath)))
+                    .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)).toString())
                     .resume(Files.readAllBytes(resumePath))
                     .build();
         } catch (Exception e) {

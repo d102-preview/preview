@@ -21,6 +21,9 @@ public enum ExceptionType {
     ResumeDownloadException("NOT FOUND", "Resume download failed"),
     ResumeNotFoundException("NOT FOUND", "Resume not found"),
 
+    /* Manage request */
+    ResumeDeleteException("NOT FOUND", "Resume delete failed"),
+
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),
     DisabledUserException("UNAUTHORIZED", "Disabled user"),
