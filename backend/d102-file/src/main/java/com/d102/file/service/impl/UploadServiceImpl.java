@@ -13,15 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -37,6 +34,8 @@ public class UploadServiceImpl implements UploadService {
 
     @Transactional
     public UploadDto.ProfileResponse uploadProfile(UploadDto.ProfileRequest profileRequestDto) {
+        checkType(profileRequestDto.getProfile());
+
         Path basePath = UploadConstant.PROFILE_DIR.resolve(securityHelper.getLoginUsername());
         String savePath = saveProfile(basePath, profileRequestDto.getProfile());
         String profileUrl = makeProfileUrl(savePath);
@@ -55,6 +54,7 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public ResumeDto.Response uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
+        System.out.println("resumeRequestDto.getResume().getContentType() = " + resumeRequestDto.getResume().getContentType());
         return null;
     }
 
@@ -67,6 +67,7 @@ public class UploadServiceImpl implements UploadService {
 
     private String saveProfile(Path dir, MultipartFile file) {
         try {
+            System.out.println("file.getContentType() = " + file.getContentType());
             Files.createDirectories(dir);
             FileUtils.cleanDirectory(new File(dir.toString()));
             String fileName = new StringJoiner("_")
@@ -79,6 +80,12 @@ public class UploadServiceImpl implements UploadService {
             return dest.toString();
         } catch (IOException e) {
             throw new UploadException(ExceptionType.ProfileUploadException);
+        }
+    }
+
+    private void checkType(MultipartFile file) {
+        if (!UploadConstant.ALLOWED_PROFILE_EXTENSIONS.contains(file.getContentType())) {
+            throw new UploadException(ExceptionType.ProfileTypeException);
         }
     }
 
