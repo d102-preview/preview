@@ -1,7 +1,7 @@
 import Lottie from 'react-lottie';
 import DoughnutChart from './DoughnutChart';
 import InterviewPrepared from './InterviewPrepared';
-import robot from '../assets/lotties/robot.json';
+import robot from '../../assets/lotties/robot.json';
 
 interface ResultReportProps {
   question: string;

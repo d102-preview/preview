@@ -186,6 +186,7 @@ const SignupForm = () => {
     mutate(signupInfo.email.value, {
       onSuccess: (data, variables) => {
         // @TODO: 이메일 인증번호 전송 로직
+        console.log(data, variables);
       },
       onError: (error, variables) => {
         console.log('실패', error, variables);

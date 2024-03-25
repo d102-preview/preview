@@ -20,7 +20,7 @@ const SelectedQuestions = () => {
             >
               <LuMinusCircle
                 size="35"
-                className="flex-shrink-0 mr-2 p-1 pl-0 text-MAIN1"
+                className="flex-shrink-0 mr-2 p-1 pl-0 text-[#EA8888]"
                 onClick={() => removeQuestion(questionObj.id)}
               />
               <div>{questionObj.question}</div>
@@ -31,15 +31,6 @@ const SelectedQuestions = () => {
       </div>
 
       <div className="flex flex-end justify-end gap-2">
-        <Button
-          text="취소하기"
-          width="w-20"
-          height="h-8"
-          backgroundColor="bg-[#F3F3F3]"
-          hoverBackgroundColor="hover:bg-[#bebebe]"
-          textColor="text-white"
-          //   onClick={() => navigate('/record')}
-        />
         <Button
           text="시작하기"
           width="w-20"
