@@ -13,6 +13,7 @@ export const authHandlers = [
     const success = HttpResponse.json(getIsEmailDuplicateRes, { status: 200 });
     const error = HttpResponse.json(null, { status: 409 });
 
+    console.log(success);
     return error;
   }),
 ];
