@@ -204,7 +204,7 @@ const SignupForm = () => {
           onError: error => {
             if (axios.isAxiosError(error)) {
               console.log('에러 객체', error.response);
-              Toast.success('인증번호를 전송하지 못했습니다. 다시 시도해주세요.');
+              Toast.error('인증번호를 전송하지 못했습니다. 다시 시도해주세요.');
             }
           },
         });
