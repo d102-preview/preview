@@ -6,7 +6,7 @@ from fastapi import APIRouter, status
 from loguru import logger
 from models.analysis import AnalysisRequest
 
-router = APIRouter()
+router = APIRouter(tags=["1. ai"])
 
 
 @router.post(
