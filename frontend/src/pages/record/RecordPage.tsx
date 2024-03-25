@@ -25,8 +25,6 @@ const RecordPage = () => {
 
   // "거울",  화면에 보여지는 역할
   const videoRef = useRef<HTMLVideoElement>(null);
-  // dom내부에선 보여지지 않지만, 내부에서 "녹화"에 대한 기능만을 수행합니다.
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   const [stream, setStream] = useState<MediaStream | null>(null);
 
@@ -56,36 +54,11 @@ const RecordPage = () => {
       setStatus('preparing');
     } else if (status === 'preparing') {
       setStatus('recording');
-    } else if (status === 'recording') {
-      setStatus('proceeding');
     } else if (status === 'proceeding') {
       setStatus('uploading');
-    } else if (status === 'uploading') {
-      handleStartRecording();
+      handleStopRecording();
     }
   };
-
-  useEffect(() => {
-    // 아직 media stream이 설정되지 않았다면 호출
-    if (!stream) {
-      getMediaPermission();
-    }
-
-    // 페이지 이탈 또는 컴포넌트 언마운트 시 미디어 스트림 정지
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-    };
-  }, [stream]);
-
-  useEffect(() => {
-    console.log(questionList?.data.questionList);
-  }, [questionList]);
-
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
 
   const [btnText, setBtnText] = useState<string>('다음');
 
@@ -100,6 +73,7 @@ const RecordPage = () => {
         break;
       case 'proceeding':
         setBtnText('녹화종료');
+        handleStartRecording();
         break;
       case 'recording':
         setBtnText('');
@@ -107,17 +81,26 @@ const RecordPage = () => {
     }
   }, [status]);
 
+  // dom내부에선 보여지지 않지만, 내부에서 "녹화"에 대한 기능만을 수행합니다.
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
 
   const handleStartRecording = () => {
     setRecordedBlobs([]);
+
     try {
-      mediaRecorderRef.current = new MediaRecorder(stream as MediaStream);
-      console.log('1');
+      // MediaRecorder 생성자 호출
+      mediaRecorderRef.current = new MediaRecorder(stream as MediaStream, {
+        mimeType: 'video/webm; codecs=vp9',
+      });
+
+      console.log(mediaRecorderRef.current);
+
+      // 전달받는 데이터를 처리
+      // 녹화된 미디어 데이터가 사용 가능할 때 트리거됩니다. (handleStopRecording 호출 시)
       mediaRecorderRef.current.ondataavailable = event => {
         if (event.data && event.data.size > 0) {
           setRecordedBlobs(prev => [...prev, event.data]);
-          console.log('2');
         }
       };
       mediaRecorderRef.current.start();
@@ -126,9 +109,30 @@ const RecordPage = () => {
     }
   };
 
+  const handleStopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setRecordedBlobs([]);
+    }
+  };
+
   useEffect(() => {
     console.log(recordedBlobs);
   }, [recordedBlobs]);
+
+  useEffect(() => {
+    // 아직 media stream이 설정되지 않았다면 호출
+    if (!stream) {
+      getMediaPermission();
+    }
+
+    // 페이지 이탈 또는 컴포넌트 언마운트 시 미디어 스트림 정지
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [stream]);
 
   return (
     <div>
@@ -160,6 +164,7 @@ const RecordPage = () => {
                   question={questionList.data.questionList[questionIndex]}
                   setStatus={setStatus}
                   status={status}
+                  handleStopRecording={handleStopRecording}
                 />
               )}
 
@@ -184,6 +189,7 @@ const RecordPage = () => {
                 question={questionList.data.questionList[questionIndex]}
                 setStatus={setStatus}
                 status={status}
+                handleStopRecording={handleStopRecording}
               />
             </>
           )}
