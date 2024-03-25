@@ -21,7 +21,7 @@ const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setSta
         setQuestionIndex(questionIndex + 1);
         setStatus('preparing');
       }
-    }, 1500);
+    }, 2000);
     console.log('업로드 완료');
   }, []);
 
