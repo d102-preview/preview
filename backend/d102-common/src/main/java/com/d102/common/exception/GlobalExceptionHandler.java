@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler(value = DownloadException.class)
+    @ExceptionHandler(value = {DownloadException.class, ManageException.class})
     public Response handleNotFoundException(DownloadException e) {
         return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }

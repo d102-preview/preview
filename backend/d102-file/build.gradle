@@ -30,6 +30,8 @@ dependencies {
 
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.apache.tika:tika-core:2.9.1'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
@@ -58,7 +60,6 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
     testImplementation 'org.mapstruct:mapstruct:1.5.5.Final'
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
-
 
     // boot test
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.3'
