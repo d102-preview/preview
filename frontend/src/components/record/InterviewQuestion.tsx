@@ -34,18 +34,19 @@ const InterviewQuestion = ({ question, status, setStatus, handleStopRecording }:
   return (
     <div className="absolute top-0 left-0 right-0 mx-[9.2rem] px-5 bg-black rounded-b-xl ">
       <div className="flex justify-between items-center font-bold gap-5 my-2">
-        <div className="whitespace-nowrap bg-white rounded-2xl py-1 px-3">
-          <p>질문</p>
-        </div>
-        <p className="text-lg text-white">{question.question}</p>
-        <div className="w-20">
-          {status === 'proceeding' && (
-            <div className="flex justify-center items-center gap-2 text-white border border-white rounded-2xl py-1 px-3">
-              <div className="w-[0.3rem] h-[0.3rem] bg-red-700 rounded-full"></div>
-              <p>00:{count.toString().padStart(2, '0')}</p>
-            </div>
-          )}
-        </div>
+        {status === 'proceeding' && (
+          <div className="whitespace-nowrap bg-white rounded-2xl py-1 px-3">
+            <p>질문</p>
+          </div>
+        )}
+
+        <p className="text-lg text-white flex-1 text-center ">{question.question}</p>
+        {status === 'proceeding' && (
+          <div className="flex justify-center items-center gap-2 text-white border border-white rounded-2xl py-1 px-3">
+            <div className="w-[0.3rem] h-[0.3rem] bg-red-700 rounded-full"></div>
+            <p>00:{count.toString().padStart(2, '0')}</p>
+          </div>
+        )}
       </div>
     </div>
   );
