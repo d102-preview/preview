@@ -52,7 +52,7 @@ public interface CommonQuestionControllerDocs {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
                     }))
     })
-    Response createKeyword(Long commonQuestionId, CommonKeywordDto.Request request);
+    Response createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto);
 
     @Operation(summary = "공통 질문 키워드 수정", description = "공통 질문에 관한 키워드를 수정하는 API를 호출한다.")
     @ApiResponses({
@@ -61,7 +61,7 @@ public interface CommonQuestionControllerDocs {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
                     }))
     })
-    Response updateKeyword(Long commonKeywordId, CommonKeywordDto.Request request);
+    Response updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto);
 
     @Operation(summary = "공통 질문 키워드 삭제", description = "공통 질문에 관한 키워드를 삭제하는 API를 호출한다.")
     @ApiResponses({
