@@ -1,4 +1,4 @@
-import { getCommonQuestionList } from '@/services/question/api';
+import { getCommonQuestionList, getCommonQuestion } from '@/services/question/api';
 import { useQuery } from '@tanstack/react-query';
 
 export const useQuestion = () => {
@@ -6,5 +6,11 @@ export const useQuestion = () => {
     return useQuery({ queryKey: ['commonQuestions', 'resumeQuestions'], queryFn: () => getCommonQuestionList() });
   };
 
-  return { useGetCommonQuestionList };
+  const useGetCommonQuestion = (commonQuestionId: number) => {
+    return useQuery({
+      queryKey: ['commonQuestion', commonQuestionId],
+      queryFn: () => getCommonQuestion(commonQuestionId),
+    });
+  };
+  return { useGetCommonQuestionList, useGetCommonQuestion };
 };
