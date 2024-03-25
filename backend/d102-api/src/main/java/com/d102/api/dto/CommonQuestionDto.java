@@ -18,7 +18,7 @@ public class CommonQuestionDto {
     @Data
     public static class ListResponse {
 
-        private int id;
+        private Long id;
         private String question;
     }
 
