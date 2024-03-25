@@ -1,0 +1,80 @@
+pipeline {
+  agent any
+  
+  environment {
+    CI = false
+
+    GIT_MESSAGE = """${sh(
+        script: 'git show -s --pretty="* Commit %h by %cn <%ce>%n* Title: %s%n* Date: %cI"',
+        returnStdout: true
+    )}"""
+    CHANNEL = 'D102-Alert'
+    SUCCESS_ICON = 'https://www.jenkins.io/images/logos/seonbi/256.png'
+    FAIL_ICON = 'https://www.jenkins.io/images/logos/fire/256.png'
+  }
+ 
+  stages {
+    stage('Deploy Backend AI') {
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                    sourceFiles: 'api-ai/**',
+                    removePrefix: 'api-ai/',
+                    remoteDirectory: '/jenkins/deploy/backend-ai',
+                    execCommand: 'cd /home/jenkins/deploy/backend-ai && chmod 755 *.sh; \
+                                  ./stop-ai.sh; \
+                                  ./start-ai.sh'
+                ),
+                sshTransfer(
+                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }
+  }
+
+  post {
+    success {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            mattermostSend(
+              color: 'good',
+              message: "[AI] Deploy Success: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${SUCCESS_ICON}"
+            )
+          }
+        }
+      }
+    }
+    failure {
+      script {
+        withCredentials([string(credentialsId: 'gitlab_repo_url', variable: 'GIT_URL')]) {
+          withCredentials([string(credentialsId: 'mattermost_url', variable: 'MM_URL')]) {
+            mattermostSend(
+              color: 'danger',
+              message: "[AI] Deploy Fail: ${env.BUILD_URL}\n${GIT_MESSAGE}",
+              endpoint: "${MM_URL}",
+              channel: "${CHANNEL}",
+              icon: "${FAIL_ICON}"
+            )
+          }
+        }
+      }
+    }
+  }
+}
