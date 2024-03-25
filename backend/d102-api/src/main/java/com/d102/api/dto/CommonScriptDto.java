@@ -15,7 +15,7 @@ public class CommonScriptDto {
     @Data
     public static class Response {
 
-        private int id;
+        private Long id;
         private String script;
     }
 
