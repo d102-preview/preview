@@ -24,7 +24,7 @@ public class UploadController implements UploadControllerDocs {
     }
 
     @PostMapping(value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
+    public Response uploadResume(@ModelAttribute UploadDto.ResumeRequest resumeRequestDto) {
         return new Response(UploadConstant.RESUME, uploadService.uploadResume(resumeRequestDto));
     }
 

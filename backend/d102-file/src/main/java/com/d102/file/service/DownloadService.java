@@ -8,4 +8,6 @@ public interface DownloadService {
 
     DownloadDto.ProfileResponse downloadProfile(Path profileUrl);
 
+    DownloadDto.ResumeResponse downloadResume(Long resumeId);
+
 }

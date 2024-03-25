@@ -23,6 +23,17 @@ public interface DownloadControllerDocs {
                             @SchemaProperty(name = "data", schema = @Schema(defaultValue = "다운로드한 프로필 이미지", description = "다운로드한 프로필 이미지"))
                     }))
     })
-    ResponseEntity<ByteArrayResource> downloadProfile(String profileUrl);
+    ResponseEntity<ByteArrayResource> downloadProfile(String profilePath);
+
+    @Operation(summary = "이력서 다운로드", description = "이력서를 다운로드한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 이력서를 다운로드한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "다운로드한 이력서", description = "다운로드한 이력서"))
+                    }))
+    })
+    ResponseEntity<ByteArrayResource> downloadResume(Long resumeId);
+
 
 }

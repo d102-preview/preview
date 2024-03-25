@@ -1,12 +1,16 @@
 package com.d102.file.service.impl;
 
 import com.d102.common.constant.UploadConstant;
+import com.d102.common.domain.Resume;
 import com.d102.common.dto.ResumeDto;
 import com.d102.common.exception.ExceptionType;
+import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.UploadException;
+import com.d102.common.repository.ResumeRepository;
 import com.d102.common.repository.UserRepository;
 import com.d102.common.util.SecurityHelper;
 import com.d102.file.dto.UploadDto;
+import com.d102.file.mapper.UploadMapper;
 import com.d102.file.service.UploadService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -30,11 +35,13 @@ public class UploadServiceImpl implements UploadService {
     private String profileBaseUrl;
 
     private final UserRepository userRepository;
+    private final ResumeRepository resumeRepository;
     private final SecurityHelper securityHelper;
+    private final UploadMapper uploadMapper;
 
     @Transactional
     public UploadDto.ProfileResponse uploadProfile(UploadDto.ProfileRequest profileRequestDto) {
-        checkType(profileRequestDto.getProfile());
+        checkType(profileRequestDto.getProfile(), UploadConstant.ALLOWED_PROFILE_EXTENSIONS, ExceptionType.ProfileTypeException);
 
         Path basePath = UploadConstant.PROFILE_DIR.resolve(securityHelper.getLoginUsername());
         String savePath = saveProfile(basePath, profileRequestDto.getProfile());
@@ -52,22 +59,54 @@ public class UploadServiceImpl implements UploadService {
                 .build();
     }
 
-    @Override
+    @Transactional
     public ResumeDto.Response uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
-        System.out.println("resumeRequestDto.getResume().getContentType() = " + resumeRequestDto.getResume().getContentType());
-        return null;
+        checkType(resumeRequestDto.getResume(), UploadConstant.ALLOWED_RESUME_EXTENSIONS, ExceptionType.ResumeTypeException);
+
+        Path basePath = UploadConstant.RESUME_DIR.resolve(securityHelper.getLoginUsername());
+        String savePath = saveResume(basePath, resumeRequestDto.getResume());
+
+        Resume resume = uploadMapper.toResume(resumeRequestDto);
+        resume.setFilePath(savePath);
+        resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
+
+        return uploadMapper.toResumeResponseDto(resumeRepository.saveAndFlush(resume));
+    }
+
+    private String saveResume(Path basePath, MultipartFile resume) {
+        try {
+            Files.createDirectories(basePath);
+            List<File> files = Files.list(basePath).map(Path::toFile).toList();
+            if (files.size() > UploadConstant.RESUME_LIMIT) {
+                throw new UploadException(ExceptionType.ResumeLimitException);
+            }
+
+            String fileName = new StringJoiner("_")
+                    .add(UUID.randomUUID().toString())
+                    .add(resume.getOriginalFilename())
+                    .toString();
+            Path dest = basePath.resolve(fileName);
+            resume.transferTo(dest);
+
+            return dest.toString();
+        } catch (IOException e) {
+            throw new UploadException(ExceptionType.ResumeUploadException);
+        }
     }
 
     private String makeProfileUrl(String savePath) {
-        return new StringBuilder()
-                .append(profileBaseUrl)
-                .append(URLEncoder.encode(savePath))
-                .toString();
+        try {
+            return new StringBuilder()
+                    .append(profileBaseUrl)
+                    .append(URLEncoder.encode(savePath, "UTF-8"))
+                    .toString();
+        } catch (Exception e) {
+            throw new UploadException(ExceptionType.ProfileUrlException);
+        }
     }
 
     private String saveProfile(Path dir, MultipartFile file) {
         try {
-            System.out.println("file.getContentType() = " + file.getContentType());
             Files.createDirectories(dir);
             FileUtils.cleanDirectory(new File(dir.toString()));
             String fileName = new StringJoiner("_")
@@ -83,9 +122,9 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
-    private void checkType(MultipartFile file) {
-        if (!UploadConstant.ALLOWED_PROFILE_EXTENSIONS.contains(file.getContentType())) {
-            throw new UploadException(ExceptionType.ProfileTypeException);
+    private void checkType(MultipartFile file, List<String> allowedExtensions, ExceptionType exceptionType) {
+        if (!allowedExtensions.contains(file.getContentType())) {
+            throw new UploadException(exceptionType);
         }
     }
 

@@ -8,12 +8,18 @@ public enum ExceptionType {
     /* Invalid request */
     InvalidParamException("INVALID", "Invalid param"),
 
-    /* Upload exception */
+    /* Upload request */
     ProfileTypeException("INVALID", "Invalid profile type"),
     ProfileUploadException("INVALID", "Profile upload failed"),
+    ProfileUrlException("INVALID", "Invalid profile name"),
+    ResumeTypeException("INVALID", "Invalid resume type"),
+    ResumeUploadException("INVALID", "Resume upload failed"),
+    ResumeLimitException("INVALID", "Resume limit exceeded"),
 
-    /* Download exception */
+    /* Download request */
     ProfileDownloadException("NOT FOUND", "Profile download failed"),
+    ResumeDownloadException("NOT FOUND", "Resume download failed"),
+    ResumeNotFoundException("NOT FOUND", "Resume not found"),
 
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),

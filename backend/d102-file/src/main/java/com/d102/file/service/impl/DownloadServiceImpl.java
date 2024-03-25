@@ -1,7 +1,9 @@
 package com.d102.file.service.impl;
 
+import com.d102.common.domain.Resume;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.DownloadException;
+import com.d102.common.repository.ResumeRepository;
 import com.d102.file.dto.DownloadDto;
 import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +19,32 @@ import java.util.Base64;
 @Service
 public class DownloadServiceImpl implements DownloadService {
 
-    public DownloadDto.ProfileResponse downloadProfile(Path profileUrl) {
+    private final ResumeRepository resumeRepository;
+
+    public DownloadDto.ProfileResponse downloadProfile(Path profilePath) {
         try {
             return DownloadDto.ProfileResponse.builder()
-                    .profileType(MediaType.parseMediaType(Files.probeContentType(profileUrl)))
-                    .profile(Files.readAllBytes(profileUrl))
+                    .profileType(MediaType.parseMediaType(Files.probeContentType(profilePath)))
+                    .profile(Files.readAllBytes(profilePath))
                     .build();
         } catch (IOException e) {
             throw new DownloadException(ExceptionType.ProfileDownloadException);
         }
     }
+
+    public DownloadDto.ResumeResponse downloadResume(Long resumeId) {
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new DownloadException(ExceptionType.ResumeNotFoundException));
+
+        try {
+            Path resumePath = Paths.get(resume.getFilePath());
+            return DownloadDto.ResumeResponse.builder()
+                    .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)))
+                    .resume(Files.readAllBytes(resumePath))
+                    .build();
+        } catch (Exception e) {
+            throw new DownloadException(ExceptionType.ResumeDownloadException);
+        }
+    }
+
 
 }
