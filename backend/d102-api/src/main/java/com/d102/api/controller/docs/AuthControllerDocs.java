@@ -20,7 +20,7 @@ public interface AuthControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 가입한 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResponse.class)),
                     }))
     })
     Response join(@Valid UserDto.JoinRequest joinRequestDto);
@@ -30,9 +30,13 @@ public interface AuthControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 로그인한 유저 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResponse.class)),
                     }))
     })
     Response login(@Valid UserDto.LoginRequest loginRequestDto, HttpServletResponse servletResponse);
 
+
+    class UserResponse { public UserDto.Response user; }
+
 }
+
