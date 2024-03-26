@@ -1,4 +1,4 @@
-from common.exception import custom_value_error_handler
+from common.exception import custom_validation_error_handler
 from core.settings import settings
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -13,4 +13,4 @@ app = FastAPI()
 app.include_router(analysis_router, prefix=settings.API_V1_STR)
 
 # Add custom exception handlers
-app.add_exception_handler(RequestValidationError, custom_value_error_handler)
+app.add_exception_handler(RequestValidationError, custom_validation_error_handler)
