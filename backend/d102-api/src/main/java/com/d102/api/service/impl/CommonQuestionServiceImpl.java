@@ -16,6 +16,7 @@ import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.UserRepository;
 import com.d102.common.util.SecurityHelper;
+import com.d102.common.util.UserVerifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,9 +42,9 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     @Transactional(readOnly = true)
     public CommonQuestionDto.Response get(Long commonQuestionId) {
         return CommonQuestionDto.Response.builder()
-                .commonScript(commonQuestionMapper.toCommonScriptDto(commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(
+                .script(commonQuestionMapper.toCommonScriptDto(commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(
                         securityHelper.getLoginUsername(), commonQuestionId).orElse(null)))
-                .commonKeywords(commonQuestionMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
+                .keywordList(commonQuestionMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
                         securityHelper.getLoginUsername(), commonQuestionId)))
                 .build();
     }
@@ -59,6 +60,7 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
             commonScriptRepository.save(commonScriptRepository.save(CommonScript.builder()
                     .user(user)
                     .commonQuestion(commonQuestion)
+                    .script(requestDto.getScript())
                     .build()));
         } else {
             commonScript.setScript(requestDto.getScript());
@@ -80,7 +82,7 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     @Transactional
     public void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto) {
         CommonKeyword commonKeyword = getCommonKeyword(commonKeywordId);
-        checkLoginUserAndKeywordUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
+        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
 
         commonKeyword.setKeyword(requestDto.getKeyword());
     }
@@ -88,15 +90,9 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     @Transactional
     public void deleteKeyword(Long commonKeywordId) {
         CommonKeyword commonKeyword = getCommonKeyword(commonKeywordId);
-        checkLoginUserAndKeywordUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
+        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
 
         commonKeywordRepository.deleteById(commonKeywordId);
-    }
-
-    private void checkLoginUserAndKeywordUser(String loginEmail, String keywordEmail) {
-        if (!loginEmail.equals(keywordEmail)) {
-            throw new NotFoundException(ExceptionType.NotVerifyUserException);
-        }
     }
 
     public User getUser(String email) {

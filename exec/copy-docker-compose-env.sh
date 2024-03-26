@@ -1,0 +1,1 @@
+cd deploy-backend && chmod -R 755 . && cp ${DC_ENV} .

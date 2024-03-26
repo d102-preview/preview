@@ -28,7 +28,8 @@ CREATE TABLE `social` (
 CREATE TABLE `resume` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` bigint NOT NULL,
-  `name` varchar(16) NOT NULL,
+  `file_name` varchar(128) NOT NULL,
+  `display_name` varchar(16) NOT NULL,
   `file_path` varchar(512) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
