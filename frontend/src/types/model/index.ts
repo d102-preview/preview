@@ -35,3 +35,11 @@ export interface ResultItemData {
   question: string;
   time: string;
 }
+
+// 회원 정보
+export interface IUserInfo {
+  email: string;
+  profileImageName: string;
+  profileImageUrl: string;
+  name: string;
+}

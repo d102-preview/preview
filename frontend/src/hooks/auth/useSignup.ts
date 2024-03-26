@@ -1,6 +1,6 @@
-import { getIsEmailDuplicate, postEmailCertification, postVerifyEmail } from '@/services/auth/api';
+import { getIsEmailDuplicate, postEmailCertification, postSignup, postVerifyEmail } from '@/services/auth/api';
 import { useMutation } from '@tanstack/react-query';
-import { IPostEmailVerifyReq } from './../../types/auth';
+import { IPostEmailVerifyReq, IPostJoinReq } from './../../types/auth';
 
 export const useSignup = () => {
   const useGetIsDuplicateEmail = () => {
@@ -39,5 +39,11 @@ export const useSignup = () => {
     });
   };
 
-  return { useGetIsDuplicateEmail, usePostEmailCertification, usePostEmailVerify };
+  const usePostSignup = () => {
+    return useMutation({
+      mutationFn: ({ email, password, name }: IPostJoinReq) => postSignup({ email, password, name }),
+    });
+  };
+
+  return { useGetIsDuplicateEmail, usePostEmailCertification, usePostEmailVerify, usePostSignup };
 };
