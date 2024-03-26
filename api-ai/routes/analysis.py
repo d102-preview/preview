@@ -2,6 +2,7 @@ from fastapi import APIRouter, status
 from loguru import logger
 from models.analysis import AnalysisRequest, AnalysisResponse
 from models.common import Status
+from service.analysis import create_task
 
 router = APIRouter(tags=["1. ai"])
 
@@ -20,5 +21,7 @@ def analyse_video(params: AnalysisRequest):
     답변 영상 분석
     """
     logger.info("Analyse video")
+
+    create_task(params.analysis_id)
 
     return AnalysisResponse(result=Status.OK)
