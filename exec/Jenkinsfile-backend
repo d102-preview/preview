@@ -32,6 +32,16 @@ pipeline {
       }
     }
 
+    stage('Copy .env to Deploy Directory') {
+      steps {
+        script {
+          withCredentials([file(credentialsId: 'be_env_docker_compose', variable: 'DC_ENV')]) {
+            sh 'cd exec/ && chmod +x copy-docker-compose-env.sh && ./copy-docker-compose-env.sh'
+          }
+        }
+      }
+    }
+
     stage('Deploy Backend') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
         sshPublisher(
