@@ -18,13 +18,9 @@ class AnalysisResponse(CommonResponse):
 
 class Analysis(SQLModel, table=True):
     id: int = sqlmodel.Field(primary_key=True)
-    user_id: int = sqlmodel.Field(foreign_key="user.id", nullable=False)
     type: str = sqlmodel.Field(max_length=16)
     question: str = sqlmodel.Field(max_length=512)
     video_path: str = sqlmodel.Field(max_length=512)
     thumbnail_path: str = sqlmodel.Field(max_length=512)
-    keyword: str = sqlmodel.Field(max_length=128)
-    set_start_time: datetime
-    analysis_req_time: datetime
     analysis_start_time: datetime | None = sqlmodel.Field(default=None, nullable=True)
     analysis_end_time: datetime | None = sqlmodel.Field(default=None, nullable=True)
