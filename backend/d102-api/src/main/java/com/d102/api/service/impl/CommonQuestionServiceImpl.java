@@ -41,9 +41,9 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     @Transactional(readOnly = true)
     public CommonQuestionDto.Response get(Long commonQuestionId) {
         return CommonQuestionDto.Response.builder()
-                .commonScript(commonQuestionMapper.toCommonScriptDto(commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(
+                .script(commonQuestionMapper.toCommonScriptDto(commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(
                         securityHelper.getLoginUsername(), commonQuestionId).orElse(null)))
-                .commonKeywords(commonQuestionMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
+                .keywordList(commonQuestionMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
                         securityHelper.getLoginUsername(), commonQuestionId)))
                 .build();
     }
@@ -59,6 +59,7 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
             commonScriptRepository.save(commonScriptRepository.save(CommonScript.builder()
                     .user(user)
                     .commonQuestion(commonQuestion)
+                    .script(requestDto.getScript())
                     .build()));
         } else {
             commonScript.setScript(requestDto.getScript());
