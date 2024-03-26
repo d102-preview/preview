@@ -2,6 +2,7 @@ import Lottie from 'react-lottie';
 import DoughnutChart from './DoughnutChart';
 import InterviewPrepared from './InterviewPrepared';
 import robot from '../../assets/lotties/robot.json';
+import InterviewVideo from './InterviewVideo';
 
 interface ResultReportProps {
   question: string;
@@ -47,6 +48,7 @@ const ResultReport = ({ question, name, percent, prepare }: ResultReportProps) =
           <DoughnutChart percent={percent} />
           <InterviewPrepared state={5} name={name} />
         </div>
+        <InterviewVideo />
       </div>
     </div>
   );
