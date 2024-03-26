@@ -25,3 +25,9 @@ def analyse_video(params: AnalysisRequest):
     create_task(params.analysis_id)
 
     return AnalysisResponse(result=Status.OK)
+
+
+@router.get("/", summary="서버 Health Check", status_code=status.HTTP_200_OK)
+def health_check():
+    """서버가 실행 중이면 \"ok\" 반환"""
+    return "ok"
