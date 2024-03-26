@@ -37,12 +37,12 @@ public class DownloadServiceImpl implements DownloadService {
     public DownloadDto.ResumeResponse downloadResume(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new NotFoundException(ExceptionType.ResumeNotFoundException));
 
-        UserVerifier.checkLoginUserAndResumeUser(securityHelper.getLoginUsername(), resume.getUser().getEmail());
+        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), resume.getUser().getEmail());
 
         try {
             Path resumePath = Path.of(resume.getFilePath());
             return DownloadDto.ResumeResponse.builder()
-                    .name(resume.getName())
+                    .name(resume.getFileName())
                     .length(String.valueOf(Files.size(resumePath)))
                     .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)).toString())
                     .resume(Files.readAllBytes(resumePath))

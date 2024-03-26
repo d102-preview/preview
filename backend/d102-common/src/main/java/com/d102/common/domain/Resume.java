@@ -20,8 +20,8 @@ public class Resume extends BaseTime {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "name", length = 128, nullable = false)
-    private String name;
+    @Column(name = "file_name", length = 128, nullable = false)
+    private String fileName;
 
     @Column(name = "display_name", length = 16, nullable = false)
     private String displayName;

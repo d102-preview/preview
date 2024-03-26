@@ -41,7 +41,7 @@ public class UploadDto {
     public static class ResumeResponse {
 
         private int id;
-        private String name;
+        private String fileName;
         private String displayName;
     }
 

@@ -19,7 +19,7 @@ public interface UploadControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 업로드한 프로필 이미지 URL을 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UploadDto.ProfileResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = ProfileResponse.class)),
                     }))
     })
     Response uploadProfile(@Valid UploadDto.ProfileRequest profileRequestDto);
@@ -29,9 +29,13 @@ public interface UploadControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 업로드한 이력서 파일 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UploadDto.ResumeResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = ResumeResponse.class)),
                     }))
     })
     Response uploadResume(@Valid UploadDto.ResumeRequest resumeRequestDto);
+
+
+    class ProfileResponse { public UploadDto.ProfileResponse profile; }
+    class ResumeResponse { public UploadDto.ResumeResponse resume; }
 
 }

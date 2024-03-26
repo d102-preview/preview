@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -58,7 +59,7 @@ public class UploadServiceImpl implements UploadService {
         String savePath = saveResume(basePath, resumeRequestDto.getResume());
 
         Resume resume = uploadMapper.toResume(resumeRequestDto);
-        resume.setName(resumeRequestDto.getResume().getOriginalFilename());
+        resume.setFileName(resumeRequestDto.getResume().getOriginalFilename());
         resume.setFilePath(savePath);
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
 
@@ -86,7 +87,7 @@ public class UploadServiceImpl implements UploadService {
         try {
             return new StringBuilder()
                     .append(profileBaseUrl)
-                    .append(URLEncoder.encode(savePath, "UTF-8"))
+                    .append(URLEncoder.encode(savePath, StandardCharsets.UTF_8))
                     .toString();
         } catch (Exception e) {
             throw new InvalidException(ExceptionType.ProfileUrlException);
