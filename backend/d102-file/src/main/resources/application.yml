@@ -75,4 +75,4 @@ jwt:
 
 download:
   profile:
-    base-url: http://localhost:8082/file/download/profile?url=
+    base-url: http://localhost:8082/file/download/profile?path=

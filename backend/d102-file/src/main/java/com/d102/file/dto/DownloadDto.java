@@ -11,8 +11,18 @@ public class DownloadDto {
     @Data
     public static class ProfileResponse {
 
-        private MediaType profileType;
+        private String profileType;
         private byte[] profile;
+    }
+
+    @Builder
+    @Data
+    public static class ResumeResponse {
+
+        private String name;
+        private String length;
+        private String resumeType;
+        private byte[] resume;
     }
 
 }
