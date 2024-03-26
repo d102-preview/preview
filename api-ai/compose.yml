@@ -9,8 +9,8 @@ services:
     restart: unless-stopped
     networks:
       - d102-network
-    ports:
-      - ${FASTAPI_PORT}:8000
+    expose:
+      - 8000
     env_file:
       - .env
     command: "/app/wait-for-it.sh $DB_HOST:$DB_PORT -t 10 -- poetry run uvicorn main:app --reload --host=0.0.0.0"
