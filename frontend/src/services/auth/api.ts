@@ -3,10 +3,11 @@ import {
   IPostEmailCertificationRes,
   IPostEmailVerifyReq,
   IPostEmailVerifyRes,
+  IPostLoginRes,
 } from '@/types/auth';
 import { APIResponse } from '@/types/model';
 import axios from 'axios';
-import { IPostJoinReq, IPostJoinRes } from './../../types/auth';
+import { IPostJoinReq, IPostJoinRes, IPostLoginReq } from './../../types/auth';
 
 export const getIsEmailDuplicate = async (email: string): Promise<APIResponse<IGetEmailDuplicateRes>> => {
   const res = await axios.get(`/api/email?email=${email}`);
@@ -41,6 +42,15 @@ export const postSignup = async ({ email, password, name }: IPostJoinReq): Promi
     email: email,
     password: password,
     name: name,
+  });
+
+  return res.data;
+};
+
+export const postLogin = async ({ email, password }: IPostLoginReq): Promise<APIResponse<IPostLoginRes>> => {
+  const res = await axios.post('/api/auth/login', {
+    email: email,
+    password: password,
   });
 
   return res.data;
