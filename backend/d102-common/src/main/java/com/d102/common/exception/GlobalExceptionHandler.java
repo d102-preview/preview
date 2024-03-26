@@ -3,18 +3,16 @@ package com.d102.common.exception;
 import com.d102.common.exception.custom.ConflictException;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.TooManyException;
-import com.d102.common.exception.custom.UploadException;
 import com.d102.common.exception.custom.*;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
 import jakarta.validation.ConstraintViolationException;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import java.io.IOException;
+
 import static com.d102.common.exception.ExceptionType.InvalidParamException;
 
 @RestControllerAdvice
@@ -27,8 +25,8 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = UploadException.class)
-    public Response handleUploadException(UploadException e) {
+    @ExceptionHandler(value = InvalidException.class)
+    public Response handleUploadException(InvalidException e) {
         return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }
 
@@ -47,12 +45,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NotFoundException.class)
     public Response handleNotFoundException(NotFoundException e) {
-        return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
-    }
-
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler(value = {DownloadException.class, ManageException.class})
-    public Response handleNotFoundException(DownloadException e) {
         return new ResponseFail(e.getExceptionType().getCode(), e.getMessage());
     }
 

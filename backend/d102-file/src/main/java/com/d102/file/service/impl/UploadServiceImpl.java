@@ -4,8 +4,8 @@ import com.d102.common.constant.FileConstant;
 import com.d102.common.domain.Resume;
 import com.d102.common.domain.User;
 import com.d102.common.exception.ExceptionType;
+import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.exception.custom.NotFoundException;
-import com.d102.common.exception.custom.UploadException;
 import com.d102.common.repository.ResumeRepository;
 import com.d102.common.repository.UserRepository;
 import com.d102.common.util.SecurityHelper;
@@ -70,7 +70,7 @@ public class UploadServiceImpl implements UploadService {
             Files.createDirectories(basePath);
             List<File> files = Files.list(basePath).map(Path::toFile).toList();
             if (files.size() >= FileConstant.RESUME_UPLOAD_LIMIT) {
-                throw new UploadException(ExceptionType.ResumeLimitException);
+                throw new InvalidException(ExceptionType.ResumeLimitException);
             }
 
             Path dest = makeSavePath(basePath, resume);
@@ -78,7 +78,7 @@ public class UploadServiceImpl implements UploadService {
 
             return dest.toString();
         } catch (IOException e) {
-            throw new UploadException(ExceptionType.ResumeUploadException);
+            throw new InvalidException(ExceptionType.ResumeUploadException);
         }
     }
 
@@ -89,7 +89,7 @@ public class UploadServiceImpl implements UploadService {
                     .append(URLEncoder.encode(savePath, "UTF-8"))
                     .toString();
         } catch (Exception e) {
-            throw new UploadException(ExceptionType.ProfileUrlException);
+            throw new InvalidException(ExceptionType.ProfileUrlException);
         }
     }
 
@@ -103,7 +103,7 @@ public class UploadServiceImpl implements UploadService {
 
             return dest.toString();
         } catch (IOException e) {
-            throw new UploadException(ExceptionType.ProfileUploadException);
+            throw new InvalidException(ExceptionType.ProfileUploadException);
         }
     }
 

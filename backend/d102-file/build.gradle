@@ -30,8 +30,8 @@ dependencies {
 
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.apache.tika:tika-core:2.9.1'
     implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'org.apache.tika:tika-core:2.9.1'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
