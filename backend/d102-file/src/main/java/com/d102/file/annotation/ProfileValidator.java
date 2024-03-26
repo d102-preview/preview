@@ -1,4 +1,4 @@
-package com.d102.file.util;
+package com.d102.file.annotation;
 
 import com.d102.common.constant.FileConstant;
 import com.d102.common.constant.ProfileExtension;
@@ -8,7 +8,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,13 +15,13 @@ import java.io.IOException;
 /**
  * @author D102
  */
-public class ProfileValidator implements ConstraintValidator<ProfileValid, MultipartFile> {
+public class ProfileValidator implements ConstraintValidator<ValidProfile, MultipartFile> {
 
-    private ProfileValid annotation;
+    private ValidProfile annotation;
 
     @Override
-    public void initialize(ProfileValid profileValid) {
-        annotation = profileValid;
+    public void initialize(ValidProfile validProfile) {
+        annotation = validProfile;
     }
 
     @Override
@@ -56,9 +55,9 @@ public class ProfileValidator implements ConstraintValidator<ProfileValid, Multi
         }
 
         final String extension = FilenameUtils.getExtension(name);
-        final ProfileExtension[] allowedExtensions = annotation.allowedExtensions();
+        final ProfileExtension[] allowedExtensionList = annotation.allowedExtensionList();
         boolean isValidExtension = false;
-        for (ProfileExtension allowedExtension : allowedExtensions) {
+        for (ProfileExtension allowedExtension : allowedExtensionList) {
             if (StringUtils.equals(allowedExtension.getProfileExtensionLowerCase(), extension.toLowerCase())) {
                 isValidExtension = true;
                 break;
@@ -71,7 +70,7 @@ public class ProfileValidator implements ConstraintValidator<ProfileValid, Multi
 
         final String detectedMimeType = getMimeTypeByTika(profile);
         boolean isValidMimeType = false;
-        for (ProfileExtension allowedExtension : allowedExtensions) {
+        for (ProfileExtension allowedExtension : allowedExtensionList) {
             if (ArrayUtils.contains(allowedExtension.getProfileMimeTypes(), detectedMimeType)) {
                 isValidMimeType = true;
                 break;

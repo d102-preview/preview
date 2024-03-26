@@ -1,7 +1,6 @@
-package com.d102.file.util;
+package com.d102.file.annotation;
 
 import com.d102.common.constant.FileConstant;
-import com.d102.common.constant.ProfileExtension;
 import com.d102.common.constant.ResumeExtension;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -15,13 +14,13 @@ import java.io.IOException;
 /**
  * @author D102
  */
-public class ResumeValidator implements ConstraintValidator<ResumeValid, MultipartFile> {
+public class ResumeValidator implements ConstraintValidator<ValidResume, MultipartFile> {
 
-    private ResumeValid annotation;
+    private ValidResume annotation;
 
     @Override
-    public void initialize(ResumeValid resumeValid) {
-        annotation = resumeValid;
+    public void initialize(ValidResume validResume) {
+        annotation = validResume;
     }
 
     @Override
@@ -55,9 +54,9 @@ public class ResumeValidator implements ConstraintValidator<ResumeValid, Multipa
         }
 
         final String extension = FilenameUtils.getExtension(name);
-        final ResumeExtension[] allowedExtensions = annotation.allowedExtensions();
+        final ResumeExtension[] allowedExtensionList = annotation.allowedExtensionList();
         boolean isValidExtension = false;
-        for (ResumeExtension allowedExtension : allowedExtensions) {
+        for (ResumeExtension allowedExtension : allowedExtensionList) {
             if (StringUtils.equals(allowedExtension.getResumeExtensionLowerCase(), extension.toLowerCase())) {
                 isValidExtension = true;
                 break;
@@ -70,7 +69,7 @@ public class ResumeValidator implements ConstraintValidator<ResumeValid, Multipa
 
         final String detectedMimeType = getMimeTypeByTika(resume);
         boolean isValidMimeType = false;
-        for (ResumeExtension allowedExtension : allowedExtensions) {
+        for (ResumeExtension allowedExtension : allowedExtensionList) {
             if (ArrayUtils.contains(allowedExtension.getResumeMimeTypes(), detectedMimeType)) {
                 isValidMimeType = true;
                 break;
@@ -80,7 +79,6 @@ public class ResumeValidator implements ConstraintValidator<ResumeValid, Multipa
             context.buildConstraintViolationWithTemplate("Modified profile extension").addConstraintViolation();
             return false;
         }
-
 
         return true;
     }

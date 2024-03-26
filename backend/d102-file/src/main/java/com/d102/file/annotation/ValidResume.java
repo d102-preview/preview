@@ -1,6 +1,6 @@
-package com.d102.file.util;
+package com.d102.file.annotation;
 
-import com.d102.common.constant.ProfileExtension;
+import com.d102.common.constant.ResumeExtension;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -11,8 +11,8 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ProfileValidator.class)
-public @interface ProfileValid {
+@Constraint(validatedBy = ResumeValidator.class)
+public @interface ValidResume {
 
     String message();
 
@@ -20,6 +20,6 @@ public @interface ProfileValid {
 
     Class<? extends Payload>[] payload() default {};
 
-    ProfileExtension[] allowedExtensions();
+    ResumeExtension[] allowedExtensionList();
 
 }

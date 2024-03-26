@@ -2,24 +2,26 @@ package com.d102.file.service.impl;
 
 import com.d102.common.domain.Resume;
 import com.d102.common.exception.ExceptionType;
-import com.d102.common.exception.custom.DownloadException;
+import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.ResumeRepository;
+import com.d102.common.util.SecurityHelper;
+import com.d102.common.util.UserVerifier;
 import com.d102.file.dto.DownloadDto;
 import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
 
 @RequiredArgsConstructor
 @Service
 public class DownloadServiceImpl implements DownloadService {
 
     private final ResumeRepository resumeRepository;
+    private final SecurityHelper securityHelper;
 
     public DownloadDto.ProfileResponse downloadProfile(Path profilePath) {
         try {
@@ -28,12 +30,14 @@ public class DownloadServiceImpl implements DownloadService {
                     .profile(Files.readAllBytes(profilePath))
                     .build();
         } catch (IOException e) {
-            throw new DownloadException(ExceptionType.ProfileDownloadException);
+            throw new NotFoundException(ExceptionType.ProfileDownloadException);
         }
     }
 
     public DownloadDto.ResumeResponse downloadResume(Long resumeId) {
-        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new DownloadException(ExceptionType.ResumeNotFoundException));
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new NotFoundException(ExceptionType.ResumeNotFoundException));
+
+        UserVerifier.checkLoginUserAndResumeUser(securityHelper.getLoginUsername(), resume.getUser().getEmail());
 
         try {
             Path resumePath = Path.of(resume.getFilePath());
@@ -44,9 +48,8 @@ public class DownloadServiceImpl implements DownloadService {
                     .resume(Files.readAllBytes(resumePath))
                     .build();
         } catch (Exception e) {
-            throw new DownloadException(ExceptionType.ResumeDownloadException);
+            throw new NotFoundException(ExceptionType.ResumeDownloadException);
         }
     }
-
 
 }

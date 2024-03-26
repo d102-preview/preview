@@ -7,22 +7,10 @@ public enum ExceptionType {
 
     /* Invalid request */
     InvalidParamException("INVALID", "Invalid param"),
-
-    /* Upload request */
-    ProfileTypeException("INVALID", "Invalid profile type"),
     ProfileUploadException("INVALID", "Profile upload failed"),
     ProfileUrlException("INVALID", "Invalid profile name"),
-    ResumeTypeException("INVALID", "Invalid resume type"),
     ResumeUploadException("INVALID", "Resume upload failed"),
     ResumeLimitException("INVALID", "Resume limit exceeded"),
-
-    /* Download request */
-    ProfileDownloadException("NOT FOUND", "Profile download failed"),
-    ResumeDownloadException("NOT FOUND", "Resume download failed"),
-    ResumeNotFoundException("NOT FOUND", "Resume not found"),
-
-    /* Manage request */
-    ResumeDeleteException("NOT FOUND", "Resume delete failed"),
 
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),
@@ -41,6 +29,10 @@ public enum ExceptionType {
     UserNotFoundException("NOT FOUND", "Invalid user"),
     CommonQuestionNotFoundException("NOT FOUND", "Invalid common question"),
     CommonKeywordNotFoundException("NOT FOUND", "Invalid common keyword"),
+    ProfileDownloadException("NOT FOUND", "Profile download failed"),
+    ResumeDownloadException("NOT FOUND", "Resume download failed"),
+    ResumeNotFoundException("NOT FOUND", "Resume not found"),
+    ResumeDeleteException("NOT FOUND", "Resume delete failed"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),
