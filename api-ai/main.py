@@ -1,48 +1,16 @@
-from typing import Annotated
-
-from fastapi import FastAPI, HTTPException, Path, Query, status
+from common.exception import custom_validation_error_handler
+from core.settings import settings
+from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from loguru import logger
-from models.item import Item, ReadItemByItemIdResponse
+from routes import analysis_router
 
 logger.info("Run server")
 
 app = FastAPI()
 
-items = {}
+# Add routers(controllers)
+app.include_router(analysis_router, prefix=settings.API_V1_STR)
 
-
-@app.get("/")
-def read_root():
-    return {"hello": "world"}
-
-
-@app.get("/items")
-def read_item() -> dict[str, Item]:
-    return items
-
-
-@app.get("/items/{item_id}")
-def read_item_by_item_id(
-    item_id: Annotated[int, Path(description="Item ID for search")],
-    q: Annotated[
-        str | None,
-        Query(alias="q-test", description="Query string for item", max_length=10),
-    ] = None,
-) -> ReadItemByItemIdResponse:
-    if item_id not in items:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"message": "Item not found", "item_id": item_id},
-        )
-    return ReadItemByItemIdResponse(id=item_id, item=items[item_id], q=q)
-
-
-@app.post("/items/{item_id}", status_code=status.HTTP_201_CREATED)
-def create_item(item_id: int, item: Item):
-    """
-    Create a new item.
-    - **item_id**: Item ID
-    - **item**: Item
-    """
-    items[item_id] = item
-    return {"item_name": item.name, "item_id": item_id}
+# Add custom exception handlers
+app.add_exception_handler(RequestValidationError, custom_validation_error_handler)
