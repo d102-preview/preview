@@ -23,6 +23,6 @@ public class CommonCategory extends BaseTime {
     private String category;
 
     @OneToMany(mappedBy = "commonCategory", orphanRemoval = true)
-    private List<CommonQuestion> commonQuestions;
+    private List<CommonQuestion> commonQuestionList;
 
 }

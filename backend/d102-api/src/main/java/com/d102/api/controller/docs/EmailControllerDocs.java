@@ -24,7 +24,7 @@ public interface EmailControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 이메일 사용 가능여부를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "사용가능 여부", description = "true: 사용 가능, false: 사용 불가")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = AvailableResponse.class))
                     }))
     })
     Response checkAvailableEmail(
@@ -47,9 +47,13 @@ public interface EmailControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 이메일 전송 성공 여부를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(defaultValue = "인증 성공 여부", description = "true: 인증 성공, false: 인증 실패")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = VerifyResponse.class))
                     }))
     })
     Response verifyAuthorizationCode(@Valid EmailDto.VerifyRequest verifyRequestDto);
+
+
+    class AvailableResponse { public Boolean available; }
+    class VerifyResponse { public Boolean verify; }
 
 }

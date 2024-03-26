@@ -21,7 +21,7 @@ public interface CommonQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 공통 질문 리스트를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = CommonQuestionDto.ListResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionListResponse.class)),
                     }))
     })
     Response getList(Pageable pageable);
@@ -31,7 +31,7 @@ public interface CommonQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 공통 질문과 질문 스크립트, 키워드를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = CommonQuestionDto.Response.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
                     }))
     })
     Response get(Long commonQuestionId);
@@ -71,5 +71,9 @@ public interface CommonQuestionControllerDocs {
                     }))
     })
     Response deleteKeyword(Long commonKeywordId);
+
+
+    class QuestionListResponse { public CommonQuestionDto.ListResponse questionList; }
+    class QuestionDetailResponse { public CommonQuestionDto.Response questionDetail; }
 
 }
