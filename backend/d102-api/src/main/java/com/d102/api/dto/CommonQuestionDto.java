@@ -11,8 +11,8 @@ public class CommonQuestionDto {
     @Data
     public static class Response {
 
-        private CommonScriptDto.Response commonScript;
-        private List<CommonKeywordDto.Response> commonKeywords;
+        private CommonScriptDto.Response script;
+        private List<CommonKeywordDto.Response> keywordList;
     }
 
     @Data
