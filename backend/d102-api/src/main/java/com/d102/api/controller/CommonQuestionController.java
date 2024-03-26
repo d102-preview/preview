@@ -46,7 +46,7 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
     }
 
     @DeleteMapping("/keyword/{commonKeywordId}")
-    public Response deleteKeyword(Long commonKeywordId) {
+    public Response deleteKeyword(@PathVariable Long commonKeywordId) {
         commonQuestionService.deleteKeyword(commonKeywordId);
         return new Response();
     }
