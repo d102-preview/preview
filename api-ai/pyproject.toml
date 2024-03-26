@@ -20,6 +20,7 @@ torch = "^2.2.1"
 torchvision = "^0.17.1"
 torchaudio = "^2.2.1"
 pandas = "^2.2.1"
+sqlmodel = "^0.0.16"
 
 
 [tool.poetry.group.dev.dependencies]
