@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class DownloadException extends RuntimeException {
+public class InvalidException extends RuntimeException {
 
     private final ExceptionType exceptionType;
 
