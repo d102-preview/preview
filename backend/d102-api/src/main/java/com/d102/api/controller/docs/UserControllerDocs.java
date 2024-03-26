@@ -19,7 +19,7 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 자신의 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResponse.class)),
                     }))
     })
     Response get();
@@ -29,7 +29,7 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 갱신한 자신의 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserDto.Response.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResponse.class)),
                     }))
     })
     Response update(@Valid UserDto.UpdateRequest updateRequestDto);
@@ -51,5 +51,8 @@ public interface UserControllerDocs {
                     }))
     })
     Response delete();
+
+
+    class UserResponse { public UserDto.Response user; }
 
 }
