@@ -1,8 +1,13 @@
-from pydantic_settings import BaseSettings
+from pydantic import Field, MariaDBDsn
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    API_V1_STR: str = "/ai"
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
+    API_V1_STR: str = Field("/ai")
+
+    DATABASE_DSN: MariaDBDsn
 
 
 settings = Settings()
