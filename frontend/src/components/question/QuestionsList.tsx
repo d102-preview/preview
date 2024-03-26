@@ -1,7 +1,6 @@
 import { IQuestionListItem, interviewType } from '@/types/model';
 import QuestionItem from './QuestionItem';
 import questionStore from '@/stores/questionStore';
-import { useQuestion } from '@/hooks/question/useQuestion';
 
 interface QuestionsListProps {
   questions: IQuestionListItem[];
@@ -10,9 +9,7 @@ interface QuestionsListProps {
 
 const QuestionsList = ({ questions, type }: QuestionsListProps) => {
   const { selectedQuestions, addQuestion, removeQuestion } = questionStore();
-  const { useGetCommonQuestionList } = useQuestion();
-  const { data } = useGetCommonQuestionList();
-  
+
   return (
     <div className="pr-7">
       {questions.map(question => (

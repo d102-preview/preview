@@ -1,17 +1,21 @@
+import { APIResponse } from '@/types/model';
+import { IQuestionListRes } from '@/types/question';
 import QuestionsList from './QuestionsList';
-import { useQuestion } from '@/hooks/question/useQuestion';
 
-const CommonQuestions = () => {
-  const { useGetCommonQuestionList } = useQuestion();
-  const { data } = useGetCommonQuestionList();
+interface QuestionsProps {
+  data: APIResponse<IQuestionListRes> | undefined;
+  type: 'common';
+}
 
-  const questions = data?.data.commonQuestionList.content || [];
+const CommonQuestions = ({ data, type }: QuestionsProps) => {
+  const questions = data?.data?.questionList?.content || [];
+  const total = data?.data?.questionList?.totalElements || 0;
 
   return (
     <div>
       <h3 className="text-lg font-semibold">공통 면접 질문</h3>
-      <p className="text-UNIMPORTANT_TEXT pt-1">총 {questions.length}개의 질문이 있습니다.</p>
-      <QuestionsList questions={questions} type={'common'} />
+      <p className="text-UNIMPORTANT_TEXT pt-1">총 {total}개의 질문이 있습니다.</p>
+      <QuestionsList questions={questions} type={type} />
     </div>
   );
 };

@@ -17,7 +17,7 @@ export type interviewType = 'common' | 'resume';
 // 면접 스크립트 타입
 export interface IScriptItem {
   id: number;
-  script: string;
+  script: string | null;
 }
 
 // 면접 키워드 리스트 타입
@@ -67,6 +67,11 @@ export interface ISort {
 }
 
 export interface IQuestionDetail {
-  commonScript: IScriptItem;
-  commonKeywords: IKeywordItem[];
+  script: IScriptItem;
+  keywords: IKeywordItem[];
+}
+
+export interface ISubText {
+  text: string;
+  type: 'success' | 'info' | 'error';
 }

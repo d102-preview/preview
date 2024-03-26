@@ -1,11 +1,20 @@
-import { useState } from 'react';
+import { IKeywordItem } from '@/types/model';
+import { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 
-const Keywords = () => {
-  const [keywords, setKeywords] = useState<string[]>(['React', '선언적 UI', '컴포넌트 기반', '커뮤니티']); // 더미 데이터
+interface IkeywordsProps {
+  initialKeywords: IKeywordItem[];
+}
+
+const Keywords = ({ initialKeywords }: IkeywordsProps) => {
+  const [keywords, setKeywords] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
+  // initialKeywords가 변경될 때마다 keywords 상태 업데이트
+  useEffect(() => {
+    setKeywords(initialKeywords.map(item => item.keyword));
+  }, [initialKeywords]);
   const toggleEdit = () => {
     setIsEdit(!isEdit);
   };
