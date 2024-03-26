@@ -1,7 +1,11 @@
+from datetime import datetime
+
 from core.db import engine
+from core.settings import settings
 from fastapi import HTTPException, status
 from loguru import logger
 from models.analysis import Analysis
+from pytz import timezone
 from sqlmodel import Session, select
 
 
@@ -27,5 +31,10 @@ def create_task(analysis_id: int) -> None:
 
             # TODO: Replace HTTPException with custom exception
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
+
+        # Set analysis start time(`analysis_start_time`) as current time
+        result.analysis_start_time = datetime.now(tz=timezone(settings.TZ))
+        session.add(result)
+        session.commit()
 
     return

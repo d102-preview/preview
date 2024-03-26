@@ -9,5 +9,7 @@ class Settings(BaseSettings):
 
     DATABASE_DSN: MariaDBDsn
 
+    TZ: str = "Asia/Seoul"
+
 
 settings = Settings()
