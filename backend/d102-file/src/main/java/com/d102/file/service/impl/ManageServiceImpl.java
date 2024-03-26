@@ -30,7 +30,7 @@ public class ManageServiceImpl implements ManageService {
         Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.ResumeNotFoundException));
 
-        UserVerifier.checkLoginUserAndResumeUser(securityHelper.getLoginUsername(), resume.getUser().getEmail());
+        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), resume.getUser().getEmail());
 
         Path dir = Path.of(resume.getFilePath());
         deleteFile(dir);
