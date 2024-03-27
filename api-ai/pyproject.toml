@@ -21,7 +21,6 @@ sqlmodel = "^0.0.16"
 pymysql = "^1.1.0"
 torch = {version = "^2.2.2+cpu", source = "pytorch-cpu-src"}
 torchvision = {version = "^0.17.2+cpu", source = "pytorch-cpu-src"}
-torchaudio = {version = "^2.2.2+cpu", source = "pytorch-cpu-src"}
 
 
 [tool.poetry.group.dev.dependencies]
