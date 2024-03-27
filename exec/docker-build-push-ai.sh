@@ -7,7 +7,7 @@ export IMG_NAME=api-ai
 
 chmod -R 755 "./deploy-$IMG_NAME"
 
-docker-compose -f "./deploy-$IMG_NAME/docker-compose.yml" build fastapi
+docker build -t "$REGISTRY/$IMG_NAME:$TAG" ../api-ai
 
 docker push "$REGISTRY/$IMG_NAME:$TAG"
 
