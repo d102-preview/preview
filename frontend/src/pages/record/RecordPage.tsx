@@ -6,6 +6,7 @@ import { useInterview } from '@/hooks/interview/useInterview';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import BackgroundOpacity from '@/components/record/BackgroundOpacity';
 import RecordUploading from '@/components/record/RecordUploading';
+import { useSpeechRecognition } from 'react-speech-kit';
 
 export type recordStatusType = 'pending' | 'preparing' | 'recording' | 'proceeding' | 'uploading';
 
@@ -43,6 +44,24 @@ const RecordPage = () => {
     }
   }, []);
 
+  const [btnText, setBtnText] = useState<string>('다음');
+  const getButtonText = useCallback(() => {
+    switch (status) {
+      case 'preparing':
+        setBtnText('녹화시작');
+        break;
+      case 'uploading':
+        setBtnText('');
+        break;
+      case 'proceeding':
+        setBtnText('녹화종료');
+        break;
+      case 'recording':
+        setBtnText('');
+        break;
+    }
+  }, [status]);
+
   const nextButtonClick = async () => {
     if (!stream) {
       alert('카메라와 마이크를 확인해보세요');
@@ -60,23 +79,19 @@ const RecordPage = () => {
     }
   };
 
-  const [btnText, setBtnText] = useState<string>('다음');
-
-  // 상태에 따른 버튼 text 수정
   useEffect(() => {
+    getButtonText();
+
     switch (status) {
       case 'preparing':
-        setBtnText('녹화시작');
         break;
       case 'uploading':
-        setBtnText('');
         break;
       case 'proceeding':
-        setBtnText('녹화종료');
         handleStartRecording();
+        listen({ interimResults: false });
         break;
       case 'recording':
-        setBtnText('');
         break;
     }
   }, [status]);
@@ -112,6 +127,7 @@ const RecordPage = () => {
   const handleStopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
+      stop();
       setRecordedBlobs([]);
     }
   };
@@ -133,6 +149,22 @@ const RecordPage = () => {
       }
     };
   }, [stream]);
+
+  const [value, setValue] = useState([]);
+  const { listen, listening, stop } = useSpeechRecognition({
+    onResult: result => {
+      // 음성인식 결과가 value 상태값으로 할당됩니다.
+      // console.log('gkdl');
+      setValue(result);
+    },
+  });
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
+
+  useEffect(() => {
+    console.log(listening);
+  }, [listening]);
 
   return (
     <div>
@@ -176,6 +208,7 @@ const RecordPage = () => {
               </div>
             </>
           )}
+
           {stream && status === 'recording' && (
             <>
               <BackgroundOpacity />
