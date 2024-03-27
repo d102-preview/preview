@@ -5,13 +5,13 @@ import robot from '../../assets/lotties/robot.json';
 import InterviewVideo from './InterviewVideo';
 
 interface ResultReportProps {
-  question: string;
   name: string;
   percent: number;
-  prepare: string;
+  prepare: '매우 부족' | '부족' | '보통' | '우수' | '매우 우수';
+  state: 1 | 2 | 3 | 4 | 5;
 }
 
-const ResultReport = ({ question, name, percent, prepare }: ResultReportProps) => {
+const ResultReport = ({ name, percent, prepare, state }: ResultReportProps) => {
   // Lottie 애니메이션
   const defaultOptions = {
     loop: true,
@@ -23,11 +23,7 @@ const ResultReport = ({ question, name, percent, prepare }: ResultReportProps) =
   };
 
   return (
-    <div className="w-10/12 mx-auto">
-      <div>
-        <h3 className="text-3xl font-bold text-BLACK">프리뷰 분석 결과</h3>
-        <p className="text-lg text-UNIMPORTANT_TEXT">{`“${question}” 문항에 대한 ${name}님의 면접 분석 결과입니다.`}</p>
-      </div>
+    <>
       {/* 분석 보고서 */}
       <div className="shadow-xl p-14 my-3 rounded-lg w-full">
         <div className="flex items-center gap-10 pb-5">
@@ -46,11 +42,11 @@ const ResultReport = ({ question, name, percent, prepare }: ResultReportProps) =
         </div>
         <div className="flex items-center px-20 gap-5">
           <DoughnutChart percent={percent} />
-          <InterviewPrepared state={5} name={name} />
+          <InterviewPrepared prepare={prepare} state={state} name={name} />
         </div>
         <InterviewVideo />
       </div>
-    </div>
+    </>
   );
 };
 
