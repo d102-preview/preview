@@ -30,7 +30,7 @@ pipeline {
       }
     }
 
-    stage('Deploy Backend AI') {
+    stage('Deploy API-AI') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
         sshPublisher(
           continueOnError: false,
@@ -41,8 +41,8 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                    sourceFiles: 'exec/deploy-backend-ai/*',
-                    removePrefix: 'exec/deploy-backend-ai/',
+                    sourceFiles: 'exec/deploy-api-ai/*',
+                    removePrefix: 'exec/deploy-api-ai/',
                     remoteDirectory: '/jenkins/deploy/api-ai',
                     execCommand: 'cd /home/jenkins/deploy/api-ai && chmod 755 *.sh; \
                                   ./stop-ai.sh; \
