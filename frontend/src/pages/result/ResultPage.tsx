@@ -1,5 +1,5 @@
-import Header from '@/components/@common/Header/Header';
 import { useState } from 'react';
+import Header from '@/components/@common/Header/Header';
 import ResultList from '@/components/result/ResultList';
 
 const ResultPage = () => {

@@ -2,8 +2,11 @@ import Lottie from 'react-lottie';
 import loading from '@/assets/lotties/loading.json';
 import { formatInterviewSetTime } from '@/utils/formatDateTime';
 import { ResultItemData } from '@/types/model/index';
+import { useNavigate } from 'react-router-dom';
 
 const ResultItem = ({ result, id, imagePath, type, date, question, time }: ResultItemData) => {
+  const navigate = useNavigate();
+
   // Lottie 이미지
   const defaultOptions = {
     loop: true,
@@ -15,10 +18,13 @@ const ResultItem = ({ result, id, imagePath, type, date, question, time }: Resul
   };
 
   return (
-    <div className={`bg-white rounded-lg py-1 ${result === 'fail' ? 'pointer-events-none' : 'cursor-pointer'}`}>
+    <div
+      className={`bg-white rounded-lg py-1 ${result === 'fail' ? 'pointer-events-none' : 'cursor-pointer'}`}
+      onClick={() => navigate(`/result/${id}`)}
+    >
       <div className="relative">
         {result === 'fail' && (
-          <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-65 rounded-lg">
+          <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-70 rounded-lg">
             <Lottie options={defaultOptions} height={50} width={150} />
             <div className="text-center pt-2">
               <span className="text-white text-xl font-semibold">결과 분석 중</span>
