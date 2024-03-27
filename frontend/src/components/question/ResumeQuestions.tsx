@@ -1,6 +1,8 @@
+import { APIResponse } from '@/types/model';
+import {IQuestionListRes } from '@/types/question';
 import { useState } from 'react';
 import QuestionsList from './QuestionsList';
-import { interviewType, IResumeList, IQuestionItem } from '@/types/model';
+import { IResumeList } from '@/types/model';
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 
 // 더미 데이터
@@ -20,11 +22,13 @@ const resumes: IResumeList[] = [
 ];
 
 interface QuestionsProps {
-  questions: IQuestionItem[];
-  type: interviewType;
+  data: APIResponse<IQuestionListRes> | undefined;
+  type: 'resume';
 }
+const ResumeQuestions = ({ data, type }: QuestionsProps) => {
+  const questions = data?.data?.questionList?.content || [];
+  const total = data?.data?.questionList?.totalElements || 0;
 
-const ResumeQuestions = ({ questions, type }: QuestionsProps) => {
   const [selectedResume, setSelectedResume] = useState<IResumeList | null>(resumes[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -74,7 +78,7 @@ const ResumeQuestions = ({ questions, type }: QuestionsProps) => {
 
       {selectedResume && (
         <>
-          <p className="text-UNIMPORTANT_TEXT mt-12">총 {questions.length}개의 질문이 있습니다.</p>
+          <p className="text-UNIMPORTANT_TEXT mt-12">총 {total}개의 질문이 있습니다.</p>
           <QuestionsList questions={questions} type={type} />
         </>
       )}
