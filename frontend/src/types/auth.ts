@@ -1,3 +1,5 @@
+import { IUserInfo } from './model';
+
 export interface IGetEmailDuplicateRes {
   available: boolean;
 }
@@ -13,4 +15,14 @@ export interface IPostEmailVerifyRes {
 export interface IPostEmailVerifyReq {
   email: string;
   authorizationCode: number;
+}
+
+export interface IPostJoinReq {
+  email: string;
+  password: string;
+  name: string;
+}
+
+export interface IPostJoinRes {
+  user: IUserInfo;
 }
