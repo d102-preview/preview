@@ -1,6 +1,6 @@
-import { IQuestionDetail, IQuestionListItem, PaginationResponse, APIResponse } from './model';
+import { IQuestionDetail, IQuestionListItem, IPaginationResponse, APIResponse } from './model';
 
-export interface IQuestionListPaginationResponse extends PaginationResponse {
+export interface IQuestionListPaginationResponse extends IPaginationResponse {
   content: IQuestionListItem[];
 }
 

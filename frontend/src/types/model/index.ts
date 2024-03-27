@@ -38,7 +38,7 @@ export interface IQuestionListItem {
 }
 
 // 페이지네이션 정보 타입
-export interface PaginationResponse {
+export interface IPaginationResponse {
   pageable: IPageable;
   last: boolean;
   totalElements: number;
