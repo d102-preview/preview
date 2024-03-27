@@ -8,6 +8,7 @@ COPY pyproject.toml poetry.lock ./
 
 RUN apt-get update && \
     pip install poetry && \
+    poetry config virtualenvs.create false && \
     poetry install --without dev,ai
 
 COPY . .
@@ -16,7 +17,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+ENV POETRY_SITE_PACKAGES=/usr/local/lib/python3.11/site-packages
+
+COPY --from=builder $POETRY_SITE_PACKAGES $POETRY_SITE_PACKAGES
+COPY --from=builder /usr/local/bin/poetry /usr/local/bin/poetry
 COPY --from=builder /app /app
 
-
+RUN poetry config virtualenvs.create false
