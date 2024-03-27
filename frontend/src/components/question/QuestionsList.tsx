@@ -1,14 +1,15 @@
-import { IQuestionItem, interviewType } from '@/types/model';
+import { IQuestionListItem, interviewType } from '@/types/model';
 import QuestionItem from './QuestionItem';
 import questionStore from '@/stores/questionStore';
 
 interface QuestionsListProps {
-  questions: IQuestionItem[];
+  questions: IQuestionListItem[];
   type: interviewType;
 }
 
 const QuestionsList = ({ questions, type }: QuestionsListProps) => {
   const { selectedQuestions, addQuestion, removeQuestion } = questionStore();
+
   return (
     <div className="pr-7">
       {questions.map(question => (
