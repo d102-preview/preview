@@ -51,6 +51,7 @@ const LineChart = ({ currentTime, onTimeChange }: LineChartProps) => {
     scales: {
       y: {
         beginAtZero: true,
+        max: 5,
       },
       x: {
         type: 'linear',
