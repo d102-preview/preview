@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,5 +41,8 @@ public class User extends BaseTime {
 
     @Column(name = "deleted_time")
     private LocalDateTime deletedTime;
+
+    @OneToMany(mappedBy = "user")
+    private List<Resume> resumeList;
 
 }

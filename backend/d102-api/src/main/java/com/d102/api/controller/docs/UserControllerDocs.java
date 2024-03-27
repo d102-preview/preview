@@ -19,7 +19,7 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 자신의 정보를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = UserResumeResponse.class)),
                     }))
     })
     Response get();
@@ -54,5 +54,6 @@ public interface UserControllerDocs {
 
 
     class UserResponse { public UserDto.Response user; }
+    class UserResumeResponse { public UserDto.ResumeResponse user; }
 
 }
