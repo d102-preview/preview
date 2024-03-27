@@ -16,12 +16,11 @@ opencv-python = "^4.9.0.80"
 matplotlib = "^3.8.3"
 numpy = "^1.26.4"
 tqdm = "^4.66.2"
-torch = "^2.2.1"
-torchvision = "^0.17.1"
-torchaudio = "^2.2.1"
 pandas = "^2.2.1"
 sqlmodel = "^0.0.16"
 pymysql = "^1.1.0"
+torch = {version = "^2.2.2+cpu", source = "pytorch-cpu-src"}
+torchvision = {version = "^0.17.2+cpu", source = "pytorch-cpu-src"}
 
 
 [tool.poetry.group.dev.dependencies]
@@ -30,6 +29,8 @@ isort = "^5.13.2"
 black = "^24.2.0"
 jupyter = "^1.0.0"
 
+[tool.poetry.group.ai]
+optional = true
 
 [tool.poetry.group.ai.dependencies]
 mxnet = "^1.9.1"
@@ -37,6 +38,18 @@ gluonnlp = "0.8.0"
 sentencepiece = "^0.2.0"
 transformers = "^4.38.2"
 ipywidgets = "^8.1.2"
+
+
+[[tool.poetry.source]]
+name = "pytorch-cpu-src"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "supplemental"
+
+
+[[tool.poetry.source]]
+name = "pytorch-gpu-src"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "supplemental"
 
 [build-system]
 requires = ["poetry-core"]
