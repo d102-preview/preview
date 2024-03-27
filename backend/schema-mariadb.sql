@@ -89,10 +89,10 @@ CREATE TABLE `resume_question` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `resume_id` bigint NOT NULL,
   `question` varchar(512) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `resume_question_resume_FK` FOREIGN KEY (`id`) REFERENCES `resume` (`id`)
+  CONSTRAINT `resume_question_resume_FK` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

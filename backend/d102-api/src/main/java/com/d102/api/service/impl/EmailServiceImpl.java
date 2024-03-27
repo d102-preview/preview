@@ -9,7 +9,7 @@ import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.ConflictException;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.TooManyException;
-import com.d102.common.repository.UserRepository;
+import com.d102.common.repository.jpa.UserRepository;
 import com.d102.common.util.RandomGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

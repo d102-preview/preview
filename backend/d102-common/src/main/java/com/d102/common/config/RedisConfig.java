@@ -9,7 +9,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 @Configuration
-@EnableRedisRepositories(basePackages = "com.d102")
+@EnableRedisRepositories(basePackages = {"com.d102.api.repository.redis", "com.d102.common.repository.redis", "com.d102.file.repository.redis"})
 public class RedisConfig {
 
     @Value("${spring.redis.host}")

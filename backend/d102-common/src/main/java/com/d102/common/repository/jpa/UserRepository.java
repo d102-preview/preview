@@ -1,4 +1,4 @@
-package com.d102.common.repository;
+package com.d102.common.repository.jpa;
 
 import com.d102.common.domain.User;
 import org.springframework.transaction.annotation.Transactional;

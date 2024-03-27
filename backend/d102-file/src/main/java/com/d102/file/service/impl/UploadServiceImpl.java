@@ -6,8 +6,9 @@ import com.d102.common.domain.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.exception.custom.NotFoundException;
-import com.d102.common.repository.ResumeRepository;
-import com.d102.common.repository.UserRepository;
+import com.d102.common.repository.jpa.ResumeRepository;
+import com.d102.common.repository.jpa.UserRepository;
+import com.d102.common.service.AsyncService;
 import com.d102.common.util.SecurityHelper;
 import com.d102.file.dto.UploadDto;
 import com.d102.file.mapper.UploadMapper;
@@ -18,15 +19,14 @@ import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -39,6 +39,7 @@ public class UploadServiceImpl implements UploadService {
     private final ResumeRepository resumeRepository;
     private final SecurityHelper securityHelper;
     private final UploadMapper uploadMapper;
+    private final AsyncService asyncService;
 
     @Transactional
     public UploadDto.ProfileResponse uploadProfile(UploadDto.ProfileRequest profileRequestDto) {
@@ -55,6 +56,8 @@ public class UploadServiceImpl implements UploadService {
 
     @Transactional
     public UploadDto.ResumeResponse uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
+        checkResumeLimit();
+
         Path basePath = FileConstant.RESUME_SAVE_DIR.resolve(securityHelper.getLoginUsername());
         String savePath = saveResume(basePath, resumeRequestDto.getResume());
 
@@ -62,24 +65,28 @@ public class UploadServiceImpl implements UploadService {
         resume.setFileName(resumeRequestDto.getResume().getOriginalFilename());
         resume.setFilePath(savePath);
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
+        resumeRepository.saveAndFlush(resume);
 
-        return uploadMapper.toResumeResponseDto(resumeRepository.saveAndFlush(resume));
+        asyncService.generateAndSaveQuestionList(savePath, resume);
+
+        return uploadMapper.toResumeResponseDto(resume);
     }
 
     private String saveResume(Path basePath, MultipartFile resume) {
         try {
             Files.createDirectories(basePath);
-            List<File> files = Files.list(basePath).map(Path::toFile).toList();
-            if (files.size() >= FileConstant.RESUME_UPLOAD_LIMIT) {
-                throw new InvalidException(ExceptionType.ResumeLimitException);
-            }
-
             Path dest = makeSavePath(basePath, resume);
             resume.transferTo(dest);
 
             return dest.toString();
         } catch (IOException e) {
             throw new InvalidException(ExceptionType.ResumeUploadException);
+        }
+    }
+
+    private void checkResumeLimit() {
+        if (resumeRepository.countByUser_Email(securityHelper.getLoginUsername()) >= FileConstant.RESUME_UPLOAD_LIMIT) {
+            throw new InvalidException(ExceptionType.ResumeLimitException);
         }
     }
 
