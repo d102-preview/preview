@@ -1,5 +1,6 @@
 import Button from '@/components/@common/Button/Button';
 import Toast from '@/components/@common/Toast/Toast';
+import { useUser } from '@/hooks/user/useUser';
 import userStore from '@/stores/userStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,15 +8,32 @@ const EtcButton = () => {
   const navigate = useNavigate();
   const { logout } = userStore();
 
-  // @TODO: 로그아웃 로직
+  const { useDeleteUser } = useUser();
+  const { mutate } = useDeleteUser();
+
   const handleLogout = () => {
     logout();
     navigate('/');
     Toast.success('로그아웃되었습니다.');
   };
 
-  // @TODO: 회원탈퇴 로직
-  const handleSignout = () => {};
+  const handleSignout = () => {
+    if (window.confirm('회원탈퇴를 진행하시겠습니까?')) {
+      mutate(undefined, {
+        onSuccess: () => {
+          navigate('/signup');
+          Toast.success('회원탈퇴 되었습니다.');
+
+          setTimeout(() => {
+            logout();
+          }, 1000);
+        },
+        onError: () => {
+          Toast.error('회원탈퇴에 실패했습니다.');
+        },
+      });
+    }
+  };
 
   return (
     <div className="py-8 flex justify-end">
