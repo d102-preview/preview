@@ -1,11 +1,12 @@
 import kakao from '@/assets/images/kakao.png';
+import Button from '@/components/@common/Button/Button';
+import Input from '@/components/@common/Input/Input';
+import Toast from '@/components/@common/Toast/Toast';
+import Timer from '@/components/signup/Timer/Timer';
 import { useSignup } from '@/hooks/auth/useSignup';
 import axios from 'axios';
-import { ChangeEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Button from '../@common/Button/Button';
-import Input from '../@common/Input/Input';
-import Toast from '../@common/Toast/Toast';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface signupInfo {
   value: string;
@@ -22,8 +23,16 @@ interface ISignupInfo {
 }
 
 const SignupForm = () => {
-  const { useGetIsDuplicateEmail } = useSignup();
-  const { mutate } = useGetIsDuplicateEmail();
+  const navigate = useNavigate();
+  const { useGetIsDuplicateEmail, usePostEmailCertification, usePostEmailVerify, usePostSignup } = useSignup();
+  const { mutate: checkDuplicateEmail } = useGetIsDuplicateEmail();
+  const { mutate: postEmailCertification } = usePostEmailCertification();
+  const { mutate: postEmailVerify } = usePostEmailVerify();
+  const { mutate: postSignup } = usePostSignup();
+
+  const [isShowTimer, setIsShowTimer] = useState<boolean>(false);
+  const [isVerify, setIsVerify] = useState<boolean>(false);
+  const [isPossibleSignup, setIsPossibleSignup] = useState<boolean>(false);
 
   const [signupInfo, setSignupInfo] = useState<ISignupInfo>({
     name: {
@@ -54,6 +63,12 @@ const SignupForm = () => {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof ISignupInfo) => {
+    // if (isVerify) {
+    //   if (field === 'email' || field === 'certifNum') {
+    //     return;
+    //   }
+    // }
+
     setSignupInfo(prev => {
       return {
         ...prev,
@@ -80,9 +95,9 @@ const SignupForm = () => {
   };
 
   const checkValidation = (type: keyof ISignupInfo) => {
-    const nameRegex = /[a-zA-Z가-힣]/; // 대소문자 문자만 있어야 함
-    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/; // 이메일 정규식
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g; // 비밀번호 정규식
+    const nameRegex = /[a-zA-Z가-힣]/;
+    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
 
     switch (type) {
       case 'name': {
@@ -183,10 +198,25 @@ const SignupForm = () => {
       return;
     }
 
-    mutate(signupInfo.email.value, {
-      onSuccess: (data, variables) => {
-        // @TODO: 이메일 인증번호 전송 로직
-        console.log(data, variables);
+    if (isVerify) {
+      Toast.error('이미 인증된 이메일입니다.');
+      return;
+    }
+
+    checkDuplicateEmail(signupInfo.email.value, {
+      onSuccess: () => {
+        postEmailCertification(signupInfo.email.value, {
+          onSuccess: () => {
+            Toast.success('인증번호를 전송했습니다. 입력한 이메일을 확인해보세요.');
+            setIsShowTimer(true);
+          },
+          onError: error => {
+            if (axios.isAxiosError(error)) {
+              console.log('에러 객체', error.response);
+              Toast.error('인증번호를 전송하지 못했습니다. 다시 시도해주세요.');
+            }
+          },
+        });
       },
       onError: (error, variables) => {
         console.log('실패', error, variables);
@@ -199,6 +229,97 @@ const SignupForm = () => {
       },
     });
   };
+
+  // 인증번호 확인 클릭 이벤트
+  const handleCheckCertifNum = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (signupInfo.certifNum.status !== 'success') {
+      Toast.error('올바른 인증번호를 입력해주세요.');
+      return;
+    }
+
+    postEmailVerify(
+      {
+        email: signupInfo.email.value,
+        authorizationCode: Number(signupInfo.certifNum.value),
+      },
+      {
+        onSuccess: res => {
+          console.log('인증번호 확인 성공', res);
+          if (res.data.verify) {
+            Toast.success('인증되었습니다.');
+            setIsVerify(true);
+          } else {
+          }
+        },
+        onError: err => {
+          console.log('인증번호 확인 실패', err);
+        },
+      },
+    );
+  };
+
+  const isExistImpossibleValue = () => {
+    const values = Object.values(signupInfo);
+
+    for (let val of values) {
+      if (val.value.length === 0 || val.status === 'error') {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  const handleSignup = () => {
+    if (!isVerify) {
+      Toast.error('인증이 완료되지 않았습니다. 인증 후 회원가입을 진행해주세요.');
+      return;
+    }
+
+    if (isExistImpossibleValue()) {
+      Toast.error('입력 형식에 맞지 않은 값이 있습니다.');
+      return;
+    }
+
+    postSignup(
+      {
+        email: signupInfo.email.value,
+        password: signupInfo.password.value,
+        name: signupInfo.name.value,
+      },
+      {
+        onSuccess: () => {
+          Toast.success('회원가입에 성공했습니다.');
+          navigate('/login');
+        },
+        onError: () => {
+          Toast.error('회원가입에 실패했습니다.');
+        },
+      },
+    );
+  };
+
+  useEffect(() => {
+    const values = Object.values(signupInfo);
+
+    for (let val of values) {
+      if (val.status !== 'success') {
+        setIsPossibleSignup(false);
+        return;
+      }
+    }
+
+    if (!isVerify) {
+      setIsPossibleSignup(false);
+      return;
+    }
+
+    setIsPossibleSignup(true);
+  }, [signupInfo, isVerify]);
+
+  console.log(isPossibleSignup);
 
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">
@@ -234,19 +355,31 @@ const SignupForm = () => {
                 text: signupInfo.email.subText,
                 type: signupInfo.email.status,
               }}
+              disabled={isVerify}
             />
           </div>
           <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
-            <Button
-              text="발송하기"
-              width="w-[72px]"
-              height="h-9"
-              backgroundColor="bg-[#EEF3FF]"
-              textColor="text-MAIN1"
-              hoverBackgroundColor="hover:bg-[#D8E2FC]"
-              hoverTextColor="hover:text-[#3273FF]"
-              onClick={handleSendCertifNum}
-            />
+            {!isVerify && isShowTimer ? (
+              <Timer
+                minute={3}
+                timeoutFunc={() => {
+                  setIsShowTimer(false);
+                  Toast.error('인증 시간이 만료되었습니다. 다시 시도해주세요.');
+                }}
+              />
+            ) : (
+              <Button
+                text="발송하기"
+                width="w-[72px]"
+                height="h-9"
+                backgroundColor={isVerify ? 'bg-gray-200' : 'bg-[#EEF3FF]'}
+                textColor={isVerify ? 'text-gray-400' : 'text-MAIN1'}
+                hoverBackgroundColor={isVerify ? 'bg-gray-200' : 'hover:bg-[#D8E2FC]'}
+                hoverTextColor={isVerify ? 'text-gray-400' : 'hover:text-[#3273FF]'}
+                onClick={handleSendCertifNum}
+                disabled={isVerify ? true : false}
+              />
+            )}
           </div>
         </div>
         <div className="relative">
@@ -261,6 +394,7 @@ const SignupForm = () => {
                 text: signupInfo.certifNum.subText,
                 type: signupInfo.certifNum.status,
               }}
+              disabled={isVerify}
             />
           </div>
           <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
@@ -268,10 +402,12 @@ const SignupForm = () => {
               text="인증하기"
               width="w-[72px]"
               height="h-9"
-              backgroundColor="bg-[#EEF3FF]"
-              textColor="text-MAIN1"
-              hoverBackgroundColor="hover:bg-[#D8E2FC]"
-              hoverTextColor="hover:text-[#3273FF]"
+              backgroundColor={isVerify ? 'bg-gray-200' : 'bg-[#EEF3FF]'}
+              textColor={isVerify ? 'text-gray-400' : 'text-MAIN1'}
+              hoverBackgroundColor={isVerify ? 'bg-gray-200' : 'hover:bg-[#D8E2FC]'}
+              hoverTextColor={isVerify ? 'text-gray-400' : 'hover:text-[#3273FF]'}
+              onClick={handleCheckCertifNum}
+              disabled={isVerify ? true : false}
             />
           </div>
         </div>
@@ -302,9 +438,11 @@ const SignupForm = () => {
         text="회원가입"
         width="w-full"
         height="h-11"
-        backgroundColor="bg-MAIN1"
-        textColor="text-[#EEF3FF]"
-        hoverBackgroundColor="hover:bg-[#3273FF]"
+        backgroundColor={isPossibleSignup ? 'bg-MAIN1' : 'bg-gray-200'}
+        textColor={isPossibleSignup ? 'text-[#EEF3FF]' : 'text-gray-400'}
+        hoverBackgroundColor={isPossibleSignup ? 'hover:bg-[#3273FF]' : 'bg-gray-200'}
+        onClick={handleSignup}
+        disabled={!isPossibleSignup}
       />
 
       <div className="relative">
