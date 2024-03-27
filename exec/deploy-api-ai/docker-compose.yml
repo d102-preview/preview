@@ -4,7 +4,7 @@ name: d102-api-ai
 
 services:
   fastapi:
-    image: ${REGISTRY}/api-ai:${TAG}
+    image: ${REGISTRY}/${IMG_NAME}:${TAG}
     container_name: fastapi
     restart: unless-stopped
     networks:
