@@ -75,3 +75,13 @@ export interface ISubText {
   text: string;
   type: 'success' | 'info' | 'error';
 }
+
+export interface ResultItemData {
+  result: 'ok' | 'fail';
+  id: number;
+  imagePath: string;
+  type: 'mock' | 'main';
+  date: Date;
+  question: string;
+  time: string;
+}
