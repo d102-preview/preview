@@ -38,7 +38,7 @@ export interface IQuestionListItem {
 }
 
 // 페이지네이션 정보 타입
-export interface PaginationResponse {
+export interface IPaginationResponse {
   pageable: IPageable;
   last: boolean;
   totalElements: number;
@@ -74,4 +74,22 @@ export interface IQuestionDetail {
 export interface ISubText {
   text: string;
   type: 'success' | 'info' | 'error';
+}
+
+export interface IResultItemData {
+  result: 'ok' | 'fail';
+  id: number;
+  imagePath: string;
+  type: 'mock' | 'main';
+  date: Date;
+  question: string;
+  time: string;
+}
+
+// 회원 정보
+export interface IUserInfo {
+  email: string;
+  profileImageName: string;
+  profileImageUrl: string;
+  name: string;
 }
