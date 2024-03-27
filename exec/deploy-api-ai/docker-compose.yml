@@ -4,9 +4,6 @@ name: d102-api-ai
 
 services:
   fastapi:
-    build:
-      context: ../../api-ai
-      dockerfile: Dockerfile
     image: ${REGISTRY}/api-ai:${TAG}
     container_name: fastapi
     restart: unless-stopped
