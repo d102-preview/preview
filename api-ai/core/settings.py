@@ -7,6 +7,8 @@ class Settings(BaseSettings):
 
     API_V1_STR: str = Field("/ai")
 
+    DB_HOST: str
+    DB_PORT: int
     DATABASE_DSN: MariaDBDsn
 
     TZ: str = "Asia/Seoul"
