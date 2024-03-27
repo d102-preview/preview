@@ -59,9 +59,8 @@ pipeline {
         )
       }
     }
-  }
 
-  stage('Health Check API-AI') {
+    stage('Health Check API-AI') {
       steps {
         sh 'sleep 20'
         script {
