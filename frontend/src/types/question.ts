@@ -15,3 +15,5 @@ export interface IQuestionRes {
 export interface IQuestionsDetailsRes {
   [key: string]: APIResponse<IQuestionRes>;
 }
+
+export type questionType = 'common' | 'resume'
