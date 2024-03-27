@@ -14,6 +14,12 @@ pipeline {
   }
 
   stages {
+    stage('Build and Push Images') {
+      steps {
+        sh 'cd exec/ && chmod +x docker-build-push-ai.sh && ./docker-build-push-ai.sh'
+      }
+    }
+
     stage('Copy .env to Deploy Directory') {
       steps {
         script {
@@ -21,12 +27,6 @@ pipeline {
             sh 'cd exec/ && chmod +x copy-docker-compose-env.sh && ./copy-docker-compose-env.sh'
           }
         }
-      }
-    }
-
-    stage('Build and Push Images') {
-      steps {
-        sh 'cd exec/ && chmod +x docker-build-push-ai.sh && ./docker-build-push-ai.sh'
       }
     }
 
