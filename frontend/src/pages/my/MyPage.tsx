@@ -1,5 +1,13 @@
+import Header from '@/components/@common/Header/Header';
+import ProfileContainer from '@/components/my/ProfileContainer/ProfileContainer';
+
 const MyPage = () => {
-  return <div>마이 페이지 입니다</div>;
+  return (
+    <div>
+      <Header />
+      <ProfileContainer />
+    </div>
+  );
 };
 
 export default MyPage;
