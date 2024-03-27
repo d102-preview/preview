@@ -1,44 +1,27 @@
 import SpeechBubble from './SpeechBubble';
 
 interface IInterviewPreparedProps {
+  prepare: '매우 부족' | '부족' | '보통' | '우수' | '매우 우수';
   state: 1 | 2 | 3 | 4 | 5;
   name: string;
 }
 
-const InterviewPrepared = ({ state, name }: IInterviewPreparedProps) => {
+const InterviewPrepared = ({ prepare, state, name }: IInterviewPreparedProps) => {
   // state 값에 따라 적절한 클래스 반환
-  const getTextClass = (state: number) => {
-    switch (state) {
-      case 1:
+  const getTextClass = (prepare: string) => {
+    switch (prepare) {
+      case '매우 부족':
         return 'text-[#F87F7F]';
-      case 2:
+      case '부족':
         return 'text-[#F5B18A]';
-      case 3:
+      case '보통':
         return 'text-[#F8C77F]';
-      case 4:
+      case '우수':
         return 'text-[#83C978]';
-      case 5:
+      case '매우 우수':
         return 'text-[#5BAF82]';
       default:
         return 'text-UNIMPORTANT_TEXT';
-    }
-  };
-
-  // state 값에 따라 적절한 문자열 반환
-  const getStateText = (state: number) => {
-    switch (state) {
-      case 1:
-        return '매우 부족';
-      case 2:
-        return '부족';
-      case 3:
-        return '보통';
-      case 4:
-        return '양호';
-      case 5:
-        return '매우 양호';
-      default:
-        return '';
     }
   };
 
@@ -56,8 +39,7 @@ const InterviewPrepared = ({ state, name }: IInterviewPreparedProps) => {
     return isActive ? 'bg-MAIN1' : 'bg-gray-300';
   };
 
-  const textClass = getTextClass(state);
-  const text = getStateText(state);
+  const textClass = getTextClass(prepare);
   const activeStates = getBarActiveStates(state);
 
   return (
@@ -65,7 +47,7 @@ const InterviewPrepared = ({ state, name }: IInterviewPreparedProps) => {
       <div className="mt-5 px-10 ">
         <div className="flex font-bold text-2xl">
           <h3 className="mr-2 text-[#727272]">면접 준비</h3>
-          <h3 className={textClass}>{text}</h3>
+          <h3 className={textClass}>{prepare}</h3>
         </div>
         <p className="text-UNIMPORTANT_TEXT text-lg">면접 합격 가능성으로 본 나의 면접 준비 상태</p>
         <div className="w-5/6">
