@@ -96,7 +96,7 @@ const SignupForm = () => {
 
   const checkValidation = (type: keyof ISignupInfo) => {
     const nameRegex = /[a-zA-Z가-힣]/;
-    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z0-9]{2,3}/;
+    const emailRegex = /[a-z0-9]+@[a-z0-9]+\.[a-z]{2,3}/;
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
 
     switch (type) {
