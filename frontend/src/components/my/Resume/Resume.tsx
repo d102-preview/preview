@@ -1,4 +1,9 @@
+import { useState } from 'react';
+import ResumeAddModal from '../Modal/ResumeAddModal/ResumeAddModal';
+
 const Resume = () => {
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+
   return (
     <div>
       <span>내 이력서</span>
@@ -6,10 +11,14 @@ const Resume = () => {
         <div className="h-48 flex justify-center items-center text-gray-400 border rounded-md cursor-pointer">
           수화의 이력서
         </div>
-        <div className="h-48 flex justify-center items-center text-MAIN1 border bg-[#F8FAFF] hover:bg-[#EAF0FF] rounded-md cursor-pointer">
+        <button
+          onClick={() => setIsShowModal(true)}
+          className="h-48 flex justify-center items-center text-MAIN1 border bg-[#F8FAFF] hover:bg-[#EAF0FF] rounded-md cursor-pointer"
+        >
           추가하기
-        </div>
+        </button>
       </div>
+      {isShowModal && <ResumeAddModal onClose={() => setIsShowModal(false)} />}
     </div>
   );
 };
