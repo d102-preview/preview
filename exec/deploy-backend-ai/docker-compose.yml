@@ -1,16 +1,21 @@
 version: "3.8"
 
+name: d102-backend-ai
+
 services:
   fastapi:
     build:
-      context: .
+      context: ../../api-ai
       dockerfile: Dockerfile
-    container_name: fastapi
+    image: ${REGISTRY}/backend-ai:${TAG}
+    container_name: backend-ai
     restart: unless-stopped
     networks:
       - d102-network
     expose:
       - 8000
+    volumes:
+      - ${HOME}/d102/files:/app/files
     env_file:
       - .env
     command: "/app/wait-for-it.sh $DB_HOST:$DB_PORT -t 10 -- poetry run uvicorn main:app --reload --host=0.0.0.0"
