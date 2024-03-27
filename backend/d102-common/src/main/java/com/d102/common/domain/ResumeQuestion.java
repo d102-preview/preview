@@ -1,4 +1,4 @@
-package com.d102.api.domain;
+package com.d102.common.domain;
 
 import com.d102.common.domain.BaseTime;
 import com.d102.common.domain.Resume;
