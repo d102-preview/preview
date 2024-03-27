@@ -1,14 +1,14 @@
 version: "3.8"
 
-name: d102-backend-ai
+name: d102-api-ai
 
 services:
   fastapi:
     build:
       context: ../../api-ai
       dockerfile: Dockerfile
-    image: ${REGISTRY}/backend-ai:${TAG}
-    container_name: backend-ai
+    image: ${REGISTRY}/api-ai:${TAG}
+    container_name: fastapi
     restart: unless-stopped
     networks:
       - d102-network
