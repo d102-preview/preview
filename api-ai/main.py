@@ -18,4 +18,6 @@ app.add_exception_handler(RequestValidationError, custom_validation_error_handle
 if __name__ == "__main__":
     logger.info("Run server")
 
-    uvicorn.run("main:app", port=8000, reload=True, log_config=load_config())
+    uvicorn.run(
+        "main:app", host="0.0.0.0", port=8000, reload=True, log_config=load_config()
+    )
