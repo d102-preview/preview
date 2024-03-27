@@ -96,7 +96,7 @@ const SignupForm = () => {
 
   const checkValidation = (type: keyof ISignupInfo) => {
     const nameRegex = /[a-zA-Z가-힣]/;
-    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z0-9]{2,3}/;
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
 
     switch (type) {
@@ -251,6 +251,7 @@ const SignupForm = () => {
             Toast.success('인증되었습니다.');
             setIsVerify(true);
           } else {
+            Toast.error('인증에 실패했습니다.');
           }
         },
         onError: err => {
@@ -318,8 +319,6 @@ const SignupForm = () => {
 
     setIsPossibleSignup(true);
   }, [signupInfo, isVerify]);
-
-  console.log(isPossibleSignup);
 
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">
