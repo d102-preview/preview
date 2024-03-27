@@ -5,7 +5,7 @@ export REGISTRY=localhost:5000
 
 export IMG_NAME=api-ai
 
-docker compose -f "./deploy-$IMG_NAME/docker-compose.yml" build fastapi
+docker-compose -f "./deploy-$IMG_NAME/docker-compose.yml" build fastapi
 
 docker push "$REGISTRY/$IMG_NAME:$TAG"
 
