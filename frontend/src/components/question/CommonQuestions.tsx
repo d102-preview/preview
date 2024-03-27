@@ -3,7 +3,7 @@ import { IQuestionListRes } from '@/types/question';
 import QuestionsList from './QuestionsList';
 
 interface QuestionsProps {
-  data: APIResponse<IQuestionListRes> | undefined;
+  data?: APIResponse<IQuestionListRes>;
   type: 'common';
 }
 
