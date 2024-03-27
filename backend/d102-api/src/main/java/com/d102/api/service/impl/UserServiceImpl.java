@@ -26,8 +26,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public UserDto.Response get() {
-        return userMapper.toUserResponseDto(userRepository.findByEmail(
+    public UserDto.ResumeResponse get() {
+        return userMapper.toUserResumeResponseDto(userRepository.findByEmail(
                 securityHelper.getLoginUsername()).orElse(null));
     }
 
