@@ -3,6 +3,7 @@ import Keywords from '@/components/question/Keywords';
 import Script from '@/components/question/Script';
 import { IQuestionItem, interviewType } from '@/types/model';
 import { useLocation } from 'react-router-dom';
+import { useQuestion } from '@/hooks/question/useQuestion';
 
 interface IQuestionItemProps {
   question: string;
@@ -17,14 +18,20 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const location = useLocation();
   const isQuestionPage = location.pathname === '/question';
 
+  const { useGetQuestion } = useQuestion();
+  const { data } = useGetQuestion(type, id);
+
+  const script = data?.data?.questionDetail?.script?.script;
+  const keywords = data?.data?.questionDetail.keywords;
+
   return (
     <div className="mb-2">
       <Accordian
         titleContent={question}
         children={
           <>
-            <Script initialScript="단점이 없는 게 장점입니다." maxLength={500} />
-            <Keywords />
+            <Script initialScript={script || ''} maxLength={500} />
+            <Keywords initialKeywords={keywords || []} />
           </>
         }
         defaultOpen={false}

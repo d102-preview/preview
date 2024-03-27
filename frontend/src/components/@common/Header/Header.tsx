@@ -1,11 +1,11 @@
 import logo from '@/assets/images/logo.png';
 import profileImage from '@/assets/images/profile.png';
+import userStore from '@/stores/userStore';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLink from '../HeaderLink/HeaderLink';
 
 const Header = () => {
-  // @TODO: 추후 로그인 상태인지 store에서 받아오기
-  const isLogin = false;
+  const { isLogin, name, profileUrl } = userStore();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,9 +31,9 @@ const Header = () => {
         {!isLogin ? (
           <HeaderLink label="로그인" link="/login" isClicked={false} />
         ) : (
-          <div className="p-1" onClick={() => navigate('/my')}>
-            {/* @TODO: 프로필 이미지 등록 */}
-            <img src={profileImage} alt="default profile" className="w-7 rounded-full cursor-pointer" />
+          <div className="p-1 pl-2 flex items-center cursor-pointer" onClick={() => navigate('/my')}>
+            <img src={profileUrl || profileImage} alt="default profile" className="w-7 rounded-full cursor-pointer" />
+            <span className="text-sm pl-2">{name}</span>
           </div>
         )}
       </div>
