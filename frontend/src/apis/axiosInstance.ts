@@ -7,4 +7,6 @@ const axiosRequestConfig = {
 
 export const axiosCommonInstance = axios.create(axiosRequestConfig);
 
-axiosCommonInstance.interceptors.request.use(setAuthorization);
+export const axiosAuthInstance = axios.create(axiosRequestConfig);
+
+axiosAuthInstance.interceptors.request.use(setAuthorization);
