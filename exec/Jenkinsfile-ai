@@ -18,7 +18,7 @@ pipeline {
       steps {
         script {
           withCredentials([file(credentialsId: 'ai_env_docker_compose', variable: 'DC_ENV')]) {
-            sh 'cd api-ai/ && chmod +x copy-docker-compose-env.sh && ./copy-docker-compose-env.sh'
+            sh 'cp $DC_ENV exec/deploy-api-ai/.env'
           }
         }
       }
