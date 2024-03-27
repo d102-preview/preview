@@ -5,7 +5,7 @@ export REGISTRY=localhost:5000
 
 export IMG_NAME=api-ai
 
-chmod 755 "./deploy-$IMG_NAME/docker-compose.yml"
+chmod -R 755 "./deploy-$IMG_NAME"
 
 docker-compose -f "./deploy-$IMG_NAME/docker-compose.yml" build fastapi
 
