@@ -3914,33 +3914,6 @@ url = "https://download.pytorch.org/whl/cpu"
 reference = "pytorch-cpu-src"
 
 [[package]]
-name = "torchaudio"
-version = "2.2.2+cpu"
-description = "An audio package for PyTorch"
-optional = false
-python-versions = "*"
-files = [
-    {file = "torchaudio-2.2.2+cpu-cp310-cp310-linux_x86_64.whl", hash = "sha256:a072a93cfe357a890c7f73fc39665445f0dc58bbf79045b88113ee4dbf658c81"},
-    {file = "torchaudio-2.2.2+cpu-cp310-cp310-win_amd64.whl", hash = "sha256:012cd8efbd9e0011abcd79daff98d312136b5e49417062bef1d38cd208f0c05f"},
-    {file = "torchaudio-2.2.2+cpu-cp311-cp311-linux_x86_64.whl", hash = "sha256:144767aad7609ee7c0dfe9f163003db584aaab3bc69db388d56dad3772a267d4"},
-    {file = "torchaudio-2.2.2+cpu-cp311-cp311-win_amd64.whl", hash = "sha256:6e718df4834f9cef28b7dc1edc9ceabfe477d4dbd5527b51234e96bf91465d9d"},
-    {file = "torchaudio-2.2.2+cpu-cp312-cp312-linux_x86_64.whl", hash = "sha256:6adffc55d7a42e5dab86c23f1a2287529a073160e5cc241269e467561a7513ee"},
-    {file = "torchaudio-2.2.2+cpu-cp312-cp312-win_amd64.whl", hash = "sha256:56ff742be82ce4445e45b4a1d6c72be7de4cbc528e4ef5638279bc8ca820ec36"},
-    {file = "torchaudio-2.2.2+cpu-cp38-cp38-linux_x86_64.whl", hash = "sha256:ad86c5f68fe6ed62c3999ec91ee1d5e4bb07f7d0342ac1400ef6f4cb294b4c4a"},
-    {file = "torchaudio-2.2.2+cpu-cp38-cp38-win_amd64.whl", hash = "sha256:4e6760b0cf1e373140a47152f55f935c0df421c9acd55369a8e9fa7d4bc5648e"},
-    {file = "torchaudio-2.2.2+cpu-cp39-cp39-linux_x86_64.whl", hash = "sha256:d14eb6172f54a550d82fc7ca7a53ed4bcea141ffd3d736d5eabba6d4fe4a39ce"},
-    {file = "torchaudio-2.2.2+cpu-cp39-cp39-win_amd64.whl", hash = "sha256:d2e93eae8303a1b00cbcd1859b2b5736c3612d5948ab6fd5f9a5922c8b4ccfde"},
-]
-
-[package.dependencies]
-torch = "2.2.2"
-
-[package.source]
-type = "legacy"
-url = "https://download.pytorch.org/whl/cpu"
-reference = "pytorch-cpu-src"
-
-[[package]]
 name = "torchvision"
 version = "0.17.2+cpu"
 description = "image and video datasets and models for torch deep learning"
@@ -4551,4 +4524,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "a16dd3c9e58aed5c4013470964615d750e31d6c4cc892da1b0e7d0b8602b054d"
+content-hash = "a4e88da7f46e01d5073be24d391928fd2462a5411f4f95444b83009fb43f40ea"
