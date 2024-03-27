@@ -3,6 +3,8 @@ import Button from '@/components/@common/Button/Button';
 import Input from '@/components/@common/Input/Input';
 import { ChangeEvent, useState } from 'react';
 import { PiNotePencil } from 'react-icons/pi';
+import ModifyPasswordModal from '../Modal/ModifyPasswordModal/ModifyPasswordModal';
+import ProfileModifyModal from '../Modal/ProfileModifyModal/ProfileModifyModal';
 
 interface IMyInfo {
   email: string;
@@ -11,17 +13,25 @@ interface IMyInfo {
   password: string;
 }
 
+interface IModalType {
+  profile: boolean;
+  password: boolean;
+}
+
 const MyInfo = () => {
   const [isModifyName, setIsModifyName] = useState<boolean>(false);
-  const [isShowModifyProfileImageModal, setIsShowModifyProfileImageModal] = useState<boolean>(false);
+  const [isShowModal, setIsShowModal] = useState<IModalType>({
+    profile: false,
+    password: false,
+  });
 
-  const [myInfo, setMyInfo] = useState<IMyInfo>({
+  const myInfo: IMyInfo = {
     email: 'tnghk9611@naver.com',
     name: '이수화',
     profileUrl:
       'https://i.namu.wiki/i/kwzpyLbWWq104Sny-FNaj0cGadskPMEf6KHqrSD1YQ_IHDjjC61DgFftSytELDwSwtuUgQG3e0Feb4F01ZrnZHYFyt2VkesGyU207md8_nfGVAbYoZ8h1eEt-AF0NlO3PwahAYB3oanCtu_Q8tJBBw.webp',
     password: 'sdf3234@#',
-  });
+  };
 
   const [modifyInfo, setModifyInfo] = useState<IMyInfo>({
     email: myInfo.email,
@@ -31,12 +41,19 @@ const MyInfo = () => {
   });
 
   const handleModifyInfo = (e: ChangeEvent<HTMLInputElement>, key: keyof IMyInfo) => {
-    console.log(key, e.target.value);
-
     setModifyInfo(prev => {
       return {
         ...prev,
         [key]: e.target.value,
+      };
+    });
+  };
+
+  const setShow = (key: keyof IModalType, flag: boolean) => {
+    setIsShowModal(prev => {
+      return {
+        ...prev,
+        [key]: flag,
       };
     });
   };
@@ -83,6 +100,7 @@ const MyInfo = () => {
             textColor="text-[#5A8AF2]"
             hoverBackgroundColor="hover:bg-[#5A8AF2]"
             hoverTextColor="hover:text-white"
+            onClick={() => setShow('password', true)}
           />
         </div>
       </div>
@@ -90,13 +108,17 @@ const MyInfo = () => {
         <div className="relative">
           <img className="w-full mb-4 rounded-full border" src={myInfo.profileUrl || profileImage} alt="프로필" />
           <button
-            onClick={() => setIsShowModifyProfileImageModal(true)}
-            className="w-10 h-10 absolute bottom-2 right-2 rounded-full bg-gray-200 flex justify-center items-center cursor-pointer"
+            onClick={() => setShow('profile', true)}
+            className="w-8 h-8 absolute bottom-1 right-1 rounded-full bg-gray-200 flex justify-center items-center cursor-pointer"
           >
-            <PiNotePencil color="white" size={25} />
+            <PiNotePencil color="white" size={20} />
           </button>
         </div>
       </div>
+      {isShowModal.profile && (
+        <ProfileModifyModal profileUrl={myInfo.profileUrl} onClose={() => setShow('profile', false)} />
+      )}
+      {isShowModal.password && <ModifyPasswordModal onClose={() => setShow('password', false)} />}
     </div>
   );
 };
