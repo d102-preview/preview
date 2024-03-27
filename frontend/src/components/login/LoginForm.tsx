@@ -2,21 +2,28 @@ import kakao from '@/assets/images/kakao.png';
 import Button from '@/components/@common/Button/Button';
 import Input from '@/components/@common/Input/Input';
 import Toast from '@/components/@common/Toast/Toast';
+import { useSignup } from '@/hooks/auth/useSignup';
+import userStore from '@/stores/userStore';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface signupInfo {
+interface ILoginStatus {
   value: string;
   subText: string;
   status: 'success' | 'info' | 'error';
 }
 
 interface ILoginInfo {
-  email: signupInfo;
-  password: signupInfo;
+  email: ILoginStatus;
+  password: ILoginStatus;
 }
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const { usePostLogin } = useSignup();
+  const { mutate: postLogin } = usePostLogin();
+  const { login } = userStore();
+
   const [isPossibleLogin, setIsPossibleLogin] = useState<boolean>(false);
 
   const [loginInfo, setLoginInfo] = useState<ILoginInfo>({
@@ -118,6 +125,26 @@ const LoginForm = () => {
       Toast.error('입력 형식에 맞지 않은 값이 있습니다.');
       return;
     }
+
+    postLogin(
+      {
+        email: loginInfo.email.value,
+        password: loginInfo.password.value,
+      },
+      {
+        onSuccess: res => {
+          Toast.success('로그인에 성공했습니다.');
+          login(res.data.user.name, res.data.user.profileImageUrl);
+
+          setTimeout(() => {
+            navigate('/');
+          }, 1000);
+        },
+        onError: () => {
+          Toast.error('로그인에 실패했습니다.');
+        },
+      },
+    );
   };
 
   useEffect(() => {
@@ -132,8 +159,6 @@ const LoginForm = () => {
 
     setIsPossibleLogin(true);
   }, [loginInfo]);
-
-  console.log(isPossibleLogin);
 
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">

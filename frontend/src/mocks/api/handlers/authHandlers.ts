@@ -3,6 +3,7 @@ import {
   postEmailCertificationRes,
   postEmailVerifyRes,
   postJoinRes,
+  postLoginRes,
 } from '@/mocks/api/data/auth';
 import { HttpResponse, http } from 'msw';
 
@@ -35,6 +36,11 @@ export const authHandlers = [
 
   http.post('/api/auth/join', () => {
     const success = HttpResponse.json(postJoinRes, { status: 200 });
+    return success;
+  }),
+
+  http.post('/api/auth/login', () => {
+    const success = HttpResponse.json(postLoginRes, { status: 200 });
     return success;
   }),
 ];
