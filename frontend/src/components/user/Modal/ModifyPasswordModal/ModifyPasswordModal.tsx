@@ -1,13 +1,8 @@
 import Button from '@/components/@common/Button/Button';
 import Input from '@/components/@common/Input/Input';
 import Modal from '@/components/@common/Modal/Modal';
+import { IPasswordInfo } from '@/types/model';
 import { useState } from 'react';
-
-interface IPasswordInfo {
-  currentPassword: string;
-  changedPassword: string;
-  checkChangePassword: string;
-}
 
 const ModifyPasswordModal = ({ onClose }: { onClose: () => void }) => {
   const [passwordInfo, setPasswordInfo] = useState<IPasswordInfo>({
