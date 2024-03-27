@@ -26,3 +26,12 @@ export interface IPostJoinReq {
 export interface IPostJoinRes {
   user: IUserInfo;
 }
+
+export interface IPostLoginReq {
+  email: string;
+  password: string;
+}
+
+export interface IPostLoginRes {
+  user: IUserInfo;
+}
