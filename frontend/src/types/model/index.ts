@@ -76,7 +76,8 @@ export interface ISubText {
   type: 'success' | 'info' | 'error';
 }
 
-export interface IResultItemData {
+export interface ResultItemData {
+
   result: 'ok' | 'fail';
   id: number;
   imagePath: string;
@@ -93,3 +94,4 @@ export interface IUserInfo {
   profileImageUrl: string;
   name: string;
 }
+
