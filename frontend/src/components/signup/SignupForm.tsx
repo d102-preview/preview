@@ -5,8 +5,8 @@ import Toast from '@/components/@common/Toast/Toast';
 import Timer from '@/components/signup/Timer/Timer';
 import { useSignup } from '@/hooks/auth/useSignup';
 import axios from 'axios';
-import { ChangeEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface signupInfo {
   value: string;
@@ -23,13 +23,16 @@ interface ISignupInfo {
 }
 
 const SignupForm = () => {
-  const { useGetIsDuplicateEmail, usePostEmailCertification, usePostEmailVerify } = useSignup();
+  const navigate = useNavigate();
+  const { useGetIsDuplicateEmail, usePostEmailCertification, usePostEmailVerify, usePostSignup } = useSignup();
   const { mutate: checkDuplicateEmail } = useGetIsDuplicateEmail();
   const { mutate: postEmailCertification } = usePostEmailCertification();
   const { mutate: postEmailVerify } = usePostEmailVerify();
+  const { mutate: postSignup } = usePostSignup();
 
   const [isShowTimer, setIsShowTimer] = useState<boolean>(false);
   const [isVerify, setIsVerify] = useState<boolean>(false);
+  const [isPossibleSignup, setIsPossibleSignup] = useState<boolean>(false);
 
   const [signupInfo, setSignupInfo] = useState<ISignupInfo>({
     name: {
@@ -60,6 +63,12 @@ const SignupForm = () => {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof ISignupInfo) => {
+    // if (isVerify) {
+    //   if (field === 'email' || field === 'certifNum') {
+    //     return;
+    //   }
+    // }
+
     setSignupInfo(prev => {
       return {
         ...prev,
@@ -273,7 +282,44 @@ const SignupForm = () => {
       Toast.error('입력 형식에 맞지 않은 값이 있습니다.');
       return;
     }
+
+    postSignup(
+      {
+        email: signupInfo.email.value,
+        password: signupInfo.password.value,
+        name: signupInfo.name.value,
+      },
+      {
+        onSuccess: () => {
+          Toast.success('회원가입에 성공했습니다.');
+          navigate('/login');
+        },
+        onError: () => {
+          Toast.error('회원가입에 실패했습니다.');
+        },
+      },
+    );
   };
+
+  useEffect(() => {
+    const values = Object.values(signupInfo);
+
+    for (let val of values) {
+      if (val.status !== 'success') {
+        setIsPossibleSignup(false);
+        return;
+      }
+    }
+
+    if (!isVerify) {
+      setIsPossibleSignup(false);
+      return;
+    }
+
+    setIsPossibleSignup(true);
+  }, [signupInfo, isVerify]);
+
+  console.log(isPossibleSignup);
 
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">
@@ -309,10 +355,11 @@ const SignupForm = () => {
                 text: signupInfo.email.subText,
                 type: signupInfo.email.status,
               }}
+              disabled={isVerify}
             />
           </div>
           <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
-            {isShowTimer ? (
+            {!isVerify && isShowTimer ? (
               <Timer
                 minute={3}
                 timeoutFunc={() => {
@@ -347,6 +394,7 @@ const SignupForm = () => {
                 text: signupInfo.certifNum.subText,
                 type: signupInfo.certifNum.status,
               }}
+              disabled={isVerify}
             />
           </div>
           <div className="absolute right-0 bottom-0 top-0 flex justify-center items-center">
@@ -390,10 +438,11 @@ const SignupForm = () => {
         text="회원가입"
         width="w-full"
         height="h-11"
-        backgroundColor="bg-MAIN1"
-        textColor="text-[#EEF3FF]"
-        hoverBackgroundColor="hover:bg-[#3273FF]"
+        backgroundColor={isPossibleSignup ? 'bg-MAIN1' : 'bg-gray-200'}
+        textColor={isPossibleSignup ? 'text-[#EEF3FF]' : 'text-gray-400'}
+        hoverBackgroundColor={isPossibleSignup ? 'hover:bg-[#3273FF]' : 'bg-gray-200'}
         onClick={handleSignup}
+        disabled={!isPossibleSignup}
       />
 
       <div className="relative">

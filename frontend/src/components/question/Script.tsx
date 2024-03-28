@@ -1,11 +1,6 @@
 import Textarea from '@/components/@common/Textarea/Textarea';
+import { ISubText } from '@/types/model';
 import { useState, useEffect } from 'react';
-
-// @TODO: 추후 삭제하기
-interface ISubText {
-  text: string;
-  type: 'success' | 'info' | 'error';
-}
 
 interface IScriptProps {
   initialScript: string;
@@ -14,7 +9,7 @@ interface IScriptProps {
 
 const Script = ({ initialScript, maxLength }: IScriptProps) => {
   const [isEdit, setIsEdit] = useState(false);
-  const [script, setScript] = useState(initialScript || '');
+  const [script, setScript] = useState(initialScript);
   const [tempScript, setTempScript] = useState('');
   const [subText, setSubText] = useState<ISubText>({ text: '', type: 'info' });
 
