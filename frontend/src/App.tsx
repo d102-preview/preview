@@ -5,11 +5,12 @@ import HomePage from './pages/home/HomePage';
 import InterviewPage from './pages/interview/InterviewPage';
 import LoginPage from './pages/login/LoginPage';
 import MyPage from './pages/my/MyPage';
+import PrivateRoute from './pages/private/PrivateRoute';
 import QuestionPage from './pages/question/QuestionPage';
 import RecordPage from './pages/record/RecordPage';
 import ResultPage from './pages/result/ResultPage';
-import SignUpPage from './pages/signup/SignupPage';
 import ResultReportPage from './pages/result/ResultReportPage';
+import SignUpPage from './pages/signup/SignupPage';
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/my',
-    element: <MyPage />,
+    element: (
+      <PrivateRoute>
+        <MyPage />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/interview',
@@ -34,7 +39,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/record',
-    element: <RecordPage />,
+    element: (
+      <PrivateRoute>
+        <RecordPage />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/question',
@@ -46,13 +55,22 @@ const router = createBrowserRouter([
   },
   {
     path: '/result',
-    element: <ResultPage />,
+    element: (
+      <PrivateRoute>
+        <ResultPage />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/result/:id',
-    element: <ResultReportPage />,
+    element: (
+      <PrivateRoute>
+        <ResultReportPage />
+      </PrivateRoute>
+    ),
   },
 ]);
+
 function App() {
   return (
     <>

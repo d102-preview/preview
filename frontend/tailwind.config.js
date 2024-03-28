@@ -38,7 +38,7 @@ export default {
         modalOpen: 'FadeIn 0.3s ease-in-out',
         modalClose: 'FadeOut 0.3s ease-in-out',
         showLeft: 'ShowLeft 0.5s ease-in-out',
-        showUp: 'ShowUp 1.2s ease-in-out',
+        showUp: 'ShowUp 1.0s ease-in-out',
         uploading: 'Uploading 2s ease-in-out',
       },
     },
