@@ -107,7 +107,7 @@ const ResultReportPage = () => {
             <DetailedAnalysis
               type={data.metadata.type}
               question={data.metadata.question}
-              result={data.result}
+              // result={data.result}
               date={data.set_start_time}
             />
           </div>

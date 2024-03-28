@@ -61,7 +61,7 @@ const HasKeywords = ({ text, keywords, totalNum, includedNum }: IHasKeywordsProp
         ))}
       </div>
       <p className="flex items-center gap-2 text-BLACK text-xl mt-4 mx-3">
-        <TbArrowBigRightFilled size={25} />
+        <TbArrowBigRightFilled size={25} color='#404040' />
         {`미리 작성된 핵심 키워드 ${totalNum} 중 ${includedNum}개가 포함되어 있습니다. `}
       </p>
     </div>

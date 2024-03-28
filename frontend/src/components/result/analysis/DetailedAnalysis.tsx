@@ -8,28 +8,28 @@ import { FaUserTie } from 'react-icons/fa';
 import { RiEmotionFill } from 'react-icons/ri';
 import { HiMiniChatBubbleOvalLeftEllipsis, HiMiniKey } from 'react-icons/hi2';
 
-interface IResult {
-  emotion: {
-    ratio: {
-      positive: number;
-      neutral: number;
-      negative: number;
-    };
-    list: number[]; // 각 프레임별 감정 분류 배열의 타입을 가정합니다.
-  };
-  intent: {
-    // intent 관련 타입 정의 필요
-  };
-}
+// interface IResult {
+//   emotion: {
+//     ratio: {
+//       positive: number;
+//       neutral: number;
+//       negative: number;
+//     };
+//     list: number[]; // 각 프레임별 감정 분류 배열의 타입을 가정합니다.
+//   };
+//   intent: {
+//     // intent 관련 타입 정의 필요
+//   };
+// }
 
 interface IDetailedAnalysisProps {
   type: string;
   question: string;
-  result: IResult;
+  // result: IResult;
   date: Date;
 }
 
-const DetailedAnalysis = ({ type, question, result, date }: IDetailedAnalysisProps) => {
+const DetailedAnalysis = ({ type, question, date }: IDetailedAnalysisProps) => {
   const [activeTab, setActiveTab] = useState<analysisType>('movement');
   const [currentTime, setCurrentTime] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -94,7 +94,7 @@ const DetailedAnalysis = ({ type, question, result, date }: IDetailedAnalysisPro
           <div className="w-1/2">
             <ChartArea
               activeTab={activeTab}
-              result={result}
+              // result={result}
               currentTime={currentTime}
               handleChartTimeUpdate={handleChartTimeUpdate}
             />
