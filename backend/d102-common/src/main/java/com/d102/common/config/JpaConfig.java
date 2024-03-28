@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.repository.config.BootstrapMode;
 
 @Configuration
 @EnableJpaAuditing
 @EntityScan("com.d102")
-@EnableJpaRepositories("com.d102")
+@EnableJpaRepositories(basePackages = {"com.d102.*.repository.jpa"})
 public class JpaConfig {
 
     @PersistenceContext

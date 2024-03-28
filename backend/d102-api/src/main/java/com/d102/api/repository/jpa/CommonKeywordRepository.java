@@ -1,6 +1,6 @@
-package com.d102.api.repository;
+package com.d102.api.repository.jpa;
 
-import com.d102.api.domain.CommonKeyword;
+import com.d102.api.domain.jpa.CommonKeyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

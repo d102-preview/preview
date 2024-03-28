@@ -1,7 +1,7 @@
-package com.d102.api.domain;
+package com.d102.api.domain.jpa;
 
-import com.d102.common.domain.BaseTime;
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.BaseTime;
+import com.d102.common.domain.jpa.User;
 import jakarta.persistence.*;
 import lombok.*;
 
