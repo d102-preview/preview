@@ -1,8 +1,8 @@
 package com.d102.file.service.impl;
 
 import com.d102.common.constant.FileConstant;
-import com.d102.common.domain.Resume;
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.Resume;
+import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.exception.custom.NotFoundException;
@@ -85,7 +85,8 @@ public class UploadServiceImpl implements UploadService {
     }
 
     private void checkResumeLimit() {
-        if (resumeRepository.countByUser_Email(securityHelper.getLoginUsername()) >= FileConstant.RESUME_UPLOAD_LIMIT) {
+        int numOfResume = resumeRepository.countByUser_Email(securityHelper.getLoginUsername());
+        if (numOfResume >= FileConstant.RESUME_UPLOAD_LIMIT) {
             throw new InvalidException(ExceptionType.ResumeLimitException);
         }
     }

@@ -2,8 +2,8 @@ package com.d102.api.mapper;
 
 import com.d102.api.dto.ResumeDto;
 import com.d102.api.dto.UserDto;
-import com.d102.common.domain.Resume;
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.Resume;
+import com.d102.common.domain.jpa.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

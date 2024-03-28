@@ -1,5 +1,6 @@
 package com.d102.api.domain.redis;
 
+import com.d102.common.constant.RedisConstant;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -9,7 +10,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "emailHash", timeToLive = 180)
+@RedisHash(value = "emailHash", timeToLive = RedisConstant.EMAIL_LIFE)
 public class EmailHash  {
 
     @Id

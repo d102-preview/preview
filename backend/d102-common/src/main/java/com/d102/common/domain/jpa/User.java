@@ -1,4 +1,4 @@
-package com.d102.common.domain;
+package com.d102.common.domain.jpa;
 
 import com.d102.common.constant.RoleName;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

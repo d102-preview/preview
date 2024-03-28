@@ -1,7 +1,5 @@
-package com.d102.common.domain;
+package com.d102.common.domain.jpa;
 
-import com.d102.common.domain.BaseTime;
-import com.d102.common.domain.Resume;
 import jakarta.persistence.*;
 import lombok.*;
 
