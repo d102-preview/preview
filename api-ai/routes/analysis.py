@@ -1,3 +1,4 @@
+from common.deps import SessionDep
 from fastapi import APIRouter, status
 from loguru import logger
 from models.analysis import AnalysisRequest, AnalysisResponse
@@ -16,15 +17,15 @@ router = APIRouter(tags=["1. ai"])
     },
     response_model_exclude_unset=True,
 )
-def analyse_video(params: AnalysisRequest):
+def analyse_video(params: AnalysisRequest, session: SessionDep):
     """
     답변 영상 분석
     """
     logger.info("Analyse video")
 
-    create_task(params.analysis_id)
+    emotion_list = create_task(params.analysis_id, session)
 
-    return AnalysisResponse(result=Status.OK)
+    return AnalysisResponse(result=Status.OK, data={"emotion_list": emotion_list})
 
 
 @router.get("/", summary="서버 Health Check", status_code=status.HTTP_200_OK)
