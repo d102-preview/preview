@@ -1,4 +1,4 @@
-package com.d102.api.domain.redis;
+package com.d102.common.domain.redis;
 
 import com.d102.common.constant.RedisConstant;
 import lombok.*;
@@ -10,13 +10,12 @@ import org.springframework.data.redis.core.RedisHash;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "emailHash", timeToLive = RedisConstant.EMAIL_LIFE)
-public class EmailHash  {
+@RedisHash(value = "followUp", timeToLive = RedisConstant.FOLLOW_UP_QUESTION_LIFE)
+public class FollowUpQuestionHash {
 
     @Id
-    private String email;
+    private Long id;
 
-    private int count;
-    private int authorizationCode;
+    private String status;
 
 }

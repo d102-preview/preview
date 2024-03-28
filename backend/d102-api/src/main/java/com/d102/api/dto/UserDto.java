@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 public class UserDto {
 
     @Data
@@ -71,6 +73,16 @@ public class UserDto {
         private String profileImageName;
         private String profileImageUrl;
         private String name;
+    }
+
+    @Data
+    public static class ResumeResponse {
+
+        private String email;
+        private String profileImageName;
+        private String profileImageUrl;
+        private String name;
+        private List<ResumeDto.Response> resumeList;
     }
 
 }

@@ -1,10 +1,12 @@
-package com.d102.common.domain;
+package com.d102.common.domain.jpa;
 
 import com.d102.common.constant.RoleName;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,5 +42,9 @@ public class User extends BaseTime {
 
     @Column(name = "deleted_time")
     private LocalDateTime deletedTime;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Resume> resumeList;
 
 }

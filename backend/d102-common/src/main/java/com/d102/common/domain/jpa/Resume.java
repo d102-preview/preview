@@ -1,5 +1,6 @@
-package com.d102.common.domain;
+package com.d102.common.domain.jpa;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +19,7 @@ public class Resume extends BaseTime {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @Column(name = "file_name", length = 128, nullable = false)
@@ -28,9 +30,5 @@ public class Resume extends BaseTime {
 
     @Column(name = "file_path", length = 512, nullable = false)
     private String filePath;
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
 }

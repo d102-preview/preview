@@ -1,6 +1,6 @@
-package com.d102.common.repository;
+package com.d102.common.repository.jpa;
 
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

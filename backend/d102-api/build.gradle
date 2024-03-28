@@ -63,6 +63,12 @@ dependencies {
     testImplementation 'org.mapstruct:mapstruct:1.5.5.Final'
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
 
+    // gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // pdf
+    implementation 'org.apache.pdfbox:pdfbox:2.0.31'
+    implementation 'org.apache.pdfbox:fontbox:2.0.31'
 
     // boot test
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.3'

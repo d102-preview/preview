@@ -1,8 +1,8 @@
 package com.d102.api.mapper;
 
-import com.d102.api.domain.CommonKeyword;
-import com.d102.api.domain.CommonQuestion;
-import com.d102.api.domain.CommonScript;
+import com.d102.api.domain.jpa.CommonKeyword;
+import com.d102.api.domain.jpa.CommonQuestion;
+import com.d102.api.domain.jpa.CommonScript;
 import com.d102.api.dto.CommonKeywordDto;
 import com.d102.api.dto.CommonQuestionDto;
 import com.d102.api.dto.CommonScriptDto;
