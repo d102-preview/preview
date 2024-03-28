@@ -30,9 +30,6 @@ def extract_frames(path: str, msec: int = 1000) -> list:
     Returns:
         list: 프레임 목록
     """
-    if not os.path.isfile(path):
-        raise FileNotFoundError(path)
-
     video = cv2.VideoCapture(path)
 
     frame_list = []
