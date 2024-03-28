@@ -4,6 +4,7 @@ from datetime import datetime
 
 from ai.ai import detect_faces, extract_frames, get_model, predict
 from common.deps import SessionDep
+from common.perf import elapsed
 from core.settings import settings
 from fastapi import HTTPException, status
 from loguru import logger
@@ -13,6 +14,7 @@ from pytz import timezone
 from sqlmodel import select
 
 
+@elapsed
 def _facial_emotional_recognition(record: Analysis) -> list:
     video_path = os.path.join(settings.DATA_HOME, record.video_path)
 
@@ -49,6 +51,7 @@ def _facial_emotional_recognition(record: Analysis) -> list:
     return predict_list
 
 
+@elapsed
 def create_task(analysis_id: int, session: SessionDep) -> None:
     """
     파라미터로 받은 `analysis_id`를 사용해 해당하는 분석 요청을 분석 작업 큐에 등록한다.
