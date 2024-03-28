@@ -1,1 +1,1 @@
-cd ../frontend && npm install && npm run build
+cd ../frontend && npm i --force && npm run build
