@@ -23,7 +23,7 @@ public class UploadDto {
     @Data
     public static class ProfileResponse {
 
-        private String url;
+        private String path;
     }
 
     @Data
