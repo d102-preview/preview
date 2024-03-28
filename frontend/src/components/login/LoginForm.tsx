@@ -4,6 +4,7 @@ import Input from '@/components/@common/Input/Input';
 import Toast from '@/components/@common/Toast/Toast';
 import { useSignup } from '@/hooks/auth/useSignup';
 import userStore from '@/stores/userStore';
+import axios from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -66,7 +67,7 @@ const LoginForm = () => {
   };
 
   const checkValidation = (type: keyof ILoginInfo) => {
-    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    const emailRegex = /[a-z0-9]+@[a-z0-9]+\.[a-z]{2,3}/;
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
 
     switch (type) {
@@ -79,11 +80,11 @@ const LoginForm = () => {
         }
 
         if (!emailRegex.test(email)) {
-          setSubTextAndStatus(type, '입력 형식이 틀립니다. 다시 입력해주세요.', 'error');
+          setSubTextAndStatus(type, '올바른 이메일 형식이 아닙니다. 다시 입력해주세요.', 'error');
           return;
         }
 
-        setSubTextAndStatus(type, '사용 가능한 이메일입니다.', 'success');
+        setSubTextAndStatus(type, '', 'success');
         break;
       }
       case 'password': {
@@ -95,11 +96,11 @@ const LoginForm = () => {
         }
 
         if (!passwordRegex.test(password)) {
-          setSubTextAndStatus(type, '입력 형식이 틀립니다. 다시 입력해주세요.', 'error');
+          setSubTextAndStatus(type, '비밀번호는 6-15자리이며, 영문, 숫자, 특수문자를 포함해야합니다.', 'error');
           return;
         }
 
-        setSubTextAndStatus(type, '사용 가능한 비밀번호입니다.', 'success');
+        setSubTextAndStatus(type, '', 'success');
         break;
       }
       default: {
@@ -135,12 +136,24 @@ const LoginForm = () => {
         onSuccess: res => {
           Toast.success('로그인에 성공했습니다.');
           login(res.data.user.name, res.data.user.profileImageUrl);
-
-          setTimeout(() => {
-            navigate('/');
-          }, 1000);
+          navigate('/');
         },
-        onError: () => {
+        onError: err => {
+          if (axios.isAxiosError(err)) {
+            const res = err.response;
+
+            if (res && res.status === 400) {
+              if (res.data.code === 'INVALID') {
+                Toast.error('로그인에 실패했습니다. 다시 시도해주세요.');
+                return;
+              }
+            }
+
+            if (res && res.status === 401) {
+              Toast.error('잘못된 이메일 또는 비밀번호입니다. 다시 시도해주세요.');
+              return;
+            }
+          }
           Toast.error('로그인에 실패했습니다.');
         },
       },
