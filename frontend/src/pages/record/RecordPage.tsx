@@ -7,6 +7,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import BackgroundOpacity from '@/components/record/BackgroundOpacity';
 import RecordUploading from '@/components/record/RecordUploading';
 import { useSpeechRecognition } from 'react-speech-kit';
+// import { GrNotes } from 'react-icons/gr';
+// import CheatSheetModal from '@/components/record/CheatSheetModal';
 
 export type recordStatusType = 'pending' | 'preparing' | 'recording' | 'proceeding' | 'uploading';
 
@@ -89,7 +91,7 @@ const RecordPage = () => {
         break;
       case 'proceeding':
         handleStartRecording();
-        listen({ interimResults: false });
+        listen({ interimResults: false, lang: 'ko-KR' });
         break;
       case 'recording':
         break;
@@ -126,8 +128,10 @@ const RecordPage = () => {
 
   const handleStopRecording = () => {
     if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop();
       stop();
+      console.log(stt);
+
+      mediaRecorderRef.current.stop();
       setRecordedBlobs([]);
     }
   };
@@ -150,21 +154,17 @@ const RecordPage = () => {
     };
   }, [stream]);
 
-  const [value, setValue] = useState([]);
-  const { listen, listening, stop } = useSpeechRecognition({
-    onResult: result => {
+  const [stt, setStt] = useState<string>('');
+  const { listen, stop } = useSpeechRecognition({
+    onResult: (result: string) => {
       // 음성인식 결과가 value 상태값으로 할당됩니다.
-      // console.log('gkdl');
-      setValue(result);
+      setStt(prev => {
+        return prev + ' ' + result;
+      });
     },
   });
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
 
-  useEffect(() => {
-    console.log(listening);
-  }, [listening]);
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <div>
@@ -199,13 +199,19 @@ const RecordPage = () => {
                   handleStopRecording={handleStopRecording}
                 />
               )}
-
               <div className="absolute bottom-0 w-[40rem] ">
                 <div className=" text-white m-6 p-5 text-center bg-black/50 rounded-lg">
                   <p>질문당 30초의 시간이 주어집니다</p>
                   <p>준비됐으면 녹화시작 버튼을 눌러주세요</p>
                 </div>
               </div>
+              {/* <GrNotes
+                onClick={() => setIsOpen(!isOpen)}
+                size={20}
+                color="white"
+                className="absolute bottom-0 right-0 m-6 cursor-pointer"
+              />
+              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />} */}
             </>
           )}
 
@@ -224,6 +230,13 @@ const RecordPage = () => {
                 status={status}
                 handleStopRecording={handleStopRecording}
               />
+              {/* <GrNotes
+                onClick={() => setIsOpen(!isOpen)}
+                size={20}
+                color="white"
+                className="absolute bottom-0 right-0 m-6 cursor-pointer"
+              />
+              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />} */}
             </>
           )}
 
