@@ -48,4 +48,10 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
         return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.updateKeyword(resumeKeywordId, requestDto));
     }
 
+    @DeleteMapping("/keyword/{resumeKeywordId}")
+    public Response deleteKeyword(@PathVariable Long resumeKeywordId) {
+        resumeQuestionService.deleteKeyword(resumeKeywordId);
+        return new Response();
+    }
+
 }
