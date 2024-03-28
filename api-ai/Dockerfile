@@ -23,4 +23,6 @@ COPY --from=builder $POETRY_SITE_PACKAGES $POETRY_SITE_PACKAGES
 COPY --from=builder /usr/local/bin/poetry /usr/local/bin/poetry
 COPY --from=builder /app /app
 
-RUN poetry config virtualenvs.create false
+RUN poetry config virtualenvs.create false && \
+    apt-get update && \
+    apt-get install -y libgl1-mesa-glx libglib2.0-0
