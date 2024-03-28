@@ -1,14 +1,13 @@
 package com.d102.api.service.impl;
 
+import com.d102.api.dto.ResumeKeywordDto;
 import com.d102.api.dto.ResumeQuestionDto;
 import com.d102.api.dto.ResumeScriptDto;
 import com.d102.api.mapper.ResumeQuestionMapper;
+import com.d102.api.repository.jpa.ResumeKeywordRepository;
 import com.d102.api.repository.jpa.ResumeScriptRepository;
 import com.d102.api.service.ResumeQuestionService;
-import com.d102.common.domain.jpa.Resume;
-import com.d102.common.domain.jpa.ResumeQuestion;
-import com.d102.common.domain.jpa.ResumeScript;
-import com.d102.common.domain.jpa.User;
+import com.d102.common.domain.jpa.*;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.jpa.ResumeQuestionRepository;
@@ -30,6 +29,7 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
     private final ResumeRepository resumeRepository;
     private final ResumeQuestionRepository resumeQuestionRepository;
     private final ResumeScriptRepository resumeScriptRepository;
+    private final ResumeKeywordRepository resumeKeywordRepository;
     private final ResumeQuestionMapper resumeQuestionMapper;
     private final SecurityHelper securityHelper;
 
@@ -56,20 +56,32 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
     }
 
     @Transactional
-    public ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request request) {
+    public ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request requestDto) {
         ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
 
         if (resumeQuestion.getResumeScript() == null) {
             resumeQuestion.setResumeScript(resumeScriptRepository.saveAndFlush(ResumeScript.builder()
                     .user(getUser(securityHelper.getLoginUsername()))
                     .resumeQuestion(resumeQuestion)
-                    .script(request.getScript())
+                    .script(requestDto.getScript())
                     .build()));
         } else {
-            resumeQuestion.getResumeScript().setScript(request.getScript());
+            resumeQuestion.getResumeScript().setScript(requestDto.getScript());
         }
 
         return resumeQuestionMapper.toResumeQuestionDto(resumeQuestion);
+    }
+
+    @Transactional
+    public ResumeQuestionDto.Response createKeyword(Long resumeQuestionId, ResumeKeywordDto.Request requestDto) {
+        ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
+
+        resumeKeywordRepository.saveAndFlush(ResumeKeyword.builder()
+                .resumeQuestion(resumeQuestion)
+                .keyword(requestDto.getKeyword())
+                .build());
+
+        return get(resumeQuestionId);
     }
 
     private User getUser(String email) {

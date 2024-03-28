@@ -1,5 +1,6 @@
 package com.d102.api.service;
 
+import com.d102.api.dto.ResumeKeywordDto;
 import com.d102.api.dto.ResumeQuestionDto;
 import com.d102.api.dto.ResumeScriptDto;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ public interface ResumeQuestionService {
 
     void deleteResumeQuestion(Long resumeQuestionId);
 
-    ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request request);
+    ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request requestDto);
+
+    ResumeQuestionDto.Response createKeyword(Long resumeQuestionId, ResumeKeywordDto.Request requestDto);
 
 }

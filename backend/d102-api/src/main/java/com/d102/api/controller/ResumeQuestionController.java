@@ -1,6 +1,7 @@
 package com.d102.api.controller;
 
 import com.d102.api.controller.docs.ResumeQuestionControllerDocs;
+import com.d102.api.dto.ResumeKeywordDto;
 import com.d102.api.dto.ResumeScriptDto;
 import com.d102.api.service.ResumeQuestionService;
 import com.d102.common.constant.ResumeQuestionConstant;
@@ -33,8 +34,13 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
     }
 
     @PostMapping("/script/{resumeQuestionId}")
-    public Response writeScript(@PathVariable Long resumeQuestionId, @RequestBody ResumeScriptDto.Request request) {
-        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.writeScript(resumeQuestionId, request));
+    public Response writeScript(@PathVariable Long resumeQuestionId, @RequestBody ResumeScriptDto.Request requestDto) {
+        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.writeScript(resumeQuestionId, requestDto));
+    }
+
+    @PostMapping("/keyword/{resumeQuestionId}")
+    public Response createKeyword(@PathVariable Long resumeQuestionId, @RequestBody ResumeKeywordDto.Request requestDto) {
+        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.createKeyword(resumeQuestionId, requestDto));
     }
 
 }
