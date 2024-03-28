@@ -113,11 +113,17 @@ const MyInfo = ({ user }: { user: IUserInfo }) => {
         </div>
       </div>
       <div className="w-[30%]">
-        <div className="relative">
-          <img className="w-full mb-4 rounded-full border" src={user.profileImageUrl || profileImage} alt="프로필" />
+        <div className="w-[130px] h-[130px] relative flex">
+          <div className="w-full h-full">
+            <img
+              className="w-full h-full mb-4 rounded-full border object-cover"
+              src={user.profileImageUrl || profileImage}
+              alt="프로필"
+            />
+          </div>
           <button
             onClick={() => setShow('profile', true)}
-            className="w-8 h-8 absolute bottom-1 right-1 rounded-full bg-gray-200 flex justify-center items-center cursor-pointer"
+            className="w-8 h-8 absolute bottom-0 right-0 rounded-full bg-gray-200 flex justify-center items-center cursor-pointer"
           >
             <PiNotePencil color="white" size={20} />
           </button>
