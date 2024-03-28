@@ -3,7 +3,7 @@ import { Chart } from 'chart.js';
 import { ChartOptions } from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { IResult } from '@/types/result';
+// import { IResult } from '@/types/result';
 
 Chart.register(annotationPlugin);
 
@@ -11,10 +11,10 @@ interface LineChartProps {
   title: string;
   currentTime: number;
   onTimeChange: (time: number) => void;
-  result: IResult;
+  // result: IResult;
 }
 
-const LineChart = ({ title, currentTime, onTimeChange, result }: LineChartProps) => {
+const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
   const chartRef = useRef<Chart<'line', number[], unknown> | null>(null);
 
   const onCanvasClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -30,7 +30,7 @@ const LineChart = ({ title, currentTime, onTimeChange, result }: LineChartProps)
     labels: Array.from({ length: 80 }, (_, i) => i), // 80초 분량의 라벨
     datasets: [
       {
-        label: `프레임별 ${title}`,
+        // label: `프레임별 ${title}`,
         data: [
           0, 0.5, 1, 1.3, 1.5, 1.8, 2, 2.1, 2, 1.9, 2, 2.1, 2.2, 2.3, 2.1, 2.4, 2.3, 2.3, 2.2, 2.1, 2.1, 2, 2, 2.1, 2.3,
           2.5, 2.6, 2.7, 2.7, 2.8, 2.9, 3, 3.1, 3.1, 3, 3.3, 3.4, 3.5, 3.5, 3.7, 3.9, 4, 4, 3.9, 3.9, 3.8, 3.7, 3.5,
@@ -41,7 +41,7 @@ const LineChart = ({ title, currentTime, onTimeChange, result }: LineChartProps)
         borderColor: '#5A8AF2',
         tension: 0.5,
         backgroundColor: 'rgba(90, 138, 242, 0.06)',
-        pointRadius: 1,
+        pointRadius: 0,
         spanGaps: false, // false: 빈 데이터가 있을 때 자연스럽게 채워줌(공백으로 표시 안됨)
       },
     ],
@@ -65,8 +65,15 @@ const LineChart = ({ title, currentTime, onTimeChange, result }: LineChartProps)
     },
     onClick: onCanvasClick as any, // 타입 오류 임시 조치
     plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false },
+      datalabels: { 
+        display: false 
+      },
+      legend: { 
+        display: false 
+      },
+      tooltip: { 
+        enabled: false 
+      },
       annotation: {
         annotations: {
           Timebar: {
