@@ -10,11 +10,8 @@ const EtcButton = () => {
   // @TODO: 로그아웃 로직
   const handleLogout = () => {
     logout();
+    navigate('/');
     Toast.success('로그아웃되었습니다.');
-
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
   };
 
   // @TODO: 회원탈퇴 로직
