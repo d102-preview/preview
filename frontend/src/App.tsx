@@ -9,6 +9,7 @@ import QuestionPage from './pages/question/QuestionPage';
 import RecordPage from './pages/record/RecordPage';
 import ResultPage from './pages/result/ResultPage';
 import SignUpPage from './pages/signup/SignupPage';
+import ResultReportPage from './pages/result/ResultReportPage';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: '/result',
     element: <ResultPage />,
+  },
+  {
+    path: '/result/:id',
+    element: <ResultReportPage />,
   },
 ]);
 function App() {
