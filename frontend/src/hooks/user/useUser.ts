@@ -1,9 +1,13 @@
+import Toast from '@/components/@common/Toast/Toast';
 import { deleteUser, getUser, patchPassword, patchUser } from '@/services/user/api';
 import { IPasswordInfo } from '@/types/model';
 import { IPatchUserReq } from '@/types/user';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 export const useUser = () => {
+  const queryClient = useQueryClient();
+
   const useGetUser = () => {
     return useQuery({
       queryKey: ['my'],
@@ -20,6 +24,13 @@ export const useUser = () => {
   const usePatchUser = () => {
     return useMutation({
       mutationFn: ({ key, value }: IPatchUserReq) => patchUser({ key, value }),
+      onSuccess: () => {
+        Toast.success('수정되었습니다.');
+        queryClient.invalidateQueries({ queryKey: ['my'] });
+      },
+      onError: () => {
+        Toast.error('수정에 실패했습니다.');
+      },
     });
   };
 
@@ -31,6 +42,19 @@ export const useUser = () => {
           changedPassword,
           checkChangePassword,
         }),
+      onSuccess: () => {
+        Toast.success('수정되었습니다.');
+      },
+      onError: err => {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+          if (err.response?.status === 401) {
+            Toast.error('기존 비밀번호와 다릅니다.');
+            return;
+          }
+        }
+        Toast.error('수정에 실패했습니다.');
+      },
     });
   };
 

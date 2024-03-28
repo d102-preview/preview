@@ -7,10 +7,8 @@ const ProfileContainer = () => {
   const { useGetUser } = useUser();
   const { data, isLoading, isError } = useGetUser();
 
-  console.log(data);
-
   if (isLoading) return <div>로딩중</div>;
-  if (!data) return <div>로딩</div>;
+  if (!data) return <div>회원 정보가 없습니다</div>;
   if (isError) return <div>에러</div>;
 
   return (
