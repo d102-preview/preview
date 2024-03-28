@@ -8,12 +8,13 @@ import { IResult } from '@/types/result';
 Chart.register(annotationPlugin);
 
 interface LineChartProps {
+  title: string;
   currentTime: number;
   onTimeChange: (time: number) => void;
   result: IResult;
 }
 
-const LineChart = ({ currentTime, onTimeChange, result }: LineChartProps) => {
+const LineChart = ({ title, currentTime, onTimeChange, result }: LineChartProps) => {
   const chartRef = useRef<Chart<'line', number[], unknown> | null>(null);
 
   const onCanvasClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -29,7 +30,7 @@ const LineChart = ({ currentTime, onTimeChange, result }: LineChartProps) => {
     labels: Array.from({ length: 80 }, (_, i) => i), // 80초 분량의 라벨
     datasets: [
       {
-        label: '프레임별 움직임',
+        label: `프레임별 ${title}`,
         data: [
           0, 0.5, 1, 1.3, 1.5, 1.8, 2, 2.1, 2, 1.9, 2, 2.1, 2.2, 2.3, 2.1, 2.4, 2.3, 2.3, 2.2, 2.1, 2.1, 2, 2, 2.1, 2.3,
           2.5, 2.6, 2.7, 2.7, 2.8, 2.9, 3, 3.1, 3.1, 3, 3.3, 3.4, 3.5, 3.5, 3.7, 3.9, 4, 4, 3.9, 3.9, 3.8, 3.7, 3.5,
@@ -89,7 +90,7 @@ const LineChart = ({ currentTime, onTimeChange, result }: LineChartProps) => {
 
   return (
     <div className="p-3">
-      <h4 className="text-2xl text-[#696969] font-bold pb-7">프레임별 움직임</h4>
+      <h4 className="text-2xl text-[#696969] font-bold pb-7">프레임별 {title}</h4>
       <Line data={data} options={options} ref={chartRef} />
     </div>
   );
