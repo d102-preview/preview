@@ -31,7 +31,7 @@ def _facial_emotional_recognition(record: Analysis) -> list:
     # Detect face from the frames
     face_list = []
     for img in frame_list:
-        _, face_img = detect_faces(img, (48, 48))
+        _, face_img = detect_faces(img, (224, 224))
 
         if face_img is None:
             continue
@@ -39,7 +39,7 @@ def _facial_emotional_recognition(record: Analysis) -> list:
         face_list.append(face_img)
     logger.debug(f"{len(face_list)} faces are detected from {len(frame_list)} frames")
 
-    model = get_model("ResNet9")
+    model = get_model("ResNet18")
 
     predict_list = []
     for img in face_list:
