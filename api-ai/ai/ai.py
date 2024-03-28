@@ -8,6 +8,7 @@ import torch
 import torchvision.transforms as T
 from ai.resnet9 import ImageClassificationBase, ResNet9
 from loguru import logger
+from torchvision.models import resnet18
 
 EMOTIONS = {
     0: "Angry",
@@ -67,11 +68,8 @@ def detect_faces(
     if img is None:
         raise ValueError("img is required")
 
-    # Haar cascade 모델이 흑백 이미지를 사용
-    img_grey = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-
     faces = classifier.detectMultiScale(
-        img_grey, scaleFactor=1.1, minNeighbors=5, minSize=(224, 224)
+        img, scaleFactor=1.1, minNeighbors=5, minSize=dsize
     )
 
     face_img = None
@@ -104,7 +102,7 @@ def to_device(data, device: torch.device = get_default_device()):
     return data.to(device, non_blocking=True)
 
 
-def get_model(name: str):
+def get_model(name: str, device: torch.device = get_default_device()):
     if name not in MODELS:
         raise Exception("No such model")
 
@@ -118,15 +116,15 @@ def get_model(name: str):
     model = None
     if name == "ResNet9":
         model = ResNet9(1, 7)
-        model.load_state_dict(torch.load(model_path, map_location=get_default_device()))
-    # TODO: implement prediction using resnet18 model
-    # elif name == "ResNet18":
-    #     model = resnet18()
-    #     model.load_state_dict(torch.load(model_path, map_location=get_default_device()))
+    elif name == "ResNet18":
+        # Original ResNet18 uses 1,000 classes,
+        # but we trained it with 3 classes: positive, neutral, negative.
+        model = resnet18(num_classes=3)
 
     if model is None:
         raise Exception("Cannot load the model")
 
+    model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
 
     return model
@@ -136,11 +134,9 @@ def predict(
     img: np.ndarray,
     model: ImageClassificationBase,
     device: torch.device = get_default_device(),
-    dsize: Tuple[int] = (48, 48),
+    dsize: Tuple[int] = (224, 224),
 ):
-    transform = T.Compose(
-        [T.Grayscale(num_output_channels=1), T.Resize(dsize), T.ToTensor()]
-    )
+    transform = T.Compose([T.Resize(dsize), T.ToTensor()])
     img = transform(img)
 
     x = to_device(img.unsqueeze(0), device)
