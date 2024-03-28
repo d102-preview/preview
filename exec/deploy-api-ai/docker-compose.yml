@@ -1,19 +1,21 @@
 version: "3.8"
 
+name: d102-api-ai
+
 services:
   fastapi:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${REGISTRY}/${IMG_NAME}:${TAG}
     container_name: fastapi
     restart: unless-stopped
     networks:
       - d102-network
     expose:
       - 8000
+    volumes:
+      - ${HOME}/d102/files:/app/files
     env_file:
       - .env
-    command: "/app/wait-for-it.sh $DB_HOST:$DB_PORT -t 10 -- poetry run uvicorn main:app --reload --host=0.0.0.0"
+    command: "poetry run python3 main.py"
 
 networks:
   d102-network:
