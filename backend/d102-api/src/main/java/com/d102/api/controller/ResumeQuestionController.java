@@ -23,4 +23,9 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
         return new Response(ResumeQuestionConstant.RESUME_QUESTION_LIST, resumeQuestionService.getList(resumeId, pageable));
     }
 
+    @GetMapping("/{resumeQuestionId}")
+    public Response get(@PathVariable Long resumeQuestionId) {
+        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.get(resumeQuestionId));
+    }
+
 }

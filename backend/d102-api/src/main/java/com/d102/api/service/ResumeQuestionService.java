@@ -7,5 +7,6 @@ import org.springframework.data.domain.Pageable;
 public interface ResumeQuestionService {
 
     Page<ResumeQuestionDto.ListResponse> getList(Long resumeId, Pageable pageable);
+    ResumeQuestionDto.Response get(Long resumeQuestionId);
 
 }
