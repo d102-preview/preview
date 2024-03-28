@@ -50,7 +50,7 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     }
 
     @Transactional
-    public void writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto) {
+    public CommonQuestionDto.Response writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto) {
         User user = getUser(securityHelper.getLoginUsername());
         CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
         CommonScript commonScript = commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(securityHelper.getLoginUsername(),
@@ -65,10 +65,12 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
         } else {
             commonScript.setScript(requestDto.getScript());
         }
+
+        return get(commonQuestionId);
     }
 
     @Transactional
-    public void createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto) {
+    public CommonQuestionDto.Response createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto) {
         User user = getUser(securityHelper.getLoginUsername());
         CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
 
@@ -77,14 +79,18 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
                 .commonQuestion(commonQuestion)
                 .keyword(requestDto.getKeyword())
                 .build());
+
+        return get(commonQuestionId);
     }
 
     @Transactional
-    public void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto) {
+    public CommonQuestionDto.Response updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto) {
         CommonKeyword commonKeyword = getCommonKeyword(commonKeywordId);
         UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
 
         commonKeyword.setKeyword(requestDto.getKeyword());
+
+        return get(commonKeyword.getCommonQuestion().getId());
     }
 
     @Transactional

@@ -12,11 +12,11 @@ public interface CommonQuestionService {
 
     CommonQuestionDto.Response get(Long commonQuestionId);
 
-    void writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto);
+    CommonQuestionDto.Response writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto);
 
-    void createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto);
+    CommonQuestionDto.Response createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto);
 
-    void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto);
+    CommonQuestionDto.Response updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto);
 
     void deleteKeyword(Long commonKeywordId);
 
