@@ -1,11 +1,12 @@
 import { authHandlers } from './api/handlers/authHandlers';
 import { interviewHandlers } from './api/handlers/interviewHandlers';
 import {
-  commonQuestionsHandlers,
-  resumeQuestionsHandlers,
   commonQuestionDetailHandlers,
+  commonQuestionsHandlers,
   resumeQuestionDetailHandlers,
+  resumeQuestionsHandlers,
 } from './api/handlers/questionHandlers';
+import { userHandlers } from './api/handlers/userHandlers';
 
 export const handlers = [
   ...interviewHandlers,
@@ -14,4 +15,5 @@ export const handlers = [
   ...resumeQuestionsHandlers,
   ...commonQuestionDetailHandlers,
   ...resumeQuestionDetailHandlers,
+  ...userHandlers,
 ];
