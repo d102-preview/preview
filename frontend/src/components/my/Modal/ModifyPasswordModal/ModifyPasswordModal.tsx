@@ -30,7 +30,7 @@ const ModifyPasswordModal = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <Modal width="w-[420px]" onClose={onClose}>
-      <div className="p-4">
+      <form className="p-4">
         <div className="text-xl pb-2">비밀번호 변경</div>
         <div className="text-sm text-gray-700">변경할 비밀번호를 입력하고 [변경하기] 버튼을 눌러주세요</div>
         <br />
@@ -75,7 +75,7 @@ const ModifyPasswordModal = ({ onClose }: { onClose: () => void }) => {
             onClick={handleModify}
           />
         </div>
-      </div>
+      </form>
     </Modal>
   );
 };
