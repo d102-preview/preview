@@ -77,7 +77,6 @@ export interface ISubText {
 }
 
 export interface ResultItemData {
-
   result: 'ok' | 'fail';
   id: number;
   imagePath: string;
@@ -90,8 +89,22 @@ export interface ResultItemData {
 // 회원 정보
 export interface IUserInfo {
   email: string;
-  profileImageName: string;
+  profileImageName?: string;
   profileImageUrl: string;
   name: string;
+  resumeList?: IResume[];
 }
 
+// 이력서 정보
+export interface IResume {
+  id: number;
+  displayName: string;
+  filePath: string;
+}
+
+// 비밀번호 정보
+export interface IPasswordInfo {
+  currentPassword: string;
+  changedPassword: string;
+  checkChangePassword: string;
+}
