@@ -19,4 +19,8 @@ public class FileConstant {
     /* 30MB */
     public static final int RESUME_SIZE_LIMIT = 31457280;
 
+    /* Video */
+    public static final String VIDEO = "video";
+    public static final Path VIDEO_SAVE_DIR = Paths.get(System.getProperty("user.dir"), "app", "files", "video").toAbsolutePath().normalize();
+
 }

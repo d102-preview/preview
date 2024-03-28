@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
+import java.time.LocalDateTime;
 
 public class UploadDto {
 
@@ -43,6 +44,20 @@ public class UploadDto {
         private int id;
         private String fileName;
         private String displayName;
+    }
+
+    @Data
+    public static class VideoRequest {
+
+        @NotBlank
+        private String type;
+
+        private String question;
+        private String answer;
+        private String script;
+        private Boolean skip;
+        private MultipartFile video;
+        private LocalDateTime setStartTime;
     }
 
 }
