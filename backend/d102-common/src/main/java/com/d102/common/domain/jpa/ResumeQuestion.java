@@ -25,10 +25,10 @@ public class ResumeQuestion extends BaseTime {
     @Column(name = "question", length = 512, nullable = false)
     private String question;
 
-    @OneToOne(mappedBy = "resumeQuestion", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "resumeQuestion", fetch = FetchType.LAZY, orphanRemoval = true)
     private ResumeScript resumeScript;
 
-    @OneToMany(mappedBy = "resumeQuestion")
+    @OneToMany(mappedBy = "resumeQuestion", orphanRemoval = true)
     private List<ResumeKeyword> resumeKeywordList;
 
 }
