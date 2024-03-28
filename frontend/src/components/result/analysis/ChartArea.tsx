@@ -2,6 +2,7 @@ import { analysisType, IResult } from '@/types/result';
 import Explanation from '../Explanation';
 import LineChart from './LineChart';
 import HasKeywords from './HasKeywords';
+import PieChart from './PieChart';
 
 interface IChartAreaProps {
   activeTab: analysisType;
@@ -15,7 +16,7 @@ const ChartArea = ({ activeTab, result, currentTime, handleChartTimeUpdate }: IC
     <div className="p-10 shadow-lg rounded-xl">
       {activeTab === 'movement' ? (
         <>
-          <LineChart currentTime={currentTime} onTimeChange={handleChartTimeUpdate} result={result} />
+          <LineChart title={'움직임'} currentTime={currentTime} onTimeChange={handleChartTimeUpdate} result={result} />
           <Explanation
             message={
               '김싸피님의 움직임은 산만한 편입니다. 잘하고 계시지만 동작 처리에도 조금 더 신경 써보세요! 정확하고 자신있는 움직임은 면접에서 긍정적인 인상을 남기는 데 도움이 됩니다.'
@@ -31,7 +32,12 @@ const ChartArea = ({ activeTab, result, currentTime, handleChartTimeUpdate }: IC
       )}
       {activeTab === 'emotion' ? (
         <>
-          <LineChart currentTime={currentTime} onTimeChange={handleChartTimeUpdate} result={result} />
+          <LineChart
+            title={'감정 변화'}
+            currentTime={currentTime}
+            onTimeChange={handleChartTimeUpdate}
+            result={result}
+          />
           <Explanation
             message={
               '김싸피님의 움직임은 산만한 편입니다. 잘하고 계시지만 동작 처리에도 조금 더 신경 써보세요! 정확하고 자신있는 움직임은 면접에서 긍정적인 인상을 남기는 데 도움이 됩니다.'
@@ -47,7 +53,7 @@ const ChartArea = ({ activeTab, result, currentTime, handleChartTimeUpdate }: IC
       )}
       {activeTab === 'intent' ? (
         <>
-          <LineChart currentTime={currentTime} onTimeChange={handleChartTimeUpdate} result={result} />
+          {/* <PieChart title={'답변 의도'} /> */}
           <Explanation
             message={
               '김싸피님의 움직임은 산만한 편입니다. 잘하고 계시지만 동작 처리에도 조금 더 신경 써보세요! 정확하고 자신있는 움직임은 면접에서 긍정적인 인상을 남기는 데 도움이 됩니다.'

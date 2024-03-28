@@ -31,7 +31,7 @@ const InterviewVideo = () => {
 
         <div className="w-1/2">
           <div className="p-10 shadow-lg rounded-xl">
-            <LineChart currentTime={currentTime} onTimeChange={handleChartTimeUpdate} />
+            <LineChart currentTime={currentTime} onTimeChange={handleChartTimeUpdate} result={result} />
           </div>
         </div>
       </div>
