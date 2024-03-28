@@ -1,5 +1,5 @@
 import Header from '@/components/@common/Header/Header';
-import ProfileContainer from '@/components/my/ProfileContainer/ProfileContainer';
+import ProfileContainer from '@/components/user/ProfileContainer/ProfileContainer';
 
 const MyPage = () => {
   return (

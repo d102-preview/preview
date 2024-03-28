@@ -50,7 +50,7 @@ export const postLogin = async ({ email, password }: IPostLoginReq): Promise<API
   });
 
   if (res.status === 200 && res.headers.authorization) {
-    localStorage.setItem('PREVIEW_REFRESH_TOKEN', res.headers.authorization);
+    localStorage.setItem('PREVIEW_ACCESS_TOKEN', res.headers.authorization);
   }
 
   return res.data;

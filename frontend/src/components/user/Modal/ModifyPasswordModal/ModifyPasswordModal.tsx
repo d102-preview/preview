@@ -1,15 +1,14 @@
 import Button from '@/components/@common/Button/Button';
 import Input from '@/components/@common/Input/Input';
 import Modal from '@/components/@common/Modal/Modal';
+import Toast from '@/components/@common/Toast/Toast';
+import { useUser } from '@/hooks/user/useUser';
+import { IPasswordInfo } from '@/types/model';
 import { useState } from 'react';
 
-interface IPasswordInfo {
-  currentPassword: string;
-  changedPassword: string;
-  checkChangePassword: string;
-}
-
 const ModifyPasswordModal = ({ onClose }: { onClose: () => void }) => {
+  const { usePatchPassword } = useUser();
+  const { mutate: patchPassword } = usePatchPassword();
   const [passwordInfo, setPasswordInfo] = useState<IPasswordInfo>({
     currentPassword: '',
     changedPassword: '',
@@ -26,7 +25,40 @@ const ModifyPasswordModal = ({ onClose }: { onClose: () => void }) => {
   };
 
   // @TODO: 비밀번호 변경하기
-  const handleModify = () => {};
+  const handleModify = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    console.log(passwordInfo);
+
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
+
+    if (!passwordInfo.changedPassword.trim().length) {
+      Toast.error('비밀번호를 입력하지 않았습니다.');
+      return;
+    }
+
+    if (!passwordRegex.test(passwordInfo.changedPassword)) {
+      Toast.error('비밀번호는 6-15자리이며, 영문, 숫자, 특수문자를 포함해야합니다.');
+      return;
+    }
+
+    if (passwordInfo.changedPassword !== passwordInfo.checkChangePassword) {
+      Toast.error('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
+      return;
+    }
+
+    patchPassword(
+      {
+        currentPassword: passwordInfo.currentPassword,
+        changedPassword: passwordInfo.changedPassword,
+        checkChangePassword: passwordInfo.checkChangePassword,
+      },
+      {
+        onSuccess: () => {},
+        onError: () => {},
+      },
+    );
+  };
 
   return (
     <Modal width="w-[420px]" onClose={onClose}>
