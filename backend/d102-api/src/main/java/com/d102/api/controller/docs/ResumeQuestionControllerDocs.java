@@ -35,6 +35,15 @@ public interface ResumeQuestionControllerDocs {
                     }))
     })
     Response get(Long resumeQuestionId);
+
+    @Operation(summary = "이력서 기반 질문 삭제", description = "이력서 기반 질문을 삭제하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 ok를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                    }))
+    })
+    Response deleteResumeQuestion(Long resumeQuestionId);
     
     
     class QuestionListResponse { public List<ResumeQuestionDto.ListResponse> questionList; }

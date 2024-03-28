@@ -6,10 +6,7 @@ import com.d102.common.constant.ResumeQuestionConstant;
 import com.d102.common.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/resume/question")
 @RequiredArgsConstructor
@@ -26,6 +23,12 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
     @GetMapping("/{resumeQuestionId}")
     public Response get(@PathVariable Long resumeQuestionId) {
         return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.get(resumeQuestionId));
+    }
+
+    @DeleteMapping("/{resumeQuestionId}")
+    public Response deleteResumeQuestion(@PathVariable Long resumeQuestionId) {
+        resumeQuestionService.deleteResumeQuestion(resumeQuestionId);
+        return new Response();
     }
 
 }

@@ -1,6 +1,5 @@
 package com.d102.api.service.impl;
 
-import com.d102.api.dto.CommonQuestionDto;
 import com.d102.api.dto.ResumeQuestionDto;
 import com.d102.api.mapper.ResumeQuestionMapper;
 import com.d102.api.service.ResumeQuestionService;
@@ -36,30 +35,29 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
         return resumeQuestionRepository.findByResume_Id(resumeId, pageable).map(resumeQuestionMapper::toResumeQuestionListResponseDto);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public ResumeQuestionDto.Response get(Long resumeQuestionId) {
-        ResumeQuestion resumeQuestion = getResumeQuestion(resumeQuestionId);
-        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), resumeQuestion.getResume().getUser().getEmail());
+        ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
 
         return resumeQuestionMapper.toResumeQuestionDto(resumeQuestion);
     }
 
-    //    @Transactional(readOnly = true)
-//    public CommonQuestionDto.Response get(Long commonQuestionId) {
-//        return CommonQuestionDto.Response.builder()
-//                .script(commonQuestionMapper.toCommonScriptDto(commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(
-//                        securityHelper.getLoginUsername(), commonQuestionId).orElse(null)))
-//                .keywordList(commonQuestionMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
-//                        securityHelper.getLoginUsername(), commonQuestionId)))
-//                .build();
-//    }
+    @Transactional
+    public void deleteResumeQuestion(Long resumeQuestionId) {
+        ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
 
-    public ResumeQuestion getResumeQuestion(Long resumeQuestionId) {
-        return resumeQuestionRepository.findById(resumeQuestionId)
-                .orElseThrow(() -> new NotFoundException(ExceptionType.ResumeQuestionNotFoundException));
+        resumeQuestionRepository.deleteById(resumeQuestion.getId());
     }
 
-    public Resume getResume(Long resumeId) {
+    private ResumeQuestion getResumeQuestionAndCheckUser(Long resumeQuestionId) {
+        ResumeQuestion resumeQuestion = resumeQuestionRepository.findById(resumeQuestionId)
+                .orElseThrow(() -> new NotFoundException(ExceptionType.ResumeQuestionNotFoundException));
+        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), resumeQuestion.getResume().getUser().getEmail());
+
+        return resumeQuestion;
+    }
+
+    private Resume getResume(Long resumeId) {
         return resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.ResumeNotFoundException));
     }
