@@ -2,17 +2,18 @@ import errno
 import os
 from datetime import datetime
 
-from ai.ai import extract_frames
+from ai.ai import detect_faces, extract_frames, get_model, predict
 from common.deps import SessionDep
 from core.settings import settings
 from fastapi import HTTPException, status
 from loguru import logger
 from models.analysis import Analysis
+from PIL import Image
 from pytz import timezone
 from sqlmodel import select
 
 
-def _facial_emotional_recognition(record: Analysis):
+def _facial_emotional_recognition(record: Analysis) -> list:
     video_path = os.path.join(settings.DATA_HOME, record.video_path)
 
     # check file exists
@@ -26,6 +27,26 @@ def _facial_emotional_recognition(record: Analysis):
     # Extract frames
     frame_list = extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(f"{len(frame_list)} frames are extracted from the input video")
+
+    # Detect face from the frames
+    face_list = []
+    for img in frame_list:
+        _, face_img = detect_faces(img, (48, 48))
+
+        if face_img is None:
+            continue
+
+        face_list.append(face_img)
+    logger.debug(f"{len(face_list)} faces are detected from {len(frame_list)} frames")
+
+    model = get_model("ResNet9")
+
+    predict_list = []
+    for img in face_list:
+        predict_list.append(predict(Image.fromarray(img), model))
+    logger.info(f"Predict {len(predict_list)} faces")
+
+    return predict_list
 
 
 def create_task(analysis_id: int, session: SessionDep) -> None:
@@ -56,6 +77,6 @@ def create_task(analysis_id: int, session: SessionDep) -> None:
     session.commit()
 
     # Step 1: Facial Emotional Recognition
-    _facial_emotional_recognition(record)
+    emotion_list = _facial_emotional_recognition(record)
 
-    return
+    return emotion_list

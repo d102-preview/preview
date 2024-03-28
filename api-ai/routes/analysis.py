@@ -23,9 +23,9 @@ def analyse_video(params: AnalysisRequest, session: SessionDep):
     """
     logger.info("Analyse video")
 
-    create_task(params.analysis_id, session)
+    emotion_list = create_task(params.analysis_id, session)
 
-    return AnalysisResponse(result=Status.OK)
+    return AnalysisResponse(result=Status.OK, data={"emotion_list": emotion_list})
 
 
 @router.get("/", summary="서버 Health Check", status_code=status.HTTP_200_OK)
