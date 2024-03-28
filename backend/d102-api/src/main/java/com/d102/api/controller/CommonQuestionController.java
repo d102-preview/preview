@@ -22,25 +22,25 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
         return new Response(CommonQuestionConstant.COMMON_QUESTION_LIST, commonQuestionService.getList(pageable));
     }
 
-    @GetMapping
-    public Response get(@RequestParam Long commonQuestionId) {
+    @GetMapping("/{commonQuestionId}")
+    public Response get(@PathVariable Long commonQuestionId) {
         return new Response(CommonQuestionConstant.QUESTION_DETAIL, commonQuestionService.get(commonQuestionId));
     }
 
-    @PostMapping("/script")
-    public Response writeScript(@RequestParam Long commonQuestionId, @RequestBody CommonScriptDto.Request requestDto) {
+    @PostMapping("/script/{commonQuestionId}")
+    public Response writeScript(@PathVariable Long commonQuestionId, @RequestBody CommonScriptDto.Request requestDto) {
         commonQuestionService.writeScript(commonQuestionId, requestDto);
         return new Response();
     }
 
-    @PostMapping("/keyword")
-    public Response createKeyword(@RequestParam Long commonQuestionId, @RequestBody CommonKeywordDto.Request requestDto) {
+    @PostMapping("/keyword/{commonQuestionId}")
+    public Response createKeyword(@PathVariable Long commonQuestionId, @RequestBody CommonKeywordDto.Request requestDto) {
         commonQuestionService.createKeyword(commonQuestionId, requestDto);
         return new Response();
     }
 
-    @PatchMapping("/keyword")
-    public Response updateKeyword(@RequestParam Long commonKeywordId, @RequestBody CommonKeywordDto.Request requestDto) {
+    @PatchMapping("/keyword/{commonKeywordId}")
+    public Response updateKeyword(@PathVariable Long commonKeywordId, @RequestBody CommonKeywordDto.Request requestDto) {
         commonQuestionService.updateKeyword(commonKeywordId, requestDto);
         return new Response();
     }

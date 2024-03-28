@@ -14,7 +14,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 
-@Tag(name = "4. 공통 질문 관련 API", description = "공통 질문 관련 정보를 CRUD 하는 API")
+import java.util.List;
+
+@Tag(name = "5. 공통 질문 관련 API", description = "공통 질문 관련 정보를 CRUD 하는 API")
 public interface CommonQuestionControllerDocs {
 
     @Operation(summary = "공통 질문 목록 조회", description = "공통 질문 목록을 조회하는 API를 호출한다.")
@@ -74,7 +76,7 @@ public interface CommonQuestionControllerDocs {
     Response deleteKeyword(Long commonKeywordId);
 
 
-    class QuestionListResponse { public CommonQuestionDto.ListResponse questionList; }
+    class QuestionListResponse { public List<CommonQuestionDto.ListResponse> questionList; }
     class QuestionDetailResponse { public CommonQuestionDto.Response questionDetail; }
 
 }
