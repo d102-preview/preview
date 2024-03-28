@@ -1,14 +1,19 @@
 package com.d102.api.service.impl;
 
 import com.d102.api.dto.ResumeQuestionDto;
+import com.d102.api.dto.ResumeScriptDto;
 import com.d102.api.mapper.ResumeQuestionMapper;
+import com.d102.api.repository.jpa.ResumeScriptRepository;
 import com.d102.api.service.ResumeQuestionService;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
+import com.d102.common.domain.jpa.ResumeScript;
+import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.jpa.ResumeQuestionRepository;
 import com.d102.common.repository.jpa.ResumeRepository;
+import com.d102.common.repository.jpa.UserRepository;
 import com.d102.common.util.SecurityHelper;
 import com.d102.common.util.UserVerifier;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ResumeQuestionServiceImpl implements ResumeQuestionService {
 
+    private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
     private final ResumeQuestionRepository resumeQuestionRepository;
+    private final ResumeScriptRepository resumeScriptRepository;
     private final ResumeQuestionMapper resumeQuestionMapper;
     private final SecurityHelper securityHelper;
-
 
     @Transactional(readOnly = true)
     public Page<ResumeQuestionDto.ListResponse> getList(Long resumeId, Pageable pageable) {
@@ -47,6 +53,28 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
         ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
 
         resumeQuestionRepository.deleteById(resumeQuestion.getId());
+    }
+
+    @Transactional
+    public ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request request) {
+        ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
+
+        if (resumeQuestion.getResumeScript() == null) {
+            resumeQuestion.setResumeScript(resumeScriptRepository.saveAndFlush(ResumeScript.builder()
+                    .user(getUser(securityHelper.getLoginUsername()))
+                    .resumeQuestion(resumeQuestion)
+                    .script(request.getScript())
+                    .build()));
+        } else {
+            resumeQuestion.getResumeScript().setScript(request.getScript());
+        }
+
+        return resumeQuestionMapper.toResumeQuestionDto(resumeQuestion);
+    }
+
+    private User getUser(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
     }
 
     private ResumeQuestion getResumeQuestionAndCheckUser(Long resumeQuestionId) {

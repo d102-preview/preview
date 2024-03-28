@@ -25,7 +25,7 @@ public class ResumeQuestion extends BaseTime {
     @Column(name = "question", length = 512, nullable = false)
     private String question;
 
-    @OneToOne(mappedBy = "resumeQuestion", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy = "resumeQuestion", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private ResumeScript resumeScript;
 
     @OneToMany(mappedBy = "resumeQuestion", orphanRemoval = true)

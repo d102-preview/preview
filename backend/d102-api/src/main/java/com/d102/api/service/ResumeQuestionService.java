@@ -1,6 +1,7 @@
 package com.d102.api.service;
 
 import com.d102.api.dto.ResumeQuestionDto;
+import com.d102.api.dto.ResumeScriptDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,5 +12,7 @@ public interface ResumeQuestionService {
     ResumeQuestionDto.Response get(Long resumeQuestionId);
 
     void deleteResumeQuestion(Long resumeQuestionId);
+
+    ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request request);
 
 }
