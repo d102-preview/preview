@@ -13,6 +13,9 @@ class Settings(BaseSettings):
 
     TZ: str = "Asia/Seoul"
 
+    # Analysis variables
+    FPS: int = Field(1, ge=1)
+
     # Database variables
     DATABASE_DSN: MariaDBDsn
 
