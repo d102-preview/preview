@@ -1,6 +1,6 @@
 import { IQuestionListRes, IQuestionRes } from '@/types/question';
 import { APIResponse } from '@/types/model';
-import { axiosCommonInstance } from '@/apis/axiosInstance';
+import { axiosAuthInstance, axiosCommonInstance } from '@/apis/axiosInstance';
 import { questionType } from '@/types/question';
 
 export const getQuestionList = async (type: questionType): Promise<APIResponse<IQuestionListRes>> => {
@@ -11,9 +11,9 @@ export const getQuestionList = async (type: questionType): Promise<APIResponse<I
   return data;
 };
 
-// @TODO: 헤더에 토큰 보내기
+// @TODO: 헤더에 토큰 보내기 : axiosAuthInstance
 export const getQuestion = async (type: questionType, questionId: number): Promise<APIResponse<IQuestionRes>> => {
-  const { data } = await axiosCommonInstance.get(`/api/${type}/question?${type}QuestionId=${questionId}`);
+  const { data } = await axiosAuthInstance.get(`/api/${type}/question?${type}QuestionId=${questionId}`);
   console.log('1) 질문 상세', data);
   return data;
 };
