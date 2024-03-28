@@ -12,4 +12,11 @@ public class ResumeDto {
         private String filePath;
     }
 
+    @Data
+    public static class ListResponse {
+
+        private Long id;
+        private String displayName;
+    }
+
 }
