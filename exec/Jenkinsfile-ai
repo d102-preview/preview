@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  
+
   environment {
     CI = false
 
@@ -12,33 +12,39 @@ pipeline {
     SUCCESS_ICON = 'https://www.jenkins.io/images/logos/seonbi/256.png'
     FAIL_ICON = 'https://www.jenkins.io/images/logos/fire/256.png'
   }
- 
+
   stages {
+    stage('Build and Push Images') {
+      steps {
+        sh 'cd exec/ && chmod +x docker-build-push-ai.sh && ./docker-build-push-ai.sh'
+      }
+    }
+
     stage('Copy .env to Deploy Directory') {
       steps {
         script {
           withCredentials([file(credentialsId: 'ai_env_docker_compose', variable: 'DC_ENV')]) {
-            sh 'cd api-ai/ && chmod +x copy-docker-compose-env.sh && ./copy-docker-compose-env.sh'
+            sh 'cd exec/ && chmod +x copy-docker-compose-env-ai.sh && ./copy-docker-compose-env-ai.sh'
           }
         }
       }
     }
 
-    stage('Deploy Backend AI') {
+    stage('Deploy API-AI') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
         sshPublisher(
           continueOnError: false,
           failOnError: true,
           publishers: [
             sshPublisherDesc(
-              configName: 'application', 
+              configName: 'application',
               verbose: true,
               transfers: [
                 sshTransfer(
-                    sourceFiles: 'api-ai/**',
-                    removePrefix: 'api-ai/',
-                    remoteDirectory: '/jenkins/deploy/backend-ai',
-                    execCommand: 'cd /home/jenkins/deploy/backend-ai && chmod 755 *.sh; \
+                    sourceFiles: 'exec/deploy-api-ai/*',
+                    removePrefix: 'exec/deploy-api-ai/',
+                    remoteDirectory: '/jenkins/deploy/api-ai',
+                    execCommand: 'cd /home/jenkins/deploy/api-ai && chmod 755 *.sh; \
                                   ./stop-ai.sh; \
                                   ./start-ai.sh'
                 ),
@@ -51,6 +57,26 @@ pipeline {
             )
           ]
         )
+      }
+    }
+
+    stage('Health Check API-AI') {
+      steps {
+        sh 'sleep 20'
+        script {
+          withCredentials([string(credentialsId: 'api_ai_url', variable: 'API_AI_URL')]) {
+            def HEALTH = sh(
+              returnStdout: true,
+              script: "curl -s -o /dev/null -w '%{http_code}' ${API_AI_URL}"
+            ).trim()
+
+            if (HEALTH == "200") {
+              echo "api-ai success"
+            } else {
+              error "api-ai fail"
+            }
+          }
+        }
       }
     }
   }
