@@ -1,6 +1,5 @@
 package com.d102.api.controller.docs;
 
-import com.d102.api.dto.CommonKeywordDto;
 import com.d102.api.dto.ResumeKeywordDto;
 import com.d102.api.dto.ResumeQuestionDto;
 import com.d102.api.dto.ResumeScriptDto;
@@ -68,6 +67,16 @@ public interface ResumeQuestionControllerDocs {
                     }))
     })
     Response createKeyword(Long resumeQuestionId, @Valid ResumeKeywordDto.Request requestDto);
+
+    @Operation(summary = "이력서 기반 질문 키워드 수정", description = "이력서 기반 질문에 관한 키워드를 수정하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 이력서 기반 질문과 질문 스크립트, 키워드를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                    }))
+    })
+    Response updateKeyword(Long resumeKeywordId, @Valid ResumeKeywordDto.Request requestDto);
     
     
     class QuestionListResponse { public List<ResumeQuestionDto.ListResponse> questionList; }

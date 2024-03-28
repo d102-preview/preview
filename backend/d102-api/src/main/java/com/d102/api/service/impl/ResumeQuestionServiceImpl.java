@@ -84,6 +84,22 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
         return get(resumeQuestionId);
     }
 
+    @Transactional
+    public ResumeQuestionDto.Response updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto) {
+        ResumeKeyword resumeKeyword = getResumeKeyword(resumeKeywordId);
+        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(),
+                resumeKeyword.getResumeQuestion().getResume().getUser().getEmail());
+
+        resumeKeyword.setKeyword(requestDto.getKeyword());
+
+        return get(resumeKeyword.getResumeQuestion().getId());
+    }
+
+    public ResumeKeyword getResumeKeyword(Long resumeKeywordId) {
+        return resumeKeywordRepository.findById(resumeKeywordId)
+                .orElseThrow(() -> new NotFoundException(ExceptionType.ResumeKeywordNotFoundException));
+    }
+
     private User getUser(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
