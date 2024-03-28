@@ -1,6 +1,7 @@
 package com.d102.api.controller;
 
 import com.d102.api.controller.docs.ResumeQuestionControllerDocs;
+import com.d102.api.dto.ResumeScriptDto;
 import com.d102.api.service.ResumeQuestionService;
 import com.d102.common.constant.ResumeQuestionConstant;
 import com.d102.common.response.Response;
@@ -29,6 +30,11 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
     public Response deleteResumeQuestion(@PathVariable Long resumeQuestionId) {
         resumeQuestionService.deleteResumeQuestion(resumeQuestionId);
         return new Response();
+    }
+
+    @PostMapping("/script/{resumeQuestionId}")
+    public Response writeScript(@PathVariable Long resumeQuestionId, @RequestBody ResumeScriptDto.Request request) {
+        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.writeScript(resumeQuestionId, request));
     }
 
 }
