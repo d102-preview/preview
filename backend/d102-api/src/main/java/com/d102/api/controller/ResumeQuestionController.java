@@ -43,4 +43,9 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
         return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.createKeyword(resumeQuestionId, requestDto));
     }
 
+    @PatchMapping("/keyword/{resumeKeywordId}")
+    public Response updateKeyword(@PathVariable Long resumeKeywordId, @RequestBody ResumeKeywordDto.Request requestDto) {
+        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.updateKeyword(resumeKeywordId, requestDto));
+    }
+
 }

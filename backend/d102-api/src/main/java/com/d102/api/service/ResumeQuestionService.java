@@ -18,4 +18,6 @@ public interface ResumeQuestionService {
 
     ResumeQuestionDto.Response createKeyword(Long resumeQuestionId, ResumeKeywordDto.Request requestDto);
 
+    ResumeQuestionDto.Response updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto);
+
 }

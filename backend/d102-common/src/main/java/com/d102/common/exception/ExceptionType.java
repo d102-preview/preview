@@ -36,6 +36,7 @@ public enum ExceptionType {
     ResumeNotFoundException("NOT FOUND", "Resume not found"),
     ResumeDeleteException("NOT FOUND", "Resume delete failed"),
     ResumeQuestionNotFoundException("NOT FOUND", "Resume question not found"),
+    ResumeKeywordNotFoundException("NOT FOUND", "Invalid resume keyword"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),
