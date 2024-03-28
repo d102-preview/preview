@@ -13,6 +13,7 @@ const EtcButton = () => {
 
   const handleLogout = () => {
     logout();
+    localStorage.setItem('PREVIEW_ACCESS_TOKEN', '');
     navigate('/');
     Toast.success('로그아웃되었습니다.');
   };
