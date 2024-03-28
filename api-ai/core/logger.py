@@ -1,4 +1,23 @@
-import uvicorn
+import logging
+
+from loguru import logger
+
+
+class InterceptHandler(logging.Handler):
+    def emit(self, record: logging.LogRecord) -> None:
+        try:
+            level = logger.level(record.levelname).name
+        except ValueError:
+            level = record.levelno
+
+        frame, depth = logging.currentframe(), 2
+        while frame.f_code.co_filename == logging.__file__:
+            frame = frame.f_back
+            depth += 1
+
+        logger.opt(depth=depth, exception=record.exc_info).log(
+            level, record.getMessage()
+        )
 
 
 def load_config():
@@ -6,13 +25,4 @@ def load_config():
     References:
       - https://docs.python.org/ko/3/library/logging.html#logrecord-attributes
     """
-    config = uvicorn.config.LOGGING_CONFIG
-
-    msg_format = (
-        "%(asctime)s | %(levelname)-8s | %(name)s:%(funcName)s:%(lineno)s - %(message)s"
-    )
-
-    config["formatters"]["default"]["fmt"] = msg_format
-    config["formatters"]["access"]["fmt"] = msg_format
-
-    return config
+    return logging.basicConfig(handlers=[InterceptHandler()], level=0)
