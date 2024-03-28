@@ -20,4 +20,6 @@ public interface ResumeQuestionService {
 
     ResumeQuestionDto.Response updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto);
 
+    void deleteKeyword(Long resumeKeywordId);
+
 }

@@ -77,6 +77,15 @@ public interface ResumeQuestionControllerDocs {
                     }))
     })
     Response updateKeyword(Long resumeKeywordId, @Valid ResumeKeywordDto.Request requestDto);
+
+    @Operation(summary = "이력서 기반  질문 키워드 삭제", description = "이력서 기반  질문에 관한 키워드를 삭제하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 ok를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                    }))
+    })
+    Response deleteKeyword(Long resumeKeywordId);
     
     
     class QuestionListResponse { public List<ResumeQuestionDto.ListResponse> questionList; }

@@ -86,23 +86,31 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
 
     @Transactional
     public ResumeQuestionDto.Response updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto) {
-        ResumeKeyword resumeKeyword = getResumeKeyword(resumeKeywordId);
-        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(),
-                resumeKeyword.getResumeQuestion().getResume().getUser().getEmail());
+        ResumeKeyword resumeKeyword = getResumeKeywordAndCheckUser(resumeKeywordId);
 
         resumeKeyword.setKeyword(requestDto.getKeyword());
 
         return get(resumeKeyword.getResumeQuestion().getId());
     }
 
-    public ResumeKeyword getResumeKeyword(Long resumeKeywordId) {
-        return resumeKeywordRepository.findById(resumeKeywordId)
-                .orElseThrow(() -> new NotFoundException(ExceptionType.ResumeKeywordNotFoundException));
+    @Transactional
+    public void deleteKeyword(Long resumeKeywordId) {
+        getResumeKeywordAndCheckUser(resumeKeywordId);
+
+        resumeKeywordRepository.deleteById(resumeKeywordId);
     }
 
     private User getUser(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
+    }
+
+    private ResumeKeyword getResumeKeywordAndCheckUser(Long resumeKeywordId) {
+        ResumeKeyword resumeKeyword = resumeKeywordRepository.findById(resumeKeywordId)
+                .orElseThrow(() -> new NotFoundException(ExceptionType.ResumeKeywordNotFoundException));
+        UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(),
+                resumeKeyword.getResumeQuestion().getResume().getUser().getEmail());
+        return resumeKeyword;
     }
 
     private ResumeQuestion getResumeQuestionAndCheckUser(Long resumeQuestionId) {
