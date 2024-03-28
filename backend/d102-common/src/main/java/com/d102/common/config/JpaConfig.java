@@ -13,7 +13,7 @@ import org.springframework.data.repository.config.BootstrapMode;
 @Configuration
 @EnableJpaAuditing
 @EntityScan("com.d102")
-@EnableJpaRepositories(basePackages = {"com.d102.api.repository.jpa", "com.d102.common.repository.jpa", "com.d102.file.repository.jpa"})
+@EnableJpaRepositories(basePackages = {"com.d102.*.repository.jpa"})
 public class JpaConfig {
 
     @PersistenceContext
