@@ -3,11 +3,11 @@ package com.d102.api.service.impl;
 import com.d102.api.dto.UserDto;
 import com.d102.api.mapper.UserMapper;
 import com.d102.api.service.UserService;
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.exception.custom.UnAuthorizeException;
-import com.d102.common.repository.UserRepository;
+import com.d102.common.repository.jpa.UserRepository;
 import com.d102.common.util.SecurityHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         User user = getUser(securityHelper.getLoginUsername());
 
         verifyCurrentPassword(passwordUpdateRequestDto.getCurrentPassword(), user.getPassword());
-        checkChagedPassword(passwordUpdateRequestDto.getChangedPassword(), passwordUpdateRequestDto.getCheckChangePassword());
+        checkChangedPassword(passwordUpdateRequestDto.getChangedPassword(), passwordUpdateRequestDto.getCheckChangePassword());
 
         user.setPassword(passwordEncoder.encode(passwordUpdateRequestDto.getChangedPassword()));
     }
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         user.setDeletedTime(LocalDateTime.now());
     }
 
-    private void checkChagedPassword(String changedPassword, String checkChangePassword) {
+    private void checkChangedPassword(String changedPassword, String checkChangePassword) {
         if (!changedPassword.equals(checkChangePassword)) {
             throw new UnAuthorizeException(ExceptionType.WrongChangedPasswordException);
         }
