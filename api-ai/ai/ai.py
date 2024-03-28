@@ -1,12 +1,13 @@
+import errno
 import os
 from typing import Tuple
 
 import cv2
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import torchvision.transforms as T
+from ai.resnet9 import ImageClassificationBase, ResNet9
+from loguru import logger
 
 EMOTIONS = {
     0: "Angry",
@@ -16,6 +17,15 @@ EMOTIONS = {
     4: "Sad",
     5: "Surprise",
     6: "Neutral",
+}
+
+__haar_cascade = cv2.CascadeClassifier(
+    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+)
+
+MODELS = {
+    "ResNet9": "ai/models/ResNet9/ResNet9_epoch-198_score-0.846.pth",
+    "ResNet18": "ai/models/ResNet18/ResNet18_epoch-4_score-0.823.pt",
 }
 
 
@@ -46,21 +56,16 @@ def extract_frames(path: str, msec: int = 1000) -> list:
 
         frame_list.append(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 
-    print(f"Extract {len(frame_list)} images")
-
     return frame_list
 
 
 def detect_faces(
     img: np.ndarray,
     dsize: Tuple[int] = (224, 224),
-    classifier: cv2.CascadeClassifier = None
+    classifier: cv2.CascadeClassifier = __haar_cascade,
 ):
     if img is None:
         raise ValueError("img is required")
-
-    if classifier is None:
-        raise ValueError("classifier is required")
 
     # Haar cascade 모델이 흑백 이미지를 사용
     img_grey = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
@@ -74,7 +79,7 @@ def detect_faces(
     for x, y, w, h in faces:
         m = max(w, h)
         cv2.rectangle(img, (x, y), (x + m, y + m), (0, 255, 0), 2)
-        face_img = img[y: y + m, x: x + m].copy()
+        face_img = img[y : y + m, x : x + m].copy()
         if dsize is not None:
             face_img = cv2.resize(face_img, dsize=dsize)
 
@@ -93,68 +98,49 @@ def get_default_device():
         return torch.device("cpu")
 
 
-def to_device(
-        data,
-        device: torch.device
-):
+def to_device(data, device: torch.device = get_default_device()):
     if isinstance(data, (list, tuple)):
         return [to_device(x, device) for x in data]
     return data.to(device, non_blocking=True)
 
 
-class ImageClassificationBase(nn.Module):
-    def training_step(self, batch):
-        inputs, labels = batch
-        outputs = self(inputs)
-        loss = F.cross_entropy(outputs, labels)
-        acc = accuracy(outputs, labels)
-        return {"loss": loss, "acc": acc.detach()}
+def get_model(name: str):
+    if name not in MODELS:
+        raise Exception("No such model")
 
-    def validation_step(self, batch):
-        inputs, labels = batch
-        outputs = self(inputs)
-        loss = F.cross_entropy(outputs, labels)
-        acc = accuracy(outputs, labels)
-        return {"val_loss": loss.detach(), "val_acc": acc.detach()}
+    model_path = os.path.join(os.getcwd(), MODELS[name])
 
-    def get_metrics_epoch_end(self, outputs, validation=True):
-        if validation:
-            loss_ = "val_loss"
-            acc_ = "val_acc"
-        else:
-            loss_ = "loss"
-            acc_ = "acc"
+    if not os.path.exists(model_path):
+        msg = f"No model file on {model_path}"
+        logger.error(msg)
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), model_path)
 
-        batch_losses = [x[f"{loss_}"] for x in outputs]
-        epoch_loss = torch.stack(batch_losses).mean()
+    model = None
+    if name == "ResNet9":
+        model = ResNet9(1, 7)
+        model.load_state_dict(torch.load(model_path, map_location=get_default_device()))
+    # TODO: implement prediction using resnet18 model
+    # elif name == "ResNet18":
+    #     model = resnet18()
+    #     model.load_state_dict(torch.load(model_path, map_location=get_default_device()))
 
-        batch_accs = [x[f"{acc_}"] for x in outputs]
-        epoch_acc = torch.stack(batch_accs).mean()
+    if model is None:
+        raise Exception("Cannot load the model")
 
-        return {
-            f"{loss_}": epoch_loss.detach().item(),
-            f"{acc_}": epoch_acc.detach().item(),
-        }
+    model.eval()
 
-    def epoch_end(self, epoch, result, num_epochs):
-        print(
-            f"Epoch: {epoch+1}/{num_epochs} -> lr: {result['lrs'][-1]:.5f} "
-            f"loss: {result['loss']:.4f}, acc: {result['acc']:.4f}, "
-            f"val_loss: {result['val_loss']:.4f}, val_acc: {result['val_acc']:.4f}\n"
-        )
+    return model
 
 
 def predict(
-        img: np.ndarray,
-        model: ImageClassificationBase,
-        device: torch.device,
-        dsize: Tuple[int] = (48, 48)
+    img: np.ndarray,
+    model: ImageClassificationBase,
+    device: torch.device = get_default_device(),
+    dsize: Tuple[int] = (48, 48),
 ):
-    transform = T.Compose([
-        T.Grayscale(num_output_channels=1),
-        T.Resize(dsize),
-        T.ToTensor()
-    ])
+    transform = T.Compose(
+        [T.Grayscale(num_output_channels=1), T.Resize(dsize), T.ToTensor()]
+    )
     img = transform(img)
 
     x = to_device(img.unsqueeze(0), device)
