@@ -1,6 +1,6 @@
 package com.d102.common.dto;
 
-import com.d102.common.domain.Resume;
+import com.d102.common.domain.jpa.Resume;
 import lombok.Builder;
 import lombok.Data;
 

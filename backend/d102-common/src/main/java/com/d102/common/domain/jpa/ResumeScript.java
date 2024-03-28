@@ -1,4 +1,4 @@
-package com.d102.common.domain;
+package com.d102.common.domain.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,17 +10,21 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ResumeKeyword extends BaseTime {
+public class ResumeScript extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     private ResumeQuestion resumeQuestion;
 
-    @Column(name = "keyword", length = 16, nullable = false)
-    private String keyword;
+    @Column(name = "script", length = 512, nullable = false)
+    private String script;
 
 }

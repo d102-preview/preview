@@ -1,6 +1,6 @@
 package com.d102.file.service.impl;
 
-import com.d102.common.domain.Resume;
+import com.d102.common.domain.jpa.Resume;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.jpa.ResumeRepository;

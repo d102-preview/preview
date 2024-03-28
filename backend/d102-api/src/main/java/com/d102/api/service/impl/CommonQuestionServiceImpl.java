@@ -1,8 +1,8 @@
 package com.d102.api.service.impl;
 
-import com.d102.api.domain.CommonKeyword;
-import com.d102.api.domain.CommonQuestion;
-import com.d102.api.domain.CommonScript;
+import com.d102.api.domain.jpa.CommonKeyword;
+import com.d102.api.domain.jpa.CommonQuestion;
+import com.d102.api.domain.jpa.CommonScript;
 import com.d102.api.dto.CommonKeywordDto;
 import com.d102.api.dto.CommonQuestionDto;
 import com.d102.api.dto.CommonScriptDto;
@@ -11,7 +11,7 @@ import com.d102.api.repository.jpa.CommonKeywordRepository;
 import com.d102.api.repository.jpa.CommonQuestionRepository;
 import com.d102.api.repository.jpa.CommonScriptRepository;
 import com.d102.api.service.CommonQuestionService;
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.jpa.UserRepository;

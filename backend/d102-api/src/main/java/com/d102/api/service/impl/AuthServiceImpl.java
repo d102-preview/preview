@@ -4,7 +4,7 @@ import com.d102.api.dto.UserDto;
 import com.d102.api.mapper.UserMapper;
 import com.d102.api.service.AuthService;
 import com.d102.common.constant.RoleName;
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.ConflictException;
 import com.d102.common.exception.custom.NotFoundException;

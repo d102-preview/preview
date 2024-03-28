@@ -1,4 +1,4 @@
-package com.d102.common.domain;
+package com.d102.common.domain.jpa;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

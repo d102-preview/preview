@@ -1,6 +1,6 @@
 package com.d102.common.security;
 
-import com.d102.common.domain.User;
+import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.jpa.UserRepository;
