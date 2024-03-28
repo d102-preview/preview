@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UploadMapper {
 
-    @Mapping(source = "profileImageUrl", target = "path")
+    @Mapping(source = "profileImageUrl", target = "url")
     UploadDto.ProfileResponse toProfileResponseDto(User user);
 
     UploadDto.ResumeResponse toResumeResponseDto(Resume resume);
