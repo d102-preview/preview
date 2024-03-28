@@ -84,3 +84,7 @@ jwt:
 download:
   profile:
     base-url: http://localhost:8082/file/download/profile?path=
+
+open-ai:
+  url: https://api.openai.com/v1/chat/completions
+  secret-key: secret

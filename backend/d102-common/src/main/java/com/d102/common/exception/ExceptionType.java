@@ -11,6 +11,8 @@ public enum ExceptionType {
     ProfileUrlException("INVALID", "Invalid profile name"),
     ResumeUploadException("INVALID", "Resume upload failed"),
     ResumeLimitException("INVALID", "Resume limit exceeded"),
+    PdfConvertException("INVALID", "Pdf convert failed"),
+    Base64ConvertException("INVALID", "Base64 convert failed"),
 
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),

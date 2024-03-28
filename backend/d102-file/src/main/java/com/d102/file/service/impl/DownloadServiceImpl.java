@@ -1,15 +1,14 @@
 package com.d102.file.service.impl;
 
-import com.d102.common.domain.Resume;
+import com.d102.common.domain.jpa.Resume;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
-import com.d102.common.repository.ResumeRepository;
+import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.util.SecurityHelper;
 import com.d102.common.util.UserVerifier;
 import com.d102.file.dto.DownloadDto;
 import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
