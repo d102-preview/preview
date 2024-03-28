@@ -62,10 +62,10 @@ const DetailedAnalysis = ({ type, question, result, date }: IDetailedAnalysisPro
               비디오를 지원하지 않는 브라우저입니다.
             </video>
             <div className="flex justify-between px-1 pt-4 pb-1">
-              <span className="text-MAIN1">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
-              <span className="text-sm text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
+              <span className="text-MAIN1 text-lg">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
+              <span className="text-lg text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
             </div>
-            <span className="font-semibold text-BLACK text-xl mx-1">Q. {question}</span>
+            <span className="font-semibold text-BLACK text-2xl mx-1">Q. {question}</span>
 
             <div className="border-b-2 border-gray my-7"></div>
             {/* 요약 */}
@@ -92,7 +92,12 @@ const DetailedAnalysis = ({ type, question, result, date }: IDetailedAnalysisPro
           </div>
 
           <div className="w-1/2">
-            <ChartArea result={result} currentTime={currentTime} handleChartTimeUpdate={handleChartTimeUpdate} />
+            <ChartArea
+              activeTab={activeTab}
+              result={result}
+              currentTime={currentTime}
+              handleChartTimeUpdate={handleChartTimeUpdate}
+            />
           </div>
         </div>
       </div>
