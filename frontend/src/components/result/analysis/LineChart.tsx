@@ -3,15 +3,17 @@ import { Chart } from 'chart.js';
 import { ChartOptions } from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import annotationPlugin from 'chartjs-plugin-annotation';
+import { IResult } from '@/types/result';
 
 Chart.register(annotationPlugin);
 
 interface LineChartProps {
   currentTime: number;
   onTimeChange: (time: number) => void;
+  result: IResult;
 }
 
-const LineChart = ({ currentTime, onTimeChange }: LineChartProps) => {
+const LineChart = ({ currentTime, onTimeChange, result }: LineChartProps) => {
   const chartRef = useRef<Chart<'line', number[], unknown> | null>(null);
 
   const onCanvasClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
