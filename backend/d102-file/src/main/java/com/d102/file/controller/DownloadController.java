@@ -8,10 +8,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.util.UrlUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -34,9 +31,8 @@ public class DownloadController implements DownloadControllerDocs {
                 .body(new ByteArrayResource(profileResponseDto.getProfile()));
     }
 
-    // download pdf file
-    @GetMapping(value = "/resume")
-    public ResponseEntity<ByteArrayResource> downloadResume(@RequestParam("id") Long resumeId) {
+    @GetMapping(value = "/resume/{resumeId}")
+    public ResponseEntity<ByteArrayResource> downloadResume(@PathVariable("resumeId") Long resumeId) {
         DownloadDto.ResumeResponse resumeResponseDto = downloadService.downloadResume(resumeId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + URLEncoder.encode(resumeResponseDto.getName(), StandardCharsets.UTF_8))

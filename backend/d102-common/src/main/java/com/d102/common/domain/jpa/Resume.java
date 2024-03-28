@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -30,5 +32,8 @@ public class Resume extends BaseTime {
 
     @Column(name = "file_path", length = 512, nullable = false)
     private String filePath;
+
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ResumeQuestion> resumeQuestions;
 
 }
