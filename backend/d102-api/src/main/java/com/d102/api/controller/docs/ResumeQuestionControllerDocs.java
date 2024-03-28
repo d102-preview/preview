@@ -25,8 +25,19 @@ public interface ResumeQuestionControllerDocs {
                     }))
     })
     Response getList(Long resumeId, Pageable pageable);
+
+    @Operation(summary = "이력서 기반 질문 상세 조회", description = "이력서 기반 질문 상세 조회하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 이력서 기반 질문과 질문 스크립트, 키워드를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                    }))
+    })
+    Response get(Long resumeQuestionId);
     
     
     class QuestionListResponse { public List<ResumeQuestionDto.ListResponse> questionList; }
+    class QuestionDetailResponse { public ResumeQuestionDto.Response questionDetail; }
 
 }
