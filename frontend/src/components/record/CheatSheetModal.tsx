@@ -1,72 +1,22 @@
-import { Meta, StoryObj } from '@storybook/react';
-import Modal from './Modal';
 import { GrDocumentText } from 'react-icons/gr';
+import { Dispatch, SetStateAction } from 'react';
+import Modal from '../@common/Modal/Modal';
 
-const meta = {
-  title: 'common/Modal',
-  component: Modal,
-  tags: ['autodocs'],
-  argTypes: {
-    onClose: { action: 'closed' },
-  },
-  decorators: [
-    Story => (
-      <div className="m-72">
-        <Story />
-      </div>
-    ),
-  ],
-} satisfies Meta<typeof Modal>;
+interface ICheatSheetModalProps {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
 
-export default meta;
-
-type Story = StoryObj<typeof meta>;
-
-export const Basic: Story = {
-  args: {
-    width: 'w-96',
-    padding: 'p-5',
-    rounded: 'rounded-lg',
-    onClose: () => console.log('close'),
-    children: (
-      <div className="text-center">
-        <p>모달 테스트입니다</p>
-        <p>모달 테스트입니다</p>
-        <p>모달 테스트입니다</p>
-        <p>모달 테스트입니다</p>
-      </div>
-    ),
-  },
-};
-
-export const Custom: Story = {
-  args: {
-    width: 'w-96',
-    contentBackgroundColor: 'bg-black/70',
-    isBackgroundColorDark: false,
-    padding: 'p-5',
-    rounded: 'rounded-lg',
-    onClose: () => console.log('close'),
-    children: (
-      <div className="text-center">
-        <p>모달 테스트입니다</p>
-        <p>모달 테스트입니다</p>
-        <p>모달 테스트입니다</p>
-        <p>모달 테스트입니다</p>
-      </div>
-    ),
-  },
-};
-
-export const Script: Story = {
-  args: {
-    width: 'w-80',
-    contentBackgroundColor: 'bg-black/70',
-    isBackgroundColorDark: false,
-    padding: 'p-5',
-    rounded: 'rounded-lg',
-    onClose: () => console.log('close'),
-    children: (
+const CheatSheetModal = ({ setIsOpen }: ICheatSheetModalProps) => {
+  return (
+    <Modal
+      width="w-80"
+      contentBackgroundColor="bg-black/70"
+      isBackgroundColorDark={false}
+      padding="p-5"
+      margin="mt-7"
+      rounded="rounded-lg"
+      onClose={() => setIsOpen(false)}
+    >
       <div className="flex flex-col gap-3 text-sm">
         <div className="py-2">
           <p>핵심 키워드</p>
@@ -103,6 +53,8 @@ export const Script: Story = {
           </div>
         </div>
       </div>
-    ),
-  },
+    </Modal>
+  );
 };
+
+export default CheatSheetModal;
