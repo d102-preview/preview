@@ -3,6 +3,8 @@ package com.d102.common.domain.jpa;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -22,5 +24,11 @@ public class ResumeQuestion extends BaseTime {
 
     @Column(name = "question", length = 512, nullable = false)
     private String question;
+
+    @OneToOne(mappedBy = "resumeQuestion", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private ResumeScript resumeScript;
+
+    @OneToMany(mappedBy = "resumeQuestion", orphanRemoval = true)
+    private List<ResumeKeyword> resumeKeywordList;
 
 }
