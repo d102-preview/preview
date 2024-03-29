@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from '@/components/@common/Header/Header';
-import ResultList from '@/components/result/ResultList';
+import ResultList from '@/components/result/result-list/ResultList';
 
 const ResultPage = () => {
   const [type, setType] = useState<'mock' | 'main'>('mock');

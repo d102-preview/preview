@@ -1,11 +1,11 @@
 import { interviewType } from '@/types/model';
 
-interface QuestionTabProps {
+interface IQuestionTabProps {
   activeTab: interviewType;
   setActiveTab: (tab: interviewType) => void;
 }
 
-const QuestionTab = ({ activeTab, setActiveTab }: QuestionTabProps) => {
+const QuestionTab = ({ activeTab, setActiveTab }: IQuestionTabProps) => {
   // Tab 클릭 핸들러
   const handleTabClick = (tabName: interviewType) => {
     setActiveTab(tabName);
