@@ -68,7 +68,7 @@ export interface ISort {
 
 export interface IQuestionDetail {
   script: IScriptItem;
-  keywords: IKeywordItem[];
+  keywordList: IKeywordItem[];
 }
 
 export interface ISubText {
