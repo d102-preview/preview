@@ -58,8 +58,11 @@ def _intent_recognition(record: Analysis) -> dict:
 
     pred = kobert_model.predict(record.answer)
 
-    result = intent_labels.iloc[pred][["category", "expression"]].to_dict()
-    logger.debug(f"predict: {result}")
+    result = []
+    for k, v in pred:
+        d = intent_labels.iloc[k][["category", "expression"]].to_dict()
+        d["ratio"] = round(float(v), 2)
+        result.append(d)
 
     return result
 

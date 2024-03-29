@@ -28,7 +28,11 @@ def analyse_video(params: AnalysisRequest, session: SessionDep):
     return AnalysisResponse(
         result=Status.OK,
         data={
-            "emotion_list": emotion_list,
-            "intent_list": intent_list,
+            "emotion": emotion_list,
+            "intent": {
+                "answer": {
+                    "intent": intent_list,
+                },
+            },
         },
     )
