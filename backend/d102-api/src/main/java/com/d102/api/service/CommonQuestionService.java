@@ -6,17 +6,19 @@ import com.d102.api.dto.CommonScriptDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface CommonQuestionService {
 
     Page<CommonQuestionDto.ListResponse> getList(Pageable pageable);
 
     CommonQuestionDto.Response get(Long commonQuestionId);
 
-    CommonQuestionDto.Response writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto);
+    CommonScriptDto.Response writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto);
 
-    CommonQuestionDto.Response createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto);
+    List<CommonKeywordDto.Response> createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto);
 
-    CommonQuestionDto.Response updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto);
+    List<CommonKeywordDto.Response> updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto);
 
     void deleteKeyword(Long commonKeywordId);
 
