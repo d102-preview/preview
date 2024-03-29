@@ -19,8 +19,19 @@ class AnalysisResponse(CommonResponse):
 class Analysis(SQLModel, table=True):
     id: int = sqlmodel.Field(primary_key=True)
     type: str = sqlmodel.Field(max_length=16)
+
     question: str = sqlmodel.Field(max_length=512)
-    video_path: str = sqlmodel.Field(max_length=512)
-    thumbnail_path: str = sqlmodel.Field(max_length=512)
+    answer: str = sqlmodel.Field(max_length=1024)
+
+    video_path: str = sqlmodel.Field(max_length=1024)
+    thumbnail_path: str = sqlmodel.Field(max_length=1024)
+
     analysis_start_time: datetime | None = sqlmodel.Field(default=None, nullable=True)
     analysis_end_time: datetime | None = sqlmodel.Field(default=None, nullable=True)
+
+    video_length: int | None = sqlmodel.Field(default=None, nullable=True)
+    fps: int | None = sqlmodel.Field(default=None, nullable=True)
+    frames: int | None = sqlmodel.Field(default=None, nullable=True)
+
+    emotion: str | None = sqlmodel.Field(default=None, nullable=True)
+    intent: str | None = sqlmodel.Field(default=None, nullable=True)
