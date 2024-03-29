@@ -26,7 +26,7 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   };
 
   const script = data?.data?.questionDetail?.script?.script;
-  const keywords = data?.data?.questionDetail.keywords;
+  const keywords = data?.data?.questionDetail.keywordList;
 
   return (
     <div className="mb-2" onClick={handleClick}>
@@ -34,7 +34,7 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
         titleContent={question}
         children={
           <>
-            <Script initialScript={script || ''} maxLength={500} />
+            <Script initialScript={script || ''} id={id} type={type} />
             <Keywords initialKeywords={keywords || []} />
           </>
         }
