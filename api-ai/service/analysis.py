@@ -2,7 +2,7 @@ import errno
 import os
 from datetime import datetime
 
-from ai.ai import detect_faces, extract_frames, get_model, predict
+from ai import resnet_proc
 from common.deps import SessionDep
 from common.perf import elapsed
 from core.settings import settings
@@ -27,13 +27,13 @@ def _facial_emotional_recognition(record: Analysis) -> list:
     logger.info(f"Start facial emotional recognition. {video_path = }")
 
     # Extract frames
-    frame_list = extract_frames(video_path, msec=(1000 // settings.FPS))
+    frame_list = resnet_proc.extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(f"{len(frame_list)} frames are extracted from the input video")
 
     # Detect face from the frames
     face_list = []
     for img in frame_list:
-        _, face_img = detect_faces(img, (224, 224))
+        _, face_img = resnet_proc.detect_faces(img, (224, 224))
 
         if face_img is None:
             continue
@@ -41,11 +41,11 @@ def _facial_emotional_recognition(record: Analysis) -> list:
         face_list.append(face_img)
     logger.debug(f"{len(face_list)} faces are detected from {len(frame_list)} frames")
 
-    model = get_model("ResNet18")
+    model = resnet_proc.get_model("ResNet18")
 
     predict_list = []
     for img in face_list:
-        predict_list.append(predict(Image.fromarray(img), model))
+        predict_list.append(resnet_proc.predict(Image.fromarray(img), model))
     logger.info(f"Predict {len(predict_list)} faces")
 
     return predict_list
