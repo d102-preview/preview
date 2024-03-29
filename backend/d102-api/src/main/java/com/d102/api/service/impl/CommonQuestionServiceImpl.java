@@ -23,6 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class CommonQuestionServiceImpl implements CommonQuestionService {
@@ -50,7 +52,7 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
     }
 
     @Transactional
-    public void writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto) {
+    public CommonScriptDto.Response writeScript(Long commonQuestionId, CommonScriptDto.Request requestDto) {
         User user = getUser(securityHelper.getLoginUsername());
         CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
         CommonScript commonScript = commonScriptRepository.findByUser_EmailAndCommonQuestion_Id(securityHelper.getLoginUsername(),
@@ -65,10 +67,12 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
         } else {
             commonScript.setScript(requestDto.getScript());
         }
+
+        return get(commonQuestionId).getScript();
     }
 
     @Transactional
-    public void createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto) {
+    public List<CommonKeywordDto.Response> createKeyword(Long commonQuestionId, CommonKeywordDto.Request requestDto) {
         User user = getUser(securityHelper.getLoginUsername());
         CommonQuestion commonQuestion = getCommonQuestion(commonQuestionId);
 
@@ -77,14 +81,18 @@ public class CommonQuestionServiceImpl implements CommonQuestionService {
                 .commonQuestion(commonQuestion)
                 .keyword(requestDto.getKeyword())
                 .build());
+
+        return get(commonQuestionId).getKeywordList();
     }
 
     @Transactional
-    public void updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto) {
+    public List<CommonKeywordDto.Response> updateKeyword(Long commonKeywordId, CommonKeywordDto.Request requestDto) {
         CommonKeyword commonKeyword = getCommonKeyword(commonKeywordId);
         UserVerifier.checkLoginUserAndResourceUser(securityHelper.getLoginUsername(), commonKeyword.getUser().getEmail());
 
         commonKeyword.setKeyword(requestDto.getKeyword());
+
+        return get(commonKeyword.getCommonQuestion().getId()).getKeywordList();
     }
 
     @Transactional
