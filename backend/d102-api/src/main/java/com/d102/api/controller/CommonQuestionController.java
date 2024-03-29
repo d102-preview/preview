@@ -19,7 +19,7 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
 
     @GetMapping("/list")
     public Response getList(Pageable pageable) {
-        return new Response(CommonQuestionConstant.COMMON_QUESTION_LIST, commonQuestionService.getList(pageable));
+        return new Response(CommonQuestionConstant.QUESTION_LIST, commonQuestionService.getList(pageable));
     }
 
     @GetMapping("/{commonQuestionId}")
@@ -29,20 +29,17 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
 
     @PostMapping("/script/{commonQuestionId}")
     public Response writeScript(@PathVariable Long commonQuestionId, @RequestBody CommonScriptDto.Request requestDto) {
-        commonQuestionService.writeScript(commonQuestionId, requestDto);
-        return new Response();
+        return new Response(CommonQuestionConstant.QUESTION_SCRIPT, commonQuestionService.writeScript(commonQuestionId, requestDto));
     }
 
     @PostMapping("/keyword/{commonQuestionId}")
     public Response createKeyword(@PathVariable Long commonQuestionId, @RequestBody CommonKeywordDto.Request requestDto) {
-        commonQuestionService.createKeyword(commonQuestionId, requestDto);
-        return new Response();
+        return new Response(CommonQuestionConstant.QUESTION_KEYWORD, commonQuestionService.createKeyword(commonQuestionId, requestDto));
     }
 
     @PatchMapping("/keyword/{commonKeywordId}")
     public Response updateKeyword(@PathVariable Long commonKeywordId, @RequestBody CommonKeywordDto.Request requestDto) {
-        commonQuestionService.updateKeyword(commonKeywordId, requestDto);
-        return new Response();
+        return new Response(CommonQuestionConstant.QUESTION_KEYWORD, commonQuestionService.updateKeyword(commonKeywordId, requestDto));
     }
 
     @DeleteMapping("/keyword/{commonKeywordId}")
