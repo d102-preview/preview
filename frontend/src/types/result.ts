@@ -1,4 +1,4 @@
-export type analysisType = 'movement' | 'emotion' | 'intent' | 'keyword';
+export type analysisType =  'emotion' | 'intent' | 'keyword';
 
 export interface IResult {
   emotion: {

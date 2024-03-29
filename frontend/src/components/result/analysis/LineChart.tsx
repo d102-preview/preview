@@ -32,17 +32,16 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
       {
         // label: `프레임별 ${title}`,
         data: [
-          0, 0.5, 1, 1.3, 1.5, 1.8, 2, 2.1, 2, 1.9, 2, 2.1, 2.2, 2.3, 2.1, 2.4, 2.3, 2.3, 2.2, 2.1, 2.1, 2, 2, 2.1, 2.3,
-          2.5, 2.6, 2.7, 2.7, 2.8, 2.9, 3, 3.1, 3.1, 3, 3.3, 3.4, 3.5, 3.5, 3.7, 3.9, 4, 4, 3.9, 3.9, 3.8, 3.7, 3.5,
-          3.5, 3.4, 3.4, 3.3, 3, 2.5, 2.4, 2, 2, 1.9, 2, 2.2, 2.3, 2.5, 3, 3.1, 3.2, 3.2, 3.1, 3.1, 3.2, 3.1, 3.1, 3,
-          2.9, 2.8, 2.7, 2.5, 2, 1.9, 1.5, 1.3,
+          0, -1, 1, 0, 1, -1, 1, -1, 0, 0, 1, -1, 0.3, 1, 1, 0.9, 1, 0, -1, 1, 1, 0, 0, -1, 1, 0, 1, -1, -1, 1, 1, 0, 1,
+          1, 0.2, 0, -1, -1, 0, 0.5, 1, 1, 1, 0, -1, 0, 1, 0, -1, 1, 0, 0, 1, -1, 1, 1, -1, 1, 0, 0, 1, -1, 0, 1, 1, 0,
+          0, -1, 1, 0, 1, -1, 1, 0, 0, 1, -1, 0, 1, 1, 0, 1, 0, -1, 1, 0.7, 1, 0.8, 1, 0, 0.5, -1, 0.5, 0.7, 1, 0,
         ], // 가상의 데이터
-        fill: true,
+        fill: false,
         borderColor: '#5A8AF2',
         tension: 0.5,
         backgroundColor: 'rgba(90, 138, 242, 0.06)',
         pointRadius: 0,
-        spanGaps: false, // false: 빈 데이터가 있을 때 자연스럽게 채워줌(공백으로 표시 안됨)
+        spanGaps: true, // false: 빈 데이터가 있을 때 자연스럽게 채워줌(공백으로 표시 안됨)
       },
     ],
   };
@@ -54,25 +53,56 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
     scales: {
       y: {
         beginAtZero: true,
-        max: 5,
+        min: -1.5, // 최소값을 -1로 설정 (부정)
+        max: 1.5, // 최대값을 1로 설정 (긍정)
+        ticks: {
+          // y축의 값을 긍정, 중립, 부정으로 변환
+          callback: value => {
+            if (value === 1) return '긍정';
+            if (value === 0) return '중립';
+            if (value === -1) return '부정';
+          },
+          font: {
+            size: 20, // 글자 크기
+            weight: 'bold', // 글자 굵기
+          },
+          color: context => {
+            const value = context.tick.value;
+            if (value === 1) return '#17A44B'; // 긍정일 때는 녹색
+            if (value === 0) return '#EAB50D'; // 중립일 때는 파란색
+            if (value === -1) return '#F98282'; // 부정일 때는 빨간색
+            return 'black'; // 기본값은 검은색
+          },
+        },
       },
       x: {
         type: 'linear',
         min: 0,
         max: 80, // 비디오 길이(초 단위)
-        display: false,
+        display: true,
+        ticks: {
+          callback: (tickValue: string | number) => {
+            const value = typeof tickValue === 'number' ? tickValue : parseFloat(tickValue);
+            if (value > 60) {
+              const min = Math.floor(value / 60);
+              const sec = value % 60;
+              return `${min}분 ${sec}초`;
+            }
+            return `${value}초`;
+          },
+        },
       },
     },
     onClick: onCanvasClick as any, // 타입 오류 임시 조치
     plugins: {
-      datalabels: { 
-        display: false 
+      datalabels: {
+        display: false,
       },
-      legend: { 
-        display: false 
+      legend: {
+        display: false,
       },
-      tooltip: { 
-        enabled: false 
+      tooltip: {
+        enabled: false,
       },
       annotation: {
         annotations: {
@@ -85,9 +115,9 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
           },
           middleLine: {
             type: 'line',
-            yMin: 2,
-            yMax: 2,
-            borderColor: '#9EB1DF',
+            yMin: 0,
+            yMax: 0,
+            borderColor: '#F9D654',
             borderWidth: 0.5,
           },
         },
