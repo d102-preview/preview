@@ -3,12 +3,12 @@ import InterviewQuestion from '@/components/record/InterviewQuestion';
 import RecordTimer from '@/components/record/RecordTimer';
 import RecordSetting from '@/components/record/RecordSetting';
 import { useInterview } from '@/hooks/interview/useInterview';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import BackgroundOpacity from '@/components/record/BackgroundOpacity';
 import RecordUploading from '@/components/record/RecordUploading';
 import { useSpeechRecognition } from 'react-speech-kit';
-// import { GrNotes } from 'react-icons/gr';
-// import CheatSheetModal from '@/components/record/CheatSheetModal';
+import { GrNotes } from 'react-icons/gr';
+import CheatSheetModal from '@/components/record/CheatSheetModal';
 
 export type recordStatusType = 'pending' | 'preparing' | 'recording' | 'proceeding' | 'uploading';
 
@@ -88,12 +88,14 @@ const RecordPage = () => {
       case 'preparing':
         break;
       case 'uploading':
+        setIsOpen(false);
         break;
       case 'proceeding':
         handleStartRecording();
         listen({ interimResults: false, lang: 'ko-KR' });
         break;
       case 'recording':
+        setIsOpen(false);
         break;
     }
   }, [status]);
@@ -164,7 +166,14 @@ const RecordPage = () => {
     },
   });
 
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  // 모달 상태 관리
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  // 타이머 세팅 상태 관리
+  const [timerSetting, setTimerSetting] = useState<number>(30);
+  const radioHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setTimerSetting(Number(e.target.value));
+  };
 
   return (
     <div>
@@ -193,25 +202,39 @@ const RecordPage = () => {
               <BackgroundOpacity />
               {questionList && (
                 <InterviewQuestion
+                  timerSetting={timerSetting}
                   question={questionList.data.questionList[questionIndex]}
                   setStatus={setStatus}
                   status={status}
                   handleStopRecording={handleStopRecording}
                 />
               )}
-              <div className="absolute bottom-0 w-[40rem] ">
-                <div className=" text-white m-6 p-5 text-center bg-black/50 rounded-lg">
-                  <p>질문당 30초의 시간이 주어집니다</p>
-                  <p>준비됐으면 녹화시작 버튼을 눌러주세요</p>
+              <div className="absolute bottom-0 w-[40rem]">
+                <div className="flex justify-around text-white m-6 p-5  text-center bg-black/50 rounded-lg">
+                  <p>녹화 시간 설정</p>
+                  <div className="flex gap-5">
+                    <div className="flex gap-2">
+                      <input id="thirty" type="radio" value={30} onChange={radioHandler} checked={timerSetting == 30} />
+                      <label htmlFor="thirty">30초</label>
+                    </div>
+                    <div className="flex gap-2">
+                      <input id="sixty" type="radio" value={60} onChange={radioHandler} checked={timerSetting == 60} />
+                      <label htmlFor="sixty">60초</label>
+                    </div>
+                    <div className="flex gap-2">
+                      <input id="ninety" type="radio" value={90} onChange={radioHandler} checked={timerSetting == 90} />
+                      <label htmlFor="ninety">90초</label>
+                    </div>
+                  </div>
                 </div>
               </div>
-              {/* <GrNotes
+              <GrNotes
                 onClick={() => setIsOpen(!isOpen)}
                 size={20}
                 color="white"
                 className="absolute bottom-0 right-0 m-6 cursor-pointer"
               />
-              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />} */}
+              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />}
             </>
           )}
 
@@ -225,18 +248,19 @@ const RecordPage = () => {
           {stream && questionList && status === 'proceeding' && (
             <>
               <InterviewQuestion
+                timerSetting={timerSetting}
                 question={questionList.data.questionList[questionIndex]}
                 setStatus={setStatus}
                 status={status}
                 handleStopRecording={handleStopRecording}
               />
-              {/* <GrNotes
+              <GrNotes
                 onClick={() => setIsOpen(!isOpen)}
                 size={20}
                 color="white"
                 className="absolute bottom-0 right-0 m-6 cursor-pointer"
               />
-              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />} */}
+              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />}
             </>
           )}
 
