@@ -1,5 +1,5 @@
 import { IInterviewQuestionRes } from '@/types/interview';
-import { APIResponse } from '@/types/model';
+import { APIResponse, APISimpleResponse } from '@/types/model';
 
 export const interviewQuestionRes: APIResponse<IInterviewQuestionRes> = {
   result: 'ok',
@@ -65,4 +65,8 @@ export const interviewQuestionRes: APIResponse<IInterviewQuestionRes> = {
       },
     ],
   },
+};
+
+export const interviewAnalyzeRes: APISimpleResponse = {
+  result: 'ok',
 };
