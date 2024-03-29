@@ -33,7 +33,7 @@ public class Resume extends BaseTime {
     @Column(name = "file_path", length = 512, nullable = false)
     private String filePath;
 
-    @OneToMany(mappedBy = "resume", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "resume", orphanRemoval = true)
     private List<ResumeQuestion> resumeQuestions;
 
 }
