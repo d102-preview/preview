@@ -10,6 +10,12 @@ const axiosWithCredentialConfig = {
   withCredentials: true,
 };
 
+const axiosFileConfig = {
+  baseURL: import.meta.env.VITE_NODE_ENV === 'development' ? '' : import.meta.env.VITE_BASE_URL,
+  'Content-type': 'multipart/form-data',
+  withCredentials: true,
+};
+
 // 토큰 필요없는 요청
 export const axiosCommonInstance = axios.create(axiosRequestConfig);
 
@@ -20,5 +26,9 @@ export const axiosWithCredentialInstance = axios.create(axiosWithCredentialConfi
 // 토큰 필요한 요청
 export const axiosAuthInstance = axios.create(axiosWithCredentialConfig);
 
+// 파일 서버 요청
+export const axiosFileInstance = axios.create(axiosFileConfig);
+
 axiosAuthInstance.interceptors.request.use(setAuthorization);
 axiosWithCredentialInstance.interceptors.request.use(setAuthorization);
+axiosFileInstance.interceptors.request.use(setAuthorization);

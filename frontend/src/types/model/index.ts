@@ -68,7 +68,7 @@ export interface ISort {
 
 export interface IQuestionDetail {
   script: IScriptItem;
-  keywords: IKeywordItem[];
+  keywordList: IKeywordItem[];
 }
 
 export interface ISubText {
@@ -107,4 +107,8 @@ export interface IPasswordInfo {
   currentPassword: string;
   changedPassword: string;
   checkChangePassword: string;
+}
+
+export interface IProfile {
+  url: string;
 }

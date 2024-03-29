@@ -19,18 +19,22 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const isQuestionPage = location.pathname === '/question';
 
   const { useGetQuestion } = useQuestion();
-  const { data } = useGetQuestion(type, id);
+  const { mutate: getQuestion, data } = useGetQuestion(type, id);
+
+  const handleClick = () => {
+    getQuestion();
+  };
 
   const script = data?.data?.questionDetail?.script?.script;
-  const keywords = data?.data?.questionDetail.keywords;
+  const keywords = data?.data?.questionDetail.keywordList;
 
   return (
-    <div className="mb-2">
+    <div className="mb-2" onClick={handleClick}>
       <Accordian
         titleContent={question}
         children={
           <>
-            <Script initialScript={script || ''} maxLength={500} />
+            <Script initialScript={script || ''} id={id} type={type} />
             <Keywords initialKeywords={keywords || []} />
           </>
         }

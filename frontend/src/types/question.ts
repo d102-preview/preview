@@ -16,4 +16,19 @@ export interface IQuestionsDetailsRes {
   [key: string]: APIResponse<IQuestionRes>;
 }
 
-export type questionType = 'common' | 'resume'
+export type questionType = 'common' | 'resume';
+
+export interface IScriptReq {
+  script: string;
+}
+
+export interface IScriptInfo {
+  type: questionType;
+  questionId: number;
+  script: IScriptReq;
+}
+
+export interface IScriptRes {
+  id: number;
+  script: string | null;
+}
