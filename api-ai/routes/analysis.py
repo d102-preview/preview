@@ -23,6 +23,12 @@ def analyse_video(params: AnalysisRequest, session: SessionDep):
     """
     logger.info("Analyse video")
 
-    emotion_list = create_task(params.analysis_id, session)
+    emotion_list, intent_list = create_task(params.analysis_id, session)
 
-    return AnalysisResponse(result=Status.OK, data={"emotion_list": emotion_list})
+    return AnalysisResponse(
+        result=Status.OK,
+        data={
+            "emotion_list": emotion_list,
+            "intent_list": intent_list,
+        },
+    )
