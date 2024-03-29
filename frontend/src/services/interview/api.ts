@@ -1,11 +1,15 @@
-// import { axiosAuthInstance } from '@/apis/axiosInstance';
+import { axiosAuthInstance, axiosFileInstance } from '@/apis/axiosInstance';
 import { IInterviewQuestionRes } from '@/types/interview';
-import { APIResponse } from '@/types/model';
-import axios from 'axios';
+import { APIResponse, APISimpleResponse } from '@/types/model';
 
-// axiosAuthInstance
 export const getMainInterviewQuestionList = async (): Promise<APIResponse<IInterviewQuestionRes>> => {
-  const res = await axios.get('/api/interview/main');
+  const res = await axiosAuthInstance.get('/api/interview/main');
+  console.log(res);
+  return res.data;
+};
+
+export const getInterviewAnalyze = async (info: FormData): Promise<APISimpleResponse> => {
+  const res = await axiosFileInstance.post('/file/upload/video', info);
   console.log(res);
   return res.data;
 };

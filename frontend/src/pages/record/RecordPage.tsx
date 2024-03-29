@@ -9,12 +9,14 @@ import RecordUploading from '@/components/record/RecordUploading';
 import { useSpeechRecognition } from 'react-speech-kit';
 import { GrNotes } from 'react-icons/gr';
 import CheatSheetModal from '@/components/record/CheatSheetModal';
+import { IInterviewAnalyzeRes } from '@/types/interview';
 
 export type recordStatusType = 'pending' | 'preparing' | 'recording' | 'proceeding' | 'uploading';
 
 const RecordPage = () => {
-  const { useGetMainInterviewQuestionList } = useInterview();
-  const { data: questionList, mutate, isSuccess } = useGetMainInterviewQuestionList();
+  const { useGetMainInterviewQuestionList, usePostInterviewAnalyze } = useInterview();
+  const { data: questionList, mutate: getQuestionList, isSuccess } = useGetMainInterviewQuestionList();
+  const { data, mutate: postInterviewAnalyze } = usePostInterviewAnalyze();
   const [questionIndex, setQuestionIndex] = useState<number>(0); // 질문 인덱스 상태 관리
   /*
     stream 연결 전 상태는 stream으로 판단
@@ -71,7 +73,7 @@ const RecordPage = () => {
     }
 
     if (status === 'pending') {
-      mutate();
+      getQuestionList();
       setStatus('preparing');
     } else if (status === 'preparing') {
       setStatus('recording');
@@ -120,6 +122,7 @@ const RecordPage = () => {
       mediaRecorderRef.current.ondataavailable = event => {
         if (event.data && event.data.size > 0) {
           setRecordedBlobs(prev => [...prev, event.data]);
+          console.log('데이터처리');
         }
       };
       mediaRecorderRef.current.start();
@@ -134,8 +137,21 @@ const RecordPage = () => {
       console.log(stt);
 
       mediaRecorderRef.current.stop();
-      setRecordedBlobs([]);
     }
+
+    const check = questionList?.data.questionList[questionIndex];
+    console.log(check);
+    // const req: IInterviewAnalyzeRes ={
+    //   answer: stt,
+    //   keyword: questionList?.data.questionList[questionIndex].keywordList,
+    //   question: ,
+    //   script: ,
+    //   setStartTime: ,
+    //   skip: ,
+    // }
+
+    // postInterviewAnalyze();
+    setRecordedBlobs([]);
   };
 
   useEffect(() => {
@@ -174,6 +190,10 @@ const RecordPage = () => {
   const radioHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTimerSetting(Number(e.target.value));
   };
+
+  // const timezoneOffset = new Date().getTimezoneOffset() * 60000;
+  // const timezoneDate = new Date(Date.now() - timezoneOffset);
+  // console.log(timezoneDate.toISOString().split('.')[0]);
 
   return (
     <div>
