@@ -17,7 +17,7 @@ const Script = ({ initialScript, id, type }: IScriptProps) => {
   const [subText, setSubText] = useState<ISubText>({ text: '', type: 'info' });
 
   const { usePostScript } = useQuestion();
-  const { mutate: postScript, isSuccess, isError, data, error } = usePostScript();
+  const { mutate: postScript } = usePostScript(type, id);
 
   useEffect(() => {
     setScript(initialScript);
@@ -57,19 +57,6 @@ const Script = ({ initialScript, id, type }: IScriptProps) => {
     setScript(tempScript);
     setIsEdit(false);
   };
-
-  // 저장 성공 또는 실패에 따른 메시지 처리
-  useEffect(() => {
-    if (isSuccess) {
-      // 저장 성공 시 액션
-      console.log('스크립트 저장 성공', data);
-    }
-    if (isError) {
-      // 저장 실패 시 액션
-      console.error('스크립트 저장 실패', error);
-      setSubText({ text: '스크립트 저장에 실패했습니다.', type: 'error' });
-    }
-  }, [isSuccess, isError, data, error]);
 
   return (
     <>

@@ -1,1 +1,1 @@
-export const MAX_SCRIPT_LENGTH = 512;
+export const MAX_SCRIPT_LENGTH = 500;
