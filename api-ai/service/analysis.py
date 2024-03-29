@@ -17,7 +17,15 @@ from sqlmodel import select
 
 @elapsed
 def _facial_emotional_recognition(record: Analysis) -> list:
-    video_path = os.path.join(settings.DATA_HOME, record.video_path)
+    # value of record.video_path seems like
+    # `/app/files/video/admin@d102.com/2024-03-29T15-28-00/test1.mp4`
+    # so, for the dev environment, replace `/app/files` into `settings.DATA_HOME`
+    video_path = record.video_path
+    if settings.DEBUG:
+        video_path = os.path.join(
+            str(settings.DATA_HOME), video_path.replace("/app/files/", "")
+        )
+    logger.debug(f"{str(settings.DATA_HOME)=} {video_path = }")
 
     # check file exists
     if not os.path.exists(video_path):
