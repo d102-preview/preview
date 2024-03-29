@@ -55,6 +55,7 @@ public class UploadDto {
         private String question;
         private String answer;
         private String script;
+        private String keyword;
         private Boolean skip;
         private MultipartFile video;
         private LocalDateTime setStartTime;

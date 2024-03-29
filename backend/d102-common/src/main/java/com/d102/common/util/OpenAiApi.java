@@ -44,8 +44,8 @@ public class OpenAiApi {
     // gpt-4 text generator
     public Response generateFollowUpQuestion(String question, String answer) {
         StringBuilder questionAndAnswer = new StringBuilder();
-        questionAndAnswer.append("Interviewer Question: ").append(question).append(" ");
-        questionAndAnswer.append("Interviewee Answer: ").append(answer).append(" ");
+        questionAndAnswer.append("Interviewer Question (Korean): ").append(question).append(" ");
+        questionAndAnswer.append("Interviewee Answer (Korean): ").append(answer).append(" ");
         questionAndAnswer.append("This is a history of the previous conversation. You are interviewer. Please provide a follow-up question in Korean based on the previous conversations. The questions must contain the answers of the previous interviewee. Like this example: You say you worked on a project using Java. What was the most challenging part of that project?");
 
         StringBuilder qnaJson = new StringBuilder();
