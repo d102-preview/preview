@@ -53,14 +53,10 @@ def _facial_emotional_recognition(record: Analysis) -> list:
 
 
 @elapsed
-def _intent_recognition() -> dict:
-    # TODO: Add 'answer' column in `analysis` table of DB,
-    #       and then replace this `sample_answer` to `record.answer`.
-    sample_answer = "최근에 1주일 정도 짧게 SpringBoot를 사용하여 REST API 서버를 구축하는 프로젝트를 진행했습니다. 이 때 제가 제일 중요하게 고려했던 점 두 가지는 Swagger를 꼼꼼하게 만든 것과 파라미터 유효성 검증입니다. API 서버라면 수많은 요청을 빠르게 처리하고 응답하는 것도 중요하지만, 이상하거나 허용되지 않은 방식의 입력값으로 요청했을 때 이를 거부하여 시스템의 안정성을 유지하는 것도 매우 중요한 요소라고 생각했습니다."
-
+def _intent_recognition(record: Analysis) -> dict:
     intent_labels = kobert_model.get_intent_labels()
 
-    pred = kobert_model.predict(sample_answer)
+    pred = kobert_model.predict(record.answer)
 
     result = intent_labels.iloc[pred][["category", "expression"]].to_dict()
     logger.debug(f"predict: {result}")
@@ -97,9 +93,9 @@ def create_task(analysis_id: int, session: SessionDep) -> None:
     session.commit()
 
     # Step 1: Facial Emotional Recognition
-    emotion_list = _facial_emotional_recognition(record)
+    # emotion_list = _facial_emotional_recognition(record)
 
     # Step 2: Intent Recognition
-    intent_list = _intent_recognition()
+    intent_list = _intent_recognition(record)
 
-    return emotion_list, intent_list
+    return [], intent_list
