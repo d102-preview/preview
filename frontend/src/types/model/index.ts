@@ -108,3 +108,7 @@ export interface IPasswordInfo {
   changedPassword: string;
   checkChangePassword: string;
 }
+
+export interface IProfile {
+  url: string;
+}

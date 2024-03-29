@@ -1,6 +1,6 @@
-import { axiosAuthInstance } from '@/apis/axiosInstance';
+import { axiosAuthInstance, axiosFileInstance } from '@/apis/axiosInstance';
 import { APIResponse, IPasswordInfo } from '@/types/model';
-import { IGetUserRes, IPatchUserReq, IPatchUserRes } from '@/types/user';
+import { IGetUserRes, IPatchUserReq, IPatchUserRes, IPostProfileRes } from '@/types/user';
 
 export const getUser = async (): Promise<APIResponse<IGetUserRes>> => {
   const res = await axiosAuthInstance.get('/api/user');
@@ -34,5 +34,11 @@ export const patchPassword = async ({
     checkChangePassword: checkChangePassword,
   });
   console.log('비밀번호 수정', res);
+  return res.data;
+};
+
+export const postProfile = async (profile: FormData): Promise<APIResponse<IPostProfileRes>> => {
+  const res = await axiosFileInstance.post('/file/upload/profile', profile);
+  console.log('프로필 업로드', res);
   return res.data;
 };

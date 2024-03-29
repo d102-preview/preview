@@ -7,6 +7,7 @@ interface IUserState {
   profileUrl: string;
   login: (name: string, profileUrl: string) => void;
   logout: () => void;
+  updateProfile: (profileUrl: string) => void;
 }
 
 const userStore = create(
@@ -17,6 +18,7 @@ const userStore = create(
       profileUrl: '',
       login: (name, profileUrl) => set({ isLogin: true, name: name, profileUrl: profileUrl }),
       logout: () => set({ isLogin: false, name: '', profileUrl: '' }),
+      updateProfile: profileUrl => set({ profileUrl: profileUrl }),
     }),
     {
       name: 'PREVIEW_USER_STORE',
