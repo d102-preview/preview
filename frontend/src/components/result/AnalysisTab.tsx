@@ -12,7 +12,7 @@ const AnalysisTab = ({ activeTab, setActiveTab }: IAnalysisTabProps) => {
   };
 
   // 공통 스타일
-  const buttonStyle = 'w-1/4 text-xl text-center font-semibold p-3 bg-MAIN2 ';
+  const buttonStyle = 'w-1/4 text-2xl text-center font-semibold p-3 bg-MAIN2 ';
 
   // 조건부 스타일 적용
   const getButtonClasses = (tabName: analysisType) => {
@@ -22,10 +22,7 @@ const AnalysisTab = ({ activeTab, setActiveTab }: IAnalysisTabProps) => {
   return (
     <div className="flex pt-5">
       <h3 className="w-44 p-3 text-3xl font-bold text-BLACK">세부 분석</h3>
-      <div className="w-full bg-MAIN2 flex items-center rounded-lg">
-        <button className={getButtonClasses('movement')} onClick={() => handleTabClick('movement')}>
-          자세 움직임
-        </button>
+      <div className="flex justify-evenly items-center w-full bg-MAIN2 rounded-lg">
         <button className={getButtonClasses('emotion')} onClick={() => handleTabClick('emotion')}>
           감정 분석
         </button>

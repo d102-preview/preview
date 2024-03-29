@@ -4,7 +4,6 @@ import { formatInterviewSetTime } from '@/utils/formatDateTime';
 import testVideo from '@/assets/video/test.mp4';
 import AnalysisTab from '../AnalysisTab';
 import ChartArea from './ChartArea';
-import { FaUserTie } from 'react-icons/fa';
 import { RiEmotionFill } from 'react-icons/ri';
 import { HiMiniChatBubbleOvalLeftEllipsis, HiMiniKey } from 'react-icons/hi2';
 
@@ -30,7 +29,7 @@ interface IDetailedAnalysisProps {
 }
 
 const DetailedAnalysis = ({ type, question, date }: IDetailedAnalysisProps) => {
-  const [activeTab, setActiveTab] = useState<analysisType>('movement');
+  const [activeTab, setActiveTab] = useState<analysisType>('emotion');
   const [currentTime, setCurrentTime] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -71,10 +70,6 @@ const DetailedAnalysis = ({ type, question, date }: IDetailedAnalysisProps) => {
             {/* 요약 */}
             <div className="py-1">
               <div className="border-2 border-gray rounded-lg p-7 text-UNIMPORTANT_TEXT text-lg">
-                <div className="flex items-center gap-3 pb-4">
-                  <FaUserTie />
-                  <p>자세 및 움직임이 다소 산만합니다.</p>
-                </div>
                 <div className="flex items-center gap-3 pb-4">
                   <RiEmotionFill />
                   <p>표정이 밝은 편이며 긍정적입니다.</p>
