@@ -44,7 +44,7 @@ public interface CommonQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 공통 질문과 질문 스크립트, 키워드를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionScriptResponse.class)),
                     }))
     })
     Response writeScript(Long commonQuestionId, @Valid CommonScriptDto.Request request);
@@ -54,7 +54,7 @@ public interface CommonQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 공통 질문과 질문 스크립트, 키워드를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionKeywordResponse.class)),
                     }))
     })
     Response createKeyword(Long commonQuestionId, @Valid CommonKeywordDto.Request requestDto);
@@ -64,7 +64,7 @@ public interface CommonQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 공통 질문과 질문 스크립트, 키워드를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionKeywordResponse.class)),
                     }))
     })
     Response updateKeyword(Long commonKeywordId, @Valid CommonKeywordDto.Request requestDto);
@@ -81,5 +81,7 @@ public interface CommonQuestionControllerDocs {
 
     class QuestionListResponse { public List<CommonQuestionDto.ListResponse> questionList; }
     class QuestionDetailResponse { public CommonQuestionDto.Response questionDetail; }
+    class QuestionScriptResponse { public CommonScriptDto.Response script; }
+    class QuestionKeywordResponse { public List<CommonKeywordDto.Response> keywordList; }
 
 }
