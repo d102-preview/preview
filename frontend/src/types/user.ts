@@ -1,4 +1,4 @@
-import { IUserInfo } from './model';
+import { IProfile, IUserInfo } from './model';
 
 export interface IGetUserRes {
   user: IUserInfo;
@@ -10,4 +10,8 @@ export interface IPatchUserReq {
 
 export interface IPatchUserRes {
   user: IUserInfo;
+}
+
+export interface IPostProfileRes {
+  profile: IProfile;
 }

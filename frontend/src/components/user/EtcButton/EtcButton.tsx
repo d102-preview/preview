@@ -12,9 +12,12 @@ const EtcButton = () => {
   const { mutate } = useDeleteUser();
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
-    Toast.success('로그아웃되었습니다.');
+    if (window.confirm('로그아웃 하시겠습니까?')) {
+      logout();
+      localStorage.setItem('PREVIEW_ACCESS_TOKEN', '');
+      navigate('/');
+      Toast.success('로그아웃되었습니다.');
+    }
   };
 
   const handleSignout = () => {
