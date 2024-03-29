@@ -6,6 +6,8 @@ import com.d102.api.dto.ResumeScriptDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ResumeQuestionService {
 
     Page<ResumeQuestionDto.ListResponse> getList(Long resumeId, Pageable pageable);
@@ -14,11 +16,11 @@ public interface ResumeQuestionService {
 
     void deleteResumeQuestion(Long resumeQuestionId);
 
-    ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request requestDto);
+    ResumeScriptDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request requestDto);
 
-    ResumeQuestionDto.Response createKeyword(Long resumeQuestionId, ResumeKeywordDto.Request requestDto);
+    List<ResumeKeywordDto.Response> createKeyword(Long resumeQuestionId, ResumeKeywordDto.Request requestDto);
 
-    ResumeQuestionDto.Response updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto);
+    List<ResumeKeywordDto.Response> updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto);
 
     void deleteKeyword(Long resumeKeywordId);
 

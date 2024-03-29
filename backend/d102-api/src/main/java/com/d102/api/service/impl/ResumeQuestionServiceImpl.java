@@ -21,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ResumeQuestionServiceImpl implements ResumeQuestionService {
@@ -56,7 +58,7 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
     }
 
     @Transactional
-    public ResumeQuestionDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request requestDto) {
+    public ResumeScriptDto.Response writeScript(Long resumeQuestionId, ResumeScriptDto.Request requestDto) {
         ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
 
         if (resumeQuestion.getResumeScript() == null) {
@@ -69,11 +71,11 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
             resumeQuestion.getResumeScript().setScript(requestDto.getScript());
         }
 
-        return resumeQuestionMapper.toResumeQuestionDto(resumeQuestion);
+        return resumeQuestionMapper.toResumeQuestionDto(resumeQuestion).getScript();
     }
 
     @Transactional
-    public ResumeQuestionDto.Response createKeyword(Long resumeQuestionId, ResumeKeywordDto.Request requestDto) {
+    public List<ResumeKeywordDto.Response> createKeyword(Long resumeQuestionId, ResumeKeywordDto.Request requestDto) {
         ResumeQuestion resumeQuestion = getResumeQuestionAndCheckUser(resumeQuestionId);
 
         resumeKeywordRepository.saveAndFlush(ResumeKeyword.builder()
@@ -81,16 +83,16 @@ public class ResumeQuestionServiceImpl implements ResumeQuestionService {
                 .keyword(requestDto.getKeyword())
                 .build());
 
-        return get(resumeQuestionId);
+        return get(resumeQuestionId).getKeywordList();
     }
 
     @Transactional
-    public ResumeQuestionDto.Response updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto) {
+    public List<ResumeKeywordDto.Response> updateKeyword(Long resumeKeywordId, ResumeKeywordDto.Request requestDto) {
         ResumeKeyword resumeKeyword = getResumeKeywordAndCheckUser(resumeKeywordId);
 
         resumeKeyword.setKeyword(requestDto.getKeyword());
 
-        return get(resumeKeyword.getResumeQuestion().getId());
+        return get(resumeKeyword.getResumeQuestion().getId()).getKeywordList();
     }
 
     @Transactional
