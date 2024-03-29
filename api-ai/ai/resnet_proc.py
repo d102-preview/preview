@@ -10,15 +10,7 @@ from ai.resnet9 import ImageClassificationBase, ResNet9
 from loguru import logger
 from torchvision.models import resnet18
 
-EMOTIONS = {
-    0: "Angry",
-    1: "Disgust",
-    2: "Fear",
-    3: "Happy",
-    4: "Sad",
-    5: "Surprise",
-    6: "Neutral",
-}
+EMOTIONS = {0: "Negative", 1: "Neutral", 2: "Positive"}
 
 __haar_cascade = cv2.CascadeClassifier(
     cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
