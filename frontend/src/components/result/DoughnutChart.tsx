@@ -45,6 +45,9 @@ const DoughnutChart = ({ percent }: IDoughnutChartProps) => {
   const options: ChartOptions<'doughnut'> = {
     cutout: '90%',
     plugins: {
+      datalabels: {
+        display: false,
+      },
       legend: {
         display: false,
       },

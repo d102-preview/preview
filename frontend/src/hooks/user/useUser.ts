@@ -1,5 +1,5 @@
 import Toast from '@/components/@common/Toast/Toast';
-import { deleteUser, getUser, patchPassword, patchUser } from '@/services/user/api';
+import { deleteUser, getUser, patchPassword, patchUser, postProfile } from '@/services/user/api';
 import { IPasswordInfo } from '@/types/model';
 import { IPatchUserReq } from '@/types/user';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -58,5 +58,19 @@ export const useUser = () => {
     });
   };
 
-  return { useGetUser, useDeleteUser, usePatchUser, usePatchPassword };
+  const usePostProfile = () => {
+    return useMutation({
+      mutationFn: (profile: FormData) => postProfile(profile),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['my'] });
+        Toast.success('수정되었습니다.');
+      },
+      onError: err => {
+        console.log('에러', err);
+        Toast.error('수정에 실패했습니다.');
+      },
+    });
+  };
+
+  return { useGetUser, useDeleteUser, usePatchUser, usePatchPassword, usePostProfile };
 };

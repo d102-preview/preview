@@ -6,6 +6,7 @@ interface IModalProps {
   isBackgroundColorDark?: boolean;
   padding?: string;
   rounded?: string;
+  margin?: string;
   onClose: () => void;
   children: React.ReactNode;
 }
@@ -16,6 +17,7 @@ const Modal = ({
   rounded = 'rounded-lg',
   contentBackgroundColor = 'bg-white',
   isBackgroundColorDark = true,
+  margin,
   onClose,
   children,
 }: IModalProps) => {
@@ -36,7 +38,7 @@ const Modal = ({
         onClick={handleClose}
       ></div>
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${width} ${padding} ${rounded} ${contentBackgroundColor} ${!isBackgroundColorDark && 'text-white'} 
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${width} ${padding} ${margin} ${rounded} ${contentBackgroundColor} ${!isBackgroundColorDark && 'text-white'} 
           ${isRendering ? 'animate-modalOpen' : 'animate-modalClose'}
         `}
       >
