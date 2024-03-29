@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
@@ -74,10 +75,10 @@ public class UploadServiceImpl implements UploadService {
         return uploadMapper.toResumeResponseDto(resume);
     }
 
+    @Async
     public void uploadVideo(UploadDto.VideoRequest videoRequestDto) {
         Path basePath = FileConstant.VIDEO_SAVE_DIR.resolve(securityHelper.getLoginUsername()).resolve(makeFormattedTime(videoRequestDto.getSetStartTime()));
         String savePath = saveVideo(basePath, videoRequestDto.getVideo());
-        System.out.println(savePath);
     }
 
     private String saveVideo(Path basePath, MultipartFile video) {

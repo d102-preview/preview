@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UploadDto {
 
@@ -54,8 +55,8 @@ public class UploadDto {
 
         private String question;
         private String answer;
+        private List<String> keywordList;
         private String script;
-        private String keyword;
         private Boolean skip;
         private MultipartFile video;
         private LocalDateTime setStartTime;
