@@ -53,7 +53,7 @@ public interface ResumeQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 이력서 기반 질문과 질문 스크립트, 키워드를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionScriptResponse.class)),
                     }))
     })
     Response writeScript(Long resumeQuestionId, @Valid ResumeScriptDto.Request requestDto);
@@ -63,7 +63,7 @@ public interface ResumeQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 이력서 기반 질문과 질문 스크립트, 키워드를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionKeywordResponse.class)),
                     }))
     })
     Response createKeyword(Long resumeQuestionId, @Valid ResumeKeywordDto.Request requestDto);
@@ -73,7 +73,7 @@ public interface ResumeQuestionControllerDocs {
             @ApiResponse(responseCode = "200", description = "성공시 이력서 기반 질문과 질문 스크립트, 키워드를 반환한다.",
                     content = @Content(schemaProperties = {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
-                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionDetailResponse.class)),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = QuestionKeywordResponse.class)),
                     }))
     })
     Response updateKeyword(Long resumeKeywordId, @Valid ResumeKeywordDto.Request requestDto);
@@ -90,5 +90,7 @@ public interface ResumeQuestionControllerDocs {
     
     class QuestionListResponse { public List<ResumeQuestionDto.ListResponse> questionList; }
     class QuestionDetailResponse { public ResumeQuestionDto.Response questionDetail; }
+    class QuestionScriptResponse { public ResumeScriptDto.Response script; }
+    class QuestionKeywordResponse { public List<ResumeKeywordDto.Response> keywordList; }
 
 }

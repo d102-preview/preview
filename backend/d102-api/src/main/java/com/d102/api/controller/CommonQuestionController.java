@@ -19,7 +19,7 @@ public class CommonQuestionController implements CommonQuestionControllerDocs {
 
     @GetMapping("/list")
     public Response getList(Pageable pageable) {
-        return new Response(CommonQuestionConstant.COMMON_QUESTION_LIST, commonQuestionService.getList(pageable));
+        return new Response(CommonQuestionConstant.QUESTION_LIST, commonQuestionService.getList(pageable));
     }
 
     @GetMapping("/{commonQuestionId}")

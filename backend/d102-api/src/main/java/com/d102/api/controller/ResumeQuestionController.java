@@ -19,7 +19,7 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
 
     @GetMapping("/list/{resumeId}")
     public Response getList(@PathVariable Long resumeId, Pageable pageable) {
-        return new Response(ResumeQuestionConstant.RESUME_QUESTION_LIST, resumeQuestionService.getList(resumeId, pageable));
+        return new Response(ResumeQuestionConstant.QUESTION_LIST, resumeQuestionService.getList(resumeId, pageable));
     }
 
     @GetMapping("/{resumeQuestionId}")
@@ -35,17 +35,17 @@ public class ResumeQuestionController implements ResumeQuestionControllerDocs {
 
     @PostMapping("/script/{resumeQuestionId}")
     public Response writeScript(@PathVariable Long resumeQuestionId, @RequestBody ResumeScriptDto.Request requestDto) {
-        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.writeScript(resumeQuestionId, requestDto));
+        return new Response(ResumeQuestionConstant.QUESTION_SCRIPT, resumeQuestionService.writeScript(resumeQuestionId, requestDto));
     }
 
     @PostMapping("/keyword/{resumeQuestionId}")
     public Response createKeyword(@PathVariable Long resumeQuestionId, @RequestBody ResumeKeywordDto.Request requestDto) {
-        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.createKeyword(resumeQuestionId, requestDto));
+        return new Response(ResumeQuestionConstant.QUESTION_KEYWORD, resumeQuestionService.createKeyword(resumeQuestionId, requestDto));
     }
 
     @PatchMapping("/keyword/{resumeKeywordId}")
     public Response updateKeyword(@PathVariable Long resumeKeywordId, @RequestBody ResumeKeywordDto.Request requestDto) {
-        return new Response(ResumeQuestionConstant.QUESTION_DETAIL, resumeQuestionService.updateKeyword(resumeKeywordId, requestDto));
+        return new Response(ResumeQuestionConstant.QUESTION_KEYWORD, resumeQuestionService.updateKeyword(resumeKeywordId, requestDto));
     }
 
     @DeleteMapping("/keyword/{resumeKeywordId}")
