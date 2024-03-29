@@ -1,4 +1,12 @@
-import { IQuestionListRes, IQuestionRes, questionType, IScriptInfo, IScriptRes } from '@/types/question';
+import {
+  IQuestionListRes,
+  IQuestionRes,
+  questionType,
+  IScriptInfo,
+  IScriptRes,
+  IKeywordInfo,
+  IKeywordRes,
+} from '@/types/question';
 import { APIResponse } from '@/types/model';
 import { axiosAuthInstance, axiosCommonInstance } from '@/apis/axiosInstance';
 
@@ -16,6 +24,11 @@ export const getQuestion = async (type: questionType, questionId: number): Promi
 
 export const postScrtip = async ({ type, questionId, script }: IScriptInfo): Promise<APIResponse<IScriptRes>> => {
   const res = await axiosAuthInstance.post(`/api/${type}/question/script/${questionId}`, script);
-  console.log('스크립트 작성', res);
+  return res.data;
+};
+
+export const postKeyword = async ({ type, questionId, keyword }: IKeywordInfo): Promise<APIResponse<IKeywordRes>> => {
+  const res = await axiosAuthInstance.post(`/api/${type}/question/keyword/${questionId}`, keyword);
+  console.log('키워드 추가', res);
   return res.data;
 };

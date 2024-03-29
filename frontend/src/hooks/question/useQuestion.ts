@@ -1,6 +1,6 @@
-import { getQuestionList, getQuestion, postScrtip } from '@/services/question/api';
+import { getQuestionList, getQuestion, postScrtip, postKeyword } from '@/services/question/api';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { questionType, IScriptInfo } from '@/types/question';
+import { questionType, IScriptInfo, IKeywordInfo } from '@/types/question';
 
 export const useQuestion = () => {
   const useGetQuestionList = (type: questionType) => {
@@ -20,8 +20,9 @@ export const useQuestion = () => {
     });
   };
 
-  const usePostScript = () => {
+  const usePostScript = (type: questionType, questionId: number) => {
     return useMutation({
+      mutationKey: [`${type}Script`, questionId],
       mutationFn: ({ type, questionId, script }: IScriptInfo) => postScrtip({ type, questionId, script }),
       onSuccess: res => {
         console.log('스크립트 작성 성공', res);
@@ -32,5 +33,18 @@ export const useQuestion = () => {
     });
   };
 
-  return { useGetQuestionList, useGetQuestion, usePostScript };
+  const usePostKeyword = (type: questionType, questionId: number) => {
+    return useMutation({
+      mutationKey: [`${type}Script`, questionId],
+      mutationFn: ({ type, questionId, keyword }: IKeywordInfo) => postKeyword({ type, questionId, keyword }),
+      onSuccess: res => {
+        console.log('키워드 추가 성공', res);
+      },
+      onError: err => {
+        console.log('키워드 추가 실패', err);
+      },
+    });
+  };
+
+  return { useGetQuestionList, useGetQuestion, usePostScript, usePostKeyword };
 };
