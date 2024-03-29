@@ -13,6 +13,7 @@ public enum ExceptionType {
     ResumeLimitException("INVALID", "Resume limit exceeded"),
     PdfConvertException("INVALID", "Pdf convert failed"),
     Base64ConvertException("INVALID", "Base64 convert failed"),
+    VideoUploadException("INVALID", "Video upload failed"),
 
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),

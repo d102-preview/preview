@@ -34,6 +34,15 @@ public interface UploadControllerDocs {
     })
     Response uploadResume(@Valid UploadDto.ResumeRequest resumeRequestDto);
 
+    @Operation(summary = "면접 영상 업로드", description = "면접 영상을 업로드한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 성공시 ok를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                    }))
+    })
+    Response uploadVideo(@Valid UploadDto.VideoRequest videoRequestDto);
+
 
     class ProfileResponse { public UploadDto.ProfileResponse profile; }
     class ResumeResponse { public UploadDto.ResumeResponse resume; }
