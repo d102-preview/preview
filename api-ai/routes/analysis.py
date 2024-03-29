@@ -5,11 +5,11 @@ from models.analysis import AnalysisRequest, AnalysisResponse
 from models.common import Status
 from service.analysis import create_task
 
-router = APIRouter(tags=["1. ai"])
+router = APIRouter()
 
 
 @router.post(
-    "/analysis",
+    "/",
     summary="답변 영상 분석",
     status_code=status.HTTP_202_ACCEPTED,
     responses={
@@ -32,9 +32,3 @@ def analyse_video(params: AnalysisRequest, session: SessionDep):
             "intent_list": intent_list,
         },
     )
-
-
-@router.get("/", summary="서버 Health Check", status_code=status.HTTP_200_OK)
-def health_check():
-    """서버가 실행 중이면 \"ok\" 반환"""
-    return "ok"
