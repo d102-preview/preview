@@ -22,9 +22,7 @@ export interface IScriptReq {
   script: string;
 }
 
-export interface IScriptInfo {
-  type: questionType;
-  questionId: number;
+export interface IScriptInfo extends IQeustionInfo {
   script: IScriptReq;
 }
 
@@ -41,8 +39,17 @@ export interface IKeywordRes {
   keywordList: IKeywordItem[];
 }
 
-export interface IKeywordInfo {
-  type: questionType;
-  questionId: number;
+export interface IKeywordInfo extends IQeustionInfo {
   keyword: IKeywordReq;
 }
+
+export interface IQeustionInfo {
+  type: questionType;
+  questionId: number;
+}
+
+export interface IDeleteKeywordInfo {
+  type: questionType;
+  keywordId: number;
+}
+
