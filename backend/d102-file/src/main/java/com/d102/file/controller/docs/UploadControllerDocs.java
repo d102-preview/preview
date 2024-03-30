@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "1. 파일 업로드 관련 API", description = "파일을 업로드할 수 있는 API")
 public interface UploadControllerDocs {
@@ -41,7 +42,7 @@ public interface UploadControllerDocs {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
                     }))
     })
-    Response uploadAndAnalyzeVideo(@Valid UploadDto.AnalysisRequest analysisRequestDto);
+    Response uploadAndAnalyzeVideo(@Valid UploadDto.AnalysisRequest analysisRequestDto, MultipartFile video);
 
 
     class ProfileResponse { public UploadDto.ProfileResponse profile; }

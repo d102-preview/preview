@@ -62,10 +62,8 @@ public class UploadDto {
         private String answer;
 
         private Boolean skip;
-        private MultipartFile video;
         private LocalDateTime setStartTime;
         private List<String> keywordList;
-
     }
 
 }
