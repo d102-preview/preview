@@ -61,7 +61,7 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.web.cors: DEBUG
     org.hibernate.sql: DEBUG
-    org.hibernate.type.descriptor.sql: trace.
+    org.hibernate.type.descriptor.sql: trace
 
 cors:
   origins: >
