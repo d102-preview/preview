@@ -119,3 +119,8 @@ export interface IPasswordInfo {
 export interface IProfile {
   url: string;
 }
+
+// 작업 완료 여부 응답 객체
+export interface IStatusRes {
+  complete: boolean;
+}

@@ -9,7 +9,7 @@ import {
   IKeywordRes,
   IResumeRes,
 } from '@/types/question';
-import { APIResponse } from '@/types/model';
+import { APIResponse, IStatusRes } from '@/types/model';
 import { axiosAuthInstance, axiosCommonInstance } from '@/apis/axiosInstance';
 
 export const getCommonQuestionList = async (): Promise<APIResponse<IQuestionListRes>> => {
@@ -48,5 +48,10 @@ export const deleteKeyword = async (type: questionType, keywordId: number): Prom
 
 export const getResumeList = async (): Promise<APIResponse<IResumeRes>> => {
   const res = await axiosAuthInstance.get(`/api/resume/list`);
+  return res.data;
+};
+
+export const checkQuestionStatus = async (resumeId: number): Promise<APIResponse<IStatusRes>> => {
+  const res = await axiosAuthInstance.get(`/api/task/question/list/${resumeId}`);
   return res.data;
 };
