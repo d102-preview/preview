@@ -129,7 +129,6 @@ CREATE TABLE `analysis` (
   `video_path` varchar(1024) NOT NULL,
   `thumbnail_path` varchar(1024) DEFAULT NULL,
   `keyword_list` varchar(512),
-  `script` varchar(1024),
   `set_start_time` datetime NOT NULL,
   `analysis_req_time` datetime DEFAULT NULL,
   `analysis_start_time` datetime DEFAULT NULL,

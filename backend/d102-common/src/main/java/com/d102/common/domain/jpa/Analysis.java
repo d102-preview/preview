@@ -43,9 +43,6 @@ public class Analysis {
     @Convert(converter = StringListConverter.class)
     private List<String> keywordList;
 
-    @Column(name = "script", length = 1024)
-    private String script;
-
     @Column(name = "set_start_time", nullable = false)
     private LocalDateTime setStartTime;
 

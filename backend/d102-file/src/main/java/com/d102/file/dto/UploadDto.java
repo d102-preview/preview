@@ -61,9 +61,6 @@ public class UploadDto {
         @Size(max = 1024)
         private String answer;
 
-        @Size(max = 1024)
-        private String script;
-
         private Boolean skip;
         private MultipartFile video;
         private LocalDateTime setStartTime;
