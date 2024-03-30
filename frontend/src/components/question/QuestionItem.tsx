@@ -24,7 +24,6 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const { mutate: getQuestion, data } = useGetQuestion({ type, questionId: id });
 
   const { isLogin } = userStore();
-  console.log(isLogin);
 
   const handleClick = () => {
     if (!isLogin) {
