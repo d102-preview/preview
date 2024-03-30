@@ -2,6 +2,8 @@ import errno
 import os
 from datetime import datetime
 
+import numpy as np
+import pandas as pd
 from ai import resnet_proc
 from ai.kobert_proc import kobert_model
 from common.deps import SessionDep
@@ -13,6 +15,9 @@ from models.analysis import Analysis
 from PIL import Image
 from pytz import timezone
 from sqlmodel import select
+
+# Convert emotion strings into value for interpolation
+CONVERT_PRED = {"Positive": 1, "Neutral": 0, "Negative": -1}
 
 
 @elapsed
@@ -39,25 +44,45 @@ def _facial_emotional_recognition(record: Analysis) -> list:
     frame_list = resnet_proc.extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(f"{len(frame_list)} frames are extracted from the input video")
 
+    # TODO: Save thumbnail and update record
+
     # Detect face from the frames
     face_list = []
     for img in frame_list:
         _, face_img = resnet_proc.detect_faces(img, (224, 224))
-
-        if face_img is None:
-            continue
-
         face_list.append(face_img)
-    logger.debug(f"{len(face_list)} faces are detected from {len(frame_list)} frames")
+
+    cnt_none = len([x for x in face_list if x is None])
+    cnt_face = len(face_list) - cnt_none
+    logger.debug(f"{cnt_face} faces / {len(frame_list)} frames")
 
     model = resnet_proc.get_model("ResNet18")
 
+    # Count by emotion for calculate ratio
+    cnt_emotion = {}
+
     predict_list = []
     for img in face_list:
-        predict_list.append(resnet_proc.predict(Image.fromarray(img), model))
-    logger.info(f"Predict {len(predict_list)} faces")
+        pred = None
+        if img is not None:
+            pred = resnet_proc.predict(Image.fromarray(img), model)
+            cnt_emotion[pred] = cnt_emotion.get(pred, 0) + 1
+            pred = CONVERT_PRED[pred]
 
-    return predict_list
+        predict_list.append(pred)
+
+    logger.info(f"Process {cnt_face} faces")
+
+    # Calculate ratio
+    ratio_values = np.array(list(cnt_emotion.values()))
+    ratio_values = np.round(ratio_values * 100 / cnt_face, 2)
+    ratio = {k.lower(): v for k, v in zip(cnt_emotion.keys(), ratio_values)}
+    logger.debug(f"{ratio = }")
+
+
+    return {
+        "ratio": ratio,
+    }
 
 
 @elapsed
