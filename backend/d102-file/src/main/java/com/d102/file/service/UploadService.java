@@ -1,6 +1,7 @@
 package com.d102.file.service;
 
 import com.d102.file.dto.UploadDto;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UploadService {
 
@@ -8,6 +9,6 @@ public interface UploadService {
 
     UploadDto.ResumeResponse uploadResume(UploadDto.ResumeRequest resumeRequestDto);
 
-    void uploadVideo(UploadDto.VideoRequest videoRequestDto);
+    void uploadAndAnalyzeVideo(UploadDto.AnalysisRequest analysisRequestDto, MultipartFile video);
 
 }
