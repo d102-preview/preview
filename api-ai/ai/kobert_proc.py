@@ -151,7 +151,7 @@ class KobertModel:
         self._device = torch.device("cpu")
 
         self._bertmodel = BertModel.from_pretrained(self._pretrained, return_dict=False)
-        self._model = BERTClassifier(self._bertmodel, num_classes=16)
+        self._model = BERTClassifier(self._bertmodel, num_classes=52)
         self._model.load_state_dict(
             torch.load(
                 os.path.join(os.getcwd(), "ai/models/KoBERT/model_state_dict.pt"),
@@ -180,7 +180,7 @@ class KobertModel:
 
         self._model.eval()
 
-        answer = 0
+        answer = None
 
         for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(
             test_dataloader
@@ -191,7 +191,11 @@ class KobertModel:
             out = self._model(token_ids, valid_length, segment_ids)
             for logits in out:
                 logits = logits.detach().cpu().numpy()
-                answer = np.argmax(logits)
+                answer = sorted(
+                    {i: v for i, v in enumerate(logits) if v > 0}.items(),
+                    key=lambda x: x[1],
+                    reverse=True,
+                )[:5]
         return answer
 
 
