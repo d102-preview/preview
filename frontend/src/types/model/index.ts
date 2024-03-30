@@ -92,7 +92,7 @@ export interface IUserInfo {
   profileImageName?: string;
   profileImageUrl: string;
   name: string;
-  resumeList?: IResume[];
+  resumeList: (IResume | undefined)[];
 }
 
 // 이력서 정보
