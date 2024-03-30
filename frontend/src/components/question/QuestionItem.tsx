@@ -19,7 +19,7 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const isQuestionPage = location.pathname === '/question';
 
   const { useGetQuestion } = useQuestion();
-  const { mutate: getQuestion, data } = useGetQuestion(type, id);
+  const { mutate: getQuestion, data } = useGetQuestion({ type, questionId: id });
 
   const handleClick = () => {
     getQuestion();

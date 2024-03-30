@@ -1,4 +1,5 @@
 import {
+  IQeustionInfo,
   IQuestionListRes,
   IQuestionRes,
   questionType,
@@ -17,7 +18,7 @@ export const getQuestionList = async (type: questionType): Promise<APIResponse<I
   return res.data;
 };
 
-export const getQuestion = async (type: questionType, questionId: number): Promise<APIResponse<IQuestionRes>> => {
+export const getQuestion = async ({type, questionId}: IQeustionInfo): Promise<APIResponse<IQuestionRes>> => {
   const res = await axiosAuthInstance.get(`/api/${type}/question/${questionId}`);
   return res.data;
 };
@@ -30,5 +31,11 @@ export const postScrtip = async ({ type, questionId, script }: IScriptInfo): Pro
 export const postKeyword = async ({ type, questionId, keyword }: IKeywordInfo): Promise<APIResponse<IKeywordRes>> => {
   const res = await axiosAuthInstance.post(`/api/${type}/question/keyword/${questionId}`, keyword);
   console.log('키워드 추가', res);
+  return res.data;
+};
+
+export const deleteKeyword = async (type: questionType, keywordId: number): Promise<APIResponse<null>> => {
+  const res = await axiosAuthInstance.delete(`/api/${type}/question/keyword/${keywordId}`);
+  console.log('키워드 삭제', res);
   return res.data;
 };

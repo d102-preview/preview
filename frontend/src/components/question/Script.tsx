@@ -17,7 +17,7 @@ const Script = ({ initialScript, id, type }: IScriptProps) => {
   const [subText, setSubText] = useState<ISubText>({ text: '', type: 'info' });
 
   const { usePostScript } = useQuestion();
-  const { mutate: postScript } = usePostScript(type, id);
+  const { mutate: postScript } = usePostScript({ type, questionId: id });
 
   useEffect(() => {
     setScript(initialScript);
