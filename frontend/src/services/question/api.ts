@@ -1,4 +1,13 @@
-import { IQuestionListRes, IQuestionRes, questionType, IScriptInfo, IScriptRes } from '@/types/question';
+import {
+  IQeustionInfo,
+  IQuestionListRes,
+  IQuestionRes,
+  questionType,
+  IScriptInfo,
+  IScriptRes,
+  IKeywordInfo,
+  IKeywordRes,
+} from '@/types/question';
 import { APIResponse } from '@/types/model';
 import { axiosAuthInstance, axiosCommonInstance } from '@/apis/axiosInstance';
 
@@ -9,13 +18,24 @@ export const getQuestionList = async (type: questionType): Promise<APIResponse<I
   return res.data;
 };
 
-export const getQuestion = async (type: questionType, questionId: number): Promise<APIResponse<IQuestionRes>> => {
+export const getQuestion = async ({type, questionId}: IQeustionInfo): Promise<APIResponse<IQuestionRes>> => {
   const res = await axiosAuthInstance.get(`/api/${type}/question/${questionId}`);
   return res.data;
 };
 
 export const postScrtip = async ({ type, questionId, script }: IScriptInfo): Promise<APIResponse<IScriptRes>> => {
   const res = await axiosAuthInstance.post(`/api/${type}/question/script/${questionId}`, script);
-  console.log('스크립트 작성', res);
+  return res.data;
+};
+
+export const postKeyword = async ({ type, questionId, keyword }: IKeywordInfo): Promise<APIResponse<IKeywordRes>> => {
+  const res = await axiosAuthInstance.post(`/api/${type}/question/keyword/${questionId}`, keyword);
+  console.log('키워드 추가', res);
+  return res.data;
+};
+
+export const deleteKeyword = async (type: questionType, keywordId: number): Promise<APIResponse<null>> => {
+  const res = await axiosAuthInstance.delete(`/api/${type}/question/keyword/${keywordId}`);
+  console.log('키워드 삭제', res);
   return res.data;
 };
