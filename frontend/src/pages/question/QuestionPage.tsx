@@ -5,12 +5,12 @@ import CommonQuestions from '@/components/question/CommonQuestions';
 import ResumeQuestions from '@/components/question/ResumeQuestions';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { IResumeInfo, interviewType } from '@/types/model';
+import { ISimpleResume, interviewType } from '@/types/model';
 import { useQuestion } from '@/hooks/question/useQuestion';
 
 const QuestionPage = () => {
   const [activeTab, setActiveTab] = useState<interviewType>('common');
-  const [resumeList, setResumeList] = useState<IResumeInfo[]>([]);
+  const [resumeList, setResumeList] = useState<ISimpleResume[]>([]);
   const location = useLocation();
   const isShow = location.pathname === '/question';
 
