@@ -8,6 +8,6 @@ public interface UploadService {
 
     UploadDto.ResumeResponse uploadResume(UploadDto.ResumeRequest resumeRequestDto);
 
-    void uploadVideo(UploadDto.VideoRequest videoRequestDto);
+    void uploadAndAnalyzeVideo(UploadDto.AnalysisRequest analysisRequestDto);
 
 }

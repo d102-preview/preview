@@ -30,7 +30,7 @@ public class Resume extends BaseTime {
     @Column(name = "display_name", length = 16, nullable = false)
     private String displayName;
 
-    @Column(name = "file_path", length = 512, nullable = false)
+    @Column(name = "file_path", length = 1024, nullable = false)
     private String filePath;
 
     @OneToMany(mappedBy = "resume", orphanRemoval = true)
