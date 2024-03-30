@@ -5,7 +5,7 @@ export const useInterview = () => {
   const useGetMainInterviewQuestionList = () => {
     return useMutation({
       mutationKey: ['interview', 'questionList'],
-      mutationFn: () => getMainInterviewQuestionList(),
+      mutationFn: (resumeId: number) => getMainInterviewQuestionList(resumeId),
       onSuccess: () => {
         console.log('success');
       },

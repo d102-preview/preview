@@ -2,8 +2,8 @@ import { axiosAuthInstance, axiosFileInstance } from '@/apis/axiosInstance';
 import { IInterviewQuestionRes } from '@/types/interview';
 import { APIResponse, APISimpleResponse } from '@/types/model';
 
-export const getMainInterviewQuestionList = async (): Promise<APIResponse<IInterviewQuestionRes>> => {
-  const res = await axiosAuthInstance.get('/api/interview/main');
+export const getMainInterviewQuestionList = async (resumeId: number): Promise<APIResponse<IInterviewQuestionRes>> => {
+  const res = await axiosAuthInstance.get(`/api/interview/${resumeId}`);
   console.log(res);
   return res.data;
 };
