@@ -151,7 +151,7 @@ class KobertModel:
         self._device = torch.device("cpu")
 
         self._bertmodel = BertModel.from_pretrained(self._pretrained, return_dict=False)
-        self._model = BERTClassifier(self._bertmodel, num_classes=16)
+        self._model = BERTClassifier(self._bertmodel, num_classes=52)
         self._model.load_state_dict(
             torch.load(
                 os.path.join(os.getcwd(), "ai/models/KoBERT/model_state_dict.pt"),
@@ -195,7 +195,7 @@ class KobertModel:
                     {i: v for i, v in enumerate(logits) if v > 0}.items(),
                     key=lambda x: x[1],
                     reverse=True,
-                )
+                )[:5]
         return answer
 
 
