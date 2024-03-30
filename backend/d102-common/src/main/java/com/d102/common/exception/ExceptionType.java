@@ -12,8 +12,11 @@ public enum ExceptionType {
     ResumeUploadException("INVALID", "Resume upload failed"),
     ResumeLimitException("INVALID", "Resume limit exceeded"),
     PdfConvertException("INVALID", "Pdf convert failed"),
+    OpenAiApiException("INVALID", "OpenAi server response failed"),
     Base64ConvertException("INVALID", "Base64 convert failed"),
     VideoUploadException("INVALID", "Video upload failed"),
+    FastAiApiException("INVALID", "FastAi server response failed"),
+    AnalysisException("INVALID", "FastAi analysis failed"),
 
     /* UnAuthorize request */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),

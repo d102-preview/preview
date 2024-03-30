@@ -88,3 +88,6 @@ download:
 open-ai:
   url: https://api.openai.com/v1/chat/completions
   secret-key: secret
+
+fast-ai:
+  url: http://localhost:8000/ai/analysis/
