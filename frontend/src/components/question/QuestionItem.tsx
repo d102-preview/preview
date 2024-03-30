@@ -1,9 +1,11 @@
 import Accordian from '@/components/@common/Accordian/Accordian';
 import Keywords from '@/components/question/Keywords';
 import Script from '@/components/question/Script';
+import Toast from '@/components/@common/Toast/Toast';
 import { IQuestionItem, interviewType } from '@/types/model';
 import { useLocation } from 'react-router-dom';
 import { useQuestion } from '@/hooks/question/useQuestion';
+import userStore from '@/stores/userStore';
 
 interface IQuestionItemProps {
   question: string;
@@ -21,7 +23,14 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const { useGetQuestion } = useQuestion();
   const { mutate: getQuestion, data } = useGetQuestion({ type, questionId: id });
 
+  const { isLogin } = userStore();
+  console.log(isLogin);
+
   const handleClick = () => {
+    if (!isLogin) {
+      Toast.info('스크립트 및 키워드 작성 기능을 이용하려면 로그인이 필요합니다.');
+      return;
+    }
     getQuestion();
   };
 
@@ -39,6 +48,7 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
           </>
         }
         defaultOpen={false}
+        disabled={!isLogin}
         isSelected={isSelected}
         onPlusClick={() => onAdd && onAdd({ id, question, type, keywordList: [] })} // '+' 아이콘 클릭 시 호출될 함수
         onMinusClick={() => onRemove(id)} // '-' 아이콘 클릭 시 호출될 함수
