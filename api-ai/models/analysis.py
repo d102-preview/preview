@@ -18,7 +18,6 @@ class AnalysisResponse(CommonResponse):
 
 class Analysis(SQLModel, table=True):
     id: int = sqlmodel.Field(primary_key=True)
-    type: str = sqlmodel.Field(max_length=16)
 
     question: str = sqlmodel.Field(max_length=512)
     answer: str = sqlmodel.Field(max_length=1024)
