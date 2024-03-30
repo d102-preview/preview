@@ -26,6 +26,12 @@ export interface IKeywordItem {
   keyword: string;
 }
 
+// 이력서 리스트 타입
+export interface IResumeList {
+  name: string;
+  filePath: string;
+}
+
 // 질문 리스트 타입
 export interface IQuestionListItem {
   id: number;
@@ -91,14 +97,16 @@ export interface IUserInfo {
 }
 
 // 이력서 정보
-export interface IResumeInfo {
+export interface IResume {
   id: number;
   displayName: string;
+  filePath: string;
 }
 
 // 이력서 정보
-export interface IResume extends IResumeInfo {
-  filePath: string;
+export interface ISimpleResume {
+  id: number;
+  displayName: string;
 }
 
 // 비밀번호 정보

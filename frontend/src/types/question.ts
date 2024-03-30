@@ -4,7 +4,7 @@ import {
   IQuestionListItem,
   IPaginationResponse,
   APIResponse,
-  IResumeInfo,
+  ISimpleResume,
 } from './model';
 
 export interface IQuestionListPaginationResponse extends IPaginationResponse {
@@ -61,5 +61,5 @@ export interface IDeleteKeywordInfo {
 }
 
 export interface IResumeRes {
-  resumeList: IResumeInfo[];
+  resumeList: ISimpleResume[];
 }
