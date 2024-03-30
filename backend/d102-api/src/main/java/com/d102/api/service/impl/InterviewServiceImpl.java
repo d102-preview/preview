@@ -38,7 +38,7 @@ public class InterviewServiceImpl implements InterviewService {
 
         List<InterviewDto.ListResponse> questionList = new ArrayList<>();
 
-        // common question
+        /* common question */
         List<CommonQuestion> randomCommonQuestionList = interviewRepository.getRandomCommonQuestionList();
         for(CommonQuestion commonQuestion: randomCommonQuestionList) {
             questionList.add(InterviewDto.ListResponse.builder()
@@ -50,7 +50,7 @@ public class InterviewServiceImpl implements InterviewService {
                     .build());
         }
 
-        // resume question
+        /* resume question */
         List<ResumeQuestion> resumeQuestionList = interviewRepository.getResumeQuestionList(resumeId);
         for (ResumeQuestion resumeQuestion : resumeQuestionList) {
             questionList.add(InterviewDto.ListResponse.builder()
