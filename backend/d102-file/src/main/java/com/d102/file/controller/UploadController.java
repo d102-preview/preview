@@ -8,6 +8,7 @@ import com.d102.file.service.UploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/upload")
 @RequiredArgsConstructor
@@ -27,8 +28,8 @@ public class UploadController implements UploadControllerDocs {
     }
 
     @PostMapping(value = "/video", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response uploadVideo(@ModelAttribute UploadDto.VideoRequest videoRequestDto) {
-        uploadService.uploadVideo(videoRequestDto);
+    public Response uploadAndAnalyzeVideo(@RequestPart UploadDto.AnalysisRequest analysisRequestDto, @RequestPart MultipartFile video) {
+        uploadService.uploadAndAnalyzeVideo(analysisRequestDto, video);
         return new Response();
     }
 
