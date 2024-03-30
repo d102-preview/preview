@@ -11,9 +11,9 @@ interface IScriptProps {
 }
 
 const Script = ({ initialScript, id, type }: IScriptProps) => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [script, setScript] = useState(initialScript);
-  const [tempScript, setTempScript] = useState('');
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [script, setScript] = useState<string>(initialScript);
+  const [tempScript, setTempScript] = useState<string>('');
   const [subText, setSubText] = useState<ISubText>({ text: '', type: 'info' });
 
   const { usePostScript } = useQuestion();

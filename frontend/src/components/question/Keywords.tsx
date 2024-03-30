@@ -13,10 +13,10 @@ interface IkeywordsProps {
 
 const Keywords = ({ initialKeywords, id, type }: IkeywordsProps) => {
   const [keywords, setKeywords] = useState<IKeywordItem[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [isEdit, setIsEdit] = useState(false);
-  const [isDuplicate, setIsDuplicate] = useState(false);
-  const [message, setMessage] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isDuplicate, setIsDuplicate] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
 
   const { usePostKeyword, useDeleteKeyword } = useQuestion();
 
