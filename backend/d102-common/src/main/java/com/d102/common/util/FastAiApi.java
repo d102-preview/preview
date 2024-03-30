@@ -28,7 +28,7 @@ public class FastAiApi {
 
     private HttpEntity<String> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {
         String payloadTemplate = "{ \"analysis_id\": \"%s\" }";
-        String payload = String.format(payloadTemplate, analysisIdJson);
+        String payload = String.format(payloadTemplate, analysisIdJson.toString());
 
         return new HttpEntity<>(payload, headers);
     }
