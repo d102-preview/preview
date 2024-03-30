@@ -7,6 +7,7 @@ import com.d102.api.repository.jpa.CommonKeywordRepository;
 import com.d102.api.repository.jpa.ResumeKeywordRepository;
 import com.d102.api.repository.querydsl.InterviewRepository;
 import com.d102.api.service.InterviewService;
+import com.d102.common.constant.InterviewConstant;
 import com.d102.common.constant.QuestionType;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
@@ -38,12 +39,21 @@ public class InterviewServiceImpl implements InterviewService {
 
         List<InterviewDto.ListResponse> questionList = new ArrayList<>();
 
+        /* self introduce question */
+        questionList.add(InterviewDto.ListResponse.builder()
+                .question(InterviewConstant.SELF_INTRODUCE_QUESTION)
+                .type(QuestionType.common)
+                .keywordList(interviewMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
+                        securityHelper.getLoginUsername(), InterviewConstant.SELF_INTRODUCE_NO
+                )))
+                .build());
+
         /* common question */
         List<CommonQuestion> randomCommonQuestionList = interviewRepository.getRandomCommonQuestionList();
         for(CommonQuestion commonQuestion: randomCommonQuestionList) {
             questionList.add(InterviewDto.ListResponse.builder()
                     .question(commonQuestion.getQuestion())
-                    .type(QuestionType.COMMON)
+                    .type(QuestionType.common)
                     .keywordList(interviewMapper.toCommonKeywordDto(commonKeywordRepository.findByUser_EmailAndCommonQuestion_Id(
                             securityHelper.getLoginUsername(), commonQuestion.getId()
                     )))
@@ -55,7 +65,7 @@ public class InterviewServiceImpl implements InterviewService {
         for (ResumeQuestion resumeQuestion : resumeQuestionList) {
             questionList.add(InterviewDto.ListResponse.builder()
                     .question(resumeQuestion.getQuestion())
-                    .type(QuestionType.RESUME)
+                    .type(QuestionType.resume)
                     .keywordList(interviewMapper.toResumeKeywordDto(resumeKeywordRepository.findByResumeQuestion_id(resumeQuestion.getId())))
                     .build());
         }
