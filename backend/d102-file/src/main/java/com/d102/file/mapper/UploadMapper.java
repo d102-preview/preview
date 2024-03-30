@@ -1,5 +1,6 @@
 package com.d102.file.mapper;
 
+import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.User;
 import com.d102.file.dto.UploadDto;
@@ -19,5 +20,20 @@ public interface UploadMapper {
     @Mapping(target = "fileName", ignore = true)
     @Mapping(target = "filePath", ignore = true)
     Resume toResume(UploadDto.ResumeRequest resumeRequest);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "videoPath", ignore = true)
+    @Mapping(target = "thumbnailPath", ignore = true)
+    @Mapping(target = "keywordList", ignore = true)
+    @Mapping(target = "analysisReqTime", ignore = true)
+    @Mapping(target = "analysisStartTime", ignore = true)
+    @Mapping(target = "analysisEndTime", ignore = true)
+    @Mapping(target = "videoLength", ignore = true)
+    @Mapping(target = "fps", ignore = true)
+    @Mapping(target = "frames", ignore = true)
+    @Mapping(target = "emotion", ignore = true)
+    @Mapping(target = "intent", ignore = true)
+    Analysis toAnalysis(UploadDto.AnalysisRequest analysisRequest);
 
 }

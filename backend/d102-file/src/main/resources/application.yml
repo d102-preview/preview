@@ -61,7 +61,7 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.web.cors: DEBUG
     org.hibernate.sql: DEBUG
-    org.hibernate.type.descriptor.sql: trace
+    org.hibernate.type.descriptor.sql: trace.
 
 cors:
   origins: >
@@ -80,3 +80,6 @@ download:
 open-ai:
   url: https://api.openai.com/v1/chat/completions
   secret-key: secret
+
+fast-ai:
+  url: http://localhost:8000/ai/analysis/

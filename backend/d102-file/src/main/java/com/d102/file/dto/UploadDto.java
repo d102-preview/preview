@@ -48,18 +48,27 @@ public class UploadDto {
     }
 
     @Data
-    public static class VideoRequest {
+    public static class AnalysisRequest {
 
         @NotBlank
+        @Size(max = 16)
         private String type;
 
+        @NotBlank
+        @Size(max = 512)
         private String question;
+
+        @Size(max = 1024)
         private String answer;
-        private List<String> keywordList;
+
+        @Size(max = 1024)
         private String script;
+
         private Boolean skip;
         private MultipartFile video;
         private LocalDateTime setStartTime;
+        private List<String> keywordList;
+
     }
 
 }
