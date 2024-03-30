@@ -92,7 +92,7 @@ const ResumeAddModal = ({ onClose }: { onClose: () => void }) => {
                 textColor="text-MAIN1"
                 hoverTextColor="hover:text-white"
                 hoverBackgroundColor="hover:bg-MAIN1"
-                style={{ fontWeight: '300', zIndex: '10', cursor: 'pointer' }}
+                style={{ fontWeight: '300', zIndex: '10' }}
                 onClick={() => fileRef.current?.click()}
               />
             </div>
