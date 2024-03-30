@@ -94,7 +94,7 @@ public class OpenAiApi {
         private long created;
         private String model;
         private Usage usage;
-        private List<Choice> choiceList;
+        private List<Choice> choices;
 
         @Data
         public static class Usage {

@@ -22,7 +22,7 @@ public class FollowUpQuestionServiceImpl implements FollowUpQuestionService {
         } catch (RestClientException e) {
             throw new InvalidException(ExceptionType.OpenAiApiException);
         }
-        String question = response.getChoiceList().getFirst().getMessage().getContent();
+        String question = response.getChoices().getFirst().getMessage().getContent();
         return FollowUpQuestionDto.Response.builder()
                 .question(question).build();
     }
