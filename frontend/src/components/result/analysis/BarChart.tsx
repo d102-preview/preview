@@ -18,13 +18,22 @@ interface IBarChartProps {
 }
 
 const BarChart = ({ title }: IBarChartProps) => {
+  // 원래 데이터
+  const originalData = [12, 19, 3, 5, 2, 3];
+
+  // 가장 큰 값 찾기
+  const maxValue = Math.max(...originalData);
+
+  // 데이터를 최대값으로 나누어 비율 계산
+  const adjustedData = originalData.map(value => (value / maxValue) * 100);
+
   // 막대 그래프 데이터와 설정
   const data = {
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
     datasets: [
       {
         label: '',
-        data: [12, 19, 3, 5, 2, 3],
+        data: adjustedData, // 조정된 데이터 사용
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -50,14 +59,20 @@ const BarChart = ({ title }: IBarChartProps) => {
     scales: {
       y: {
         beginAtZero: true,
+        ticks: {
+          color: '#FE777B', // 레이블 색상 조정
+          font: {
+            size: 14, // 폰트 크기 조정
+          },
+        },
       },
     },
     plugins: {
-      legend: { 
-        display: false 
+      legend: {
+        display: false,
       },
-      tooltip: { 
-        enabled: true
+      tooltip: {
+        enabled: false,
       },
       datalabels: {
         color: '#FE777B',
