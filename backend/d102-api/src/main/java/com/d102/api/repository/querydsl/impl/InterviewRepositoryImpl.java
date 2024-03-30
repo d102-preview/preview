@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,12 +28,13 @@ public class InterviewRepositoryImpl implements InterviewRepository {
     @Transactional(readOnly = true)
     public List<CommonQuestion> getRandomCommonQuestionList() {
         return jpaQueryFactory.selectFrom(commonQuestion)
+                .where(commonQuestion.id.notIn(exceptSelfIntroduce()))
                 .orderBy(makeRandom())
                 .limit(InterviewConstant.QUESTION_COUNT)
                 .fetch();
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<ResumeQuestion> getResumeQuestionList(Long resumeId) {
         return jpaQueryFactory.selectFrom(resumeQuestion)
                 .where(resumeQuestion.resume.id.eq(resumeId))
@@ -41,7 +43,13 @@ public class InterviewRepositoryImpl implements InterviewRepository {
                 .fetch();
     }
 
-    public static OrderSpecifier<Double> makeRandom() {
+    private static List<Long> exceptSelfIntroduce() {
+        List<Long> selfIntroduceList = new ArrayList<>();
+        selfIntroduceList.add(InterviewConstant.SELF_INTRODUCE_NO);
+        return selfIntroduceList;
+    }
+
+    private static OrderSpecifier<Double> makeRandom() {
         return Expressions.numberTemplate(Double.class, "function('rand')").asc();
     }
 
