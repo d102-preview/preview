@@ -73,7 +73,7 @@ export interface ISort {
 
 export interface IQuestionDetail {
   script: IScriptItem;
-  keywords: IKeywordItem[];
+  keywordList: IKeywordItem[];
 }
 
 export interface ISubText {
@@ -97,7 +97,7 @@ export interface IUserInfo {
   profileImageName?: string;
   profileImageUrl: string;
   name: string;
-  resumeList?: IResume[];
+  resumeList: (IResume | undefined)[];
 }
 
 // 이력서 정보

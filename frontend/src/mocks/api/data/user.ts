@@ -34,6 +34,13 @@ export const patchUserRes: APIResponse<IPatchUserRes> = {
       profileImageName: '',
       profileImageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3y0SNLoQ2b2mZPT12onQlsRDn0X2elSzYcYyXG3sMMsjnjMyCc63H0u4fvWU-NA51OhY&usqp=CAU',
+      resumeList: [
+        {
+          id: 1,
+          displayName: '수화의 이력서',
+          filePath: '',
+        },
+      ],
     },
   },
 };
