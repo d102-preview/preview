@@ -68,10 +68,10 @@ const MyInfo = ({ user }: { user: IUserInfo }) => {
 
   return (
     <div className="flex pb-4">
-      <div className="w-[70%]">
+      <div className="w-[70%] mr-[10px]">
         <span>이메일</span>
         <div className="pt-2 pb-6 text-gray-500">{user.email}</div>
-        <div className="flex w-[90%]">
+        <div className="flex w-full">
           <span>이름</span>
           <div className="flex-1 text-right text-gray-500 text-sm">
             {isModifyName ? (
@@ -92,7 +92,7 @@ const MyInfo = ({ user }: { user: IUserInfo }) => {
         </div>
         <Input
           placeholder={user.name}
-          width={'w-[90%]'}
+          width={'w-full'}
           value={modifyName}
           subText={{ text: '', type: 'info' }}
           onChange={handleModifyName}
@@ -112,8 +112,8 @@ const MyInfo = ({ user }: { user: IUserInfo }) => {
           />
         </div>
       </div>
-      <div className="w-[30%]">
-        <div className="w-[130px] h-[130px] relative flex">
+      <div className="w-[30%] flex justify-center">
+        <div className="w-[130px] h-[130px] relative flex justify-center items-center">
           <div className="w-full h-full">
             <img
               className="w-full h-full mb-4 rounded-full border object-cover"
