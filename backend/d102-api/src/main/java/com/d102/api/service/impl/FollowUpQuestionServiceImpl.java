@@ -4,7 +4,6 @@ import com.d102.api.dto.FollowUpQuestionDto;
 import com.d102.api.service.FollowUpQuestionService;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
-import com.d102.common.service.AsyncService;
 import com.d102.common.util.OpenAiApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class FollowUpQuestionServiceImpl implements FollowUpQuestionService {
         } catch (RestClientException e) {
             throw new InvalidException(ExceptionType.OpenAiApiException);
         }
-        String question = response.getChoices().getFirst().getMessage().getContent();
+        String question = response.getChoiceList().getFirst().getMessage().getContent();
         return FollowUpQuestionDto.Response.builder()
                 .question(question).build();
     }
