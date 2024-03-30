@@ -9,7 +9,7 @@ const Emotion = () => {
         <div>
           <Lottie options={positiveOptions} height={150} width={150} />
           <p className="font-bold text-2xl text-center text-BLACK">긍정</p>
-          <p className="font-bold text-3xl text-center text-green-600">50%</p>
+          <p className="font-bold text-3xl text-center text-MAIN1">50%</p>
         </div>
         <div>
           <Lottie options={neutralOptions} height={150} width={150} />

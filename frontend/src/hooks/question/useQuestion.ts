@@ -6,6 +6,7 @@ import {
   postKeyword,
   deleteKeyword,
   getResumeList,
+  checkQuestionStatus,
 } from '@/services/question/api';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { IQeustionInfo, IScriptInfo, IKeywordInfo, IDeleteKeywordInfo } from '@/types/question';
@@ -72,6 +73,14 @@ export const useQuestion = () => {
     return useQuery({ queryKey: ['ResumeList'], queryFn: () => getResumeList() });
   };
 
+  const useGetQuestionStatus = (resumeId: number) => {
+    return useQuery({
+      queryKey: ['questionStatus', resumeId],
+      queryFn: () => checkQuestionStatus(resumeId),
+      enabled: resumeId !== -1,
+    });
+  };
+
   return {
     useGetCommonQuestionList,
     useGetRusmeQuestionList,
@@ -80,5 +89,6 @@ export const useQuestion = () => {
     usePostKeyword,
     useDeleteKeyword,
     useGetResumeList,
+    useGetQuestionStatus,
   };
 };
