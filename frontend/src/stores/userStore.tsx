@@ -17,7 +17,10 @@ const userStore = create(
       name: '',
       profileUrl: '',
       login: (name, profileUrl) => set({ isLogin: true, name: name, profileUrl: profileUrl }),
-      logout: () => set({ isLogin: false, name: '', profileUrl: '' }),
+      logout: () => {
+        set({ isLogin: false, name: '', profileUrl: '' });
+        localStorage.setItem('PREVIEW_ACCESS_TOKEN', '');
+      },
       updateProfile: profileUrl => set({ profileUrl: profileUrl }),
     }),
     {
