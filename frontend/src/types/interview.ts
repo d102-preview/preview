@@ -1,7 +1,7 @@
-import { IKeywordItem, IQuestionItem, interviewType } from './model';
+import { interviewType } from './model';
 
 export interface IInterviewQuestionRes {
-  questionList: IQuestionItem[];
+  questionList: IInterviewQuestionItem[];
 }
 
 export interface IInterviewAnalyzeRes {
@@ -10,5 +10,17 @@ export interface IInterviewAnalyzeRes {
   answer: string;
   skip: boolean;
   setStartTime: string;
-  keywordList: IKeywordItem[];
+  keywordList: IAnalyzeResKeyword[];
+}
+
+// 실전 면접 질문 목록
+export interface IInterviewQuestionItem {
+  question: string;
+  type: interviewType;
+  keywordList: IAnalyzeResKeyword[];
+}
+
+// 실전 면접 키워드
+export interface IAnalyzeResKeyword {
+  keyword: string;
 }
