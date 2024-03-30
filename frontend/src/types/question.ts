@@ -1,4 +1,4 @@
-import { IQuestionDetail, IQuestionListItem, IPaginationResponse, APIResponse } from './model';
+import { IKeywordItem, IQuestionDetail, IQuestionListItem, IPaginationResponse, APIResponse } from './model';
 
 export interface IQuestionListPaginationResponse extends IPaginationResponse {
   content: IQuestionListItem[];
@@ -22,9 +22,7 @@ export interface IScriptReq {
   script: string;
 }
 
-export interface IScriptInfo {
-  type: questionType;
-  questionId: number;
+export interface IScriptInfo extends IQeustionInfo {
   script: IScriptReq;
 }
 
@@ -32,3 +30,26 @@ export interface IScriptRes {
   id: number;
   script: string | null;
 }
+
+export interface IKeywordReq {
+  keyword: string;
+}
+
+export interface IKeywordRes {
+  keywordList: IKeywordItem[];
+}
+
+export interface IKeywordInfo extends IQeustionInfo {
+  keyword: IKeywordReq;
+}
+
+export interface IQeustionInfo {
+  type: questionType;
+  questionId: number;
+}
+
+export interface IDeleteKeywordInfo {
+  type: questionType;
+  keywordId: number;
+}
+
