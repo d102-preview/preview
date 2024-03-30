@@ -1,5 +1,6 @@
 import errno
 import os
+from collections import Counter
 from datetime import datetime
 
 import numpy as np
@@ -77,11 +78,29 @@ def _facial_emotional_recognition(record: Analysis) -> list:
     ratio_values = np.array(list(cnt_emotion.values()))
     ratio_values = np.round(ratio_values * 100 / cnt_face, 2)
     ratio = {k.lower(): v for k, v in zip(cnt_emotion.keys(), ratio_values)}
-    logger.debug(f"{ratio = }")
 
+    # Interpolate missing value - in case of the model cannot detect the face
+    # (when `face_img` is None in L#53, L#68)
+    if cnt_none > 0:
+        logger.debug(f"Found {cnt_none} None value(s). Try to interpolate it/them.")
+        predict_list = pd.Series(predict_list).interpolate().to_list()
+
+    # Reduce the number of results: convert unit by seconds, not frames.
+    # Split the predict_list into chunks (each chunk has same length as FPS)
+    # and select the most common value of the chunk as the representitive.
+    predict_list_by_second = []
+    chunk_size, r = divmod(len(predict_list), settings.FPS)
+    if r > 0:
+        chunk_size += 1
+
+    for chunk in np.array_split(predict_list, chunk_size):
+        predict_list_by_second.append(Counter(chunk).most_common(1)[0][0])
+
+    predict_list = {(idx + 1): v for idx, v in enumerate(predict_list_by_second)}
 
     return {
         "ratio": ratio,
+        "list": predict_list,
     }
 
 
