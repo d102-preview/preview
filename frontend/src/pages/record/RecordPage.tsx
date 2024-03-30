@@ -9,12 +9,16 @@ import RecordUploading from '@/components/record/RecordUploading';
 import { useSpeechRecognition } from 'react-speech-kit';
 import { GrNotes } from 'react-icons/gr';
 import CheatSheetModal from '@/components/record/CheatSheetModal';
+import { IInterviewAnalyzeRes } from '@/types/interview';
+import { convertBlobToFile } from '@/utils/convertBlobToFile';
+import { getCurrentTime } from '@/utils/getCurrentTime';
 
 export type recordStatusType = 'pending' | 'preparing' | 'recording' | 'proceeding' | 'uploading';
 
 const RecordPage = () => {
-  const { useGetMainInterviewQuestionList } = useInterview();
-  const { data: questionList, mutate, isSuccess } = useGetMainInterviewQuestionList();
+  const { useGetMainInterviewQuestionList, usePostInterviewAnalyze } = useInterview();
+  const { data: questionList, mutate: getQuestionList, isSuccess } = useGetMainInterviewQuestionList();
+  const { mutate: postInterviewAnalyze } = usePostInterviewAnalyze();
   const [questionIndex, setQuestionIndex] = useState<number>(0); // 질문 인덱스 상태 관리
   /*
     stream 연결 전 상태는 stream으로 판단
@@ -31,14 +35,18 @@ const RecordPage = () => {
 
   const [stream, setStream] = useState<MediaStream | null>(null);
 
+  // 면접 진행 시작 세트 타임 관리
+  const [startTime, setStartTime] = useState<string>('');
   const getMediaPermission = useCallback(async () => {
     try {
       const video = { audio: true, video: true };
 
       const videoStream = await navigator.mediaDevices.getUserMedia(video);
       setStream(videoStream);
+      setStartTime(getCurrentTime());
 
       if (videoRef.current) {
+        console.log('세팅');
         videoRef.current.srcObject = videoStream;
       }
     } catch (err) {
@@ -46,6 +54,7 @@ const RecordPage = () => {
     }
   }, []);
 
+  // 버튼 상태 관리
   const [btnText, setBtnText] = useState<string>('다음');
   const getButtonText = useCallback(() => {
     switch (status) {
@@ -71,7 +80,8 @@ const RecordPage = () => {
     }
 
     if (status === 'pending') {
-      mutate();
+      // @TODO 이력서 선택 + 이력서 id 바꿔줘야함
+      getQuestionList(3);
       setStatus('preparing');
     } else if (status === 'preparing') {
       setStatus('recording');
@@ -82,6 +92,7 @@ const RecordPage = () => {
   };
 
   useEffect(() => {
+    console.log(status);
     getButtonText();
 
     switch (status) {
@@ -90,7 +101,7 @@ const RecordPage = () => {
       case 'uploading':
         setIsOpen(false);
         break;
-      case 'proceeding':
+      case 'proceeding': // 녹화 및 STT 시작
         handleStartRecording();
         listen({ interimResults: false, lang: 'ko-KR' });
         break;
@@ -112,14 +123,14 @@ const RecordPage = () => {
       mediaRecorderRef.current = new MediaRecorder(stream as MediaStream, {
         mimeType: 'video/webm; codecs=vp9',
       });
-
       console.log(mediaRecorderRef.current);
 
-      // 전달받는 데이터를 처리
+      // 전달받은 데이터를 처리
       // 녹화된 미디어 데이터가 사용 가능할 때 트리거됩니다. (handleStopRecording 호출 시)
       mediaRecorderRef.current.ondataavailable = event => {
         if (event.data && event.data.size > 0) {
           setRecordedBlobs(prev => [...prev, event.data]);
+          console.log('데이터처리 Blob 객체 생성');
         }
       };
       mediaRecorderRef.current.start();
@@ -128,18 +139,39 @@ const RecordPage = () => {
     }
   };
 
+  // 녹화 종료 시
   const handleStopRecording = () => {
     if (mediaRecorderRef.current) {
       stop();
       console.log(stt);
 
       mediaRecorderRef.current.stop();
-      setRecordedBlobs([]);
     }
   };
 
   useEffect(() => {
     console.log(recordedBlobs);
+    if (recordedBlobs.length) {
+      const time = getCurrentTime();
+      const filename = questionIndex + '_' + time + '.mp4';
+      const videoFile = convertBlobToFile(recordedBlobs, filename);
+
+      const check = questionList?.data.questionList[questionIndex];
+      const req: IInterviewAnalyzeRes = {
+        type: check!.type,
+        question: check!.question,
+        answer: stt,
+        skip: skip,
+        setStartTime: startTime,
+        keywordList: check!.keywordList,
+      };
+      const formData = new FormData();
+      const json = JSON.stringify(req);
+
+      formData.append('analysisRequestDto', json);
+      formData.append('video', videoFile);
+      postInterviewAnalyze(formData);
+    }
   }, [recordedBlobs]);
 
   useEffect(() => {
@@ -156,10 +188,11 @@ const RecordPage = () => {
     };
   }, [stream]);
 
+  // STT 상태 관리
   const [stt, setStt] = useState<string>('');
   const { listen, stop } = useSpeechRecognition({
     onResult: (result: string) => {
-      // 음성인식 결과가 value 상태값으로 할당됩니다.
+      // 음성인식 결과가 value 상태값으로 할당
       setStt(prev => {
         return prev + ' ' + result;
       });
@@ -174,6 +207,9 @@ const RecordPage = () => {
   const radioHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTimerSetting(Number(e.target.value));
   };
+
+  // skip 상태 관리 (10초 이내면 true)
+  const [skip, setSkip] = useState<boolean>(false);
 
   return (
     <div>
@@ -205,6 +241,7 @@ const RecordPage = () => {
                   timerSetting={timerSetting}
                   question={questionList.data.questionList[questionIndex]}
                   setStatus={setStatus}
+                  setSkip={setSkip}
                   status={status}
                   handleStopRecording={handleStopRecording}
                 />
@@ -234,7 +271,10 @@ const RecordPage = () => {
                 color="white"
                 className="absolute bottom-0 right-0 m-6 cursor-pointer"
               />
-              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />}
+              {/* 모의면접일때만 modal 보여주기 */}
+              {isOpen && questionList && (
+                <CheatSheetModal question={questionList.data.questionList[questionIndex]} setIsOpen={setIsOpen} />
+              )}
             </>
           )}
 
@@ -251,6 +291,7 @@ const RecordPage = () => {
                 timerSetting={timerSetting}
                 question={questionList.data.questionList[questionIndex]}
                 setStatus={setStatus}
+                setSkip={setSkip}
                 status={status}
                 handleStopRecording={handleStopRecording}
               />
@@ -260,7 +301,9 @@ const RecordPage = () => {
                 color="white"
                 className="absolute bottom-0 right-0 m-6 cursor-pointer"
               />
-              {isOpen && <CheatSheetModal setIsOpen={setIsOpen} />}
+              {isOpen && questionList && (
+                <CheatSheetModal question={questionList.data.questionList[questionIndex]} setIsOpen={setIsOpen} />
+              )}
             </>
           )}
 
