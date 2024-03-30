@@ -7,8 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -41,31 +39,30 @@ public class OpenAiApi {
         return new RestTemplate().postForObject(OPENAI_API_URL, request, OpenAiApi.Response.class);
     }
 
-    // gpt-4 text generator
     public Response generateFollowUpQuestion(String question, String answer) {
         StringBuilder questionAndAnswer = new StringBuilder();
         questionAndAnswer.append("Interviewer Question (Korean): ").append(question).append(" ");
         questionAndAnswer.append("Interviewee Answer (Korean): ").append(answer).append(" ");
         questionAndAnswer.append("This is a history of the previous conversation. You are interviewer. Please provide a follow-up question in Korean based on the previous conversations. The questions must contain the answers of the previous interviewee. Like this example: You say you worked on a project using Java. What was the most challenging part of that project?");
 
-        StringBuilder qnaJson = new StringBuilder();
-        qnaJson.append(String.format("{ \"role\": \"system\", \"content\": \"%s\" }", questionAndAnswer.toString()));
+        StringBuilder questionAndAnswerJson = new StringBuilder();
+        questionAndAnswerJson.append(String.format("{ \"role\": \"system\", \"content\": \"%s\" }", questionAndAnswer.toString()));
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + API_KEY);
 
-        HttpEntity<String> request = getFollowUpQuestionHttpEntity(qnaJson, headers);
+        HttpEntity<String> request = getFollowUpQuestionHttpEntity(questionAndAnswerJson, headers);
 
         return new RestTemplate().postForObject(OPENAI_API_URL, request, OpenAiApi.Response.class);
     }
 
-    private HttpEntity<String> getFollowUpQuestionHttpEntity(StringBuilder qnaJson, HttpHeaders headers) {
+    private HttpEntity<String> getFollowUpQuestionHttpEntity(StringBuilder questionAndAnswerJson, HttpHeaders headers) {
         String payloadTemplate = "{ \"model\": \"gpt-4\", " +
                 "\"messages\": [ " +
                 "%s ] }";
 
-        String payload = String.format(payloadTemplate, qnaJson.toString());
+        String payload = String.format(payloadTemplate, questionAndAnswerJson.toString());
 
         return new HttpEntity<>(payload, headers);
     }

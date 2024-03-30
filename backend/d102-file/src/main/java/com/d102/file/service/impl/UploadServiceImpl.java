@@ -1,14 +1,17 @@
 package com.d102.file.service.impl;
 
 import com.d102.common.constant.FileConstant;
+import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.exception.custom.NotFoundException;
+import com.d102.common.repository.jpa.AnalysisRepository;
 import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.jpa.UserRepository;
 import com.d102.common.service.AsyncService;
+import com.d102.common.util.FastAiApi;
 import com.d102.common.util.SecurityHelper;
 import com.d102.file.dto.UploadDto;
 import com.d102.file.mapper.UploadMapper;
@@ -17,8 +20,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
@@ -40,9 +45,11 @@ public class UploadServiceImpl implements UploadService {
 
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
+    private final AnalysisRepository analysisRepository;
     private final SecurityHelper securityHelper;
     private final UploadMapper uploadMapper;
     private final AsyncService asyncService;
+    private final FastAiApi fastAiApi;
 
     @Transactional
     public UploadDto.ProfileResponse uploadProfile(UploadDto.ProfileRequest profileRequestDto) {
@@ -75,10 +82,36 @@ public class UploadServiceImpl implements UploadService {
         return uploadMapper.toResumeResponseDto(resume);
     }
 
-    @Async
-    public void uploadVideo(UploadDto.VideoRequest videoRequestDto) {
-        Path basePath = FileConstant.VIDEO_SAVE_DIR.resolve(securityHelper.getLoginUsername()).resolve(makeFormattedTime(videoRequestDto.getSetStartTime()));
-        String savePath = saveVideo(basePath, videoRequestDto.getVideo());
+    @Transactional
+    public void uploadVideo(UploadDto.AnalysisRequest analysisRequestDto) {
+        Path basePath = FileConstant.VIDEO_SAVE_DIR.resolve(securityHelper.getLoginUsername()).resolve(makeFormattedTime(analysisRequestDto.getSetStartTime()));
+        String savePath = saveVideo(basePath, analysisRequestDto.getVideo());
+
+        Analysis analysis = uploadMapper.toAnalysis(analysisRequestDto);
+        analysis.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
+        analysis.setType(analysisRequestDto.getType());
+        analysis.setQuestion(analysisRequestDto.getQuestion());
+        analysis.setAnswer(analysisRequestDto.getAnswer());
+        analysis.setScript(analysisRequestDto.getScript());
+        analysis.setSetStartTime(analysisRequestDto.getSetStartTime());
+        analysis.setKeywordList(analysisRequestDto.getKeywordList());
+        analysis.setVideoPath(savePath);
+        analysisRepository.saveAndFlush(analysis);
+
+        if (!analysisRequestDto.getSkip()) {
+            analysis.setAnalysisReqTime(LocalDateTime.now());
+            analysisRepository.saveAndFlush(analysis);
+
+            ResponseEntity<Void> response = null;
+            try {
+                response = fastAiApi.analyzeVideo(analysis.getId());
+            } catch (RestClientException e) {
+                throw new InvalidException(ExceptionType.FastAiApiException);
+            }
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new InvalidException(ExceptionType.AnalysisException);
+            }
+        }
     }
 
     private String saveVideo(Path basePath, MultipartFile video) {
