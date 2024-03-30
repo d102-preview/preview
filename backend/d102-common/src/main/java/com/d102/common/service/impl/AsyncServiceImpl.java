@@ -54,7 +54,7 @@ public class AsyncServiceImpl implements AsyncService {
         } catch (IOException e) {
             throw new InvalidException(ExceptionType.Base64ConvertException);
         }
-        String jsonString = response.getChoiceList().getFirst().getMessage().getContent();
+        String jsonString = response.getChoices().getFirst().getMessage().getContent();
         JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
         List<String> questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
 
