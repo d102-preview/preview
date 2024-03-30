@@ -17,6 +17,8 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -47,6 +49,8 @@ public class AsyncServiceImpl implements AsyncService {
         OpenAiApi.Response response = null;
         try {
             response = openAiApi.generateQuestionList(imageList);
+        } catch (RestClientException e) {
+            throw new InvalidException(ExceptionType.OpenAiApiException);
         } catch (IOException e) {
             throw new InvalidException(ExceptionType.Base64ConvertException);
         }
@@ -63,10 +67,6 @@ public class AsyncServiceImpl implements AsyncService {
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
         endQuestionList(resumeId);
-    }
-
-    public void generateAndSaveFollowUpQuestion(String question, String answer) {
-
     }
 
     private void endQuestionList(Long id) {
