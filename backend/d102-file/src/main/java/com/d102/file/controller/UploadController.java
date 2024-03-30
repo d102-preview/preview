@@ -27,8 +27,8 @@ public class UploadController implements UploadControllerDocs {
     }
 
     @PostMapping(value = "/video", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response uploadVideo(@ModelAttribute UploadDto.AnalysisRequest analysisRequestDto) {
-        uploadService.uploadVideo(analysisRequestDto);
+    public Response uploadAndAnalyzeVideo(@ModelAttribute UploadDto.AnalysisRequest analysisRequestDto) {
+        uploadService.uploadAndAnalyzeVideo(analysisRequestDto);
         return new Response();
     }
 

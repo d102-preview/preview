@@ -83,7 +83,7 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Transactional
-    public void uploadVideo(UploadDto.AnalysisRequest analysisRequestDto) {
+    public void uploadAndAnalyzeVideo(UploadDto.AnalysisRequest analysisRequestDto) {
         Path basePath = FileConstant.VIDEO_SAVE_DIR.resolve(securityHelper.getLoginUsername()).resolve(makeFormattedTime(analysisRequestDto.getSetStartTime()));
         String savePath = saveVideo(basePath, analysisRequestDto.getVideo());
 
@@ -92,7 +92,6 @@ public class UploadServiceImpl implements UploadService {
         analysis.setType(analysisRequestDto.getType());
         analysis.setQuestion(analysisRequestDto.getQuestion());
         analysis.setAnswer(analysisRequestDto.getAnswer());
-        analysis.setScript(analysisRequestDto.getScript());
         analysis.setSetStartTime(analysisRequestDto.getSetStartTime());
         analysis.setKeywordList(analysisRequestDto.getKeywordList());
         analysis.setVideoPath(savePath);

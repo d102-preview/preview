@@ -41,7 +41,7 @@ public interface UploadControllerDocs {
                             @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
                     }))
     })
-    Response uploadVideo(@Valid UploadDto.AnalysisRequest analysisRequestDto);
+    Response uploadAndAnalyzeVideo(@Valid UploadDto.AnalysisRequest analysisRequestDto);
 
 
     class ProfileResponse { public UploadDto.ProfileResponse profile; }
