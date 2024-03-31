@@ -4,12 +4,12 @@ export interface IInterviewQuestionRes {
   questionList: IInterviewQuestionItem[];
 }
 
-export interface IInterviewAnalyzeRes {
-  type: interviewType;
+export interface IInterviewAnalyzeReq {
+  interviewId: number;
+  questionType: interviewType;
   question: string;
   answer: string;
   skip: boolean;
-  setStartTime: string;
   keywordList: IAnalyzeResKeyword[];
 }
 
