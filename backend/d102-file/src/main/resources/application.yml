@@ -53,14 +53,23 @@ springdoc:
   use-fqn: true
 
 # logging
+#logging:
+#  level:
+#    root: INFO
+#    web: INFO
+#    com.d102.file: DEBUG
+#    org.springframework.security: DEBUG
+#    org.springframework.web.cors: DEBUG
+#    org.hibernate.sql: DEBUG
+#    org.hibernate.type.descriptor.sql: trace
 logging:
   level:
-    root: INFO
-    web: INFO
-    com.d102.file: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web.cors: DEBUG
-    org.hibernate.sql: DEBUG
+    root: trace
+    web: trace
+    com.d102.file: trace
+    org.springframework.security: trace
+    org.springframework.web.cors: trace
+    org.hibernate.sql: trace
     org.hibernate.type.descriptor.sql: trace
 
 cors:
