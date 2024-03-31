@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from ai import resnet_proc
 from ai.kobert_proc import kobert_model
-from common.deps import SessionDep
+from common.deps import MariaSessionDep, RedisSessionDep
 from common.perf import elapsed
 from core.settings import settings
 from fastapi import HTTPException, status
@@ -130,7 +130,11 @@ def _intent_recognition(record: Analysis) -> None:
 
 
 @elapsed
-def create_task(analysis_id: int, session: SessionDep) -> None:
+def create_task(
+    analysis_id: int,
+    maria_session: MariaSessionDep,
+    redis_session: RedisSessionDep,
+) -> None:
     """
     파라미터로 받은 `analysis_id`를 사용해 해당하는 분석 요청을 분석 작업 큐에 등록한다.
 
@@ -143,7 +147,7 @@ def create_task(analysis_id: int, session: SessionDep) -> None:
     logger.info("Create task")
 
     stmt = select(Analysis).where(Analysis.id == analysis_id)
-    record = session.exec(stmt).one_or_none()
+    record = maria_session.exec(stmt).one_or_none()
 
     if record is None:
         msg = f"No analysis record of id #{analysis_id}. Please check again."
@@ -154,7 +158,12 @@ def create_task(analysis_id: int, session: SessionDep) -> None:
 
     # Set analysis start time(`analysis_start_time`) as current time
     record.analysis_start_time = datetime.now(tz=timezone(settings.TZ))
+    maria_session.add(record)
+    maria_session.commit()
 
+    redis_key = f"analysis_process:{record.id}"
+    redis_session.set(redis_key, "processing", ex=settings.REDIS_EXPIRE_SECOND)
+    
     # Step 1: Facial Emotional Recognition
     _facial_emotional_recognition(record)
 
@@ -163,5 +172,6 @@ def create_task(analysis_id: int, session: SessionDep) -> None:
 
     # Update database
     record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
-    session.add(record)
-    session.commit()
+    maria_session.add(record)
+    maria_session.commit()
+    redis_session.set(redis_key, "done", ex=settings.REDIS_EXPIRE_SECOND)
