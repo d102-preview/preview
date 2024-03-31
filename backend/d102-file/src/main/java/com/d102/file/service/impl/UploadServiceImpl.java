@@ -102,12 +102,6 @@ public class UploadServiceImpl implements UploadService {
         analysis.setVideoPath(savePath);
         analysisRepository.saveAndFlush(analysis);
 
-        try {
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         if (!analysisRequestDto.getSkip()) {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
@@ -116,13 +110,18 @@ public class UploadServiceImpl implements UploadService {
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
             } catch (RestClientException e) {
-                e.printStackTrace();
-                throw new InvalidException(ExceptionType.FastAiApiException);
+                /**
+                 * FastAI 서버로부터 실패한 응답을 받았을 경우 재시도
+                 */
+                try {
+                    response = fastAiApi.analyzeVideo(analysis.getId());
+                } catch (RestClientException e2) {
+                    throw new InvalidException(ExceptionType.FastAiApiException);
+                }
             }
-            log.error("FastAI API response: {}", response);
-//            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
-//                throw new InvalidException(ExceptionType.AnalysisException);
-//            }
+            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
+                throw new InvalidException(ExceptionType.AnalysisException);
+            }
         }
     }
 
