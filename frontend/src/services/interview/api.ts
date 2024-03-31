@@ -1,5 +1,5 @@
 import { axiosAuthInstance, axiosFileInstance } from '@/apis/axiosInstance';
-import { IInterviewQuestionRes } from '@/types/interview';
+import { IInterviewFollowupReq, IInterviewFollowupRes, IInterviewQuestionRes } from '@/types/interview';
 import { APIResponse, APISimpleResponse } from '@/types/model';
 
 export const getMainInterviewQuestionList = async (resumeId: number): Promise<APIResponse<IInterviewQuestionRes>> => {
@@ -8,8 +8,16 @@ export const getMainInterviewQuestionList = async (resumeId: number): Promise<AP
   return res.data;
 };
 
-export const getInterviewAnalyze = async (info: FormData): Promise<APISimpleResponse> => {
+export const postInterviewAnalyze = async (info: FormData): Promise<APISimpleResponse> => {
   const res = await axiosFileInstance.post('/file/upload/video', info);
+  console.log(res);
+  return res.data;
+};
+
+export const postFollowupQuestion = async (
+  info: IInterviewFollowupReq,
+): Promise<APIResponse<IInterviewFollowupRes>> => {
+  const res = await axiosFileInstance.post('/api/followup/question', info);
   console.log(res);
   return res.data;
 };
