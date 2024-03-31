@@ -27,4 +27,9 @@ public class AnalysisController implements AnalysisControllerDocs {
         return new Response(AnalysisConstant.INTERVIEW_LIST, analysisService.getList(type, pageable));
     }
 
+    @GetMapping("/{analysisId}")
+    public Response get(Long analysisId) {
+        return new Response(AnalysisConstant.ANALYSIS_DETAIL, analysisService.get(analysisId));
+    }
+
 }
