@@ -108,6 +108,15 @@ public class UploadServiceImpl implements UploadService {
             FastAiApi.Response response = null;
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
+                System.out.println("=====================================");
+                System.out.println(response);
+                System.out.println(response);
+                System.out.println(response);
+                System.out.println(response);
+                System.out.println(response);
+                System.out.println(response);
+                System.out.println(response);
+                System.out.println("=====================================");
             } catch (RestClientException e) {
                 throw new InvalidException(ExceptionType.FastAiApiException);
             }
