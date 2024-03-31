@@ -12,10 +12,12 @@ import com.d102.common.constant.QuestionType;
 import com.d102.common.domain.jpa.Interview;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
+import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.jpa.InterviewRepository;
 import com.d102.common.repository.jpa.ResumeRepository;
+import com.d102.common.repository.jpa.UserRepository;
 import com.d102.common.util.SecurityHelper;
 import com.d102.common.util.UserVerifier;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class InterviewServiceImpl implements InterviewService {
     private final ResumeRepository resumeRepository;
     private final CommonKeywordRepository commonKeywordRepository;
     private final ResumeKeywordRepository resumeKeywordRepository;
+    private final UserRepository userRepository;
     private final InterviewMapper interviewMapper;
     private final SecurityHelper securityHelper;
 
@@ -40,7 +43,12 @@ public class InterviewServiceImpl implements InterviewService {
         /**
          * TODO: Mapper가 string을 enum으로 자동으로 바꿔주는 것 같은데 추후 확인 필요
          */
-        return interviewMapper.toResponse(interviewRepository.saveAndFlush(interviewMapper.toInterview(request)));
+        Interview interview = interviewMapper.toInterview(request);
+        User user = userRepository.findByEmail(securityHelper.getLoginUsername())
+                .orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
+        interview.setUser(user);
+
+        return interviewMapper.toResponse(interviewRepository.saveAndFlush(interview));
     }
 
     public List<InterviewDto.ListResponse> getList(Long resumeId) {

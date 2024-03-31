@@ -122,16 +122,18 @@ CREATE TABLE `resume_keyword` (
 
 CREATE TABLE `interview` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
   `type` varchar(16) NOT NULL,
   `start_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `interview_user_FK` (`user_id`),
+  CONSTRAINT `interview_user_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 CREATE TABLE `analysis` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `interview_id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
   `question_type` varchar(16) NOT NULL,
   `question` varchar(512) NOT NULL,
   `answer` varchar(1024) DEFAULT NULL,
@@ -147,8 +149,6 @@ CREATE TABLE `analysis` (
   `emotion` text DEFAULT NULL,
   `intent` text DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `analysis_user_FK` (`user_id`),
   KEY `analysis_interview_fk` (`interview_id`),
-  CONSTRAINT `analysis_interview_fk` FOREIGN KEY (`interview_id`) REFERENCES `interview` (`id`),
-  CONSTRAINT `analysis_user_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `analysis_interview_fk` FOREIGN KEY (`interview_id`) REFERENCES `interview` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

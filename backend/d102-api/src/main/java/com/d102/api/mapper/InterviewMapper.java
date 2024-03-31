@@ -20,6 +20,7 @@ public interface InterviewMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "analysisList", ignore = true)
+    @Mapping(target = "user", ignore = true)
     Interview toInterview(InterviewDto.Request request);
 
 }
