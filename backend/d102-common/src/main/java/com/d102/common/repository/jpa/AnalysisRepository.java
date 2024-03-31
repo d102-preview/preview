@@ -12,6 +12,4 @@ import java.util.List;
 
 public interface AnalysisRepository extends JpaRepository<Analysis, Long> {
 
-    Page<Analysis> findByInterview_Type(InterviewType interviewType, Pageable pageable);
-
 }
