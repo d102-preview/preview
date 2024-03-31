@@ -68,7 +68,7 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
           },
           color: context => {
             const value = context.tick.value;
-            if (value === 1) return '#17A44B'; // 긍정일 때는 녹색
+            if (value === 1) return '#5A8AF2'; // 긍정일 때는 녹색
             if (value === 0) return '#EAB50D'; // 중립일 때는 파란색
             if (value === -1) return '#F98282'; // 부정일 때는 빨간색
             return 'black'; // 기본값은 검은색
