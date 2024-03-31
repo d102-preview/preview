@@ -14,7 +14,7 @@ public class FastAiApi {
     @Value("${fast-ai.url}")
     private String FASTAI_API_URL;
 
-    public ResponseEntity<Void> analyzeVideo(Long analysisId) {
+    public Response analyzeVideo(Long analysisId) {
         StringBuilder analysisIdJson = new StringBuilder();
         analysisIdJson.append(analysisId);
 
@@ -23,7 +23,7 @@ public class FastAiApi {
 
         HttpEntity<String> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
 
-        return new RestTemplate().exchange(FASTAI_API_URL, HttpMethod.POST, request, Void.class);
+        return new RestTemplate().postForObject(FASTAI_API_URL, request, FastAiApi.Response.class);
     }
 
     private HttpEntity<String> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {
@@ -31,6 +31,15 @@ public class FastAiApi {
         String payload = String.format(payloadTemplate, analysisIdJson.toString());
 
         return new HttpEntity<>(payload, headers);
+    }
+
+    @Data
+    public static class Response {
+
+        private String result;
+        private String code;
+        private String message;
+        private Object data;
     }
 
 }

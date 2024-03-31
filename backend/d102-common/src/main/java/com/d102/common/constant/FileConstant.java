@@ -22,5 +22,6 @@ public class FileConstant {
     /* Video */
     public static final String VIDEO = "video";
     public static final Path VIDEO_SAVE_DIR = Paths.get(System.getProperty("user.dir"), "app", "files", "video").toAbsolutePath().normalize();
+    public static final String FASTAI_API_SUCCESS = "ok";
 
 }
