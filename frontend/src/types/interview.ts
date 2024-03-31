@@ -24,3 +24,18 @@ export interface IInterviewQuestionItem {
 export interface IAnalyzeResKeyword {
   keyword: string;
 }
+
+// 실전 면접 꼬리 질문 request
+export interface IInterviewFollowupReq {
+  question: string;
+  answer: string;
+}
+
+// 실전 면접 꼬리 질문 response
+export interface IInterviewFollowupRes {
+  followUpQuestion: IFollowUpQuestion;
+}
+
+export interface IFollowUpQuestion {
+  question: string;
+}
