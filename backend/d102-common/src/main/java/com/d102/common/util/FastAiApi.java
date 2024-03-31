@@ -24,11 +24,13 @@ public class FastAiApi {
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
         HttpEntity<String> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
+
         return new RestTemplate().postForObject(FASTAI_API_URL, request, FastAiApi.Response.class);
     }
 
     private HttpEntity<String> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {
         String payloadTemplate = "{ \"analysis_id\": \"%s\" }";
+
         String payload = String.format(payloadTemplate, analysisIdJson.toString());
 
         return new HttpEntity<>(payload, headers);
