@@ -44,11 +44,10 @@ const PieChart = ({ title }: IPieChartProps) => {
       datalabels: {
         align: 'center',
         color: context => {
-          // context.dataset.backgroundColor를 사용하여 현재 데이터 포인트의 배경색을 가져옵니다.
           const index = context.dataIndex;
           const backgroundColor = context.dataset.borderColor;
           if (Array.isArray(backgroundColor)) {
-            return backgroundColor[index]; // 배열에서 적절한 색상을 반환합니다.
+            return backgroundColor[index];
           }
           return '#040404'; // 기본값
         },

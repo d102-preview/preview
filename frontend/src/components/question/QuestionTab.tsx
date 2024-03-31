@@ -1,4 +1,6 @@
+import userStore from '@/stores/userStore';
 import { interviewType } from '@/types/model';
+import Toast from '../@common/Toast/Toast';
 
 interface IQuestionTabProps {
   activeTab: interviewType;
@@ -6,8 +8,14 @@ interface IQuestionTabProps {
 }
 
 const QuestionTab = ({ activeTab, setActiveTab }: IQuestionTabProps) => {
+  const { isLogin } = userStore();
+
   // Tab 클릭 핸들러
   const handleTabClick = (tabName: interviewType) => {
+    if (!isLogin && tabName === 'resume') {
+      Toast.info('로그인이 필요한 기능입니다. 로그인 후 사용해주세요.');
+      return;
+    }
     setActiveTab(tabName);
   };
 

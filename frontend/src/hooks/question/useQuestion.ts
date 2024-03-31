@@ -1,10 +1,27 @@
-import { getQuestionList, getQuestion, postScrtip, postKeyword, deleteKeyword } from '@/services/question/api';
+import {
+  getCommonQuestionList,
+  getResumeQuestionList,
+  getQuestion,
+  postScrtip,
+  postKeyword,
+  deleteKeyword,
+  getResumeList,
+  checkQuestionStatus,
+} from '@/services/question/api';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { IQeustionInfo, questionType, IScriptInfo, IKeywordInfo, IDeleteKeywordInfo } from '@/types/question';
+import { IQeustionInfo, IScriptInfo, IKeywordInfo, IDeleteKeywordInfo } from '@/types/question';
 
 export const useQuestion = () => {
-  const useGetQuestionList = (type: questionType) => {
-    return useQuery({ queryKey: ['questionList', type], queryFn: () => getQuestionList(type) });
+  const useGetCommonQuestionList = () => {
+    return useQuery({ queryKey: ['CommonQuestionList'], queryFn: () => getCommonQuestionList() });
+  };
+
+  const useGetRusmeQuestionList = (resumeId: number) => {
+    return useQuery({
+      queryKey: ['ResumeQuestionList', resumeId],
+      queryFn: () => getResumeQuestionList(resumeId),
+      enabled: resumeId !== -1, // enabled 값이 0 false이면 쿼리가 자동적으로 실행되는 것을 막을 수 있음
+    });
   };
 
   const useGetQuestion = ({ type, questionId }: IQeustionInfo) => {
@@ -52,5 +69,27 @@ export const useQuestion = () => {
     });
   };
 
-  return { useGetQuestionList, useGetQuestion, usePostScript, usePostKeyword, useDeleteKeyword };
+  const useGetResumeList = () => {
+    return useQuery({ queryKey: ['ResumeList'], queryFn: () => getResumeList() });
+  };
+
+  const useGetQuestionStatus = (resumeId: number, options = {}) => {
+    return useQuery({
+      queryKey: ['questionStatus', resumeId],
+      queryFn: () => checkQuestionStatus(resumeId),
+      enabled: resumeId !== -1,
+      ...options,
+    });
+  };
+
+  return {
+    useGetCommonQuestionList,
+    useGetRusmeQuestionList,
+    useGetQuestion,
+    usePostScript,
+    usePostKeyword,
+    useDeleteKeyword,
+    useGetResumeList,
+    useGetQuestionStatus,
+  };
 };

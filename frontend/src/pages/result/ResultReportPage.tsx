@@ -1,8 +1,8 @@
 import Header from '@/components/@common/Header/Header';
 import Lottie from 'react-lottie';
+import { robotOptions } from '@/assets/lotties/lottieOptions';
 import DoughnutChart from '@/components/result/DoughnutChart';
 import InterviewPrepared from '@/components/result/InterviewPrepared';
-import robot from '@/assets/lotties/robot.json';
 import DetailedAnalysis from '@/components/result/analysis/DetailedAnalysis';
 
 const ResultReportPage = () => {
@@ -65,16 +65,6 @@ const ResultReportPage = () => {
   const prepare = getPrepareText(percent);
   const state = getStateNumber(percent);
 
-  // Lottie 애니메이션
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: robot,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-
   return (
     <>
       <Header />
@@ -98,7 +88,7 @@ const ResultReportPage = () => {
                   <p>{`면접 합격에 한 걸음 더 다가갈 수 있습니다.`}</p>
                 </div>
               </div>
-              <Lottie options={defaultOptions} height={350} width={350} />
+              <Lottie options={robotOptions} height={350} width={350} />
             </div>
             <div className="flex items-center px-20 gap-5 pb-10">
               <DoughnutChart percent={percent} />

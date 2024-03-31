@@ -1,13 +1,14 @@
-import { APIResponse } from '@/types/model';
-import { IQuestionListRes } from '@/types/question';
 import QuestionsList from './QuestionsList';
+import { useQuestion } from '@/hooks/question/useQuestion';
 
 interface QuestionsProps {
-  data?: APIResponse<IQuestionListRes>;
   type: 'common';
 }
 
-const CommonQuestions = ({ data, type }: QuestionsProps) => {
+const CommonQuestions = ({ type }: QuestionsProps) => {
+  const { useGetCommonQuestionList } = useQuestion();
+  const { data } = useGetCommonQuestionList();
+
   const questions = data?.data?.questionList?.content || [];
   const total = data?.data?.questionList?.totalElements || 0;
 
