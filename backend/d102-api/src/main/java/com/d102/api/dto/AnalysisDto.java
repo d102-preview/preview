@@ -17,6 +17,7 @@ public class AnalysisDto {
 
     @Data
     public static class AnalysisResponse {
+
         private Long id;
         private String question;
         private String thumbnailPath;
