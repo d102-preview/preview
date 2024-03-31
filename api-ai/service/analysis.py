@@ -1,7 +1,11 @@
 import errno
+import json
 import os
+from collections import Counter
 from datetime import datetime
 
+import numpy as np
+import pandas as pd
 from ai import resnet_proc
 from ai.kobert_proc import kobert_model
 from common.deps import SessionDep
@@ -14,9 +18,12 @@ from PIL import Image
 from pytz import timezone
 from sqlmodel import select
 
+# Convert emotion strings into value for interpolation
+CONVERT_PRED = {"Positive": 1, "Neutral": 0, "Negative": -1}
+
 
 @elapsed
-def _facial_emotional_recognition(record: Analysis) -> list:
+def _facial_emotional_recognition(record: Analysis) -> None:
     # value of record.video_path seems like
     # `/app/files/video/admin@d102.com/2024-03-29T15-28-00/test1.mp4`
     # so, for the dev environment, replace `/app/files` into `settings.DATA_HOME`
@@ -39,29 +46,73 @@ def _facial_emotional_recognition(record: Analysis) -> list:
     frame_list = resnet_proc.extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(f"{len(frame_list)} frames are extracted from the input video")
 
+    # TODO: Save thumbnail and update record
+
     # Detect face from the frames
     face_list = []
     for img in frame_list:
         _, face_img = resnet_proc.detect_faces(img, (224, 224))
-
-        if face_img is None:
-            continue
-
         face_list.append(face_img)
-    logger.debug(f"{len(face_list)} faces are detected from {len(frame_list)} frames")
+
+    cnt_none = len([x for x in face_list if x is None])
+    cnt_face = len(face_list) - cnt_none
+    logger.debug(f"{cnt_face} faces / {len(frame_list)} frames")
 
     model = resnet_proc.get_model("ResNet18")
 
+    # Count by emotion for calculate ratio
+    cnt_emotion = {}
+
     predict_list = []
     for img in face_list:
-        predict_list.append(resnet_proc.predict(Image.fromarray(img), model))
-    logger.info(f"Predict {len(predict_list)} faces")
+        pred = None
+        if img is not None:
+            pred = resnet_proc.predict(Image.fromarray(img), model)
+            cnt_emotion[pred] = cnt_emotion.get(pred, 0) + 1
+            pred = CONVERT_PRED[pred]
 
-    return predict_list
+        predict_list.append(pred)
+
+    logger.info(f"Process {cnt_face} faces")
+
+    # Calculate ratio
+    ratio_values = np.array(list(cnt_emotion.values()))
+    ratio_values = np.round(ratio_values * 100 / cnt_face, 2)
+    ratio = {k.lower(): v for k, v in zip(cnt_emotion.keys(), ratio_values)}
+
+    # Interpolate missing value - in case of the model cannot detect the face
+    # (when `face_img` is None in L#53, L#68)
+    if cnt_none > 0:
+        logger.debug(f"Found {cnt_none} None value(s). Try to interpolate it/them.")
+        predict_list = pd.Series(predict_list).interpolate().to_list()
+
+    # Reduce the number of results: convert unit by seconds, not frames.
+    # Split the predict_list into chunks (each chunk has same length as FPS)
+    # and select the most common value of the chunk as the representitive.
+    predict_list_by_second = []
+    chunk_size, r = divmod(len(predict_list), settings.FPS)
+    if r > 0:
+        chunk_size += 1
+
+    for chunk in np.array_split(predict_list, chunk_size):
+        predict_list_by_second.append(Counter(chunk).most_common(1)[0][0])
+
+    predict_list = {str(idx + 1): v for idx, v in enumerate(predict_list_by_second)}
+
+    # Update record
+    record.video_length = len(predict_list_by_second)
+    record.fps = settings.FPS
+    record.frames = len(frame_list)
+    record.emotion = json.dumps(
+        {
+            "ratio": ratio,
+            "list": predict_list,
+        }
+    )
 
 
 @elapsed
-def _intent_recognition(record: Analysis) -> dict:
+def _intent_recognition(record: Analysis) -> None:
     intent_labels = kobert_model.get_intent_labels()
 
     pred = kobert_model.predict(record.answer)
@@ -72,7 +123,10 @@ def _intent_recognition(record: Analysis) -> dict:
         d["ratio"] = round(float(v), 2)
         result.append(d)
 
-    return result
+    record.intent = json.dumps(
+        result,
+        ensure_ascii=False,  # prevent Korean characters saved in unicode like `\uc9c1`
+    )
 
 
 @elapsed
@@ -100,13 +154,14 @@ def create_task(analysis_id: int, session: SessionDep) -> None:
 
     # Set analysis start time(`analysis_start_time`) as current time
     record.analysis_start_time = datetime.now(tz=timezone(settings.TZ))
-    session.add(record)
-    session.commit()
 
     # Step 1: Facial Emotional Recognition
-    # emotion_list = _facial_emotional_recognition(record)
+    _facial_emotional_recognition(record)
 
     # Step 2: Intent Recognition
-    intent_list = _intent_recognition(record)
+    _intent_recognition(record)
 
-    return [], intent_list
+    # Update database
+    record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
+    session.add(record)
+    session.commit()
