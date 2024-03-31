@@ -1,4 +1,11 @@
-import { IKeywordItem, IQuestionDetail, IQuestionListItem, IPaginationResponse, APIResponse } from './model';
+import {
+  IKeywordItem,
+  IQuestionDetail,
+  IQuestionListItem,
+  IPaginationResponse,
+  APIResponse,
+  ISimpleResume,
+} from './model';
 
 export interface IQuestionListPaginationResponse extends IPaginationResponse {
   content: IQuestionListItem[];
@@ -52,3 +59,8 @@ export interface IDeleteKeywordInfo {
   type: questionType;
   keywordId: number;
 }
+
+export interface IResumeRes {
+  resumeList: ISimpleResume[];
+}
+
