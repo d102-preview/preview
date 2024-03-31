@@ -22,9 +22,9 @@ import com.d102.file.mapper.UploadMapper;
 import com.d102.file.service.UploadService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +35,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -106,13 +105,13 @@ public class UploadServiceImpl implements UploadService {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
 
-            ResponseEntity<Void> response = null;
+            FastAiApi.Response response = null;
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
             } catch (RestClientException e) {
                 throw new InvalidException(ExceptionType.FastAiApiException);
             }
-            if (!response.getStatusCode().is2xxSuccessful()) {
+            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
                 throw new InvalidException(ExceptionType.AnalysisException);
             }
         }

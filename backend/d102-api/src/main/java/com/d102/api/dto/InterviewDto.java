@@ -19,7 +19,7 @@ public class InterviewDto {
     @Data
     public static class Response {
 
-        private String id;
+        private Long id;
     }
 
     @Builder
