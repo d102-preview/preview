@@ -22,7 +22,6 @@ public class FastAiApi {
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
         HttpEntity<String> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
-
         return new RestTemplate().postForObject(FASTAI_API_URL, request, FastAiApi.Response.class);
     }
 
