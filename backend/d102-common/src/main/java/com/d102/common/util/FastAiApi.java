@@ -14,7 +14,7 @@ public class FastAiApi {
     @Value("${fast-ai.url}")
     private String FASTAI_API_URL;
 
-    public Object analyzeVideo(Long analysisId) {
+    public FastAiApi.Response analyzeVideo(Long analysisId) {
         StringBuilder analysisIdJson = new StringBuilder();
         analysisIdJson.append(analysisId);
 
@@ -23,7 +23,7 @@ public class FastAiApi {
 
         HttpEntity<String> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
         RestTemplate restTemplate = new RestTemplate();
-        return new RestTemplate().postForObject(FASTAI_API_URL, request, Object.class);
+        return new RestTemplate().postForObject(FASTAI_API_URL, request, FastAiApi.Response.class);
     }
 
     private HttpEntity<String> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {

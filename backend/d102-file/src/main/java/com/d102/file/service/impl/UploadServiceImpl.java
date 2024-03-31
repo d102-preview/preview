@@ -106,7 +106,7 @@ public class UploadServiceImpl implements UploadService {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
 
-            Object response = null;
+            FastAiApi.Response response = null;
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
             } catch (RestClientException e) {
