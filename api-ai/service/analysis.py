@@ -96,7 +96,7 @@ def _facial_emotional_recognition(record: Analysis) -> list:
     for chunk in np.array_split(predict_list, chunk_size):
         predict_list_by_second.append(Counter(chunk).most_common(1)[0][0])
 
-    predict_list = {(idx + 1): v for idx, v in enumerate(predict_list_by_second)}
+    predict_list = {str(idx + 1): v for idx, v in enumerate(predict_list_by_second)}
 
     return {
         "ratio": ratio,
