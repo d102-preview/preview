@@ -102,6 +102,12 @@ public class UploadServiceImpl implements UploadService {
         analysis.setVideoPath(savePath);
         analysisRepository.saveAndFlush(analysis);
 
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         if (!analysisRequestDto.getSkip()) {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
