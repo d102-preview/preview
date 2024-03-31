@@ -88,12 +88,12 @@ public class UploadServiceImpl implements UploadService {
     @Transactional
     public void uploadAndAnalyzeVideo(UploadDto.AnalysisRequest analysisRequestDto, MultipartFile video) {
         Interview interview = interviewRepository.findById(analysisRequestDto.getInterviewId()).orElseThrow(() -> new NotFoundException(ExceptionType.InterviewNotFoundException));
+        interview.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
 
         Path basePath = FileConstant.VIDEO_SAVE_DIR.resolve(securityHelper.getLoginUsername()).resolve(TimeConverter.convertToFormattedTime(interview.getStartTime()));
         String savePath = saveVideo(basePath, video);
 
         Analysis analysis = uploadMapper.toAnalysis(analysisRequestDto);
-        analysis.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
         analysis.setInterview(interview);
         analysis.setQuestionType(QuestionType.valueOf(analysisRequestDto.getQuestionType()));
         analysis.setQuestion(analysisRequestDto.getQuestion());

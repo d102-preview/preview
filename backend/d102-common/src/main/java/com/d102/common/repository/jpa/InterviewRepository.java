@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InterviewRepository extends JpaRepository<Interview, Long> {
 
-    Page<Interview> findByType(InterviewType type, Pageable pageable);
+    Page<Interview> findByTypeAndUser_Email(InterviewType type, String email, Pageable pageable);
 
 }

@@ -26,6 +26,10 @@ public class Interview {
     @Enumerated(EnumType.STRING)
     private InterviewType type;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 

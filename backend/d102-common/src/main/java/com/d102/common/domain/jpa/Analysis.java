@@ -25,10 +25,6 @@ public class Analysis {
     @JoinColumn(name = "interview_id", nullable = false)
     private Interview interview;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column(name = "question_type", length = 16, nullable = false)
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
