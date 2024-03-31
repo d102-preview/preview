@@ -1,4 +1,4 @@
-from common.deps import SessionDep
+from common.deps import MariaSessionDep, RedisSessionDep
 from fastapi import APIRouter, status
 from loguru import logger
 from models.analysis import AnalysisRequest, AnalysisResponse
@@ -17,13 +17,17 @@ router = APIRouter()
     },
     response_model_exclude_unset=True,
 )
-def analyse_video(params: AnalysisRequest, session: SessionDep):
+def analyse_video(
+    params: AnalysisRequest,
+    maria_session: MariaSessionDep,
+    redis_session: RedisSessionDep,
+) -> None:
     """
     답변 영상 분석
     """
     logger.info("Analyse video")
 
-    create_task(params.analysis_id, session)
+    create_task(params.analysis_id, maria_session, redis_session)
 
     return AnalysisResponse(
         result=Status.OK,
