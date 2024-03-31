@@ -113,7 +113,7 @@ public class UploadServiceImpl implements UploadService {
                 e.printStackTrace();
                 throw new InvalidException(ExceptionType.FastAiApiException);
             }
-            log.trace("FastAI API response: {}", response);
+            log.error("FastAI API response: {}", response);
 //            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
 //                throw new InvalidException(ExceptionType.AnalysisException);
 //            }
