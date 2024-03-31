@@ -1,7 +1,6 @@
 import { recordStatusType } from '@/pages/record/RecordPage';
 import { IInterviewQuestionItem } from '@/types/interview';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Lottie from 'react-lottie';
 import followupLoading from '@/assets/lotties/followupLoading.json';
 
@@ -13,7 +12,6 @@ interface IRecordUploadingProps {
 }
 
 const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setStatus }: IRecordUploadingProps) => {
-  const navigate = useNavigate();
   const followupOptions = {
     loop: true,
     autoplay: true,
@@ -26,7 +24,7 @@ const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setSta
   useEffect(() => {
     setTimeout(() => {
       if (questionIndex + 1 === questionList.length) {
-        navigate('/');
+        setStatus('ending');
       } else {
         setQuestionIndex(questionIndex + 1);
         setStatus('preparing');
