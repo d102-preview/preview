@@ -3,6 +3,7 @@ import IMAGE2 from '@/assets/images/interview2.png';
 import Button from '@/components/@common/Button/Button';
 import Header from '@/components/@common/Header/Header';
 import InterviewStartItem from '@/components/interview/InterviewStartItem';
+import { getCurrentTime } from '@/utils/getCurrentTime';
 import { useNavigate } from 'react-router-dom';
 
 const InterviewPage = () => {
@@ -32,7 +33,11 @@ const InterviewPage = () => {
               hoverBackgroundColor=""
               textColor="text-white"
               textSize="text-lg"
-              onClick={() => navigate('/record')}
+              onClick={() =>
+                navigate('/record', {
+                  state: { type: 'main', startTime: getCurrentTime() },
+                })
+              }
             />
           </InterviewStartItem>
           <InterviewStartItem
