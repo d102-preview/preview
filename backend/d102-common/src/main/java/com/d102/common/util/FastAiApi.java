@@ -6,7 +6,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class FastAiApi {
@@ -21,16 +23,18 @@ public class FastAiApi {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-        HttpEntity<String> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
-        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<Map> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
         return new RestTemplate().postForObject(FASTAI_API_URL, request, FastAiApi.Response.class);
     }
 
-    private HttpEntity<String> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {
-        String payloadTemplate = "{ \"analysis_id\": \"%s\" }";
-        String payload = String.format(payloadTemplate, analysisIdJson.toString());
+    private HttpEntity<Map> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {
+//        String payloadTemplate = "{ \"analysis_id\": \"%s\" }";
+        HashMap<String, Integer> map = new HashMap<>() {{
+            put("analysis_id", 36);
+        }};
+//        String payload = String.format(payloadTemplate, analysisIdJson.toString());
 
-        return new HttpEntity<>(payload, headers);
+        return new HttpEntity<>(map, headers);
     }
 
     @Data
