@@ -1,4 +1,5 @@
-import { getInterviewAnalyze, getMainInterviewQuestionList } from '@/services/interview/api';
+import { postInterviewAnalyze, getMainInterviewQuestionList, postFollowupQuestion } from '@/services/interview/api';
+import { IInterviewFollowupReq } from '@/types/interview';
 import { useMutation } from '@tanstack/react-query';
 
 export const useInterview = () => {
@@ -17,8 +18,8 @@ export const useInterview = () => {
 
   const usePostInterviewAnalyze = () => {
     return useMutation({
-      mutationKey: [],
-      mutationFn: (info: FormData) => getInterviewAnalyze(info),
+      mutationKey: ['interview', 'analyze'],
+      mutationFn: (info: FormData) => postInterviewAnalyze(info),
       onSuccess: () => {
         console.log('success');
       },
@@ -27,5 +28,19 @@ export const useInterview = () => {
       },
     });
   };
-  return { useGetMainInterviewQuestionList, usePostInterviewAnalyze };
+
+  const usePostFollowupQuestion = () => {
+    return useMutation({
+      mutationKey: ['interview', 'followup'],
+      mutationFn: (info: IInterviewFollowupReq) => postFollowupQuestion(info),
+      onSuccess: () => {
+        console.log('success');
+      },
+      onError: () => {
+        console.log('fail');
+      },
+    });
+  };
+
+  return { useGetMainInterviewQuestionList, usePostInterviewAnalyze, usePostFollowupQuestion };
 };

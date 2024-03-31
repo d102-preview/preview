@@ -1,9 +1,9 @@
 import { recordStatusType } from '@/pages/record/RecordPage';
 import { IInterviewQuestionItem } from '@/types/interview';
-// import { APIResponse, IQuestionItem } from '@/types/model';
-// import { QueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Lottie from 'react-lottie';
+import followupLoading from '@/assets/lotties/followupLoading.json';
 
 interface IRecordUploadingProps {
   questionList: IInterviewQuestionItem[];
@@ -14,18 +14,16 @@ interface IRecordUploadingProps {
 
 const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setStatus }: IRecordUploadingProps) => {
   const navigate = useNavigate();
-  // const queryClient = new QueryClient();
+  const followupOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: followupLoading, // Lottie 애니메이션 데이터
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
+
   useEffect(() => {
-    // 만약 이력서 기반 질문이라면
-    if (questionList[questionIndex].type !== 'resume') {
-      console.log('꼬리질문 요청');
-      // queryClient.setQueryData(['interview', 'questionList'], (oldData: APIResponse<IInterviewQuestionRes>) => {
-      //   oldData && { ...oldData.data.questionList, question: 'string', type: 'interviewType', keywordList: ['하이'] };
-      // });
-
-      console.log(questionList);
-    }
-
     setTimeout(() => {
       if (questionIndex + 1 === questionList.length) {
         navigate('/');
@@ -37,12 +35,10 @@ const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setSta
   }, []);
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-50 w-[58rem] h-full bg-[#383838] text-white flex justify-center items-center">
-      <div className="">
-        <p className="text-center text-5xl font-bold">업로드 중</p>
-        <div className="w-[30rem] h-1 bg-black rounded-lg mt-20">
-          <div className="animate-uploading h-1 bg-white rounded-lg"></div>
-        </div>
+    <div className="absolute top-0 left-0 right-0 bottom-0 bg-black z-50">
+      <div className="w-full h-full flex flex-col items-center justify-center gap-10">
+        <p className="text-center text-3xl text-white">직전 답변에 대한 심층 질문 생성중</p>
+        <Lottie options={followupOptions} height={150} width={150} />
       </div>
     </div>
   );
