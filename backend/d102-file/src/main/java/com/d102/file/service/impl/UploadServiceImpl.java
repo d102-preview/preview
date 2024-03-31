@@ -86,7 +86,6 @@ public class UploadServiceImpl implements UploadService {
         return uploadMapper.toResumeResponseDto(resume);
     }
 
-    @Transactional
     public void uploadAndAnalyzeVideo(UploadDto.AnalysisRequest analysisRequestDto, MultipartFile video) {
         Interview interview = interviewRepository.findById(analysisRequestDto.getInterviewId()).orElseThrow(() -> new NotFoundException(ExceptionType.InterviewNotFoundException));
         interview.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
@@ -111,7 +110,7 @@ public class UploadServiceImpl implements UploadService {
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
             } catch (RestClientException e) {
-                log.trace("FastAiApi analyzeVideo() RestClientException: {}", e);
+                e.printStackTrace();
                 throw new InvalidException(ExceptionType.FastAiApiException);
             }
             if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
