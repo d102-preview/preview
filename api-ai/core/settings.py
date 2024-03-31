@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     REDIS_DB: int = Field(1, ge=0, le=15)
     REDIS_PASSWORD: str
     REDIS_MAX_CONN: int = Field(10, ge=1)
+    REDIS_EXPIRE_SECOND: int = Field(60 * 60 * 24, gt=60)  # 24h
 
     # Build variables
     REGISTRY: str
