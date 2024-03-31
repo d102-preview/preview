@@ -16,6 +16,11 @@ services:
     env_file:
       - .env
     command: "poetry run python3 main.py"
+    deploy:
+      resources:
+        limits:
+          cpus: 2
+          memory: 4G
 
 networks:
   d102-network:
