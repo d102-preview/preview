@@ -1,6 +1,7 @@
 package com.d102.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -23,7 +24,7 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
     @Override
     public List<String> convertToEntityAttribute(String data) {
         try {
-            return mapper.readValue(data, List.class);
+            return mapper.readValue(data, new TypeReference<List<String>>() {});
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

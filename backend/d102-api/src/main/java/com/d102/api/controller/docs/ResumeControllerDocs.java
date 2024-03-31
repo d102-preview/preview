@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
-@Tag(name = "4. 이력서 관련 API", description = "이력서 관련 정보를 CRUD 하는 API")
+@Tag(name = "04. 이력서 관련 API", description = "이력서 관련 정보를 CRUD 하는 API")
 public interface ResumeControllerDocs {
 
     @Operation(summary = "내 이력서 목록 조회", description = "로그인한 정보를 기반으로 자신의 이력서 목록을 조회하는 API를 호출한다.")

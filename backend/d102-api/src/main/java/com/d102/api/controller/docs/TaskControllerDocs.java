@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 
-@Tag(name = "7. 작업 완료 여부 관련 API", description = "작업 완료 여부를 조회하는 API (이력서 기반 질문 생성, 꼬리질문 생성 등)")
+@Tag(name = "07. 작업 완료 여부 관련 API", description = "작업 완료 여부를 조회하는 API")
 public interface TaskControllerDocs {
 
     @Operation(summary = "이력서 기반 질문 생성 작업 완료 여부 조회", description = "이력서 기반 질문 생성 작업 완료 여부를 조회하는 API를 호출한다.")
