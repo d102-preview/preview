@@ -23,7 +23,7 @@ export interface IQuestionsDetailsRes {
   [key: string]: APIResponse<IQuestionRes>;
 }
 
-export type questionType = 'common' | 'resume';
+export type questionType = 'common' | 'resume' | 'followup';
 
 export interface IScriptReq {
   script: string;
@@ -63,3 +63,4 @@ export interface IDeleteKeywordInfo {
 export interface IResumeRes {
   resumeList: ISimpleResume[];
 }
+
