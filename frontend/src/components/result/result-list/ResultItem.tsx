@@ -1,21 +1,11 @@
 import Lottie from 'react-lottie';
-import loading from '@/assets/lotties/loading.json';
+import { loadingOptions } from '@/assets/lotties/lottieOptions';
 import { formatInterviewSetTime } from '@/utils/formatDateTime';
 import { ResultItemData } from '@/types/model/index';
 import { useNavigate } from 'react-router-dom';
 
 const ResultItem = ({ result, id, imagePath, type, date, question, time }: ResultItemData) => {
   const navigate = useNavigate();
-
-  // Lottie 이미지
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: loading,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
 
   return (
     <div
@@ -25,7 +15,7 @@ const ResultItem = ({ result, id, imagePath, type, date, question, time }: Resul
       <div className="relative">
         {result === 'fail' && (
           <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-70 rounded-lg">
-            <Lottie options={defaultOptions} height={50} width={150} />
+            <Lottie options={loadingOptions} height={50} width={150} />
             <div className="text-center pt-2">
               <span className="text-white text-xl font-semibold">결과 분석 중</span>
               <p className="text-white text-sm">5분 이내에 완료됩니다.</p>
