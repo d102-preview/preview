@@ -18,6 +18,12 @@ class Settings(BaseSettings):
 
     # Database variables
     DATABASE_DSN: MariaDBDsn
+    REDIS_HOST: str
+    REDIS_PORT: int = Field(6379, ge=1, le=65535)
+    REDIS_DB: int = Field(1, ge=0, le=15)
+    REDIS_PASSWORD: str
+    REDIS_MAX_CONN: int = Field(10, ge=1)
+    REDIS_EXPIRE_SECOND: int = Field(60 * 60 * 24, gt=60) # 24h
 
     # Build variables
     REGISTRY: str
