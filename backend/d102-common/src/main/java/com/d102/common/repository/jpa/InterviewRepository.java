@@ -1,17 +1,14 @@
 package com.d102.common.repository.jpa;
 
 import com.d102.common.constant.InterviewType;
-import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Interview;
 import io.lettuce.core.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface InterviewRepository extends JpaRepository<Interview, Long> {
 
-public interface AnalysisRepository extends JpaRepository<Analysis, Long> {
-
-    Page<Analysis> findByInterview_Type(InterviewType interviewType, Pageable pageable);
+    Page<Interview> findByType(InterviewType type, Pageable pageable);
 
 }

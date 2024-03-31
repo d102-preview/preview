@@ -23,6 +23,7 @@ public interface UploadMapper {
     Resume toResume(UploadDto.ResumeRequest resumeRequest);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "interview", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "videoPath", ignore = true)
     @Mapping(target = "thumbnailPath", ignore = true)

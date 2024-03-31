@@ -50,9 +50,11 @@ public class UploadDto {
     @Data
     public static class AnalysisRequest {
 
+        private Long interviewId;
+
         @NotBlank
         @Size(max = 16)
-        private String type;
+        private String questionType;
 
         @NotBlank
         @Size(max = 512)
@@ -62,7 +64,6 @@ public class UploadDto {
         private String answer;
 
         private Boolean skip;
-        private LocalDateTime setStartTime;
         private List<String> keywordList;
     }
 

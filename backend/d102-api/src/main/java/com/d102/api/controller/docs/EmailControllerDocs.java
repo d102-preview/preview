@@ -16,7 +16,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@Tag(name = "1. 이메일 관련 API", description = "JWT 토큰을 요구하지 않는 API (이메일 인증번호 전송, 이메일 중복확인 등)")
+@Tag(name = "01. 이메일 관련 API", description = "JWT 토큰을 요구하지 않는 API (이메일 인증번호 전송, 이메일 중복확인 등)")
 public interface EmailControllerDocs {
 
     @Operation(summary = "이메일 중복확인", description = "이메일 중복확인 API를 호출한다.")
