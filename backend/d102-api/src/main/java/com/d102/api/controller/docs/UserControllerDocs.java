@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "3. 유저 관련 API", description = "유저 관련 정보를 CRUD 하는 API")
+@Tag(name = "03. 유저 관련 API", description = "유저 관련 정보를 CRUD 하는 API")
 public interface UserControllerDocs {
 
     @Operation(summary = "내 정보 조회", description = "로그인한 정보를 기반으로 자신의 정보를 조회하는 API를 호출한다.")

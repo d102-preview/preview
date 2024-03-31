@@ -2,6 +2,7 @@ package com.d102.common.constant;
 
 public class InterviewConstant {
 
+    public static final String INTERVIEW = "interview";
     public static final String QUESTION_LIST = "questionList";
     public static final int QUESTION_COUNT = 3;
     public static final Long SELF_INTRODUCE_NO = 1L;

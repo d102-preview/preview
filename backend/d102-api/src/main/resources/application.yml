@@ -59,7 +59,6 @@ springdoc:
   override-with-generic-response: false
   use-fqn: true
 
-
 # logging
 logging:
   level:

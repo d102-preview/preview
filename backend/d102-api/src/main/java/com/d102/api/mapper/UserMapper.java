@@ -11,11 +11,8 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
     UserDto.Response toUserResponseDto(User user);
-
     UserDto.ResumeResponse toUserResumeResponseDto(User user);
-
     ResumeDto.Response toResumeResponseDto(Resume resume);
-
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)

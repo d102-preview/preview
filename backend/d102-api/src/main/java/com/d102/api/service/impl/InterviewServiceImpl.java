@@ -5,14 +5,16 @@ import com.d102.api.dto.InterviewDto;
 import com.d102.api.mapper.InterviewMapper;
 import com.d102.api.repository.jpa.CommonKeywordRepository;
 import com.d102.api.repository.jpa.ResumeKeywordRepository;
-import com.d102.api.repository.querydsl.InterviewRepository;
+import com.d102.api.repository.querydsl.InterviewQuestionRepository;
 import com.d102.api.service.InterviewService;
 import com.d102.common.constant.InterviewConstant;
 import com.d102.common.constant.QuestionType;
+import com.d102.common.domain.jpa.Interview;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.NotFoundException;
+import com.d102.common.repository.jpa.InterviewRepository;
 import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.util.SecurityHelper;
 import com.d102.common.util.UserVerifier;
@@ -27,13 +29,20 @@ import java.util.List;
 public class InterviewServiceImpl implements InterviewService {
 
     private final InterviewRepository interviewRepository;
+    private final InterviewQuestionRepository interviewQuestionRepository;
     private final ResumeRepository resumeRepository;
     private final CommonKeywordRepository commonKeywordRepository;
     private final ResumeKeywordRepository resumeKeywordRepository;
     private final InterviewMapper interviewMapper;
     private final SecurityHelper securityHelper;
 
-    @Override
+    public InterviewDto.Response create(InterviewDto.Request request) {
+        /**
+         * TODO: Mapper가 string을 enum으로 자동으로 바꿔주는 것 같은데 추후 확인 필요
+         */
+        return interviewMapper.toResponse(interviewRepository.saveAndFlush(interviewMapper.toInterview(request)));
+    }
+
     public List<InterviewDto.ListResponse> getList(Long resumeId) {
         checkExistedResumeAndCheckUser(resumeId);
 
@@ -49,7 +58,7 @@ public class InterviewServiceImpl implements InterviewService {
                 .build());
 
         /* common question */
-        List<CommonQuestion> randomCommonQuestionList = interviewRepository.getRandomCommonQuestionList();
+        List<CommonQuestion> randomCommonQuestionList = interviewQuestionRepository.getRandomCommonQuestionList();
         for(CommonQuestion commonQuestion: randomCommonQuestionList) {
             questionList.add(InterviewDto.ListResponse.builder()
                     .question(commonQuestion.getQuestion())
@@ -61,7 +70,7 @@ public class InterviewServiceImpl implements InterviewService {
         }
 
         /* resume question */
-        List<ResumeQuestion> resumeQuestionList = interviewRepository.getResumeQuestionList(resumeId);
+        List<ResumeQuestion> resumeQuestionList = interviewQuestionRepository.getResumeQuestionList(resumeId);
         for (ResumeQuestion resumeQuestion : resumeQuestionList) {
             questionList.add(InterviewDto.ListResponse.builder()
                     .question(resumeQuestion.getQuestion())

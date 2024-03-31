@@ -8,4 +8,6 @@ public interface InterviewService {
 
     List<InterviewDto.ListResponse> getList(Long resumeId);
 
+    Object create(InterviewDto.Request request);
+
 }
