@@ -73,11 +73,12 @@ export const useQuestion = () => {
     return useQuery({ queryKey: ['ResumeList'], queryFn: () => getResumeList() });
   };
 
-  const useGetQuestionStatus = (resumeId: number) => {
+  const useGetQuestionStatus = (resumeId: number, options = {}) => {
     return useQuery({
       queryKey: ['questionStatus', resumeId],
       queryFn: () => checkQuestionStatus(resumeId),
       enabled: resumeId !== -1,
+      ...options,
     });
   };
 

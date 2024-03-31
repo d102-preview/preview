@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import QuestionsList from './QuestionsList';
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 import { useQuestion } from '@/hooks/question/useQuestion';
@@ -15,16 +15,30 @@ interface QuestionsProps {
 
 const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
   const { name } = userStore();
-
   const [selectedResume, setSelectedResume] = useState<ISimpleResume | undefined>(resumeList[0]);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   const { useGetRusmeQuestionList, useGetQuestionStatus } = useQuestion();
 
-  const { data } = useGetRusmeQuestionList(selectedResume ? selectedResume.id : -1);
-  const { data: statusData } = useGetQuestionStatus(selectedResume ? selectedResume.id : -1);
+  // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
+  const { data, refetch: refetchQuestions } = useGetRusmeQuestionList(selectedResume ? selectedResume.id : -1);
 
-  const isComplete = statusData?.data.complete || false;
+  // 선택된 이력서에 대한 질문 생성 상태를 확인하는 쿼리
+  const statusQuery = useGetQuestionStatus(selectedResume ? selectedResume.id : -1, {
+    enabled: !!selectedResume,
+  });
+
+  useEffect(() => {
+    if (statusQuery.data?.data.complete) {
+      refetchQuestions(); // 질문 생성이 완료되면 질문 목록을 다시 가져옴
+    } else {
+      // complete가 false이면 5초마다 상태 확인
+      const intervalId = setInterval(() => statusQuery.refetch(), 5000);
+      return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 제거
+    }
+  }, [statusQuery.data, refetchQuestions, statusQuery.refetch]);
+
+  const isComplete = statusQuery.data?.data.complete || false;
   const questions = data?.data?.questionList?.content || [];
   const total = data?.data?.questionList?.totalElements || 0;
 
