@@ -23,18 +23,15 @@ public class FastAiApi {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-        HttpEntity<Map> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
+        HttpEntity<String> request = getAnalyzeVideoHttpEntity(analysisIdJson, headers);
         return new RestTemplate().postForObject(FASTAI_API_URL, request, FastAiApi.Response.class);
     }
 
-    private HttpEntity<Map> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {
-//        String payloadTemplate = "{ \"analysis_id\": \"%s\" }";
-        HashMap<String, Integer> map = new HashMap<>() {{
-            put("analysis_id", 36);
-        }};
-//        String payload = String.format(payloadTemplate, analysisIdJson.toString());
+    private HttpEntity<String> getAnalyzeVideoHttpEntity(StringBuilder analysisIdJson, HttpHeaders headers) {
+        String payloadTemplate = "{ \"analysis_id\": \"%s\" }";
+        String payload = String.format(payloadTemplate, analysisIdJson.toString());
 
-        return new HttpEntity<>(map, headers);
+        return new HttpEntity<>(payload, headers);
     }
 
     @Data
