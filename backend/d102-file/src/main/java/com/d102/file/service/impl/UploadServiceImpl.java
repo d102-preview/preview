@@ -106,16 +106,16 @@ public class UploadServiceImpl implements UploadService {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
 
-            FastAiApi.Response response = null;
+            Object response = null;
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
             } catch (RestClientException e) {
                 e.printStackTrace();
                 throw new InvalidException(ExceptionType.FastAiApiException);
             }
-            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
-                throw new InvalidException(ExceptionType.AnalysisException);
-            }
+//            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
+//                throw new InvalidException(ExceptionType.AnalysisException);
+//            }
         }
     }
 
