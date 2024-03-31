@@ -1,5 +1,10 @@
-import { postInterviewAnalyze, getMainInterviewQuestionList, postFollowupQuestion } from '@/services/interview/api';
-import { IInterviewFollowupReq } from '@/types/interview';
+import {
+  postInterviewAnalyze,
+  getMainInterviewQuestionList,
+  postFollowupQuestion,
+  postInterviewSet,
+} from '@/services/interview/api';
+import { IInterviewFollowupReq, IInterviewSetReq } from '@/types/interview';
 import { useMutation } from '@tanstack/react-query';
 
 export const useInterview = () => {
@@ -42,5 +47,18 @@ export const useInterview = () => {
     });
   };
 
-  return { useGetMainInterviewQuestionList, usePostInterviewAnalyze, usePostFollowupQuestion };
+  const usePostInterviewSet = () => {
+    return useMutation({
+      mutationKey: ['interview', 'set'],
+      mutationFn: (info: IInterviewSetReq) => postInterviewSet(info),
+      onSuccess: () => {
+        console.log('success');
+      },
+      onError: () => {
+        console.log('fail');
+      },
+    });
+  };
+
+  return { useGetMainInterviewQuestionList, usePostInterviewAnalyze, usePostFollowupQuestion, usePostInterviewSet };
 };
