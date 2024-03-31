@@ -1,6 +1,8 @@
 package com.d102.common.domain.jpa;
 
+import com.d102.common.constant.QuestionType;
 import com.d102.common.util.StringListConverter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,11 +22,12 @@ public class Analysis {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "interview_id", nullable = false)
+    private Interview interview;
 
-    @Column(name = "type", length = 16, nullable = false)
-    private String type;
+    @Column(name = "question_type", length = 16, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private QuestionType questionType;
 
     @Column(name = "question", length = 512, nullable = false)
     private String question;
@@ -42,9 +44,6 @@ public class Analysis {
     @Column(name = "keyword_list", length = 512, nullable = false)
     @Convert(converter = StringListConverter.class)
     private List<String> keywordList;
-
-    @Column(name = "set_start_time", nullable = false)
-    private LocalDateTime setStartTime;
 
     @Column(name = "analysis_req_time")
     private LocalDateTime analysisReqTime;

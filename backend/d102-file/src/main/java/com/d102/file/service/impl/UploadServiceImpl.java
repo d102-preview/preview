@@ -1,27 +1,31 @@
 package com.d102.file.service.impl;
 
 import com.d102.common.constant.FileConstant;
+import com.d102.common.constant.QuestionType;
 import com.d102.common.domain.jpa.Analysis;
+import com.d102.common.domain.jpa.Interview;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.User;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.jpa.AnalysisRepository;
+import com.d102.common.repository.jpa.InterviewRepository;
 import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.jpa.UserRepository;
 import com.d102.common.service.AsyncService;
 import com.d102.common.util.FastAiApi;
 import com.d102.common.util.SecurityHelper;
+import com.d102.common.util.TimeConverter;
 import com.d102.file.dto.UploadDto;
 import com.d102.file.mapper.UploadMapper;
 import com.d102.file.service.UploadService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,11 +35,10 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UploadServiceImpl implements UploadService {
@@ -43,6 +46,7 @@ public class UploadServiceImpl implements UploadService {
     @Value("${download.profile.base-url}")
     private String profileBaseUrl;
 
+    private final InterviewRepository interviewRepository;
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
     private final AnalysisRepository analysisRepository;
@@ -82,17 +86,18 @@ public class UploadServiceImpl implements UploadService {
         return uploadMapper.toResumeResponseDto(resume);
     }
 
-    @Transactional
     public void uploadAndAnalyzeVideo(UploadDto.AnalysisRequest analysisRequestDto, MultipartFile video) {
-        Path basePath = FileConstant.VIDEO_SAVE_DIR.resolve(securityHelper.getLoginUsername()).resolve(makeFormattedTime(analysisRequestDto.getSetStartTime()));
+        Interview interview = interviewRepository.findById(analysisRequestDto.getInterviewId()).orElseThrow(() -> new NotFoundException(ExceptionType.InterviewNotFoundException));
+        interview.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
+
+        Path basePath = FileConstant.VIDEO_SAVE_DIR.resolve(securityHelper.getLoginUsername()).resolve(TimeConverter.convertToFormattedTime(interview.getStartTime()));
         String savePath = saveVideo(basePath, video);
 
         Analysis analysis = uploadMapper.toAnalysis(analysisRequestDto);
-        analysis.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
-        analysis.setType(analysisRequestDto.getType());
+        analysis.setInterview(interview);
+        analysis.setQuestionType(QuestionType.valueOf(analysisRequestDto.getQuestionType()));
         analysis.setQuestion(analysisRequestDto.getQuestion());
         analysis.setAnswer(analysisRequestDto.getAnswer());
-        analysis.setSetStartTime(analysisRequestDto.getSetStartTime());
         analysis.setKeywordList(analysisRequestDto.getKeywordList());
         analysis.setVideoPath(savePath);
         analysisRepository.saveAndFlush(analysis);
@@ -101,13 +106,20 @@ public class UploadServiceImpl implements UploadService {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
 
-            ResponseEntity<Void> response = null;
+            FastAiApi.Response response = null;
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
             } catch (RestClientException e) {
-                throw new InvalidException(ExceptionType.FastAiApiException);
+                /**
+                 * FastAI 서버로부터 실패한 응답을 받았을 경우 재시도
+                 */
+                try {
+                    response = fastAiApi.analyzeVideo(analysis.getId());
+                } catch (RestClientException e2) {
+                    throw new InvalidException(ExceptionType.FastAiApiException);
+                }
             }
-            if (!response.getStatusCode().is2xxSuccessful()) {
+            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
                 throw new InvalidException(ExceptionType.AnalysisException);
             }
         }
@@ -126,10 +138,6 @@ public class UploadServiceImpl implements UploadService {
         } catch (IOException e) {
             throw new InvalidException(ExceptionType.VideoUploadException);
         }
-    }
-
-    private String makeFormattedTime(LocalDateTime setStartTime) {
-        return setStartTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm-ss"));
     }
 
     private String saveResume(Path basePath, MultipartFile resume) {

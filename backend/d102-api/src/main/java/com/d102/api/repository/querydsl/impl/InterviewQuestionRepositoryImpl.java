@@ -2,11 +2,10 @@ package com.d102.api.repository.querydsl.impl;
 
 import com.d102.api.domain.jpa.CommonQuestion;
 import com.d102.api.domain.jpa.QCommonQuestion;
-import com.d102.api.repository.querydsl.InterviewRepository;
+import com.d102.api.repository.querydsl.InterviewQuestionRepository;
 import com.d102.common.constant.InterviewConstant;
 import com.d102.common.domain.jpa.QResumeQuestion;
 import com.d102.common.domain.jpa.ResumeQuestion;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
-public class InterviewRepositoryImpl implements InterviewRepository {
+public class InterviewQuestionRepositoryImpl implements InterviewQuestionRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final QCommonQuestion commonQuestion = QCommonQuestion.commonQuestion;
