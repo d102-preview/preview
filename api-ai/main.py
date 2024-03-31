@@ -1,6 +1,7 @@
 import uvicorn
 from common.exception import *
 from core.logger import load_config
+from core.settings import settings
 from fastapi import FastAPI, status
 from fastapi.exceptions import RequestValidationError
 from loguru import logger
@@ -49,12 +50,15 @@ def health_check():
 
 
 if __name__ == "__main__":
-    logger.info("Run server")
+    RUN_SERVER_MSG = "Run server"
+    if settings.DEBUG:
+        RUN_SERVER_MSG = f"NOTE!!! {RUN_SERVER_MSG} as DEBUG mode"
+    logger.info(RUN_SERVER_MSG)
 
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8000,
-        reload=True,
+        reload=settings.DEBUG,
         log_config=load_config(),
     )
