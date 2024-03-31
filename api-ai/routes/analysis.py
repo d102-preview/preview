@@ -27,12 +27,8 @@ def analyse_video(
     """
     logger.info("Analyse video")
 
-    emotion, intent = create_task(params.analysis_id, maria_session, redis_session)
+    create_task(params.analysis_id, maria_session, redis_session)
 
     return AnalysisResponse(
         result=Status.OK,
-        data={
-            "emotion": emotion,
-            "intent": intent,
-        },
     )
