@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "8. 꼬리질문 관련 API", description = "꼬리질문을 생성하고 조회하는 API")
+@Tag(name = "08. 꼬리질문 관련 API", description = "꼬리질문을 생성하고 조회하는 API")
 public interface FollowUpQuestionControllerDocs {
 
     @Operation(summary = "꼬리질문 생성", description = "질문에 대한 꼬리질문을 생성하는 API를 호출한다.")

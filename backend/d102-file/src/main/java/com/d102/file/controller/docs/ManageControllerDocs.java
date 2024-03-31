@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "3. 파일 관리 관련 API", description = "파일을 관리할 수 있는 API")
+@Tag(name = "03. 파일 관리 관련 API", description = "파일을 관리할 수 있는 API")
 public interface ManageControllerDocs {
 
     @Operation(summary = "이력서 삭제", description = "이력서를 삭제한다.")

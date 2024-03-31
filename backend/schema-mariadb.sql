@@ -120,24 +120,35 @@ CREATE TABLE `resume_keyword` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-CREATE TABLE `analysis` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` bigint NOT NULL,
+CREATE TABLE `interview` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `type` varchar(16) NOT NULL,
+  `start_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `analysis` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `interview_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `question_type` varchar(16) NOT NULL,
   `question` varchar(512) NOT NULL,
   `answer` varchar(1024) DEFAULT NULL,
   `video_path` varchar(1024) NOT NULL,
   `thumbnail_path` varchar(1024) DEFAULT NULL,
-  `keyword_list` varchar(512),
-  `set_start_time` datetime NOT NULL,
+  `keyword_list` varchar(512) DEFAULT NULL,
   `analysis_req_time` datetime DEFAULT NULL,
   `analysis_start_time` datetime DEFAULT NULL,
   `analysis_end_time` datetime DEFAULT NULL,
-  `video_length` int,
-  `fps` int,
-  `frames` int,
-  `emotion` text,
-  `intent` text,
+  `video_length` int(11) DEFAULT NULL,
+  `fps` int(11) DEFAULT NULL,
+  `frames` int(11) DEFAULT NULL,
+  `emotion` text DEFAULT NULL,
+  `intent` text DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `analysis_user_FK` (`user_id`),
+  KEY `analysis_interview_fk` (`interview_id`),
+  CONSTRAINT `analysis_interview_fk` FOREIGN KEY (`interview_id`) REFERENCES `interview` (`id`),
   CONSTRAINT `analysis_user_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

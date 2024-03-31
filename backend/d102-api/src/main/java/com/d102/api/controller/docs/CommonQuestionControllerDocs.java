@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-@Tag(name = "5. 공통 질문 관련 API", description = "공통 질문 관련 정보를 CRUD 하는 API")
+@Tag(name = "05. 공통 질문 관련 API", description = "공통 질문 관련 정보를 CRUD 하는 API")
 public interface CommonQuestionControllerDocs {
 
     @Operation(summary = "공통 질문 목록 조회", description = "공통 질문 목록을 조회하는 API를 호출한다.")

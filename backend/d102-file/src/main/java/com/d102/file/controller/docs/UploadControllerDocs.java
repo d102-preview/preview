@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "1. 파일 업로드 관련 API", description = "파일을 업로드할 수 있는 API")
+@Tag(name = "01. 파일 업로드 관련 API", description = "파일을 업로드할 수 있는 API")
 public interface UploadControllerDocs {
 
     @Operation(summary = "프로필 이미지 업로드", description = "프로필 이미지를 업로드한다.")

@@ -13,7 +13,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "2. 파일 다운로드 관련 API", description = "파일을 다운로드 할 수 있는 API")
+@Tag(name = "02. 파일 다운로드 관련 API", description = "파일을 다운로드 할 수 있는 API")
 public interface DownloadControllerDocs {
 
     @Operation(summary = "프로필 이미지 다운로드", description = "프로필 이미지를 다운로드한다.")
