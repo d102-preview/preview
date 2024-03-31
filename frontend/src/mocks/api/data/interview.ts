@@ -59,3 +59,7 @@ export const interviewQuestionRes: APIResponse<IInterviewQuestionRes> = {
 export const interviewAnalyzeRes: APISimpleResponse = {
   result: 'ok',
 };
+
+export const interviewFollowupRes: APISimpleResponse = {
+  result: 'ok',
+};
