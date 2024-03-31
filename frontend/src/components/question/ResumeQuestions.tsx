@@ -36,20 +36,25 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
   // 등록된 이력서가 없는 경우
   if (resumeList.length === 0) {
     return (
-      <div className="pt-2">
-        <SpeechBubble
-          children={
-            <>
-              <p>
-                {name}님! <span className="text-[#EA8888]">등록된 이력서가 없어요</span>
-              </p>
-              <p>이력서를 등록하면 이력서를 분석하여 질문을 생성해 드려요!</p>
-              <p className="text-blue-400">지금 마이페이지에서 이력서를 등록해 보세요 😊</p>
-            </>
-          }
-        />
-        <Lottie options={robotOptions} height={330} width={330} />
-      </div>
+      <>
+        <h3 className="text-lg font-semibold">이력서 기반 질문</h3>
+        <div className="my-2 relative">
+          <div className="pt-1">
+            <SpeechBubble
+              children={
+                <>
+                  <p>
+                    {name}님! <span className="text-[#EA8888]">등록된 이력서가 없어요</span>
+                  </p>
+                  <p>이력서를 등록하면 이력서를 분석하여 질문을 생성해 드려요!</p>
+                  <p className="text-blue-400">지금 마이페이지에서 이력서를 등록해 보세요 😊</p>
+                </>
+              }
+            />
+            <Lottie options={robotOptions} height={330} width={330} />
+          </div>
+        </div>
+      </>
     );
   }
 
