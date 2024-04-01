@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 
 import sqlmodel
 from models.common import CommonResponse
@@ -34,3 +35,9 @@ class Analysis(SQLModel, table=True):
 
     emotion: str | None = sqlmodel.Field(default=None, nullable=True)
     intent: str | None = sqlmodel.Field(default=None, nullable=True)
+
+
+class Status(Enum):
+    PROCESSING = "process"
+    SUCCESS = "success"
+    FAIL = "fail"
