@@ -4,4 +4,6 @@ public interface TaskService {
 
     Boolean checkQuestionListTask(Long resumeId);
 
+    Boolean checkAnalysisTask(Long resumeId);
+
 }

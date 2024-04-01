@@ -31,6 +31,8 @@ CREATE TABLE `resume` (
   `file_name` varchar(128) NOT NULL,
   `display_name` varchar(16) NOT NULL,
   `file_path` varchar(1024) NOT NULL,
+  `analysis_req_time` datetime DEFAULT NULL,
+  `analysis_end_time` datetime DEFAULT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),

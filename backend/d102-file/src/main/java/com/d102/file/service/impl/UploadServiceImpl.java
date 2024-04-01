@@ -68,6 +68,10 @@ public class UploadServiceImpl implements UploadService {
         return uploadMapper.toProfileResponseDto(userRepository.saveAndFlush(user));
     }
 
+    /**
+     * TODO: 여기에 트랜잭션을 걸고 asyncService.generateAndSaveQuestionList()에 전파할 필요가 있는지 논의 필요
+     * 여기에서 트랜잭션을 걸어도 asyncService에서 접근이 가능한 것으로 보임
+     */
     @Transactional
     public UploadDto.ResumeResponse uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
         checkResumeLimit();
@@ -81,7 +85,7 @@ public class UploadServiceImpl implements UploadService {
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
         resumeRepository.saveAndFlush(resume);
 
-        asyncService.generateAndSaveQuestionList(savePath, resume);
+        asyncService.generateAndSaveQuestionList(savePath, resume.getId());
 
         return uploadMapper.toResumeResponseDto(resume);
     }
@@ -109,7 +113,7 @@ public class UploadServiceImpl implements UploadService {
             FastAiApi.Response response = null;
             try {
                 response = fastAiApi.analyzeVideo(analysis.getId());
-            } catch (RestClientException e) {
+            } catch (RestClientException e1) {
                 /**
                  * FastAI 서버로부터 실패한 응답을 받았을 경우 재시도
                  */
@@ -118,9 +122,6 @@ public class UploadServiceImpl implements UploadService {
                 } catch (RestClientException e2) {
                     throw new InvalidException(ExceptionType.FastAiApiException);
                 }
-            }
-            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
-                throw new InvalidException(ExceptionType.AnalysisException);
             }
         }
     }
