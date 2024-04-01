@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 public class DownloadDto {
 
@@ -19,8 +20,8 @@ public class DownloadDto {
     @Data
     public static class ResumeResponse {
 
-        private String name;
-        private String length;
+        private String resumeName;
+        private String resumeLength;
         private String resumeType;
         private byte[] resume;
     }
@@ -31,6 +32,14 @@ public class DownloadDto {
 
         private String thumbnailType;
         private byte[] thumbnail;
+    }
+
+    @Builder
+    @Data
+    public static class VideoResponse {
+
+        private String videoLength;
+        private byte[] video;
     }
 
 }

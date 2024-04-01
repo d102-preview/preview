@@ -39,6 +39,7 @@ public class SecurityConfig {
             /* profile */
             "/download/profile/**",
             "/download/thumbnail/**",
+            "/download/video/**",
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

@@ -11,6 +11,8 @@ import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,8 +43,8 @@ public class DownloadServiceImpl implements DownloadService {
         try {
             Path resumePath = Path.of(resume.getFilePath());
             return DownloadDto.ResumeResponse.builder()
-                    .name(resume.getFileName())
-                    .length(String.valueOf(Files.size(resumePath)))
+                    .resumeName(resume.getFileName())
+                    .resumeLength(String.valueOf(Files.size(resumePath)))
                     .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)).toString())
                     .resume(Files.readAllBytes(resumePath))
                     .build();
@@ -62,6 +64,17 @@ public class DownloadServiceImpl implements DownloadService {
                     .build();
         } catch (IOException e) {
             throw new NotFoundException(ExceptionType.ThumbnailDownloadException);
+        }
+    }
+
+    public DownloadDto.VideoResponse downloadVideo(Path videoPath) {
+        try {
+            return DownloadDto.VideoResponse.builder()
+                    .videoLength(String.valueOf(Files.size(videoPath)))
+                    .video(FileCopyUtils.copyToByteArray(videoPath.toFile()))
+                    .build();
+        } catch (Exception e) {
+            throw new NotFoundException(ExceptionType.VideoDownloadException);
         }
     }
 
