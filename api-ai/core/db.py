@@ -1,11 +1,16 @@
 import redis
 from core.settings import settings
+from sqlalchemy.pool import QueuePool
 from sqlmodel import create_engine
 
 # Connect to MariaDB
 maria_conn = create_engine(
-    str(settings.DATABASE_DSN),
+    str(settings.MARIADB_DSN),
     echo=settings.DEBUG,
+    poolclass=QueuePool,
+    pool_size=settings.MARIADB_POOL_SIZE,
+    max_overflow=settings.MARIADB_MAX_OVERFLOW,
+    pool_pre_ping=True,
 )
 
 # Connect to Redis
