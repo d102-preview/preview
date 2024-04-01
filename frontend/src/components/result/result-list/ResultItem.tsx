@@ -38,7 +38,7 @@ const ResultItem = ({ id, thumbnailPath, type, date, question, videoLength, comp
         <span className="text-sm text-MAIN1">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
         <span className="text-xs text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
       </div>
-      <span className="font-semibold text-BLACK text-lg mx-1">Q. {question}</span>
+      <span className="line-clamp-2 font-semibold text-BLACK text-lg mx-1">Q. {question}</span>
     </div>
   );
 };
