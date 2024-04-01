@@ -19,7 +19,7 @@ const Header = ({ page }: { page?: string }) => {
 
   return (
     <div
-      className={`flex justify-between items-center w-full h-14 p-5 px-10 ${page === 'main' ? ' bg-white/40 fixed top-0 left-0 z-10' : ''}`}
+      className={`flex justify-between items-center w-full h-14 p-5 px-10 ${page === 'main' ? ' bg-white/80 fixed top-0 left-0 z-10' : ''}`}
     >
       <img className="w-24 cursor-pointer" src={logo} alt="logo" onClick={() => navigate('/')} />
       <div className="flex">
