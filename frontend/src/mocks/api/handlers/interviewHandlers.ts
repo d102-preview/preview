@@ -2,7 +2,7 @@ import { HttpResponse, delay, http } from 'msw';
 import { interviewAnalyzeRes, interviewFollowupRes, interviewQuestionRes, interviewSetRes } from '../data/interview';
 
 export const interviewHandlers = [
-  http.get(`/api/interview/3`, () => {
+  http.get(`/api/interview/0`, () => {
     return HttpResponse.json(interviewQuestionRes, { status: 201 });
   }),
 
