@@ -13,7 +13,7 @@ from common.perf import elapsed
 from core.settings import settings
 from fastapi import HTTPException, status
 from loguru import logger
-from models.analysis import Analysis
+from models.analysis import Analysis, Status
 from PIL import Image
 from pytz import timezone
 from sqlmodel import select
@@ -169,8 +169,9 @@ def create_task(
     maria_session.add(record)
     maria_session.commit()
 
-    redis_key = f"analysis_process:{record.id}"
-    redis_session.set(redis_key, "processing", ex=settings.REDIS_EXPIRE_SECOND)
+    redis_key = f"analysisHash:{record.id}"
+    redis_session.hset(redis_key, "status", Status.PROCESSING)
+    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
 
     # Step 1: Facial Emotional Recognition
     try:
@@ -188,4 +189,5 @@ def create_task(
     record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
     maria_session.add(record)
     maria_session.commit()
-    redis_session.set(redis_key, "done", ex=settings.REDIS_EXPIRE_SECOND)
+    redis_session.hset(redis_key, "status", Status.SUCCESS)
+    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
