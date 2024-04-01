@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import QuestionsList from './QuestionsList';
+
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import { ISimpleResume } from '@/types/model';
@@ -7,6 +7,9 @@ import Lottie from 'react-lottie';
 import { robotOptions, loadingOptions3 } from '@/assets/lotties/lottieOptions';
 import SpeechBubble from '@/components/result/SpeechBubble';
 import userStore from '@/stores/userStore';
+import { useIntersectionObserver } from '@/hooks/@common/userIntersectionObserver';
+import questionStore from '@/stores/questionStore';
+import QuestionItem from './QuestionItem';
 
 interface QuestionsProps {
   type: 'resume';
@@ -18,10 +21,30 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
   const [selectedResume, setSelectedResume] = useState<ISimpleResume | undefined>(resumeList[0]);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const { useGetRusmeQuestionList, useGetQuestionStatus } = useQuestion();
-
+  const { useGetQuestionStatus, useGetListInfinite } = useQuestion();
+  
   // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
-  const { data, refetch: refetchQuestions } = useGetRusmeQuestionList(selectedResume ? selectedResume.id : -1);
+  const {
+    data,
+    refetch: refetchQuestions,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetListInfinite(
+    {
+      page: 0,
+      size: 10,
+      resumeId: selectedResume ? selectedResume.id : -1,
+    },
+    type,
+    !!selectedResume, // 선택된 이력서가 있을 때만 쿼리를 활성화
+  );
+
+  const { selectedQuestions, addQuestion, removeQuestion } = questionStore();
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage,
+  });
+
 
   // 선택된 이력서에 대한 질문 생성 상태를 확인하는 쿼리
   const statusQuery = useGetQuestionStatus(selectedResume ? selectedResume.id : -1, {
@@ -39,8 +62,7 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
   }, [statusQuery.data, refetchQuestions, statusQuery.refetch]);
 
   const isComplete = statusQuery.data?.data.complete || false;
-  const questions = data?.data?.questionList?.content || [];
-  const total = data?.data?.questionList?.totalElements || 0;
+  const totalQuestions = data?.pages[0]?.data?.questionList?.totalElements || 0;
 
   const handleListItemClick = (resume: ISimpleResume) => {
     setSelectedResume(resume);
@@ -165,8 +187,27 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
 
       {selectedResume && (
         <>
-          <p className="text-UNIMPORTANT_TEXT mt-12">총 {total}개의 질문이 있습니다.</p>
-          <QuestionsList questions={questions} type={type} />
+          <p className="text-UNIMPORTANT_TEXT mt-12">총 {totalQuestions}개의 질문이 있습니다.</p>
+          {data?.pages?.map(
+            (page, i) =>
+              page && ( // page가 정의되어 있으면 아래의 컴포넌트 렌더링 실행
+                <div key={i}>
+                  {page.data.questionList.content.map(question => (
+                    <QuestionItem
+                      key={question.id}
+                      question={question.question}
+                      id={question.id}
+                      isSelected={selectedQuestions.some(q => q.id === question.id)}
+                      onAdd={addQuestion}
+                      onRemove={removeQuestion}
+                      type={type}
+                    />
+                  ))}
+                </div>
+              ),
+          )}
+          {/* 페이지 최하단에 작은 div요소 만들어 ref에 setTarget적용 */}
+          <div ref={setTarget} className="h-[1rem]" />
         </>
       )}
     </div>
