@@ -52,14 +52,17 @@ const RecordPage = () => {
 
   const [stream, setStream] = useState<MediaStream | null>(null);
 
+  useEffect(() => {
+    if (state) {
+      console.log(state);
+
+      getQuestionList(state.resumeId);
+      postInterviewSet({ type: state.type, startTime: state.startTime });
+    }
+  }, [state]);
+
   const getMediaPermission = useCallback(async () => {
     try {
-      // @TODO 이력서 선택 + 이력서 id 바꿔줘야함
-      getQuestionList(3);
-      if (state) {
-        console.log(state);
-        postInterviewSet({ type: state.type, startTime: state.startTime });
-      }
       const video = { audio: true, video: true };
 
       const videoStream = await navigator.mediaDevices.getUserMedia(video);
@@ -389,20 +392,21 @@ const RecordPage = () => {
               </div>
             </>
           )}
-
+          {/*  */}
           {status === 'ending' && (
             <>
-              <div className="absolute top-0 left-0 right-0 bottom-0 bg-black z-50">
+              <BackgroundOpacity />
+              <div className="absolute top-0 left-0 right-0 bottom-0 ">
                 <div className="w-full h-full flex flex-col text-center items-center justify-center gap-5">
                   <p className="text-3xl text-white">면접이 종료되었습니다</p>
-                  <p className="text-3xl text-white">수고하셨습니다</p>
-
+                  <p className="text-3xl text-white pb-5">수고하셨습니다</p>
                   <Button
-                    width="w-32"
-                    text="결과 보러 가기"
-                    height="h-12"
-                    backgroundColor="bg-MAIN1"
-                    textColor="text-white"
+                    width="w-24"
+                    text="결과 확인"
+                    height="h-10"
+                    backgroundColor="bg-gray-50"
+                    textColor="text-black"
+                    textSize="text-xs"
                     onClick={() => navigate('/result')}
                   />
                 </div>
