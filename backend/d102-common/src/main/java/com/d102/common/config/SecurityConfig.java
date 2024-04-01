@@ -28,7 +28,8 @@ public class SecurityConfig {
     public static final String[] PERMIT_URL_ARRAY = {
             /* api */
             "/email/**",
-            "/auth/**",
+            /* "/auth/**", */
+            "/auth/login/**",
             "/common/question/list",
             /* swagger v3 */
             "/v3/api-docs/**",
