@@ -7,18 +7,26 @@ import {
   IScriptRes,
   IKeywordInfo,
   IKeywordRes,
+  IResumeRes,
 } from '@/types/question';
-import { APIResponse } from '@/types/model';
+import { APIResponse, IStatusRes } from '@/types/model';
 import { axiosAuthInstance, axiosCommonInstance } from '@/apis/axiosInstance';
 
-export const getQuestionList = async (type: questionType): Promise<APIResponse<IQuestionListRes>> => {
+export const getCommonQuestionList = async (): Promise<APIResponse<IQuestionListRes>> => {
   // @TODO: 무한 스크롤로 변경하기
   const params = { page: 0, size: 10 };
-  const res = await axiosCommonInstance.get(`/api/${type}/question/list`, { params });
+  const res = await axiosCommonInstance.get(`/api/common/question/list`, { params });
   return res.data;
 };
 
-export const getQuestion = async ({type, questionId}: IQeustionInfo): Promise<APIResponse<IQuestionRes>> => {
+export const getResumeQuestionList = async (resumeId: number): Promise<APIResponse<IQuestionListRes>> => {
+  // @TODO: 무한 스크롤로 변경하기
+  const params = { page: 0, size: 10 };
+  const res = await axiosAuthInstance.get(`/api/resume/question/list/${resumeId}`, { params });
+  return res.data;
+};
+
+export const getQuestion = async ({ type, questionId }: IQeustionInfo): Promise<APIResponse<IQuestionRes>> => {
   const res = await axiosAuthInstance.get(`/api/${type}/question/${questionId}`);
   return res.data;
 };
@@ -30,12 +38,20 @@ export const postScrtip = async ({ type, questionId, script }: IScriptInfo): Pro
 
 export const postKeyword = async ({ type, questionId, keyword }: IKeywordInfo): Promise<APIResponse<IKeywordRes>> => {
   const res = await axiosAuthInstance.post(`/api/${type}/question/keyword/${questionId}`, keyword);
-  console.log('키워드 추가', res);
   return res.data;
 };
 
 export const deleteKeyword = async (type: questionType, keywordId: number): Promise<APIResponse<null>> => {
   const res = await axiosAuthInstance.delete(`/api/${type}/question/keyword/${keywordId}`);
-  console.log('키워드 삭제', res);
+  return res.data;
+};
+
+export const getResumeList = async (): Promise<APIResponse<IResumeRes>> => {
+  const res = await axiosAuthInstance.get(`/api/resume/list`);
+  return res.data;
+};
+
+export const checkQuestionStatus = async (resumeId: number): Promise<APIResponse<IStatusRes>> => {
+  const res = await axiosAuthInstance.get(`/api/task/question/list/${resumeId}`);
   return res.data;
 };
