@@ -41,4 +41,13 @@ public class DownloadController implements DownloadControllerDocs {
                 .body(new ByteArrayResource(resumeResponseDto.getResume()));
     }
 
+    @GetMapping(value = "/thumbnail")
+    public ResponseEntity<ByteArrayResource> downloadThumbnail(@RequestParam(value = "path") String thumbnailPath) {
+        String decodedPath = URLDecoder.decode(thumbnailPath, StandardCharsets.UTF_8);
+        DownloadDto.ThumbnailResponse thumbnailResponse = downloadService.downloadThumbnail(Path.of(decodedPath));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, thumbnailResponse.getThumbnailType())
+                .body(new ByteArrayResource(thumbnailResponse.getThumbnail()));
+    }
+
 }

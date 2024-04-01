@@ -32,5 +32,13 @@ public interface DownloadControllerDocs {
     })
     ResponseEntity<ByteArrayResource> downloadResume(Long resumeId);
 
+    @Operation(summary = "영상 섬네일 다운로드", description = "영상 섬네일을 다운로드한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 다운로드한 영상 섬네일을 반환한다.",
+                    content = @Content(schema = @Schema(implementation = ByteArrayResource.class), mediaType = "image/jpg"
+                    )),
+    })
+    ResponseEntity<ByteArrayResource> downloadThumbnail(String profilePath);
+
 
 }
