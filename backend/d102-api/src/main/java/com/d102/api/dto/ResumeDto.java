@@ -17,6 +17,7 @@ public class ResumeDto {
 
         private Long id;
         private String displayName;
+        private boolean complete;
     }
 
 }
