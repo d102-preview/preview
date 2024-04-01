@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../@common/Button/Button';
 import { LuMinusCircle } from 'react-icons/lu';
 import questionStore from '@/stores/questionStore';
+import { getCurrentTime } from '@/utils/getCurrentTime';
 
 const SelectedQuestions = () => {
   const { selectedQuestions, removeQuestion, message } = questionStore();
@@ -21,7 +22,7 @@ const SelectedQuestions = () => {
               <LuMinusCircle
                 size="35"
                 className="flex-shrink-0 mr-2 p-1 pl-0 text-[#EA8888]"
-                onClick={() => removeQuestion(questionObj.id)}
+                onClick={() => removeQuestion(questionObj.id!)}
               />
               <div>{questionObj.question}</div>
             </div>
@@ -38,7 +39,15 @@ const SelectedQuestions = () => {
           backgroundColor="bg-MAIN1"
           hoverBackgroundColor="hover:bg-MAIN2"
           textColor="text-white"
-          onClick={() => navigate('mock')}
+          onClick={() =>
+            navigate('/record', {
+              state: {
+                type: 'mock',
+                startTime: getCurrentTime(),
+                questionList: selectedQuestions,
+              },
+            })
+          }
         />
       </div>
     </div>

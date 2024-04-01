@@ -7,9 +7,12 @@ import {
   deleteKeyword,
   getResumeList,
   checkQuestionStatus,
+  getCommonQuestionListReq,
+  getResumeQuestionListReq,
 } from '@/services/question/api';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { IQeustionInfo, IScriptInfo, IKeywordInfo, IDeleteKeywordInfo } from '@/types/question';
+import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
+import { IQeustionInfo, IScriptInfo, IKeywordInfo, IDeleteKeywordInfo, IDealsListInfiniteReq } from '@/types/question';
+import { interviewType } from '@/types/model';
 
 export const useQuestion = () => {
   const useGetCommonQuestionList = () => {
@@ -21,6 +24,33 @@ export const useQuestion = () => {
       queryKey: ['ResumeQuestionList', resumeId],
       queryFn: () => getResumeQuestionList(resumeId),
       enabled: resumeId !== -1, // enabled 값이 0 false이면 쿼리가 자동적으로 실행되는 것을 막을 수 있음
+    });
+  };
+
+  const useGetListInfinite = (
+    props: IDealsListInfiniteReq & { resumeId?: number },
+    type: interviewType,
+    enabled = true,
+  ) => {
+    return useInfiniteQuery({
+      queryKey: ['questionsInfinite', props],
+      queryFn: ({ pageParam }) => {
+        if (type === 'common') {
+          return getCommonQuestionListReq({ ...props, page: pageParam });
+        } else if (type === 'resume' && props.resumeId) {
+          return getResumeQuestionListReq({ ...props, page: pageParam });
+        }
+      },
+      initialPageParam: 0, // 페이지는 0부터 시작하도록 설정
+      getNextPageParam: lastPage => {
+        if (lastPage && !lastPage.data.questionList.last) {
+          const nextPage = lastPage.data.questionList.number + 1;
+          if (lastPage.data.questionList.last) return; // 마지막 페이지면
+          return nextPage;
+        }
+      },
+      // resume 타입일 때 resumeId가 -1이 아니어야 하며, common 타입일 때는 항상 enabled
+      enabled: enabled && ((type === 'resume' && props.resumeId && props.resumeId !== -1) || type === 'common'),
     });
   };
 
@@ -91,5 +121,6 @@ export const useQuestion = () => {
     useDeleteKeyword,
     useGetResumeList,
     useGetQuestionStatus,
+    useGetListInfinite,
   };
 };
