@@ -1,4 +1,4 @@
-import { APIResponse, interviewType } from '@/types/model';
+import { APIResponse, IStatusRes, interviewType } from '@/types/model';
 import { axiosAuthInstance } from '@/apis/axiosInstance';
 import { IResultListRes, IDealsResultListInfiniteReq } from '@/types/result';
 
@@ -19,7 +19,14 @@ export const getResultListReq = async ({
   return res.data;
 };
 
+// 분석 결과 총 개수 조회
 export const getResultTotal = async (type: interviewType) => {
   const res = await axiosAuthInstance.get(`/api/analysis/list/${type}`);
   return res.data.data.interviewList.totalElements;
+};
+
+// 분석 영상 상태 확인
+export const checkResultStatus = async (analysisId: number): Promise<APIResponse<IStatusRes>> => {
+  const res = await axiosAuthInstance.get(`/api/task/question/list/${analysisId}`);
+  return res.data;
 };
