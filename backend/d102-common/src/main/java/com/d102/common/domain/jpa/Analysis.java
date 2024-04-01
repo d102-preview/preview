@@ -55,16 +55,16 @@ public class Analysis {
     private LocalDateTime analysisEndTime;
 
     @Column(name = "video_length")
-    private int videoLength;
+    private Integer videoLength;
 
     @Column(name = "video_size")
-    private long videoSize;
+    private Long videoSize;
 
     @Column(name = "fps")
-    private int fps;
+    private Integer fps;
 
     @Column(name = "frames")
-    private int frames;
+    private Integer frames;
 
     @Column(name = "emotion")
     private String emotion;
