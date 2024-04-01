@@ -22,6 +22,7 @@ public class AnalysisDto {
         private String question;
         private String thumbnailPath;
         private int videoLength;
+        private boolean complete;
     }
 
 }
