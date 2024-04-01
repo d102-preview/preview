@@ -1,11 +1,14 @@
 package com.d102.common.service.impl;
 
+import com.d102.common.constant.FileConstant;
+import com.d102.common.constant.RedisConstant;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
 import com.d102.common.domain.redis.QuestionListHash;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.repository.jpa.ResumeQuestionRepository;
+import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.redis.QuestionListHashRepository;
 import com.d102.common.service.AsyncService;
 import com.d102.common.util.OpenAiApi;
@@ -31,6 +34,7 @@ import java.util.List;
 @Service
 public class AsyncServiceImpl implements AsyncService {
 
+    private final ResumeRepository resumeRepository;
     private final ResumeQuestionRepository resumeQuestionRepository;
     private final QuestionListHashRepository questionListHashRepository;
     private final OpenAiApi openAiApi;
@@ -38,7 +42,7 @@ public class AsyncServiceImpl implements AsyncService {
     @Async
     public void generateAndSaveQuestionList(String savePath, Resume resume) {
         Long resumeId = resume.getId();
-        startQuestionList(resumeId);
+        processQuestionList(resumeId);
 
         /**
          * 1. savePath에서 pdf 파일을 읽어내서 이미지로 변환하고 imagePathList를 생성
@@ -50,8 +54,10 @@ public class AsyncServiceImpl implements AsyncService {
         try {
             response = openAiApi.generateQuestionList(imageList);
         } catch (RestClientException e) {
+            failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.OpenAiApiException);
         } catch (IOException e) {
+            failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.Base64ConvertException);
         }
         String jsonString = response.getChoices().getFirst().getMessage().getContent();
@@ -66,15 +72,23 @@ public class AsyncServiceImpl implements AsyncService {
                 .toList();
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
-        endQuestionList(resumeId);
+        successQuestionList(resumeId);
     }
 
-    private void endQuestionList(Long id) {
-        questionListHashRepository.deleteById(id);
+    private void successQuestionList(Long id) {
+        QuestionListHash questionListHash = questionListHashRepository.findById(id).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        questionListHash.setStatus(RedisConstant.STATUS_SUCCESS);
+        questionListHashRepository.save(questionListHash);
     }
 
-    private void startQuestionList(Long id) {
-        questionListHashRepository.save(QuestionListHash.builder().id(id).status("processing").build());
+    private void failQuestionList(Long id) {
+        QuestionListHash questionListHash = questionListHashRepository.findById(id).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        questionListHash.setStatus(RedisConstant.STATUS_FAIL);
+        questionListHashRepository.save(questionListHash);
+    }
+
+    private void processQuestionList(Long id) {
+        questionListHashRepository.save(QuestionListHash.builder().id(id).status(RedisConstant.STATUS_PROCESS).build());
     }
 
     private List<byte[]> convertPdfToImage(String savePath) {
@@ -83,9 +97,9 @@ public class AsyncServiceImpl implements AsyncService {
             List<byte[]> imageList = new ArrayList<>();
 
             for (int i = 0; i < document.getNumberOfPages(); i++) {
-                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, 30, ImageType.RGB);
+                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, FileConstant.RESUME_RENDER_DPI, ImageType.RGB);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(imageObject, "jpeg", baos);
+                ImageIO.write(imageObject, FileConstant.RESUME_RENDER_EXTENSION, baos);
                 byte[] imageBytes = baos.toByteArray();
                 imageList.add(imageBytes);
             }
