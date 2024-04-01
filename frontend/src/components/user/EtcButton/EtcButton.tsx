@@ -14,7 +14,6 @@ const EtcButton = () => {
   const handleLogout = () => {
     if (window.confirm('로그아웃 하시겠습니까?')) {
       logout();
-      localStorage.setItem('PREVIEW_ACCESS_TOKEN', '');
       navigate('/');
       Toast.success('로그아웃되었습니다.');
     }
@@ -24,6 +23,7 @@ const EtcButton = () => {
     if (window.confirm('회원탈퇴를 진행하시겠습니까?')) {
       mutate(undefined, {
         onSuccess: () => {
+          logout();
           navigate('/signup');
           Toast.success('회원탈퇴 되었습니다.');
 
@@ -45,6 +45,7 @@ const EtcButton = () => {
         width="w-20"
         height="h-10"
         backgroundColor="bg-gray-200"
+        hoverBackgroundColor="hover:bg-gray-300"
         textColor="text-gray-500"
         style={{ marginRight: '10px' }}
         onClick={handleLogout}
@@ -54,6 +55,7 @@ const EtcButton = () => {
         width="w-20"
         height="h-10"
         backgroundColor="bg-red-500"
+        hoverBackgroundColor="hover:bg-red-600"
         textColor="text-white"
         onClick={handleSignout}
       />

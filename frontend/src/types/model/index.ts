@@ -4,15 +4,20 @@ export interface APIResponse<T> {
   data: T;
 }
 
+// no data response
+export interface APISimpleResponse {
+  result: 'ok' | 'fail';
+}
+
 // 면접 질문 리스트 타입
 export interface IQuestionItem {
   id: number;
   question: string;
   type: interviewType;
-  keywordList: IKeywordItem[] | null;
+  keywordList: IKeywordItem[];
 }
 
-export type interviewType = 'common' | 'resume';
+export type interviewType = 'common' | 'resume' | 'followup';
 
 // 면접 스크립트 타입
 export interface IScriptItem {
@@ -32,6 +37,7 @@ export interface IResumeList {
   filePath: string;
 }
 
+// 질문 리스트 타입
 export interface IQuestionListItem {
   id: number;
   question: string;
@@ -68,7 +74,7 @@ export interface ISort {
 
 export interface IQuestionDetail {
   script: IScriptItem;
-  keywords: IKeywordItem[];
+  keywordList: IKeywordItem[];
 }
 
 export interface ISubText {
@@ -92,7 +98,7 @@ export interface IUserInfo {
   profileImageName?: string;
   profileImageUrl: string;
   name: string;
-  resumeList?: IResume[];
+  resumeList: (IResume | undefined)[];
 }
 
 // 이력서 정보
@@ -100,6 +106,12 @@ export interface IResume {
   id: number;
   displayName: string;
   filePath: string;
+}
+
+// 이력서 정보
+export interface ISimpleResume {
+  id: number;
+  displayName: string;
 }
 
 // 비밀번호 정보
@@ -111,4 +123,9 @@ export interface IPasswordInfo {
 
 export interface IProfile {
   url: string;
+}
+
+// 작업 완료 여부 응답 객체
+export interface IStatusRes {
+  complete: boolean;
 }
