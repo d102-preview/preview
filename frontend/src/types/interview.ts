@@ -18,6 +18,8 @@ export interface IInterviewQuestionItem {
   question: string;
   type: interviewType;
   keywordList: IAnalyzeResKeyword[];
+  id?: number;
+  script?: string;
 }
 
 // 실전 면접 키워드

@@ -55,9 +55,14 @@ const RecordPage = () => {
   useEffect(() => {
     if (state) {
       console.log(state);
-
-      getQuestionList(state.resumeId);
       postInterviewSet({ type: state.type, startTime: state.startTime });
+
+      if (state.questionList) {
+        setQuestionList(state.questionList);
+        console.log(questionList);
+      } else {
+        getQuestionList(state.resumeId);
+      }
     }
   }, [state]);
 
@@ -392,7 +397,7 @@ const RecordPage = () => {
               </div>
             </>
           )}
-          {/*  */}
+
           {status === 'ending' && (
             <>
               <BackgroundOpacity />
