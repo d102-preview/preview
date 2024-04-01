@@ -22,7 +22,7 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   const { useGetQuestionStatus, useGetListInfinite } = useQuestion();
-  
+
   // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
   const {
     data,
@@ -44,7 +44,6 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
     hasNextPage,
     fetchNextPage,
   });
-
 
   // 선택된 이력서에 대한 질문 생성 상태를 확인하는 쿼리
   const statusQuery = useGetQuestionStatus(selectedResume ? selectedResume.id : -1, {
@@ -76,17 +75,13 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
         <h3 className="text-lg font-semibold">이력서 기반 질문</h3>
         <div className="my-2 relative">
           <div className="pt-1">
-            <SpeechBubble
-              children={
-                <>
-                  <p>
-                    {name}님! <span className="text-[#EA8888]">등록된 이력서가 없어요</span>
-                  </p>
-                  <p>이력서를 등록하면 이력서를 분석하여 질문을 생성해 드려요!</p>
-                  <p className="text-blue-400">지금 마이페이지에서 이력서를 등록해 보세요 😊</p>
-                </>
-              }
-            />
+            <SpeechBubble>
+              <p>
+                {name}님! <span className="text-[#EA8888]">등록된 이력서가 없어요</span>
+              </p>
+              <p>이력서를 등록하면 이력서를 분석하여 질문을 생성해 드려요!</p>
+              <p className="text-blue-400">지금 마이페이지에서 이력서를 등록해 보세요 😊</p>
+            </SpeechBubble>
             <Lottie options={robotOptions} height={330} width={330} />
           </div>
         </div>
