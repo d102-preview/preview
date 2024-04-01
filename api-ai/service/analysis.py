@@ -173,10 +173,16 @@ def create_task(
     redis_session.set(redis_key, "processing", ex=settings.REDIS_EXPIRE_SECOND)
 
     # Step 1: Facial Emotional Recognition
-    _facial_emotional_recognition(record)
+    try:
+        _facial_emotional_recognition(record)
+    except Exception as e:
+        logger.error("Error while processing faces: {}", e)
 
     # Step 2: Intent Recognition
-    _intent_recognition(record)
+    try:
+        _intent_recognition(record)
+    except Exception as e:
+        logger.error("Error while processing intent: {}", e)
 
     # Update database
     record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
