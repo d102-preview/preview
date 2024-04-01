@@ -62,7 +62,7 @@ pipeline {
 
     stage('Health Check API-AI') {
       steps {
-        sh 'sleep 30'
+        sh 'sleep 60'
         script {
           withCredentials([string(credentialsId: 'api_ai_url', variable: 'API_AI_URL')]) {
             def HEALTH = sh(
