@@ -6,6 +6,7 @@ CREATE TABLE `user` (
   `name` varchar(8) NOT NULL,
   `profile_image_name` varchar(128) DEFAULT NULL,
   `profile_image_url` varchar(1024) DEFAULT NULL,
+  `profile_image_size` bigint DEFAULT NULL,
   `deleted_time` datetime DEFAULT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
@@ -31,6 +32,9 @@ CREATE TABLE `resume` (
   `file_name` varchar(128) NOT NULL,
   `display_name` varchar(16) NOT NULL,
   `file_path` varchar(1024) NOT NULL,
+  `file_size` bigint NOT NULL,
+  `analysis_req_time` datetime DEFAULT NULL,
+  `analysis_end_time` datetime DEFAULT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -121,7 +125,7 @@ CREATE TABLE `resume_keyword` (
 
 
 CREATE TABLE `interview` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `type` varchar(16) NOT NULL,
   `start_time` datetime DEFAULT NULL,
@@ -132,7 +136,7 @@ CREATE TABLE `interview` (
 
 
 CREATE TABLE `analysis` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `interview_id` bigint(20) NOT NULL,
   `question_type` varchar(16) NOT NULL,
   `question` varchar(512) NOT NULL,
@@ -144,6 +148,7 @@ CREATE TABLE `analysis` (
   `analysis_start_time` datetime DEFAULT NULL,
   `analysis_end_time` datetime DEFAULT NULL,
   `video_length` int(11) DEFAULT NULL,
+  `video_size` bigint DEFAULT NULL,
   `fps` int(11) DEFAULT NULL,
   `frames` int(11) DEFAULT NULL,
   `emotion` text DEFAULT NULL,

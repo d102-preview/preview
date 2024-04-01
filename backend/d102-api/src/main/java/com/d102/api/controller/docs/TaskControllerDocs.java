@@ -23,6 +23,16 @@ public interface TaskControllerDocs {
     })
     Response checkQuestionListTask(@NotNull(message = "not null") Long resumeId);
 
+    @Operation(summary = "면접 영상 분석 작업 완료 여부 조회", description = "면접 영상 분석 작업 완료 여부를 조회하는 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 면접 영상 분석 작업 완료 여부를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = CompleteResponse.class))
+                    }))
+    })
+    Response checkAnalysisTask(@NotNull(message = "not null") Long analysisId);
+
 
     class CompleteResponse { public Boolean complete; }
 

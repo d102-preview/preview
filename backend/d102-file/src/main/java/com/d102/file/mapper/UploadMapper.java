@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public interface UploadMapper {
 
     @Mapping(source = "profileImageUrl", target = "url")
+    @Mapping(source = "profileImageSize", target = "size")
     UploadDto.ProfileResponse toProfileResponseDto(User user);
 
     UploadDto.ResumeResponse toResumeResponseDto(Resume resume);
@@ -19,7 +20,10 @@ public interface UploadMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "fileName", ignore = true)
     @Mapping(target = "filePath", ignore = true)
+    @Mapping(target = "fileSize", ignore = true)
     @Mapping(target = "resumeQuestions", ignore = true)
+    @Mapping(target = "analysisReqTime", ignore = true)
+    @Mapping(target = "analysisEndTime", ignore = true)
     Resume toResume(UploadDto.ResumeRequest resumeRequest);
 
     @Mapping(target = "id", ignore = true)
@@ -31,6 +35,7 @@ public interface UploadMapper {
     @Mapping(target = "analysisStartTime", ignore = true)
     @Mapping(target = "analysisEndTime", ignore = true)
     @Mapping(target = "videoLength", ignore = true)
+    @Mapping(target = "videoSize", ignore = true)
     @Mapping(target = "fps", ignore = true)
     @Mapping(target = "frames", ignore = true)
     @Mapping(target = "emotion", ignore = true)
