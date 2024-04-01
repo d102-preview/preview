@@ -44,6 +44,8 @@ public enum ExceptionType {
     ResumeKeywordNotFoundException("NOT FOUND", "Invalid resume keyword"),
     InterviewNotFoundException("NOT FOUND", "Invalid interview"),
     AnalysisNotFoundException("NOT FOUND", "Invalid analysis"),
+    QuestionListHashNotFoundException("NOT FOUND", "Invalid question list hash"),
+    TaskNotFoundException("NOT FOUND", "Invalid task"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),

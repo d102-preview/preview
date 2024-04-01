@@ -20,6 +20,8 @@ public interface UploadMapper {
     @Mapping(target = "fileName", ignore = true)
     @Mapping(target = "filePath", ignore = true)
     @Mapping(target = "resumeQuestions", ignore = true)
+    @Mapping(target = "analysisReqTime", ignore = true)
+    @Mapping(target = "analysisEndTime", ignore = true)
     Resume toResume(UploadDto.ResumeRequest resumeRequest);
 
     @Mapping(target = "id", ignore = true)
