@@ -46,6 +46,7 @@ public enum ExceptionType {
     AnalysisNotFoundException("NOT FOUND", "Invalid analysis"),
     QuestionListHashNotFoundException("NOT FOUND", "Invalid question list hash"),
     TaskNotFoundException("NOT FOUND", "Invalid task"),
+    UnknownException("NOT FOUND", "Unknown exception"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),

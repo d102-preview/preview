@@ -19,4 +19,9 @@ public class TaskController implements TaskControllerDocs {
         return new Response(TaskConstant.COMPLETE, taskService.checkQuestionListTask(resumeId));
     }
 
+    @GetMapping("/analysis/{analysisId}")
+    public Response checkAnalysisTask(@PathVariable("analysisId") Long analysisId) {
+        return new Response(TaskConstant.COMPLETE, taskService.checkAnalysisTask(analysisId));
+    }
+
 }

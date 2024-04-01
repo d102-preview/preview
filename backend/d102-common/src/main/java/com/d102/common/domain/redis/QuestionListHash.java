@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "questionList", timeToLive = RedisConstant.QUESTION_LIST_LIFE)
+@RedisHash(value = "questionListHash", timeToLive = RedisConstant.QUESTION_LIST_LIFE)
 public class QuestionListHash {
 
     @Id
