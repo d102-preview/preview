@@ -1,10 +1,12 @@
 import { recordStatusType } from '@/pages/record/RecordPage';
-import { IQuestionItem } from '@/types/model';
+import { IInterviewQuestionItem } from '@/types/interview';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Lottie from 'react-lottie';
+import followupLoading from '@/assets/lotties/followupLoading.json';
 
 interface IRecordUploadingProps {
-  questionList: IQuestionItem[];
+  questionList: IInterviewQuestionItem[];
   questionIndex: number;
   setQuestionIndex: Dispatch<SetStateAction<number>>;
   setStatus: Dispatch<SetStateAction<recordStatusType>>;
@@ -12,6 +14,14 @@ interface IRecordUploadingProps {
 
 const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setStatus }: IRecordUploadingProps) => {
   const navigate = useNavigate();
+  const followupOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: followupLoading, // Lottie 애니메이션 데이터
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -22,16 +32,13 @@ const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setSta
         setStatus('preparing');
       }
     }, 2000);
-    console.log('업로드 완료');
   }, []);
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-50 w-[58rem] h-full bg-[#383838] text-white flex justify-center items-center">
-      <div className="">
-        <p className="text-center text-5xl font-bold">업로드 중</p>
-        <div className="w-[30rem] h-1 bg-black rounded-lg mt-20">
-          <div className="animate-uploading h-1 bg-white rounded-lg"></div>
-        </div>
+    <div className="absolute top-0 left-0 right-0 bottom-0 bg-black z-50">
+      <div className="w-full h-full flex flex-col items-center justify-center gap-10">
+        <p className="text-center text-3xl text-white">직전 답변에 대한 심층 질문 생성중</p>
+        <Lottie options={followupOptions} height={150} width={150} />
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ interface IAccordianProps {
   titleContent: string | React.ReactNode;
   children: string | React.ReactNode;
   defaultOpen?: boolean; // 초기 상태를 설정하기 위한 프로퍼티
+  disabled?: boolean; // 아코디언이 비활성 여부
   iconOpen?: IconType;
   iconClose?: IconType;
   iconOpenColor?: string;
@@ -29,6 +30,7 @@ const Accordian = ({
   titleContent,
   children,
   defaultOpen = false,
+  disabled = false,
   iconOpen: IconOpen = CgFileDocument,
   iconClose: IconClose = CgFileDocument,
   iconOpenColor = '#5A8AF2',
@@ -51,6 +53,8 @@ const Accordian = ({
 
   // isOpen 상태를 토글하는 함수
   const toggleOpen = () => {
+    if (disabled) return; // disabled가 true이면 열리지 않음
+
     setIsOpen(!isOpen);
 
     // 사용자 지정 토글 함수가 있으면, 상태 변경 후에 호출

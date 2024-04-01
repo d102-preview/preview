@@ -3,18 +3,25 @@ import QuestionTab from '@/components/question/QuestionTab';
 import SelectedQuestions from '@/components/question/SelectedQuestions';
 import CommonQuestions from '@/components/question/CommonQuestions';
 import ResumeQuestions from '@/components/question/ResumeQuestions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { interviewType } from '@/types/model';
+import { ISimpleResume, interviewType } from '@/types/model';
 import { useQuestion } from '@/hooks/question/useQuestion';
 
 const QuestionPage = () => {
   const [activeTab, setActiveTab] = useState<interviewType>('common');
+  const [resumeList, setResumeList] = useState<ISimpleResume[]>([]);
   const location = useLocation();
   const isShow = location.pathname === '/question';
 
-  const { useGetQuestionList } = useQuestion();
-  const { data } = useGetQuestionList(activeTab);
+  const { useGetResumeList } = useQuestion();
+  const { data: resumes } = useGetResumeList();
+
+  useEffect(() => {
+    if (resumes?.data) {
+      setResumeList(resumes.data.resumeList);
+    }
+  }, [resumes]);
 
   return (
     <>
@@ -32,8 +39,8 @@ const QuestionPage = () => {
           <div className={`flex rounded-2xl shadow-lg bg-GRAY ${isShow ? 'w-8/12' : 'w-full'} `}>
             <QuestionTab activeTab={activeTab} setActiveTab={setActiveTab} />
             <div className={`p-7 ${isShow ? 'w-11/12' : 'w-full'}  overflow-auto`}>
-              {activeTab === 'common' && <CommonQuestions data={data} type={activeTab} />}
-              {activeTab === 'resume' && <ResumeQuestions data={data} type={activeTab} />}
+              {activeTab === 'common' && <CommonQuestions type={activeTab} />}
+              {activeTab === 'resume' && <ResumeQuestions type={activeTab} resumeList={resumeList} />}
             </div>
           </div>
           {isShow && <SelectedQuestions />}
