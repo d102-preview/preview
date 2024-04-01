@@ -5,6 +5,7 @@ interface QuestionState {
   selectedQuestions: IInterviewQuestionItem[];
   addQuestion: (questionObj: IInterviewQuestionItem) => void;
   removeQuestion: (id: number) => void;
+  resetQuestion: () => void;
   message: string;
 }
 
@@ -30,6 +31,9 @@ const questionStore = create<QuestionState>(set => ({
       selectedQuestions: state.selectedQuestions.filter(q => q.id !== id),
       message: '',
     })),
+  resetQuestion: () => {
+    set({ selectedQuestions: [] });
+  },
 }));
 
 export default questionStore;

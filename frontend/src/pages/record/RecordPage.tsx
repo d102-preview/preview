@@ -15,17 +15,18 @@ import { getCurrentTime } from '@/utils/getCurrentTime';
 import Lottie from 'react-lottie';
 import followupLoading from '@/assets/lotties/followupLoading.json';
 import { useLocation, useNavigate } from 'react-router-dom';
+import questionStore from '@/stores/questionStore';
 
 export type recordStatusType = 'pending' | 'preparing' | 'recording' | 'proceeding' | 'uploading' | 'ending';
 
 const RecordPage = () => {
   const { useGetMainInterviewQuestionList, usePostInterviewAnalyze, usePostFollowupQuestion, usePostInterviewSet } =
     useInterview();
-  const { data, mutate: getQuestionList, isSuccess } = useGetMainInterviewQuestionList();
+  const { data, mutate: getQuestionList } = useGetMainInterviewQuestionList();
   const { mutate: postInterviewAnalyze } = usePostInterviewAnalyze();
   const { data: followupQuestion, mutate: postFollowupQuestion } = usePostFollowupQuestion();
   const { data: interviewSet, mutate: postInterviewSet } = usePostInterviewSet();
-
+  const { resetQuestion } = questionStore();
   const [questionList, setQuestionList] = useState<IInterviewQuestionItem[]>([]);
   const [questionIndex, setQuestionIndex] = useState<number>(0); // 질문 인덱스 상태 관리
   const { state } = useLocation();
@@ -59,7 +60,7 @@ const RecordPage = () => {
 
       if (state.questionList) {
         setQuestionList(state.questionList);
-        console.log(questionList);
+        console.log(state.questionList);
       } else {
         getQuestionList(state.resumeId);
       }
@@ -281,7 +282,7 @@ const RecordPage = () => {
       <div className="flex flex-col justify-center items-center min-w-[58rem] h-screen pb-10">
         <div className="w-[58rem] h-14 relative flex justify-end pb-5 text-center">
           <p className="absolute top-0 left-1/2 -translate-x-1/2 font-bold text-3xl">
-            {!stream ? '카메라, 마이크를 준비중입니다' : !isSuccess ? '다음 버튼을 눌러주세요' : ''}
+            {!stream ? '카메라, 마이크를 준비중입니다' : status === 'pending' ? '다음 버튼을 눌러주세요' : ''}
           </p>
           {btnText && !isFollowup && status !== 'ending' && (
             <Button
@@ -390,8 +391,7 @@ const RecordPage = () => {
             <>
               <div className="absolute top-0 left-0 right-0 bottom-0 bg-black z-50">
                 <div className="w-full h-full flex flex-col items-center justify-center gap-10">
-                  <p className="text-center text-3xl text-white">직전 답변에 대한 심층 질문 생성중</p>
-
+                  <p className="text-center text-3xl text-white">답변을 업로드하고 있습니다</p>
                   <Lottie options={followupOptions} height={150} width={150} />
                 </div>
               </div>
@@ -412,7 +412,10 @@ const RecordPage = () => {
                     backgroundColor="bg-gray-50"
                     textColor="text-black"
                     textSize="text-xs"
-                    onClick={() => navigate('/result')}
+                    onClick={() => {
+                      resetQuestion();
+                      navigate('/result');
+                    }}
                   />
                 </div>
               </div>
