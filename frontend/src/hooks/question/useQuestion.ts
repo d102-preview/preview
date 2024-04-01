@@ -10,9 +10,17 @@ import {
   getCommonQuestionListReq,
   getResumeQuestionListReq,
 } from '@/services/question/api';
-import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
-import { IQeustionInfo, IScriptInfo, IKeywordInfo, IDeleteKeywordInfo, IDealsListInfiniteReq } from '@/types/question';
-import { interviewType } from '@/types/model';
+import { useQuery, useMutation, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  IQeustionInfo,
+  IScriptInfo,
+  IKeywordInfo,
+  IDeleteKeywordInfo,
+  IDealsListInfiniteReq,
+  IResumeRes,
+} from '@/types/question';
+import { APIResponse, interviewType } from '@/types/model';
+import { useEffect } from 'react';
 
 export const useQuestion = () => {
   const useGetCommonQuestionList = () => {
@@ -65,12 +73,6 @@ export const useQuestion = () => {
     return useMutation({
       mutationKey: [`${type}Script`, questionId],
       mutationFn: ({ type, questionId, script }: IScriptInfo) => postScrtip({ type, questionId, script }),
-      onSuccess: res => {
-        console.log('스크립트 성공', res);
-      },
-      onError: err => {
-        console.log('스크립트 실패', err);
-      },
     });
   };
 
@@ -78,29 +80,20 @@ export const useQuestion = () => {
     return useMutation({
       mutationKey: [`${type}Script`, questionId],
       mutationFn: ({ type, questionId, keyword }: IKeywordInfo) => postKeyword({ type, questionId, keyword }),
-      onSuccess: res => {
-        console.log('키워드 추가 성공', res);
-      },
-      onError: err => {
-        console.log('키워드 추가 실패', err);
-      },
     });
   };
 
   const useDeleteKeyword = () => {
     return useMutation({
       mutationFn: ({ type, keywordId }: IDeleteKeywordInfo) => deleteKeyword(type, keywordId),
-      onSuccess: res => {
-        console.log('키워드 삭제 성공', res);
-      },
-      onError: err => {
-        console.log('키워드 삭제 실패', err);
-      },
     });
   };
 
   const useGetResumeList = () => {
-    return useQuery({ queryKey: ['ResumeList'], queryFn: () => getResumeList() });
+    return useQuery<APIResponse<IResumeRes>, Error>({
+      queryKey: ['ResumeList'],
+      queryFn: () => getResumeList(),
+    });
   };
 
   const useGetQuestionStatus = (resumeId: number, options = {}) => {
@@ -110,6 +103,46 @@ export const useQuestion = () => {
       enabled: resumeId !== -1,
       ...options,
     });
+  };
+
+  const useGetListWithStatusCheck = () => {
+    const queryClient = useQueryClient();
+    const { data, isSuccess } = useQuery<APIResponse<IResumeRes>, Error>({
+      queryKey: ['ResumeList'],
+      queryFn: getResumeList,
+    });
+
+    useEffect(() => {
+      const checkAndUpdateStatus = async () => {
+        if (isSuccess && data?.data?.resumeList) {
+          // 모든 이력서에 대해 상태 확인
+          for (const resume of data?.data?.resumeList) {
+            if (!resume.complete) {
+              // complete가 false이면 상태 확인 함수에 resumeId 전달
+              const statusRes = await checkQuestionStatus(resume.id);
+              if (statusRes.data.complete) {
+                // 캐시 업데이트
+                queryClient.setQueryData<APIResponse<IResumeRes>>(['ResumeList'], oldData => {
+                  return {
+                    ...oldData!,
+                    data: {
+                      ...oldData!.data,
+                      resumeList: oldData!.data.resumeList.map(r =>
+                        r.id === resume.id ? { ...r, complete: true } : r,
+                      ),
+                    },
+                  };
+                });
+              }
+            }
+          }
+        }
+      };
+
+      checkAndUpdateStatus();
+    }, [isSuccess, data, queryClient]);
+
+    return { data };
   };
 
   return {
@@ -122,5 +155,6 @@ export const useQuestion = () => {
     useGetResumeList,
     useGetQuestionStatus,
     useGetListInfinite,
+    useGetListWithStatusCheck,
   };
 };
