@@ -12,4 +12,6 @@ public interface DownloadService {
 
     DownloadDto.ThumbnailResponse downloadThumbnail(Path thumbnailPath);
 
+    DownloadDto.VideoResponse downloadVideo(Path videoPath);
+
 }

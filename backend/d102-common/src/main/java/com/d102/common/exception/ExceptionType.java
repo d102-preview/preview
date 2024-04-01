@@ -48,6 +48,7 @@ public enum ExceptionType {
     TaskNotFoundException("NOT FOUND", "Invalid task"),
     UnknownException("NOT FOUND", "Unknown exception"),
     ThumbnailDownloadException("NOT FOUND", "Thumbnail download failed"),
+    VideoDownloadException("NOT FOUND", "Video download failed"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),

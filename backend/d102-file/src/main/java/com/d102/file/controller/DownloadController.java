@@ -6,10 +6,14 @@ import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.util.UrlUtils;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.FileInputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -35,8 +39,8 @@ public class DownloadController implements DownloadControllerDocs {
     public ResponseEntity<ByteArrayResource> downloadResume(@PathVariable("resumeId") Long resumeId) {
         DownloadDto.ResumeResponse resumeResponseDto = downloadService.downloadResume(resumeId);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + URLEncoder.encode(resumeResponseDto.getName(), StandardCharsets.UTF_8))
-                .header(HttpHeaders.CONTENT_LENGTH, resumeResponseDto.getLength())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + URLEncoder.encode(resumeResponseDto.getResumeName(), StandardCharsets.UTF_8))
+                .header(HttpHeaders.CONTENT_LENGTH, resumeResponseDto.getResumeLength())
                 .header(HttpHeaders.CONTENT_TYPE, resumeResponseDto.getResumeType())
                 .body(new ByteArrayResource(resumeResponseDto.getResume()));
     }
@@ -48,6 +52,16 @@ public class DownloadController implements DownloadControllerDocs {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, thumbnailResponse.getThumbnailType())
                 .body(new ByteArrayResource(thumbnailResponse.getThumbnail()));
+    }
+
+    @GetMapping(value = "/video", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<ByteArrayResource> downloadVideo(@RequestParam(value = "path") String videoPath) {
+        String decodedPath = URLDecoder.decode(videoPath, StandardCharsets.UTF_8);
+        DownloadDto.VideoResponse videoResponse = downloadService.downloadVideo(Path.of(decodedPath));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_LENGTH, videoResponse.getVideoLength())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                .body(new ByteArrayResource(videoResponse.getVideo()));
     }
 
 }
