@@ -1,12 +1,13 @@
 import { recordStatusType } from '@/pages/record/RecordPage';
-import { IQuestionItem } from '@/types/model';
+import { IInterviewQuestionItem } from '@/types/interview';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 interface IInterviewQuestionProps {
   timerSetting: number;
-  question: IQuestionItem;
+  question: IInterviewQuestionItem;
   status: recordStatusType;
   setStatus: Dispatch<SetStateAction<recordStatusType>>;
+  setSkip: Dispatch<SetStateAction<boolean>>;
   handleStopRecording: () => void;
 }
 
@@ -15,6 +16,7 @@ const InterviewQuestion = ({
   question,
   status,
   setStatus,
+  setSkip,
   handleStopRecording,
 }: IInterviewQuestionProps) => {
   const [count, setCount] = useState<number>(timerSetting);
@@ -40,6 +42,7 @@ const InterviewQuestion = ({
       }
 
       return () => {
+        timerSetting - count < 10 ? setSkip(true) : setSkip(false);
         clearInterval(timer);
       };
     }
