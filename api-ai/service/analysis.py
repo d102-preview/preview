@@ -121,6 +121,8 @@ def _facial_emotional_recognition(record: Analysis) -> None:
 
 @elapsed
 def _intent_recognition(record: Analysis) -> None:
+    logger.info(f"Start intent recognition.")
+
     intent_labels = kobert_model.get_intent_labels()
 
     pred = kobert_model.predict(record.answer)
@@ -169,25 +171,27 @@ def create_task(
     maria_session.add(record)
     maria_session.commit()
 
-    redis_key = f"analysisHash:{record.id}"
-    redis_session.hset(redis_key, "status", Status.PROCESSING)
+    # Set status
+    redis_key = f"analysisHash:{analysis_id}"
+    redis_session.hset(redis_key, "status", Status.PROCESSING.value)
     redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
 
-    # Step 1: Facial Emotional Recognition
     try:
+        # Step 1: Facial Emotional Recognition
         _facial_emotional_recognition(record)
-    except Exception as e:
-        logger.error("Error while processing faces: {}", e)
 
-    # Step 2: Intent Recognition
-    try:
+        # Step 2: Intent Recognition
         _intent_recognition(record)
     except Exception as e:
-        logger.error("Error while processing intent: {}", e)
-
-    # Update database
-    record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
-    maria_session.add(record)
-    maria_session.commit()
-    redis_session.hset(redis_key, "status", Status.SUCCESS)
-    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+        logger.error(f"Error while processing: {e}")
+        redis_session.hset(redis_key, "status", Status.FAIL.value)
+        redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+    else:
+        logger.info(f"Success to process id #{analysis_id}")
+        redis_session.hset(redis_key, "status", Status.SUCCESS.value)
+        redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+    finally:
+        # Update database
+        record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
+        maria_session.add(record)
+        maria_session.commit()
