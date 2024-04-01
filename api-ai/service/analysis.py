@@ -13,7 +13,7 @@ from common.perf import elapsed
 from core.settings import settings
 from fastapi import HTTPException, status
 from loguru import logger
-from models.analysis import Analysis
+from models.analysis import Analysis, Status
 from PIL import Image
 from pytz import timezone
 from sqlmodel import select
@@ -46,7 +46,16 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     frame_list = resnet_proc.extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(f"{len(frame_list)} frames are extracted from the input video")
 
-    # TODO: Save thumbnail and update record
+    # Save thumbnail and update record
+    thumbnail_path = record.video_path.replace(".mp4", ".jpg")
+    record.thumbnail_path = thumbnail_path
+
+    if settings.DEBUG:
+        thumbnail_path = os.path.join(
+            str(settings.DATA_HOME), thumbnail_path.replace("/app/files/", "")
+        )
+    logger.debug(f"{thumbnail_path = }")
+    resnet_proc.save_thumbnail(frame_list[0], thumbnail_path)
 
     # Detect face from the frames
     face_list = []
@@ -97,7 +106,9 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     for chunk in np.array_split(predict_list, chunk_size):
         predict_list_by_second.append(Counter(chunk).most_common(1)[0][0])
 
-    predict_list = {str(idx + 1): v for idx, v in enumerate(predict_list_by_second)}
+    predict_list = {
+        str(idx + 1): int(v) for idx, v in enumerate(predict_list_by_second)
+    }
 
     # Update record
     record.video_length = len(predict_list_by_second)
@@ -113,6 +124,8 @@ def _facial_emotional_recognition(record: Analysis) -> None:
 
 @elapsed
 def _intent_recognition(record: Analysis) -> None:
+    logger.info(f"Start intent recognition.")
+
     intent_labels = kobert_model.get_intent_labels()
 
     pred = kobert_model.predict(record.answer)
@@ -161,17 +174,27 @@ def create_task(
     maria_session.add(record)
     maria_session.commit()
 
-    redis_key = f"analysis_process:{record.id}"
-    redis_session.set(redis_key, "processing", ex=settings.REDIS_EXPIRE_SECOND)
-    
-    # Step 1: Facial Emotional Recognition
-    _facial_emotional_recognition(record)
+    # Set status
+    redis_key = f"analysisHash:{analysis_id}"
+    redis_session.hset(redis_key, "status", Status.PROCESSING.value)
+    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
 
-    # Step 2: Intent Recognition
-    _intent_recognition(record)
+    try:
+        # Step 1: Facial Emotional Recognition
+        _facial_emotional_recognition(record)
 
-    # Update database
-    record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
-    maria_session.add(record)
-    maria_session.commit()
-    redis_session.set(redis_key, "done", ex=settings.REDIS_EXPIRE_SECOND)
+        # Step 2: Intent Recognition
+        _intent_recognition(record)
+    except Exception as e:
+        logger.error(f"Error while processing: {e}")
+        redis_session.hset(redis_key, "status", Status.FAIL.value)
+        redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+    else:
+        logger.info(f"Success to process id #{analysis_id}")
+        redis_session.hset(redis_key, "status", Status.SUCCESS.value)
+        redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+    finally:
+        # Update database
+        record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
+        maria_session.add(record)
+        maria_session.commit()
