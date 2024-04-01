@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionType {
 
-    /* Invalid request */
+    /* Invalid exception */
     InvalidParamException("INVALID", "Invalid param"),
     ProfileUploadException("INVALID", "Profile upload failed"),
     ProfileUrlException("INVALID", "Invalid profile name"),
@@ -17,8 +17,9 @@ public enum ExceptionType {
     VideoUploadException("INVALID", "Video upload failed"),
     FastAiApiException("INVALID", "FastAi server response failed"),
     AnalysisException("INVALID", "FastAi analysis failed"),
+    AnalysisJsonException("INVALID", "Analysis json convert failed"),
 
-    /* UnAuthorize request */
+    /* UnAuthorize exception */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),
     DisabledUserException("UNAUTHORIZED", "Disabled user"),
     UnAuthorizedTokenException("UNAUTHORIZED", "UnAuthorized Token"),
@@ -26,10 +27,10 @@ public enum ExceptionType {
     WrongChangedPasswordException("UNAUTHORIZED", "Wrong changedPassword and checkChangePassword"),
     NotVerifyUserException("UNAUTHORIZED", "Not verify user"),
 
-    /* Forbidden request */
+    /* Forbidden exception */
     InaccessibleException("FORBIDDEN", "Inaccessible"),
 
-    /* Not found request */
+    /* Not found exception */
     EmailHashNotFoundException("NOT FOUND", "Invalid email"),
     LoginUserNotFoundException("NOT FOUND", "Invalid email or password"),
     UserNotFoundException("NOT FOUND", "Invalid user"),
@@ -42,6 +43,7 @@ public enum ExceptionType {
     ResumeQuestionNotFoundException("NOT FOUND", "Resume question not found"),
     ResumeKeywordNotFoundException("NOT FOUND", "Invalid resume keyword"),
     InterviewNotFoundException("NOT FOUND", "Invalid interview"),
+    AnalysisNotFoundException("NOT FOUND", "Invalid analysis"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),
