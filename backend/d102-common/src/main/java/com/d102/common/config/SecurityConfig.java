@@ -38,6 +38,7 @@ public class SecurityConfig {
             "/health/**",
             /* profile */
             "/download/profile/**",
+            "/download/thumbnail/**",
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
