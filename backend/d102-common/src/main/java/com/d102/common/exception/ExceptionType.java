@@ -47,6 +47,7 @@ public enum ExceptionType {
     QuestionListHashNotFoundException("NOT FOUND", "Invalid question list hash"),
     TaskNotFoundException("NOT FOUND", "Invalid task"),
     UnknownException("NOT FOUND", "Unknown exception"),
+    ThumbnailDownloadException("NOT FOUND", "Thumbnail download failed"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),

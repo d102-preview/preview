@@ -51,4 +51,18 @@ public class DownloadServiceImpl implements DownloadService {
         }
     }
 
+    public DownloadDto.ThumbnailResponse downloadThumbnail(Path thumbnailPath) {
+        /**
+         * TODO: 섬네일 다운로드 시 섬네일의 소유자가 로그인한 유저인지 확인하는 로직 추가 필요
+         */
+        try {
+            return DownloadDto.ThumbnailResponse.builder()
+                    .thumbnailType(MediaType.parseMediaType(Files.probeContentType(thumbnailPath)).toString())
+                    .thumbnail(Files.readAllBytes(thumbnailPath))
+                    .build();
+        } catch (IOException e) {
+            throw new NotFoundException(ExceptionType.ThumbnailDownloadException);
+        }
+    }
+
 }

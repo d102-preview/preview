@@ -25,4 +25,12 @@ public class DownloadDto {
         private byte[] resume;
     }
 
+    @Builder
+    @Data
+    public static class ThumbnailResponse {
+
+        private String thumbnailType;
+        private byte[] thumbnail;
+    }
+
 }
