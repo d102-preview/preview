@@ -6,6 +6,8 @@ import com.d102.common.exception.custom.TooManyException;
 import com.d102.common.exception.custom.*;
 import com.d102.common.response.Response;
 import com.d102.common.response.ResponseFail;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +23,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, ConstraintViolationException.class})
     public Response handleParamsException(Exception e) {
+        return new ResponseFail(InvalidParamException.getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {JsonProcessingException.class, JsonMappingException.class})
+    public Response handleJsonException(Exception e) {
         return new ResponseFail(InvalidParamException.getCode(), e.getMessage());
     }
 

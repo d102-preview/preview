@@ -28,7 +28,7 @@ public class AnalysisController implements AnalysisControllerDocs {
     }
 
     @GetMapping("/{analysisId}")
-    public Response get(Long analysisId) {
+    public Response get(Long analysisId) throws Exception {
         return new Response(AnalysisConstant.ANALYSIS_DETAIL, analysisService.get(analysisId));
     }
 

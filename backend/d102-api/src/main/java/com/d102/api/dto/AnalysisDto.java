@@ -27,13 +27,6 @@ public class AnalysisDto {
         private int videoLength;
     }
 
-    @Data
-    public static class RawDetailResponse {
-
-        private String emotion;
-        private String intent;
-    }
-
     @Builder
     @Data
     public static class DetailResponse {
@@ -46,7 +39,31 @@ public class AnalysisDto {
         private String thumbnailPath;
         private List<String> keywordList;
         private int videoLength;
-        private Map<String, Object> emotionMap;
+        private EmotionResponse emotionMap;
+        private List<IntentResponse> intentList;
+    }
+
+    @Data
+    public static class EmotionResponse {
+
+        private EmotionRatioResponse ratio;
+        private Map<String, Double> list;
+    }
+
+    @Data
+    public static class EmotionRatioResponse {
+
+        private Double positive;
+        private Double negative;
+        private Double neutral;
+    }
+
+    @Data
+    public static class IntentResponse {
+
+        private String category;
+        private String expression;
+        private Double ratio;
     }
 
 }
