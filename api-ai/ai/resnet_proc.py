@@ -76,6 +76,23 @@ def detect_faces(
     return img, face_img
 
 
+def save_thumbnail(img: np.ndarray, path: str):
+    try:
+        logger.debug(f"Save thumbnail to {path}")
+
+        width = 540
+        height = int(img.shape[0] * (width / img.shape[1]))
+        thumbnail = cv2.resize(img, dsize=(width, height))
+        logger.debug(
+            f"Resize thumbnail from ({img.shape[1]}, {img.shape[0]}) to ({width}, {height})"
+        )
+
+        thumbnail = cv2.cvtColor(thumbnail, cv2.COLOR_BGR2RGB)
+        cv2.imwrite(path, thumbnail)
+    except Exception as e:
+        logger.error("Failed to create a thumbnail: {}", e)
+
+
 def get_default_device():
     cuda = torch.cuda.is_available()
     mps = torch.backends.mps.is_available()
