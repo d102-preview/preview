@@ -4,15 +4,20 @@ export interface APIResponse<T> {
   data: T;
 }
 
+// no data response
+export interface APISimpleResponse {
+  result: 'ok' | 'fail';
+}
+
 // 면접 질문 리스트 타입
 export interface IQuestionItem {
   id: number;
   question: string;
   type: interviewType;
-  keywordList: IKeywordItem[] | null;
+  keywordList: IKeywordItem[];
 }
 
-export type interviewType = 'common' | 'resume';
+export type interviewType = 'common' | 'resume' | 'followup';
 
 // 면접 스크립트 타입
 export interface IScriptItem {
