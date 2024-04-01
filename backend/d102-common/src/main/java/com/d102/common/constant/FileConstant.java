@@ -18,6 +18,8 @@ public class FileConstant {
     public static final int RESUME_UPLOAD_LIMIT = 3;
     /* 30MB */
     public static final int RESUME_SIZE_LIMIT = 31457280;
+    public static final int RESUME_RENDER_DPI = 30;
+    public static final String RESUME_RENDER_EXTENSION = "jpeg";
 
     /* Video */
     public static final String VIDEO = "video";

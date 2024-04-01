@@ -10,8 +10,8 @@ import org.springframework.data.redis.core.RedisHash;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "followUpHash", timeToLive = RedisConstant.FOLLOW_UP_QUESTION_LIFE)
-public class FollowUpQuestionHash {
+@RedisHash(value = "tempAnalysisHash", timeToLive = RedisConstant.ANALYSIS_LIFE)
+public class TempAnalysisHash {
 
     @Id
     private Long id;

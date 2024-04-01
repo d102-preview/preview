@@ -72,6 +72,7 @@ public class UserDto {
         private String email;
         private String profileImageName;
         private String profileImageUrl;
+        private Long profileImageSize;
         private String name;
     }
 
@@ -81,6 +82,7 @@ public class UserDto {
         private String email;
         private String profileImageName;
         private String profileImageUrl;
+        private Long profileImageSize;
         private String name;
         private List<ResumeDto.Response> resumeList;
     }

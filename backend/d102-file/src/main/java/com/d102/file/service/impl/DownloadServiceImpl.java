@@ -11,6 +11,8 @@ import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +28,7 @@ public class DownloadServiceImpl implements DownloadService {
         try {
             return DownloadDto.ProfileResponse.builder()
                     .profileType(MediaType.parseMediaType(Files.probeContentType(profilePath)).toString())
-                    .profile(Files.readAllBytes(profilePath))
+                    .profile(FileCopyUtils.copyToByteArray(profilePath.toFile()))
                     .build();
         } catch (IOException e) {
             throw new NotFoundException(ExceptionType.ProfileDownloadException);
@@ -41,13 +43,37 @@ public class DownloadServiceImpl implements DownloadService {
         try {
             Path resumePath = Path.of(resume.getFilePath());
             return DownloadDto.ResumeResponse.builder()
-                    .name(resume.getFileName())
-                    .length(String.valueOf(Files.size(resumePath)))
+                    .resumeName(resume.getFileName())
+                    .resumeLength(resume.getFileSize().toString())
                     .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)).toString())
-                    .resume(Files.readAllBytes(resumePath))
+                    .resume(FileCopyUtils.copyToByteArray(resumePath.toFile()))
                     .build();
         } catch (Exception e) {
             throw new NotFoundException(ExceptionType.ResumeDownloadException);
+        }
+    }
+
+    public DownloadDto.ThumbnailResponse downloadThumbnail(Path thumbnailPath) {
+        /**
+         * TODO: 섬네일 다운로드 시 섬네일의 소유자가 로그인한 유저인지 확인하는 로직 추가 필요
+         */
+        try {
+            return DownloadDto.ThumbnailResponse.builder()
+                    .thumbnailType(MediaType.parseMediaType(Files.probeContentType(thumbnailPath)).toString())
+                    .thumbnail(FileCopyUtils.copyToByteArray(thumbnailPath.toFile()))
+                    .build();
+        } catch (IOException e) {
+            throw new NotFoundException(ExceptionType.ThumbnailDownloadException);
+        }
+    }
+
+    public DownloadDto.VideoResponse downloadVideo(Path videoPath) {
+        try {
+            return DownloadDto.VideoResponse.builder()
+                    .video(FileCopyUtils.copyToByteArray(videoPath.toFile()))
+                    .build();
+        } catch (Exception e) {
+            throw new NotFoundException(ExceptionType.VideoDownloadException);
         }
     }
 

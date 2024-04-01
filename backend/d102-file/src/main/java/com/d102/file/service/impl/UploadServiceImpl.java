@@ -64,10 +64,15 @@ public class UploadServiceImpl implements UploadService {
         User user = userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
         user.setProfileImageName(profileRequestDto.getProfile().getOriginalFilename());
         user.setProfileImageUrl(profileUrl);
+        user.setProfileImageSize(profileRequestDto.getProfile().getSize());
 
         return uploadMapper.toProfileResponseDto(userRepository.saveAndFlush(user));
     }
 
+    /**
+     * TODO: 여기에 트랜잭션을 걸고 asyncService.generateAndSaveQuestionList()에 전파할 필요가 있는지 논의 필요
+     * 여기에서 트랜잭션을 걸어도 asyncService에서 접근이 가능한 것으로 보임
+     */
     @Transactional
     public UploadDto.ResumeResponse uploadResume(UploadDto.ResumeRequest resumeRequestDto) {
         checkResumeLimit();
@@ -78,10 +83,11 @@ public class UploadServiceImpl implements UploadService {
         Resume resume = uploadMapper.toResume(resumeRequestDto);
         resume.setFileName(resumeRequestDto.getResume().getOriginalFilename());
         resume.setFilePath(savePath);
+        resume.setFileSize(resumeRequestDto.getResume().getSize());
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
         resumeRepository.saveAndFlush(resume);
 
-        asyncService.generateAndSaveQuestionList(savePath, resume);
+        asyncService.generateAndSaveQuestionList(resume.getId());
 
         return uploadMapper.toResumeResponseDto(resume);
     }
@@ -100,28 +106,11 @@ public class UploadServiceImpl implements UploadService {
         analysis.setAnswer(analysisRequestDto.getAnswer());
         analysis.setKeywordList(analysisRequestDto.getKeywordList());
         analysis.setVideoPath(savePath);
+        analysis.setVideoSize(video.getSize());
         analysisRepository.saveAndFlush(analysis);
 
         if (!analysisRequestDto.getSkip()) {
-            analysis.setAnalysisReqTime(LocalDateTime.now());
-            analysisRepository.saveAndFlush(analysis);
-
-            FastAiApi.Response response = null;
-            try {
-                response = fastAiApi.analyzeVideo(analysis.getId());
-            } catch (RestClientException e) {
-                /**
-                 * FastAI 서버로부터 실패한 응답을 받았을 경우 재시도
-                 */
-                try {
-                    response = fastAiApi.analyzeVideo(analysis.getId());
-                } catch (RestClientException e2) {
-                    throw new InvalidException(ExceptionType.FastAiApiException);
-                }
-            }
-            if (!StringUtils.equals(response.getCode(), FileConstant.FASTAI_API_SUCCESS))  {
-                throw new InvalidException(ExceptionType.AnalysisException);
-            }
+            asyncService.analyzeVideo(analysis.getId());
         }
     }
 

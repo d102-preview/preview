@@ -1,13 +1,21 @@
 package com.d102.common.service.impl;
 
+import com.d102.common.constant.FileConstant;
+import com.d102.common.constant.RedisConstant;
+import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
 import com.d102.common.domain.redis.QuestionListHash;
+import com.d102.common.domain.redis.TempAnalysisHash;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
+import com.d102.common.repository.jpa.AnalysisRepository;
 import com.d102.common.repository.jpa.ResumeQuestionRepository;
+import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.redis.QuestionListHashRepository;
+import com.d102.common.repository.redis.TempAnalysisHashRepository;
 import com.d102.common.service.AsyncService;
+import com.d102.common.util.FastAiApi;
 import com.d102.common.util.OpenAiApi;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -24,6 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,15 +40,20 @@ import java.util.List;
 @Service
 public class AsyncServiceImpl implements AsyncService {
 
+    private final ResumeRepository resumeRepository;
     private final ResumeQuestionRepository resumeQuestionRepository;
     private final QuestionListHashRepository questionListHashRepository;
+    private final TempAnalysisHashRepository tempAnalysisHashRepository;
+    private final AnalysisRepository analysisRepository;
     private final OpenAiApi openAiApi;
+    private final FastAiApi fastAiApi;
 
     @Async
-    public void generateAndSaveQuestionList(String savePath, Resume resume) {
-        Long resumeId = resume.getId();
-        startQuestionList(resumeId);
+    public void generateAndSaveQuestionList(Long resumeId) {
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
+        processQuestionList(resumeId);
 
+        String savePath = resume.getFilePath();
         /**
          * 1. savePath에서 pdf 파일을 읽어내서 이미지로 변환하고 imagePathList를 생성
          * 2. imagePathList에서 List<byte[]>로 변환
@@ -48,12 +62,22 @@ public class AsyncServiceImpl implements AsyncService {
         List<byte[]> imageList = convertPdfToImage(savePath);
         OpenAiApi.Response response = null;
         try {
+            resume.setAnalysisReqTime(LocalDateTime.now());
+            resumeRepository.saveAndFlush(resume);
             response = openAiApi.generateQuestionList(imageList);
         } catch (RestClientException e) {
+            failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.OpenAiApiException);
         } catch (IOException e) {
+            failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.Base64ConvertException);
+        } catch (Exception e) {
+            failQuestionList(resumeId);
+            throw new InvalidException(ExceptionType.UnknownException);
         }
+        resume.setAnalysisEndTime(LocalDateTime.now());
+        resumeRepository.saveAndFlush(resume);
+
         String jsonString = response.getChoices().getFirst().getMessage().getContent();
         JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
         List<String> questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
@@ -66,15 +90,67 @@ public class AsyncServiceImpl implements AsyncService {
                 .toList();
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
-        endQuestionList(resumeId);
+        successQuestionList(resumeId);
     }
 
-    private void endQuestionList(Long id) {
-        questionListHashRepository.deleteById(id);
+    @Async
+    public void analyzeVideo(Long analysisId) {
+        Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+        processAnalysis(analysisId);
+
+        FastAiApi.Response response = null;
+        try {
+            analysis.setAnalysisReqTime(LocalDateTime.now());
+            analysisRepository.saveAndFlush(analysis);
+            response = fastAiApi.analyzeVideo(analysisId);
+        } catch (RestClientException e1) {
+            /**
+             * FastAI 서버로부터 실패한 응답을 받았을 경우 재시도
+             */
+            try {
+                response = fastAiApi.analyzeVideo(analysisId);
+            } catch (RestClientException e) {
+                failAnalysis(analysisId);
+                throw new InvalidException(ExceptionType.FastAiApiException);
+            } catch (Exception e) {
+                failAnalysis(analysisId);
+                throw new InvalidException(ExceptionType.UnknownException);
+            }
+        }
+
+        successAnalysis(analysisId);
     }
 
-    private void startQuestionList(Long id) {
-        questionListHashRepository.save(QuestionListHash.builder().id(id).status("processing").build());
+    private void successAnalysis(Long analysisId) {
+        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
+        tempAnalysisHash.setStatus(RedisConstant.STATUS_SUCCESS);
+        tempAnalysisHashRepository.save(tempAnalysisHash);
+    }
+
+    private void failAnalysis(Long analysisId) {
+        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
+        tempAnalysisHash.setStatus(RedisConstant.STATUS_FAIL);
+        tempAnalysisHashRepository.save(tempAnalysisHash);
+    }
+
+    private void processAnalysis(Long analysisId) {
+        tempAnalysisHashRepository.save(TempAnalysisHash.builder().id(analysisId).status(RedisConstant.STATUS_PROCESS).build());
+    }
+
+    private void successQuestionList(Long resumeId) {
+        QuestionListHash questionListHash = questionListHashRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        questionListHash.setStatus(RedisConstant.STATUS_SUCCESS);
+        questionListHashRepository.save(questionListHash);
+    }
+
+    private void failQuestionList(Long resumeId) {
+        QuestionListHash questionListHash = questionListHashRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        questionListHash.setStatus(RedisConstant.STATUS_FAIL);
+        questionListHashRepository.save(questionListHash);
+    }
+
+    private void processQuestionList(Long resumeId) {
+        questionListHashRepository.save(QuestionListHash.builder().id(resumeId).status(RedisConstant.STATUS_PROCESS).build());
     }
 
     private List<byte[]> convertPdfToImage(String savePath) {
@@ -83,9 +159,9 @@ public class AsyncServiceImpl implements AsyncService {
             List<byte[]> imageList = new ArrayList<>();
 
             for (int i = 0; i < document.getNumberOfPages(); i++) {
-                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, 30, ImageType.RGB);
+                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, FileConstant.RESUME_RENDER_DPI, ImageType.RGB);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(imageObject, "jpeg", baos);
+                ImageIO.write(imageObject, FileConstant.RESUME_RENDER_EXTENSION, baos);
                 byte[] imageBytes = baos.toByteArray();
                 imageList.add(imageBytes);
             }
