@@ -15,7 +15,7 @@ const questionStore = create<QuestionState>(set => ({
     set(state => {
       if (state.selectedQuestions.length < 3) {
         return {
-          selectedQuestions: [...state.selectedQuestions, { ...questionObj }],
+          selectedQuestions: [...state.selectedQuestions, questionObj],
           message: '',
         };
       } else {

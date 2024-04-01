@@ -46,7 +46,7 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
 
   useEffect(() => {
     if (plusClick && data) {
-      onAdd({ id, question, type, keywordList: [], script });
+      onAdd({ id, question, type, keywordList: keywords, script });
       setPlusClick(false);
     }
   }, [plusClick, data]);
