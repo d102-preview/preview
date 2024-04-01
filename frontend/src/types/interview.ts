@@ -1,11 +1,11 @@
-import { interviewType } from './model';
+import { questionType } from './model';
 
 export interface IInterviewQuestionRes {
   questionList: IInterviewQuestionItem[];
 }
 
 export interface IInterviewAnalyzeRes {
-  type: interviewType;
+  type: questionType;
   question: string;
   answer: string;
   skip: boolean;
@@ -16,7 +16,7 @@ export interface IInterviewAnalyzeRes {
 // 실전 면접 질문 목록
 export interface IInterviewQuestionItem {
   question: string;
-  type: interviewType;
+  type: questionType;
   keywordList: IAnalyzeResKeyword[];
 }
 

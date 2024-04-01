@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import { ISimpleResume } from '@/types/model';
 import Lottie from 'react-lottie';
-import { robotOptions, loadingOptions3 } from '@/assets/lotties/lottieOptions';
+import { robotOptions, createQuestionOptions } from '@/assets/lotties/lottieOptions';
 import SpeechBubble from '@/components/result/SpeechBubble';
 import userStore from '@/stores/userStore';
 import { useIntersectionObserver } from '@/hooks/@common/userIntersectionObserver';
@@ -138,7 +137,7 @@ const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
           <div>
             <p className="text-center font-bold text-2xl text-MAIN1">질문 생성 중...</p>
             <p className="text-center text-sm text-UNIMPORTANT_TEXT">잠시만 기다려 주세요</p>
-            <Lottie options={loadingOptions3} height={350} width={400} />
+            <Lottie options={createQuestionOptions} height={350} width={400} />
           </div>
         </div>
       </>

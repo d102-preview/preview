@@ -13,11 +13,20 @@ export interface APISimpleResponse {
 export interface IQuestionItem {
   id: number;
   question: string;
-  type: interviewType;
+  type: questionType;
   keywordList: IKeywordItem[];
 }
 
-export type interviewType = 'common' | 'resume' | 'followup';
+// 질문 유형
+// common -> 공통 면접 질문
+// resume -> 이력서 기반 질문
+// followup -> 꼬리 질문
+export type questionType = 'common' | 'resume' | 'followup';
+
+// 면접 연습 유형
+// mock  -> 모의 면접
+// main -> 실전 면접
+export type interviewType = 'mock' | 'main';
 
 // 면접 스크립트 타입
 export interface IScriptItem {
@@ -43,7 +52,6 @@ export interface IQuestionListItem {
   question: string;
 }
 
-
 export interface IQuestionDetail {
   script: IScriptItem;
   keywordList: IKeywordItem[];
@@ -55,13 +63,13 @@ export interface ISubText {
 }
 
 export interface ResultItemData {
-  result: 'ok' | 'fail';
   id: number;
-  imagePath: string;
+  thumbnailPath: string;
   type: 'mock' | 'main';
-  date: Date;
+  date: string;
   question: string;
-  time: string;
+  videoLength: number;
+  complete: boolean;
 }
 
 // 회원 정보

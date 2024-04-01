@@ -12,7 +12,7 @@ import {
 } from '@/services/question/api';
 import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import { IQeustionInfo, IScriptInfo, IKeywordInfo, IDeleteKeywordInfo, IDealsListInfiniteReq } from '@/types/question';
-import { interviewType } from '@/types/model';
+import { questionType } from '@/types/model';
 
 export const useQuestion = () => {
   const useGetCommonQuestionList = () => {
@@ -29,7 +29,7 @@ export const useQuestion = () => {
 
   const useGetListInfinite = (
     props: IDealsListInfiniteReq & { resumeId?: number },
-    type: interviewType,
+    type: questionType,
     enabled = true,
   ) => {
     return useInfiniteQuery({
@@ -42,9 +42,9 @@ export const useQuestion = () => {
         }
       },
       initialPageParam: 0, // 페이지는 0부터 시작하도록 설정
-      getNextPageParam: lastPage => {
+      getNextPageParam: (lastPage, allPages) => {
         if (lastPage && !lastPage.data.questionList.last) {
-          const nextPage = lastPage.data.questionList.number + 1;
+          const nextPage = allPages.length + 1;
           if (lastPage.data.questionList.last) return; // 마지막 페이지면
           return nextPage;
         }

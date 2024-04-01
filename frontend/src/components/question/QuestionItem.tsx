@@ -2,7 +2,7 @@ import Accordian from '@/components/@common/Accordian/Accordian';
 import Keywords from '@/components/question/Keywords';
 import Script from '@/components/question/Script';
 import Toast from '@/components/@common/Toast/Toast';
-import { IQuestionItem, interviewType } from '@/types/model';
+import { IQuestionItem, questionType } from '@/types/model';
 import { useLocation } from 'react-router-dom';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import userStore from '@/stores/userStore';
@@ -13,7 +13,7 @@ interface IQuestionItemProps {
   isSelected: boolean;
   onAdd?: (questionObj: IQuestionItem) => void;
   onRemove: (id: number) => void;
-  type: interviewType;
+  type: questionType;
 }
 
 const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQuestionItemProps) => {
