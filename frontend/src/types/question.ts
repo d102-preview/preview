@@ -1,18 +1,37 @@
-import {
-  IKeywordItem,
-  IQuestionDetail,
-  IQuestionListItem,
-  IPaginationResponse,
-  APIResponse,
-  ISimpleResume,
-} from './model';
+import { IKeywordItem, IQuestionDetail, IQuestionListItem, APIResponse, ISimpleResume } from './model';
 
-export interface IQuestionListPaginationResponse extends IPaginationResponse {
+export interface IQuestionList {
   content: IQuestionListItem[];
+  pageable: IPageable;
+  last: boolean;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  sort: ISort;
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
+
+// 페이지네이션 정보 타입
+export interface IPageable {
+  pageNumber: number;
+  pageSize: number;
+  sort?: ISort;
+  offset?: number;
+  paged?: boolean;
+  unpaged?: boolean;
+}
+
+export interface ISort {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
 }
 
 export interface IQuestionListRes {
-  questionList: IQuestionListPaginationResponse;
+  questionList: IQuestionList;
 }
 
 export interface IQuestionRes {
@@ -62,4 +81,12 @@ export interface IDeleteKeywordInfo {
 
 export interface IResumeRes {
   resumeList: ISimpleResume[];
+}
+
+// 무한스크롤
+export interface IDealsListInfiniteReq {
+  resumeId?: number;
+  page: number;
+  size: number;
+  sort?: ISort;
 }
