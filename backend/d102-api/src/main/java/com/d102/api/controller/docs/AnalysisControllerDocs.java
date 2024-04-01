@@ -27,7 +27,18 @@ public interface AnalysisControllerDocs {
     })
     Response getList(String type, Pageable pageable);
 
+    @Operation(summary = "분석 결과 상세 조회", description = "분석 결과 상세 조회 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 분석 결과 상세를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공")),
+                            @SchemaProperty(name = "data", schema = @Schema(implementation = AnalysisDetailResponse.class)),
+                    }))
+    })
+    Response get(Long id) throws Exception;
+
 
     class InterviewListResponse { public List<AnalysisDto.ListResponse> interviewList; }
+    class AnalysisDetailResponse { public AnalysisDto.DetailResponse analysisDetail; }
 
 }
