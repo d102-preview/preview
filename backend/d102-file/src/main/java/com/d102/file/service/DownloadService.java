@@ -6,8 +6,10 @@ import java.nio.file.Path;
 
 public interface DownloadService {
 
-    DownloadDto.ProfileResponse downloadProfile(Path profileUrl);
+    DownloadDto.ProfileResponse downloadProfile(Path profilePath);
 
     DownloadDto.ResumeResponse downloadResume(Long resumeId);
+
+    DownloadDto.ThumbnailResponse downloadThumbnail(Path thumbnailPath);
 
 }
