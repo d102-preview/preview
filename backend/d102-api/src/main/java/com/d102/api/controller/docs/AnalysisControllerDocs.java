@@ -35,7 +35,7 @@ public interface AnalysisControllerDocs {
                             @SchemaProperty(name = "data", schema = @Schema(implementation = AnalysisDetailResponse.class)),
                     }))
     })
-    Response get(Long id);
+    Response get(Long id) throws Exception;
 
 
     class InterviewListResponse { public List<AnalysisDto.ListResponse> interviewList; }

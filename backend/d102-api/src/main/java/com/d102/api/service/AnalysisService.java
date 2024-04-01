@@ -11,6 +11,6 @@ public interface AnalysisService {
 
     Page<AnalysisDto.ListResponse> getList(String type, Pageable pageable);
 
-    AnalysisDto.DetailResponse get(Long analysisId);
+    AnalysisDto.DetailResponse get(Long analysisId) throws Exception;
 
 }
