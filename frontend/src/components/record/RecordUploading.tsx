@@ -35,7 +35,7 @@ const RecordUploading = ({ questionList, questionIndex, setQuestionIndex, setSta
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 bg-black z-50">
       <div className="w-full h-full flex flex-col items-center justify-center gap-10">
-        <p className="text-center text-3xl text-white">직전 답변에 대한 심층 질문 생성중</p>
+        <p className="text-center text-3xl text-white">답변을 업로드하고 있습니다</p>
         <Lottie options={followupOptions} height={150} width={150} />
       </div>
     </div>
