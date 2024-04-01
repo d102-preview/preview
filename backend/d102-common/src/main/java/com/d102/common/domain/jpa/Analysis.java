@@ -57,6 +57,9 @@ public class Analysis {
     @Column(name = "video_length")
     private int videoLength;
 
+    @Column(name = "video_size")
+    private long videoSize;
+
     @Column(name = "fps")
     private int fps;
 

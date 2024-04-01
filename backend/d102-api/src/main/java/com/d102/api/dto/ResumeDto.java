@@ -9,6 +9,7 @@ public class ResumeDto {
 
         private Long id;
         private String displayName;
+        private Long fileSize;
         private String filePath;
     }
 
@@ -17,6 +18,7 @@ public class ResumeDto {
 
         private Long id;
         private String displayName;
+        private Long fileSize;
         private boolean complete;
     }
 

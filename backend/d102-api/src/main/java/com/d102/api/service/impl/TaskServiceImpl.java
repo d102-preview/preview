@@ -1,10 +1,10 @@
 package com.d102.api.service.impl;
 
 import com.d102.api.repository.redis.AnalysisHashRepository;
+import com.d102.common.repository.redis.TempAnalysisHashRepository;
 import com.d102.api.service.TaskService;
 import com.d102.common.constant.RedisConstant;
 import com.d102.common.exception.ExceptionType;
-import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.exception.custom.NotFoundException;
 import com.d102.common.repository.redis.QuestionListHashRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final QuestionListHashRepository questionListHashRepository;
     private final AnalysisHashRepository analysisHashRepository;
+    private final TempAnalysisHashRepository tempAnalysisHashRepository;
 
     public Boolean checkQuestionListTask(Long resumeId) {
         String status =  questionListHashRepository.findById(resumeId).orElse(null).getStatus();
@@ -32,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Boolean checkAnalysisTask(Long analysisId) {
-        String status =  analysisHashRepository.findById(analysisId).orElse(null).getStatus();
+        String status =  tempAnalysisHashRepository.findById(analysisId).orElse(null).getStatus();
         if (StringUtils.equals(status, RedisConstant.STATUS_FAIL)) {
             throw new NotFoundException(ExceptionType.TaskNotFoundException);
         }

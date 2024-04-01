@@ -34,6 +34,9 @@ public class Resume extends BaseTime {
     @Column(name = "file_path", length = 1024, nullable = false)
     private String filePath;
 
+    @Column(name = "file_size")
+    private Long fileSize;
+
     @Column(name = "analysis_req_time")
     private LocalDateTime analysisReqTime;
 

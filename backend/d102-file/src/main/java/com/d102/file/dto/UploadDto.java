@@ -26,6 +26,7 @@ public class UploadDto {
     public static class ProfileResponse {
 
         private String url;
+        private String size;
     }
 
     @Data
@@ -44,6 +45,7 @@ public class UploadDto {
 
         private int id;
         private String fileName;
+        private String fileSize;
         private String displayName;
     }
 

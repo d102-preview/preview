@@ -59,7 +59,6 @@ public class DownloadController implements DownloadControllerDocs {
         String decodedPath = URLDecoder.decode(videoPath, StandardCharsets.UTF_8);
         DownloadDto.VideoResponse videoResponse = downloadService.downloadVideo(Path.of(decodedPath));
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_LENGTH, videoResponse.getVideoLength())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
                 .body(new ByteArrayResource(videoResponse.getVideo()));
     }

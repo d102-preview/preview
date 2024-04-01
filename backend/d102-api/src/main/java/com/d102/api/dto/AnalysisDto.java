@@ -25,6 +25,7 @@ public class AnalysisDto {
         private String question;
         private String thumbnailPath;
         private int videoLength;
+        private Long videoSize;
         private boolean complete;
     }
 
@@ -40,6 +41,7 @@ public class AnalysisDto {
         private String thumbnailPath;
         private List<String> keywordList;
         private int videoLength;
+        private Long videoSize;
         private EmotionResponse emotionMap;
         private List<IntentResponse> intentList;
     }

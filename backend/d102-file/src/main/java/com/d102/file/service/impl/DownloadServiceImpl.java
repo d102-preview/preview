@@ -28,7 +28,7 @@ public class DownloadServiceImpl implements DownloadService {
         try {
             return DownloadDto.ProfileResponse.builder()
                     .profileType(MediaType.parseMediaType(Files.probeContentType(profilePath)).toString())
-                    .profile(Files.readAllBytes(profilePath))
+                    .profile(FileCopyUtils.copyToByteArray(profilePath.toFile()))
                     .build();
         } catch (IOException e) {
             throw new NotFoundException(ExceptionType.ProfileDownloadException);
@@ -44,9 +44,9 @@ public class DownloadServiceImpl implements DownloadService {
             Path resumePath = Path.of(resume.getFilePath());
             return DownloadDto.ResumeResponse.builder()
                     .resumeName(resume.getFileName())
-                    .resumeLength(String.valueOf(Files.size(resumePath)))
+                    .resumeLength(resume.getFileSize().toString())
                     .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)).toString())
-                    .resume(Files.readAllBytes(resumePath))
+                    .resume(FileCopyUtils.copyToByteArray(resumePath.toFile()))
                     .build();
         } catch (Exception e) {
             throw new NotFoundException(ExceptionType.ResumeDownloadException);
@@ -60,7 +60,7 @@ public class DownloadServiceImpl implements DownloadService {
         try {
             return DownloadDto.ThumbnailResponse.builder()
                     .thumbnailType(MediaType.parseMediaType(Files.probeContentType(thumbnailPath)).toString())
-                    .thumbnail(Files.readAllBytes(thumbnailPath))
+                    .thumbnail(FileCopyUtils.copyToByteArray(thumbnailPath.toFile()))
                     .build();
         } catch (IOException e) {
             throw new NotFoundException(ExceptionType.ThumbnailDownloadException);
@@ -70,7 +70,6 @@ public class DownloadServiceImpl implements DownloadService {
     public DownloadDto.VideoResponse downloadVideo(Path videoPath) {
         try {
             return DownloadDto.VideoResponse.builder()
-                    .videoLength(String.valueOf(Files.size(videoPath)))
                     .video(FileCopyUtils.copyToByteArray(videoPath.toFile()))
                     .build();
         } catch (Exception e) {
