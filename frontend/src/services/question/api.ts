@@ -1,4 +1,5 @@
 import {
+  IDealsListInfiniteReq,
   IQeustionInfo,
   IQuestionListRes,
   IQuestionRes,
@@ -11,6 +12,37 @@ import {
 } from '@/types/question';
 import { APIResponse, IStatusRes } from '@/types/model';
 import { axiosAuthInstance, axiosCommonInstance } from '@/apis/axiosInstance';
+
+export const getCommonQuestionListReq = async ({
+  page,
+  size,
+  sort,
+}: IDealsListInfiniteReq): Promise<APIResponse<IQuestionListRes>> => {
+  const res = await axiosCommonInstance.get(`/api/common/question/list`, {
+    params: {
+      page: page,
+      size: size,
+      sort: sort,
+    },
+  });
+  return res.data;
+};
+
+export const getResumeQuestionListReq = async ({
+  resumeId,
+  page,
+  size,
+  sort,
+}: IDealsListInfiniteReq): Promise<APIResponse<IQuestionListRes>> => {
+  const res = await axiosAuthInstance.get(`/api/resume/question/list/${resumeId}`, {
+    params: {
+      page: page,
+      size: size,
+      sort: sort,
+    },
+  });
+  return res.data;
+};
 
 export const getCommonQuestionList = async (): Promise<APIResponse<IQuestionListRes>> => {
   // @TODO: 무한 스크롤로 변경하기
