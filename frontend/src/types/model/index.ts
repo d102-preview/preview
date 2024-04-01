@@ -43,7 +43,6 @@ export interface IQuestionListItem {
   question: string;
 }
 
-
 export interface IQuestionDetail {
   script: IScriptItem;
   keywordList: IKeywordItem[];
@@ -84,6 +83,7 @@ export interface IResume {
 export interface ISimpleResume {
   id: number;
   displayName: string;
+  complete: boolean;
 }
 
 // 비밀번호 정보

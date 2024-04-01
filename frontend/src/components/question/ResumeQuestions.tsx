@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-
 import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
-import { useQuestion } from '@/hooks/question/useQuestion';
+import { useQuestion} from '@/hooks/question/useQuestion';
 import { ISimpleResume } from '@/types/model';
 import Lottie from 'react-lottie';
 import { robotOptions, loadingOptions3 } from '@/assets/lotties/lottieOptions';
@@ -16,12 +15,16 @@ interface QuestionsProps {
   resumeList: ISimpleResume[];
 }
 
-const ResumeQuestions = ({ type, resumeList }: QuestionsProps) => {
+const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps) => {
   const { name } = userStore();
-  const [selectedResume, setSelectedResume] = useState<ISimpleResume | undefined>(resumeList[0]);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const { useGetQuestionStatus, useGetListInfinite } = useQuestion();
+  const { useGetQuestionStatus, useGetListInfinite, useGetListWithStatusCheck } = useQuestion();
+
+  // useGetListWithStatusCheck 훅 사용
+  const { data: resumeListData } = useGetListWithStatusCheck();
+  const resumeList = resumeListData?.data?.resumeList ?? initialResumeList;
+  const [selectedResume, setSelectedResume] = useState<ISimpleResume | undefined>(resumeList[0]);
 
   // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
   const {
