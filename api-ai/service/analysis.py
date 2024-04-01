@@ -46,7 +46,15 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     frame_list = resnet_proc.extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(f"{len(frame_list)} frames are extracted from the input video")
 
-    # TODO: Save thumbnail and update record
+    # Save thumbnail and update record
+    thumbnail_path = record.video_path.replace(".mp4", ".jpg")
+    record.thumbnail_path = thumbnail_path
+
+    if settings.DEBUG:
+        thumbnail_path = os.path.join(
+            str(settings.DATA_HOME), thumbnail_path.replace("/app/files/", "")
+        )
+    resnet_proc.save_thumbnail(frame_list[0], thumbnail_path)
 
     # Detect face from the frames
     face_list = []
@@ -163,7 +171,7 @@ def create_task(
 
     redis_key = f"analysis_process:{record.id}"
     redis_session.set(redis_key, "processing", ex=settings.REDIS_EXPIRE_SECOND)
-    
+
     # Step 1: Facial Emotional Recognition
     _facial_emotional_recognition(record)
 
