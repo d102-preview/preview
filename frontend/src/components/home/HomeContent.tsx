@@ -1,17 +1,14 @@
-import FifthSection from './FifthSection';
 import FirstSection from './FirstSection';
-import FourthSection from './FourthSection';
-import SecondSection from './SecondSection';
-import ThirdSection from './ThirdSection';
+import FuncDetail from './FuncDetail';
+import ServiceFunc from './ServiceFunc';
 
 const HomeContent = () => {
   return (
     <>
       <FirstSection />
-      <SecondSection />
-      <ThirdSection />
-      <FourthSection />
-      <FifthSection />
+      <ServiceFunc />
+      <FuncDetail />
+      {/* <HomeBottom /> */}
     </>
   );
 };
