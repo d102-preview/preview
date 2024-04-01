@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class AsyncServiceImpl implements AsyncService {
     private final OpenAiApi openAiApi;
 
     @Async
-    public void generateAndSaveQuestionList(String savePath, Resume resume) {
-        Long resumeId = resume.getId();
+    public void generateAndSaveQuestionList(String savePath, Long resumeId) {
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processQuestionList(resumeId);
 
         /**
@@ -52,6 +53,8 @@ public class AsyncServiceImpl implements AsyncService {
         List<byte[]> imageList = convertPdfToImage(savePath);
         OpenAiApi.Response response = null;
         try {
+            resume.setAnalysisReqTime(LocalDateTime.now());
+            resumeRepository.saveAndFlush(resume);
             response = openAiApi.generateQuestionList(imageList);
         } catch (RestClientException e) {
             failQuestionList(resumeId);
@@ -59,7 +62,13 @@ public class AsyncServiceImpl implements AsyncService {
         } catch (IOException e) {
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.Base64ConvertException);
+        } catch (Exception e) {
+            failQuestionList(resumeId);
+            throw new InvalidException(ExceptionType.UnknownException);
         }
+        resume.setAnalysisEndTime(LocalDateTime.now());
+        resumeRepository.saveAndFlush(resume);
+
         String jsonString = response.getChoices().getFirst().getMessage().getContent();
         JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
         List<String> questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
