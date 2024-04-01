@@ -38,7 +38,6 @@ public class DownloadDto {
     @Data
     public static class VideoResponse {
 
-        private String videoLength;
         private byte[] video;
     }
 

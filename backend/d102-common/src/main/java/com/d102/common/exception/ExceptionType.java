@@ -49,6 +49,7 @@ public enum ExceptionType {
     UnknownException("NOT FOUND", "Unknown exception"),
     ThumbnailDownloadException("NOT FOUND", "Thumbnail download failed"),
     VideoDownloadException("NOT FOUND", "Video download failed"),
+    TempAnalysisHashNotFoundException("NOT FOUND", "Invalid temp analysis hash"),
 
     /* Conflict exception */
     EmailExistedException("CONFLICT", "Email already exists"),

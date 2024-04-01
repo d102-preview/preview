@@ -64,6 +64,7 @@ public class UploadServiceImpl implements UploadService {
         User user = userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException));
         user.setProfileImageName(profileRequestDto.getProfile().getOriginalFilename());
         user.setProfileImageUrl(profileUrl);
+        user.setProfileImageSize(profileRequestDto.getProfile().getSize());
 
         return uploadMapper.toProfileResponseDto(userRepository.saveAndFlush(user));
     }
@@ -82,10 +83,11 @@ public class UploadServiceImpl implements UploadService {
         Resume resume = uploadMapper.toResume(resumeRequestDto);
         resume.setFileName(resumeRequestDto.getResume().getOriginalFilename());
         resume.setFilePath(savePath);
+        resume.setFileSize(resumeRequestDto.getResume().getSize());
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
         resumeRepository.saveAndFlush(resume);
 
-        asyncService.generateAndSaveQuestionList(savePath, resume.getId());
+        asyncService.generateAndSaveQuestionList(resume.getId());
 
         return uploadMapper.toResumeResponseDto(resume);
     }
@@ -104,25 +106,11 @@ public class UploadServiceImpl implements UploadService {
         analysis.setAnswer(analysisRequestDto.getAnswer());
         analysis.setKeywordList(analysisRequestDto.getKeywordList());
         analysis.setVideoPath(savePath);
+        analysis.setVideoSize(video.getSize());
         analysisRepository.saveAndFlush(analysis);
 
         if (!analysisRequestDto.getSkip()) {
-            analysis.setAnalysisReqTime(LocalDateTime.now());
-            analysisRepository.saveAndFlush(analysis);
-
-            FastAiApi.Response response = null;
-            try {
-                response = fastAiApi.analyzeVideo(analysis.getId());
-            } catch (RestClientException e1) {
-                /**
-                 * FastAI 서버로부터 실패한 응답을 받았을 경우 재시도
-                 */
-                try {
-                    response = fastAiApi.analyzeVideo(analysis.getId());
-                } catch (RestClientException e2) {
-                    throw new InvalidException(ExceptionType.FastAiApiException);
-                }
-            }
+            asyncService.analyzeVideo(analysis.getId());
         }
     }
 
