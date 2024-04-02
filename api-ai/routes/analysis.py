@@ -1,5 +1,5 @@
 from common.deps import MariaSessionDep, RedisSessionDep
-from fastapi import APIRouter, status
+from fastapi import APIRouter, BackgroundTasks, status
 from loguru import logger
 from models.analysis import AnalysisRequest, AnalysisResponse
 from models.common import Status
@@ -17,17 +17,22 @@ router = APIRouter()
     },
     response_model_exclude_unset=True,
 )
-def analyse_video(
+async def analyse_video(
     params: AnalysisRequest,
     maria_session: MariaSessionDep,
     redis_session: RedisSessionDep,
+    tasks: BackgroundTasks,
 ) -> None:
     """
     답변 영상 분석
     """
-    logger.info("Analyse video")
+    # Run analysis in the background
+    tasks.add_task(create_task, params.analysis_id, maria_session, redis_session)
 
-    create_task(params.analysis_id, maria_session, redis_session)
+    logger.info(
+        "Analyse video task has created. {} task(s) is/are in queue.",
+        len(tasks.tasks),
+    )
 
     return AnalysisResponse(
         result=Status.OK,
