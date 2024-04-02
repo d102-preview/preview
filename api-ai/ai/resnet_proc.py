@@ -18,7 +18,7 @@ __haar_cascade = cv2.CascadeClassifier(
 
 MODELS = {
     "ResNet9": "ai/models/ResNet9/ResNet9_epoch-198_score-0.846.pth",
-    "ResNet18": "ai/models/ResNet18/ResNet18_epoch-20_score-0.865.pth",
+    "ResNet18": "ai/models/ResNet18/resnet18_acc_0.849_2404021036.pth",
 }
 
 
