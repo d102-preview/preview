@@ -38,7 +38,7 @@ export const useQuestion = () => {
   const useGetListInfinite = (
     props: IDealsListInfiniteReq & { resumeId?: number },
     type: questionType,
-    enabled = true,
+    // enabled = true,
   ) => {
     return useInfiniteQuery({
       queryKey: ['questionsInfinite', props],
