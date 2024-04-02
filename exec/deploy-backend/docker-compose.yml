@@ -29,6 +29,8 @@ services:
       - d102-network
     ports:
       - ${REDIS_EXTERNAL_PORT}:${REDIS_PORT}
+    volumes:
+      - ${HOME}/d102/redis/data:/data
     deploy:
       resources:
         limits:
