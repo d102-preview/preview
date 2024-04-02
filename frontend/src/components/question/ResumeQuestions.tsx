@@ -18,8 +18,8 @@ interface QuestionsProps {
 const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps) => {
   const { name } = userStore();
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const { useGetQuestionStatus, useGetListInfinite, useGetListWithStatusCheck } = useQuestion();
-
+  const { useGetListInfinite } = useQuestion();
+  // useGetQuestionStatus, useGetListWithStatusCheck
   // // useGetListWithStatusCheck 훅 사용하여 업데이트된 이력서 목록 가져오기
   // const { data: resumeListData } = useGetListWithStatusCheck();
 
@@ -94,16 +94,16 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
   return (
     <>
       <h3 className="text-lg font-semibold">이력서 기반 질문</h3>
-      <div className="my-3 relative">
-        <label htmlFor="resumeSelect" className=" block font-medium text-[#404040]">
-          이력서 선택하기
-        </label>
+      <label htmlFor="resumeSelect" className="py-1 block font-medium text-UNIMPORTANT_TEXT">
+        이력서 선택하기
+      </label>
+      <div className="mt-1 relative px-3">
         {/* 드롭다운 */}
         <div
-          className={`p-3 m-3 border-2 border-MAIN1 bg-[#F1F5FF] rounded-xl relative`}
+          className={`p-3 border border-MAIN1 bg-[#F1F5FF] rounded-xl relative text-sm`}
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
-          <div className="pl-2 flex justify-between items-center font-semibold text-MAIN1">
+          <div className="b-1 pl-2 flex justify-between items-center font-semibold text-MAIN1">
             <span>{selectedResume ? selectedResume.displayName : '이력서를 선택해주세요'}</span>
             {dropdownOpen ? (
               <MdOutlineExpandLess size="25" className="text-MAIN1" aria-hidden="true" />
@@ -114,7 +114,7 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
 
           {dropdownOpen && (
             <ul
-              className={`absolute w-full border-2 ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-3 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
+              className={`absolute w-full border ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-4 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
             >
               {initialResumeList.map((resume, index) => (
                 <li
@@ -142,11 +142,11 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
       {/* 이력서가 선택되었고 질문 생성이 완료된 경우 */}
       {selectedResume && selectedResume.status === 'success' && (
         <>
-          <p className="text-UNIMPORTANT_TEXT mt-12">총 {totalQuestions}개의 질문이 있습니다.</p>
+          <p className="text-UNIMPORTANT_TEXT mt-5 mb-1">총 {totalQuestions}개의 질문이 있습니다.</p>
           {resumeListData?.pages?.map(
             (page, i) =>
               page && ( // page가 정의되어 있으면 아래의 컴포넌트 렌더링 실행
-                <div key={i}>
+                <div key={i} className="h-[calc(100%-10rem)] overflow-y-auto px-3">
                   {page.data.questionList.content.map(question => (
                     <QuestionItem
                       key={question.id}
