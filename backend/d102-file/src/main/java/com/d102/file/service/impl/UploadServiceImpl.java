@@ -2,6 +2,7 @@ package com.d102.file.service.impl;
 
 import com.d102.common.constant.FileConstant;
 import com.d102.common.constant.QuestionType;
+import com.d102.common.constant.TaskConstant;
 import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Interview;
 import com.d102.common.domain.jpa.Resume;
@@ -111,6 +112,9 @@ public class UploadServiceImpl implements UploadService {
 
         if (!analysisRequestDto.getSkip()) {
             asyncService.analyzeVideo(analysis.getId());
+        } else {
+            analysis.setAnalysisStatus(TaskConstant.STATUS_FAIL);
+            analysisRepository.saveAndFlush(analysis);
         }
     }
 
