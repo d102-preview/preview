@@ -27,27 +27,25 @@ const QuestionPage = () => {
     <>
       <Header />
       <main
-        className={`${isShow ? 'min-w-[1100px]' : 'min-w-[900px]'} h-[calc(100vh-3.5rem)] animate-showUp max-w-[80%] mx-auto`}
+        className={`${isShow ? 'min-w-[1100px]' : 'min-w-[900px] w-[800px]'} h-[calc(100vh-3.5rem)] animate-showUp max-w-[80%] mx-auto`}
       >
         <div>
-          <div>
-            <h3 className="text-xl font-semibold mb-1">면접 질문 리스트</h3>
-            <p className="text-sm text-[#B0B0B0]">
-              {isShow
-                ? '면접 연습을 진행할 리스트를 생성해주세요'
-                : '스크립트와 핵심 키워드를 작성하여 면접을 대비하세요'}
-            </p>
-          </div>
-          <div className="mt-3 flex w-full h-5/6 mx-auto">
-            <div className={`flex rounded-2xl shadow-lg bg-GRAY ${isShow ? 'w-[1500px]' : 'w-full'} `}>
-              <QuestionTab activeTab={activeTab} setActiveTab={setActiveTab} />
-              <div className={`p-4 ${isShow ? 'w-full' : 'w-full'}  overflow-auto`}>
-                {activeTab === 'common' && <CommonQuestions type={activeTab} />}
-                {activeTab === 'resume' && <ResumeQuestions type={activeTab} resumeList={resumeList} />}
-              </div>
+          <h3 className="text-xl font-semibold mb-1">면접 질문 리스트</h3>
+          <p className="text-sm text-[#B0B0B0]">
+            {isShow
+              ? '면접 연습을 진행할 리스트를 생성해주세요'
+              : '스크립트와 핵심 키워드를 작성하여 면접을 대비하세요'}
+          </p>
+        </div>
+        <div className="mt-3 flex w-full h-[560px] mx-auto">
+          <div className={`flex rounded-2xl shadow-lg bg-GRAY ${isShow ? 'w-[1500px]' : 'w-full'} `}>
+            <QuestionTab activeTab={activeTab} setActiveTab={setActiveTab} />
+            <div className={`p-4 ${isShow ? 'w-full' : 'w-full'}  `}>
+              {activeTab === 'common' && <CommonQuestions type={activeTab} />}
+              {activeTab === 'resume' && <ResumeQuestions type={activeTab} resumeList={resumeList} />}
             </div>
-            {isShow && <SelectedQuestions />}
           </div>
+          {isShow && <SelectedQuestions />}
         </div>
       </main>
     </>
