@@ -6,8 +6,8 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
-from ai import resnet_proc
 from ai.kobert_proc import kobert_model
+from ai.resnet_proc import resnet18_model
 from common.deps import MariaSessionDep, RedisSessionDep
 from common.perf import elapsed
 from core.settings import settings
@@ -43,7 +43,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     logger.info(f"Start facial emotional recognition. {video_path = }")
 
     # Extract frames
-    frame_list = resnet_proc.extract_frames(video_path, msec=(1000 // settings.FPS))
+    frame_list = resnet18_model.extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(f"{len(frame_list)} frames are extracted from the input video")
 
     # Save thumbnail and update record
@@ -55,19 +55,17 @@ def _facial_emotional_recognition(record: Analysis) -> None:
             str(settings.DATA_HOME), thumbnail_path.replace("/app/files/", "")
         )
     logger.debug(f"{thumbnail_path = }")
-    resnet_proc.save_thumbnail(frame_list[0], thumbnail_path)
+    resnet18_model.save_thumbnail(frame_list[0], thumbnail_path)
 
     # Detect face from the frames
     face_list = []
     for img in frame_list:
-        _, face_img = resnet_proc.detect_faces(img, (224, 224))
+        _, face_img = resnet18_model.detect_faces(img, (224, 224))
         face_list.append(face_img)
 
     cnt_none = len([x for x in face_list if x is None])
     cnt_face = len(face_list) - cnt_none
     logger.debug(f"{cnt_face} faces / {len(frame_list)} frames")
-
-    model = resnet_proc.get_model("ResNet18")
 
     # Count by emotion for calculate ratio
     cnt_emotion = {}
@@ -76,7 +74,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     for img in face_list:
         pred = None
         if img is not None:
-            pred = resnet_proc.predict(Image.fromarray(img), model)
+            pred = resnet18_model.predict(Image.fromarray(img))
             cnt_emotion[pred] = cnt_emotion.get(pred, 0) + 1
             pred = CONVERT_PRED[pred]
 
