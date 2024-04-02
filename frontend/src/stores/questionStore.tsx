@@ -1,14 +1,11 @@
+import { IInterviewQuestionItem } from '@/types/interview';
 import { create } from 'zustand';
 
-interface IQuestionObj {
-  question: string;
-  id: number;
-}
-
 interface QuestionState {
-  selectedQuestions: IQuestionObj[];
-  addQuestion: (questionObj: IQuestionObj) => void;
+  selectedQuestions: IInterviewQuestionItem[];
+  addQuestion: (questionObj: IInterviewQuestionItem) => void;
   removeQuestion: (id: number) => void;
+  resetQuestion: () => void;
   message: string;
 }
 
@@ -34,6 +31,9 @@ const questionStore = create<QuestionState>(set => ({
       selectedQuestions: state.selectedQuestions.filter(q => q.id !== id),
       message: '',
     })),
+  resetQuestion: () => {
+    set({ selectedQuestions: [] });
+  },
 }));
 
 export default questionStore;

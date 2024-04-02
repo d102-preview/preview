@@ -63,11 +63,7 @@ const SignupForm = () => {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof ISignupInfo) => {
-    // if (isVerify) {
-    //   if (field === 'email' || field === 'certifNum') {
-    //     return;
-    //   }
-    // }
+    checkValidation(field, e.target.value);
 
     setSignupInfo(prev => {
       return {
@@ -94,14 +90,14 @@ const SignupForm = () => {
     });
   };
 
-  const checkValidation = (type: keyof ISignupInfo) => {
+  const checkValidation = (type: keyof ISignupInfo, value: string) => {
     const nameRegex = /[a-zA-Z가-힣]/;
     const emailRegex = /[a-z0-9]+@[a-z0-9]+\.[a-z]{2,3}/;
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
 
     switch (type) {
       case 'name': {
-        const name = signupInfo.name.value;
+        const name = value;
 
         if (!name.trim().length) {
           setSubTextAndStatus(type, '이름을 입력하지 않았습니다.', 'error');
@@ -117,7 +113,7 @@ const SignupForm = () => {
         break;
       }
       case 'email': {
-        const email = signupInfo.email.value;
+        const email = value;
 
         if (!email.trim().length) {
           setSubTextAndStatus(type, '이메일을 입력하지 않았습니다.', 'error');
@@ -133,7 +129,8 @@ const SignupForm = () => {
         break;
       }
       case 'certifNum': {
-        const certifNum = signupInfo.certifNum.value;
+        const certifNum = value;
+        console.log(certifNum);
 
         if (!certifNum.trim().length) {
           setSubTextAndStatus(type, '인증번호를 입력하지 않았습니다.', 'error');
@@ -151,7 +148,7 @@ const SignupForm = () => {
       }
 
       case 'password': {
-        const password = signupInfo.password.value;
+        const password = value;
 
         if (!password.trim().length) {
           setSubTextAndStatus(type, '비밀번호를 입력하지 않았습니다.', 'error');
@@ -168,7 +165,7 @@ const SignupForm = () => {
       }
 
       case 'passwordCheck': {
-        const passwordCheck = signupInfo.passwordCheck.value;
+        const passwordCheck = value;
 
         if (!passwordCheck.trim().length) {
           setSubTextAndStatus(type, '비밀번호를 입력하지 않았습니다.', 'error');
@@ -320,6 +317,16 @@ const SignupForm = () => {
     setIsPossibleSignup(true);
   }, [signupInfo, isVerify]);
 
+  const handleKakao = () => {
+    Toast.error('아직 준비중인 서비스입니다.');
+  };
+
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === 'Enter') {
+      handleSignup();
+    }
+  };
+
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">
       {/* 상단 텍스트 */}
@@ -336,7 +343,6 @@ const SignupForm = () => {
           placeholder="2~4자리/특수문자,숫자 제외"
           type="text"
           onChange={e => handleChange(e, 'name')}
-          onBlur={() => checkValidation('name')}
           subText={{
             text: signupInfo.name.subText,
             type: signupInfo.name.status,
@@ -349,7 +355,6 @@ const SignupForm = () => {
               placeholder="ex) email@preview.com"
               type="email"
               onChange={e => handleChange(e, 'email')}
-              onBlur={() => checkValidation('email')}
               subText={{
                 text: signupInfo.email.subText,
                 type: signupInfo.email.status,
@@ -387,8 +392,9 @@ const SignupForm = () => {
               label="인증번호"
               placeholder="6자리/숫자"
               type="number"
-              onChange={e => handleChange(e, 'certifNum')}
-              onBlur={() => checkValidation('certifNum')}
+              onChange={e => {
+                handleChange(e, 'certifNum');
+              }}
               subText={{
                 text: signupInfo.certifNum.subText,
                 type: signupInfo.certifNum.status,
@@ -415,7 +421,6 @@ const SignupForm = () => {
           placeholder="6~15자리/영문,숫자,특수문자 조합"
           type="password"
           onChange={e => handleChange(e, 'password')}
-          onBlur={() => checkValidation('password')}
           subText={{
             text: signupInfo.password.subText,
             type: signupInfo.password.status,
@@ -426,7 +431,7 @@ const SignupForm = () => {
           placeholder="비밀번호 재입력"
           type="password"
           onChange={e => handleChange(e, 'passwordCheck')}
-          onBlur={() => checkValidation('passwordCheck')}
+          onKeyUp={e => handleKey(e)}
           subText={{
             text: signupInfo.passwordCheck.subText,
             type: signupInfo.passwordCheck.status,
@@ -459,9 +464,9 @@ const SignupForm = () => {
         textColor="text-[#7E6868]"
         hoverBackgroundColor="hover:bg-[#FFED99]"
       >
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center" onClick={handleKakao}>
           <img src={kakao} alt="kakao" className="w-7 mr-3" />
-          카카오톡으로 회원가입
+          카카오톡으로 시작하기
         </div>
       </Button>
 
