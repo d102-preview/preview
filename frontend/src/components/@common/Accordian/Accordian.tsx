@@ -87,7 +87,7 @@ const Accordian = ({
   return (
     <div
       className={`${width} ${backgroundColor} ${borderStyle} ${borderRadius} 
-      m-4 cursor-pointer box-content drop-shadow-lg ${selectedBorderStyle}`}
+      cursor-pointer box-content drop-shadow-lg ${selectedBorderStyle}`}
     >
       <div className={`p-3 mx-3 flex items-center justify-between`} onClick={toggleOpen}>
         <div className={`flex items-center ${textColor} ${textSize} ${textWeight} h-8`}>
