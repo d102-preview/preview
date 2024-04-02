@@ -1,4 +1,4 @@
-import { checkAnalysisStatus, getResultListReq, getResultTotal } from '@/services/result/api';
+import { checkAnalysisStatus, getDetailResult, getResultListReq, getResultTotal } from '@/services/result/api';
 import { interviewType } from '@/types/model';
 import { IDealsResultListInfiniteReq } from '@/types/result';
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
@@ -37,5 +37,14 @@ export const useResult = () => {
     });
   };
 
-  return { useGetListInfinite, useResultTotal, useGetAnalysisStatus };
+  // 상세 조회
+  const useGetDetailAnalysis = (analysisId: number) => {
+    return useQuery({
+      queryKey: ['analysis detail', analysisId],
+      queryFn: () => getDetailResult(analysisId),
+      enabled: !!analysisId,
+    });
+  };
+
+  return { useGetListInfinite, useResultTotal, useGetAnalysisStatus, useGetDetailAnalysis };
 };

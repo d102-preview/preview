@@ -3,6 +3,7 @@ import Header from '@/components/@common/Header/Header';
 import ResultList from '@/components/result/result-list/ResultList';
 import { interviewType } from '@/types/model';
 import { useResult } from '@/hooks/result/useResult';
+import Footer from '@/components/@common/Footer/Footer';
 
 const ResultPage = () => {
   const [type, setType] = useState<interviewType>('mock');
@@ -28,7 +29,7 @@ const ResultPage = () => {
     <>
       <Header />
       <main className="max-w-5xl mx-auto mt-7">
-        <div className="flex justify-between pb-7">
+        <div className="flex justify-between pb-3">
           <div className="flex gap-2 text-xl font-bold">
             <h3 className="text-[#696969]">{type == 'mock' ? '모의 면접' : '실전 면접'} 분석 결과</h3>
             <h3 className="text-MAIN1">{totalNum}</h3>
@@ -46,6 +47,7 @@ const ResultPage = () => {
           <ResultList type={type} />
         </div>
       </main>
+      <Footer />
     </>
   );
 };

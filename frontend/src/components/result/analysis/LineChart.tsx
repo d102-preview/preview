@@ -1,11 +1,11 @@
-import { useRef } from 'react';
-import { Chart } from 'chart.js';
+import { useEffect, useRef } from 'react';
+import { Chart, LineElement, PointElement, LinearScale, CategoryScale, Title, Tooltip, Legend } from 'chart.js';
 import { ChartOptions } from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import annotationPlugin from 'chartjs-plugin-annotation';
 // import { IResult } from '@/types/result';
 
-Chart.register(annotationPlugin);
+Chart.register(LineElement, PointElement, LinearScale, CategoryScale, Title, Tooltip, Legend, annotationPlugin);
 
 interface LineChartProps {
   title: string;
@@ -15,6 +15,7 @@ interface LineChartProps {
 }
 
 const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
+  const uniqueKey = new Date().getTime() - 156463;
   const chartRef = useRef<Chart<'line', number[], unknown> | null>(null);
 
   const onCanvasClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -128,7 +129,7 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
   return (
     <div className="p-3">
       <h4 className="text-2xl text-[#696969] font-bold pb-7">프레임별 {title}</h4>
-      <Line data={data} options={options} ref={chartRef} />
+      <Line data={data} options={options} ref={chartRef} onClick={onCanvasClick} key={uniqueKey} />
     </div>
   );
 };

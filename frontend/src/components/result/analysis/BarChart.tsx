@@ -18,6 +18,7 @@ interface IBarChartProps {
 }
 
 const BarChart = ({ title }: IBarChartProps) => {
+  const uniqueKey = new Date().getTime();
   // 원래 데이터
   const originalData = [12, 19, 3, 5, 2, 3];
 
@@ -88,7 +89,7 @@ const BarChart = ({ title }: IBarChartProps) => {
     <>
       <div className="p-3">
         <h4 className="text-2xl text-[#696969] font-bold pb-7">주요 {title}</h4>
-        <Bar data={data} options={options} />
+        <Bar data={data} options={options} key={uniqueKey} />
       </div>
     </>
   );
