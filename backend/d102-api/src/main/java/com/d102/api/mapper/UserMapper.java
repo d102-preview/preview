@@ -12,6 +12,8 @@ public interface UserMapper {
 
     UserDto.Response toUserResponseDto(User user);
     UserDto.ResumeResponse toUserResumeResponseDto(User user);
+
+    @Mapping(target = "status", source = "analysisStatus")
     ResumeDto.Response toResumeResponseDto(Resume resume);
 
     @Mapping(target = "id", ignore = true)

@@ -11,6 +11,7 @@ public class ResumeDto {
         private String displayName;
         private Long fileSize;
         private String filePath;
+        private String status;
     }
 
     @Data
