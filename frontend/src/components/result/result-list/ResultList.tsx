@@ -1,7 +1,7 @@
-import ResultItem from './ResultItem';
 import IMAGE1 from '@/assets/images/interview1.png';
-import { formatInterviewTime } from '@/utils/formatDateTime';
 import { ResultItemData } from '@/types/model/index';
+import { formatInterviewTime } from '@/utils/formatDateTime';
+import ResultItem from './ResultItem';
 
 const ResultList = () => {
   // 더미 데이터
@@ -55,7 +55,7 @@ const ResultList = () => {
   ];
 
   return (
-    <div>
+    <div className="w-full">
       <div className="flex items-center mb-3">
         <p className="font-semibold text-[#B0B0B0] text-lg">{formatInterviewTime(setTime)}</p>
         <div className="flex-grow border-t-2 border-[#B0B0B0)] ml-3"></div>

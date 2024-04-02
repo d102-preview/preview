@@ -41,6 +41,8 @@ const LoginForm = () => {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof ILoginInfo) => {
+    checkValidation(field, e.target.value);
+
     setLoginInfo(prev => {
       return {
         ...prev,
@@ -66,13 +68,13 @@ const LoginForm = () => {
     });
   };
 
-  const checkValidation = (type: keyof ILoginInfo) => {
+  const checkValidation = (type: keyof ILoginInfo, value: string) => {
     const emailRegex = /[a-z0-9]+@[a-z0-9]+\.[a-z]{2,3}/;
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
 
     switch (type) {
       case 'email': {
-        const email = loginInfo.email.value;
+        const email = value;
 
         if (!email.trim().length) {
           setSubTextAndStatus(type, '이메일을 입력하지 않았습니다.', 'error');
@@ -88,7 +90,7 @@ const LoginForm = () => {
         break;
       }
       case 'password': {
-        const password = loginInfo.password.value;
+        const password = value;
 
         if (!password.trim().length) {
           setSubTextAndStatus(type, '비밀번호를 입력하지 않았습니다.', 'error');
@@ -121,7 +123,7 @@ const LoginForm = () => {
     return false;
   };
 
-  const handleSignup = () => {
+  const handleLogin = () => {
     if (isExistImpossibleValue()) {
       Toast.error('입력 형식에 맞지 않은 값이 있습니다.');
       return;
@@ -138,6 +140,7 @@ const LoginForm = () => {
           login(res.data.user.name, res.data.user.profileImageUrl);
           navigate('/');
         },
+
         onError: err => {
           if (axios.isAxiosError(err)) {
             const res = err.response;
@@ -173,6 +176,16 @@ const LoginForm = () => {
     setIsPossibleLogin(true);
   }, [loginInfo]);
 
+  const handleKakao = () => {
+    Toast.error('아직 준비중인 서비스입니다.');
+  };
+
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="w-[60%] h-full mx-auto flex justify-center flex-col animate-showUp">
       {/* 상단 텍스트 */}
@@ -188,7 +201,6 @@ const LoginForm = () => {
           placeholder="ex) email@preview.com"
           type="email"
           onChange={e => handleChange(e, 'email')}
-          onBlur={() => checkValidation('email')}
           subText={{
             text: loginInfo.email.subText,
             type: loginInfo.email.status,
@@ -199,7 +211,7 @@ const LoginForm = () => {
           placeholder="6~15자리/영문,숫자,특수문자 조합"
           type="password"
           onChange={e => handleChange(e, 'password')}
-          onBlur={() => checkValidation('password')}
+          onKeyUp={e => handleKey(e)}
           subText={{
             text: loginInfo.password.subText,
             type: loginInfo.password.status,
@@ -216,7 +228,7 @@ const LoginForm = () => {
         backgroundColor={isPossibleLogin ? 'bg-MAIN1' : 'bg-gray-200'}
         textColor={isPossibleLogin ? 'text-[#EEF3FF]' : 'text-gray-400'}
         hoverBackgroundColor={isPossibleLogin ? 'hover:bg-[#3273FF]' : 'bg-gray-200'}
-        onClick={handleSignup}
+        onClick={handleLogin}
         disabled={!isPossibleLogin}
       />
 
@@ -241,7 +253,7 @@ const LoginForm = () => {
         </div>
       </Button>
 
-      <div className="text-xs text-center pt-2">
+      <div className="text-xs text-center pt-2" onClick={handleKakao}>
         아직 가입한 적이 없으신가요?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <Link to={'/signup'} className="text-[#5A8AF2] font-bold">
           회원가입 하러가기
