@@ -27,6 +27,7 @@ public class AnalysisDto {
         private int videoLength;
         private Long videoSize;
         private String status;
+        private LocalDateTime startTime;
     }
 
     @Builder
@@ -44,6 +45,7 @@ public class AnalysisDto {
         private Long videoSize;
         private EmotionResponse emotionMap;
         private List<IntentResponse> intentList;
+        private LocalDateTime startTime;
     }
 
     @Data
