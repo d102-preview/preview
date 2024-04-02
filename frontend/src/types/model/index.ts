@@ -83,6 +83,7 @@ export interface IResume {
 export interface ISimpleResume {
   id: number;
   displayName: string;
+  fileSize: number;
   status: 'success' | 'process' | 'fail';
 }
 
