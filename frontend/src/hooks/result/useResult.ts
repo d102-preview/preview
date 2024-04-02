@@ -1,5 +1,4 @@
-import { checkAnalysisStatus, getDetailResult, getResultListReq, getResultTotal } from '@/services/result/api';
-import { interviewType } from '@/types/model';
+import { checkAnalysisStatus, getDetailResult, getResultListReq } from '@/services/result/api';
 import { IDealsResultListInfiniteReq } from '@/types/result';
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
@@ -21,13 +20,6 @@ export const useResult = () => {
     });
   };
 
-  const useResultTotal = (type: interviewType) => {
-    return useQuery({
-      queryKey: ['result total', type],
-      queryFn: () => getResultTotal(type),
-    });
-  };
-
   const useGetAnalysisStatus = (analysisId: number) => {
     return useQuery({
       queryKey: ['analysis', analysisId],
@@ -46,5 +38,5 @@ export const useResult = () => {
     });
   };
 
-  return { useGetListInfinite, useResultTotal, useGetAnalysisStatus, useGetDetailAnalysis };
+  return { useGetListInfinite, useGetAnalysisStatus, useGetDetailAnalysis };
 };

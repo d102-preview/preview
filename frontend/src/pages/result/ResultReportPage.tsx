@@ -1,13 +1,13 @@
 import Header from '@/components/@common/Header/Header';
-// import Lottie from 'react-lottie';
-// import { robotOptions } from '@/assets/lotties/lottieOptions';
-// import DoughnutChart from '@/components/result/DoughnutChart';
-// import InterviewPrepared from '@/components/result/InterviewPrepared';
 import DetailedAnalysis from '@/components/result/analysis/DetailedAnalysis';
 import userStore from '@/stores/userStore';
 import { useResult } from '@/hooks/result/useResult';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+// import Lottie from 'react-lottie';
+// import { robotOptions } from '@/assets/lotties/lottieOptions';
+// import DoughnutChart from '@/components/result/DoughnutChart';
+// import InterviewPrepared from '@/components/result/InterviewPrepared';
+// import { useEffect } from 'react';
 
 const ResultReportPage = () => {
   const parms = useParams();
@@ -19,11 +19,10 @@ const ResultReportPage = () => {
   const { useGetDetailAnalysis } = useResult();
   const { data, isLoading, error } = useGetDetailAnalysis(Number(analysisId));
 
-  const question = data?.data.analysisDetail.question;
-  console.log(data);
-  console.log(analysisId);
+  const date = data?.data.analysisDetail.startTime || '';
 
-  const result = data?.data.analysisDetail;
+  const question = data?.data.analysisDetail.question;
+  const analysisDetail = data?.data.analysisDetail;
 
   // const percent = 70;
   // const getPrepareText = (percent: number) => {
@@ -53,7 +52,7 @@ const ResultReportPage = () => {
   //     return 5;
   //   }
   // };
-  //
+
   // const prepare = getPrepareText(percent);
   // const state = getStateNumber(percent);
 
@@ -85,18 +84,17 @@ const ResultReportPage = () => {
                 </div>
               </div>
               <Lottie options={robotOptions} height={350} width={350} />
-            </div>
-            <div className="flex items-center px-20 gap-5 pb-10">
+            </div> */}
+            {/* <div className="flex items-center px-20 gap-5 pb-10">
               <DoughnutChart percent={percent} />
               <InterviewPrepared prepare={prepare} state={state} name={name} />
             </div> */}
-            {result && (
+            {analysisDetail && (
               <DetailedAnalysis
-                type={result.questionType}
-                question={result.question}
-                result={result}
-                date={result.startTime}
-                // answer={data.data.analysisDetail}
+                type={analysisDetail.questionType}
+                question={analysisDetail.question}
+                analysisDetail={analysisDetail}
+                date={date}
               />
             )}
           </div>
