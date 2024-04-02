@@ -92,6 +92,7 @@ export interface IResume {
 export interface ISimpleResume {
   id: number;
   displayName: string;
+  status: 'success' | 'process' | 'fail';
 }
 
 // 비밀번호 정보
@@ -107,5 +108,7 @@ export interface IProfile {
 
 // 작업 완료 여부 응답 객체
 export interface IStatusRes {
-  complete: boolean;
+  status: 'success' | 'process' | 'fail';
 }
+
+export type statusType = 'success' | 'process' | 'fail';

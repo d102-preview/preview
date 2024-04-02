@@ -6,12 +6,14 @@ import { IQuestionItem, questionType } from '@/types/model';
 import { useLocation } from 'react-router-dom';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import userStore from '@/stores/userStore';
+import { IInterviewQuestionItem } from '@/types/interview';
+import { useEffect, useState } from 'react';
 
 interface IQuestionItemProps {
   question: string;
   id: number;
   isSelected: boolean;
-  onAdd?: (questionObj: IQuestionItem) => void;
+  onAdd: (questionObj: IInterviewQuestionItem) => void;
   onRemove: (id: number) => void;
   type: questionType;
 }
@@ -36,25 +38,35 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const script = data?.data?.questionDetail?.script?.script || '';
   const keywords = data?.data?.questionDetail.keywordList || [];
 
+  const [plusClick, setPlusClick] = useState<boolean>(false);
+  const handlePlusClick = () => {
+    getQuestion();
+    setPlusClick(true);
+  };
+
+  useEffect(() => {
+    if (plusClick && data) {
+      onAdd({ id, question, type, keywordList: keywords, script });
+      setPlusClick(false);
+    }
+  }, [plusClick, data]);
+
   return (
     <div className="mb-2" onClick={handleClick}>
       <Accordian
         titleContent={question}
-        children={
-          <>
-            <Script initialScript={script} id={id} type={type} />
-            <Keywords initialKeywords={keywords} id={id} type={type} />
-          </>
-        }
         defaultOpen={false}
         disabled={!isLogin}
         isSelected={isSelected}
-        onPlusClick={() => onAdd && onAdd({ id, question, type, keywordList: [] })} // '+' 아이콘 클릭 시 호출될 함수
+        onPlusClick={handlePlusClick} // '+' 아이콘 클릭 시 호출될 함수
         onMinusClick={() => onRemove(id)} // '-' 아이콘 클릭 시 호출될 함수
         hasIcons={isQuestionPage}
         textSize="text-base"
         textWeight="font-medium"
-      />
+      >
+        <Script initialScript={script} id={id} type={type} />
+        <Keywords initialKeywords={keywords} id={id} type={type} />
+      </Accordian>
     </div>
   );
 };
