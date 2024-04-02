@@ -4,7 +4,7 @@ const setAuthorization = (config: InternalAxiosRequestConfig) => {
   let accessToken = localStorage.getItem('PREVIEW_ACCESS_TOKEN');
 
   if (accessToken) {
-    accessToken = accessToken.replace('Bearer ', '');
+    accessToken = 'Bearer ' + accessToken;
     config.headers.Authorization = accessToken;
   }
 
