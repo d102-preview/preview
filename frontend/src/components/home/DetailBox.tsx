@@ -28,17 +28,17 @@ const DetailBox = ({ info }: { info: IDetailBox }) => {
 
   const titleVarient = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.3 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.3 } },
   };
 
   const descVarient = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.5 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.5 } },
   };
 
   const buttonVarient = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.7 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.7 } },
   };
 
   return (
@@ -65,7 +65,8 @@ const DetailBox = ({ info }: { info: IDetailBox }) => {
                   width="w-full"
                   height="h-[45px]"
                   textColor="text-white"
-                  backgroundColor="bg-gradient-to-r from-MAIN1 to-MAIN2"
+                  backgroundColor="bg-MAIN1"
+                  hoverBackgroundColor="hover:bg-[#3273FF]"
                   style={{ fontWeight: '300', overflow: 'hidden', whiteSpace: 'nowrap', padding: '10px' }}
                   onClick={() => navigate(info.navigateUrl)}
                 />
@@ -107,7 +108,8 @@ const DetailBox = ({ info }: { info: IDetailBox }) => {
                   width="w-full"
                   height="h-[45px]"
                   textColor="text-white"
-                  backgroundColor="bg-gradient-to-r from-MAIN1 to-MAIN2"
+                  backgroundColor="bg-MAIN1"
+                  hoverBackgroundColor="hover:bg-[#3273FF]"
                   style={{ fontWeight: '300', overflow: 'hidden', whiteSpace: 'nowrap', padding: '10px' }}
                   onClick={() => navigate(info.navigateUrl)}
                 />

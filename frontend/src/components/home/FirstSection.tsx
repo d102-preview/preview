@@ -1,4 +1,5 @@
-import main from '@/assets/images/main.png';
+import logo from '@/assets/images/logo.png';
+import main from '@/assets/images/main.webp';
 import scroll from '@/assets/lotties/scroll.json';
 import { motion } from 'framer-motion';
 import Lottie from 'react-lottie';
@@ -38,8 +39,8 @@ const FirstSection = () => {
           <div className="font-black">
             당신의 <br /> AI 면접 파트너
           </div>
-          <div className="font-[yg-jalnan] text-[55px] text-black">preview</div>
-          <div className="text-[20px] pb-4">
+          <img src={logo} alt="logo" width={'220px'} />
+          <div className="text-[20px] py-4">
             AI 영상 분석을 통해 자세, 억양을 분석하고
             <br /> 피드백까지 한눈에 ! <br />
             당신만의 질문을 생성하고 피드백까지 받아보세요
@@ -48,7 +49,7 @@ const FirstSection = () => {
             text="지금 바로 시작하기"
             width="w-[180px]"
             height="h-[50px]"
-            backgroundColor="bg-gradient-to-r from-MAIN1 to-MAIN2"
+            backgroundColor="bg-MAIN1"
             hoverBackgroundColor="hover:bg-[#3273FF]"
             textColor="text-white"
             textSize="text-[18px]"
