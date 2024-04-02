@@ -10,22 +10,22 @@ export interface IInterviewAnalyzeReq {
   question: string;
   answer: string;
   skip: boolean;
-  keywordList: IAnalyzeResKeyword[];
+  keywordList: string[];
 }
 
 // 실전 면접 질문 목록
 export interface IInterviewQuestionItem {
   question: string;
   type: interviewType;
-  keywordList: IAnalyzeResKeyword[];
+  keywordList: string[];
   id?: number;
   script?: string;
 }
 
-// 실전 면접 키워드
-export interface IAnalyzeResKeyword {
-  keyword: string;
-}
+// // 실전 면접 키워드
+// export interface IAnalyzeResKeyword {
+//   keyword: string;
+// }
 
 // 실전 면접 꼬리 질문 request
 export interface IInterviewFollowupReq {
