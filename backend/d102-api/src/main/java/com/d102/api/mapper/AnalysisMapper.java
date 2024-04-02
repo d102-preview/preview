@@ -11,6 +11,7 @@ public interface AnalysisMapper {
 
     AnalysisDto.ListResponse toAnalysisListResponseDto(Interview interview);
 
+    @Mapping(target = "status", source = "analysisStatus")
     AnalysisDto.AnalysisResponse toAnalysisListResponseDto(Analysis analysis);
 
 }
