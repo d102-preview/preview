@@ -26,7 +26,7 @@ export const getResultTotal = async (type: interviewType) => {
 };
 
 // 분석 영상 상태 확인
-export const checkResultStatus = async (analysisId: number): Promise<APIResponse<IStatusRes>> => {
-  const res = await axiosAuthInstance.get(`/api/task/question/list/${analysisId}`);
+export const checkAnalysisStatus = async (analysisId: number): Promise<APIResponse<IStatusRes>> => {
+  const res = await axiosAuthInstance.get(`/api/task/analysis/list/${analysisId}`);
   return res.data;
 };
