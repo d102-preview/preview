@@ -30,12 +30,12 @@ const ServiceFunc = () => {
         variants={serviceTextVarients}
         initial="hidden"
         whileInView="visible"
-        className="text-[30px] text-center"
+        className="text-[40px] text-center"
       >
         <div className="font-bold">
-          <span className="text-MAIN1 ">preview</span>만의 서비스
+          <span className="text-MAIN1">preview</span>만의 서비스
         </div>
-        <div className="text-[15px]">preview의 주요 기능을 소개해드릴게요.</div>
+        <div className="text-[20px]">preview의 주요 기능을 소개해드릴게요</div>
       </motion.div>
 
       <div className="grid grid-cols-4 gap-4 w-[70%] min-w-[600px] pt-16 pb-32 ">
@@ -48,7 +48,7 @@ const ServiceFunc = () => {
               whileInView="visible"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="rounded-lg shadow-lg flex flex-col justify-center items-center py-5"
+              className="rounded-lg shadow-lg flex flex-col justify-center items-center py-10"
             >
               <Lottie
                 options={{
@@ -59,10 +59,10 @@ const ServiceFunc = () => {
                     preserveAspectRatio: 'xMidYMid slice',
                   },
                 }}
-                width={150}
+                width={180}
                 height={150}
               />
-              <div className="pt-6">{text}</div>
+              <div className="pt-6 text-xl">{text}</div>
             </motion.div>
           );
         })}
