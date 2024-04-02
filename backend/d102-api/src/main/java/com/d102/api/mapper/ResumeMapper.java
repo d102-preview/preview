@@ -10,7 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ResumeMapper {
 
-    @Mapping(target = "complete", expression = "java(resume.getAnalysisEndTime() == null ? false : true)")
     ResumeDto.ListResponse toResumeListResponseDto(Resume resume);
 
     List<ResumeDto.ListResponse> toResumeListResponseDto(List<Resume> resumeList);

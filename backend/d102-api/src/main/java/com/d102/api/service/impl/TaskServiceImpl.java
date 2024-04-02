@@ -19,25 +19,12 @@ public class TaskServiceImpl implements TaskService {
     private final AnalysisHashRepository analysisHashRepository;
     private final TempAnalysisHashRepository tempAnalysisHashRepository;
 
-    public Boolean checkQuestionListTask(Long resumeId) {
-        String status =  questionListHashRepository.findById(String.valueOf(resumeId)).orElse(null).getStatus();
-        if (StringUtils.equals(status, RedisConstant.STATUS_FAIL)) {
-            throw new NotFoundException(ExceptionType.TaskNotFoundException);
-        }
-        /**
-         * STATUS_PROCESS일 경우 처리중이므로 false 반환
-         * STATUS_SUCCESS일 경우 처리 완료이므로 true 반환
-         * STATUS_FAIL일 경우 처리 실패이므로 NotFoundException 발생
-         */
-        return StringUtils.equals(status, RedisConstant.STATUS_SUCCESS);
+    public String checkQuestionListTask(Long resumeId) {
+        return questionListHashRepository.findById(String.valueOf(resumeId)).orElse(null).getStatus();
     }
 
-    public Boolean checkAnalysisTask(Long analysisId) {
-        String status =  analysisHashRepository.findById(String.valueOf(analysisId)).orElse(null).getStatus();
-        if (StringUtils.equals(status, RedisConstant.STATUS_FAIL)) {
-            throw new NotFoundException(ExceptionType.TaskNotFoundException);
-        }
-        return StringUtils.equals(status, RedisConstant.STATUS_SUCCESS);
+    public String checkAnalysisTask(Long analysisId) {
+        return analysisHashRepository.findById(String.valueOf(analysisId)).orElse(null).getStatus();
     }
 
 }
