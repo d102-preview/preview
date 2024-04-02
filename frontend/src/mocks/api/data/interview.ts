@@ -1,4 +1,4 @@
-import { IInterviewFollowupRes, IInterviewQuestionRes } from '@/types/interview';
+import { IInterviewFollowupRes, IInterviewQuestionRes, IInterviewSetRes } from '@/types/interview';
 import { APIResponse, APISimpleResponse } from '@/types/model';
 
 export const interviewQuestionRes: APIResponse<IInterviewQuestionRes> = {
@@ -66,6 +66,15 @@ export const interviewFollowupRes: APIResponse<IInterviewFollowupRes> = {
     followUpQuestion: {
       question:
         '이승현님께서는 사용자 중심의 솔루션을 개발하고, 그것이 현실 세계에 긍정적인 영향을 미칠 수 있다고 말씀하셨군요. 그렇다면 기억에 남는 프로젝트 중 하나를 들어주시고, 그 프로젝트에서 개발한 솔루션이 현실 세계에 어떠한 긍정적인 영향을 미쳤는지 구체적으로 설명해주실 수 있나요?',
+    },
+  },
+};
+
+export const interviewSetRes: APIResponse<IInterviewSetRes> = {
+  result: 'ok',
+  data: {
+    interview: {
+      id: 5,
     },
   },
 };

@@ -32,7 +32,7 @@ const InterviewPage = () => {
               hoverBackgroundColor=""
               textColor="text-white"
               textSize="text-lg"
-              onClick={() => navigate('/record')}
+              onClick={() => navigate('/interview/resume')}
             />
           </InterviewStartItem>
           <InterviewStartItem

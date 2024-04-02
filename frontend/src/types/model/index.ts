@@ -43,35 +43,6 @@ export interface IQuestionListItem {
   question: string;
 }
 
-// 페이지네이션 정보 타입
-export interface IPaginationResponse {
-  pageable: IPageable;
-  last: boolean;
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  sort: ISort;
-  first: boolean;
-  numberOfElements: number;
-  empty: boolean;
-}
-
-export interface IPageable {
-  pageNumber: number;
-  pageSize: number;
-  sort: ISort;
-  offset: number;
-  paged: boolean;
-  unpaged: boolean;
-}
-
-export interface ISort {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
-}
-
 export interface IQuestionDetail {
   script: IScriptItem;
   keywordList: IKeywordItem[];
@@ -112,6 +83,7 @@ export interface IResume {
 export interface ISimpleResume {
   id: number;
   displayName: string;
+  status: 'success' | 'process' | 'fail';
 }
 
 // 비밀번호 정보
@@ -127,5 +99,7 @@ export interface IProfile {
 
 // 작업 완료 여부 응답 객체
 export interface IStatusRes {
-  complete: boolean;
+  status: 'success' | 'process' | 'fail';
 }
+
+export type statusType = 'success' | 'process' | 'fail';
