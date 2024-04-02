@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Boolean checkAnalysisTask(Long analysisId) {
-        String status =  tempAnalysisHashRepository.findById(analysisId).orElse(null).getStatus();
+        String status =  analysisHashRepository.findById(analysisId).orElse(null).getStatus();
         if (StringUtils.equals(status, RedisConstant.STATUS_FAIL)) {
             throw new NotFoundException(ExceptionType.TaskNotFoundException);
         }
