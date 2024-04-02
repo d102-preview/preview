@@ -26,7 +26,7 @@ public class AnalysisDto {
         private String thumbnailPath;
         private int videoLength;
         private Long videoSize;
-        private String analysisStatus;
+        private String status;
     }
 
     @Builder
