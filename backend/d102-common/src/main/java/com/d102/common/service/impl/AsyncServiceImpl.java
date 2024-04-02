@@ -52,8 +52,7 @@ public class AsyncServiceImpl implements AsyncService {
     public void generateAndSaveQuestionList(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processQuestionList(resumeId);
-        resume.setAnalysisStatus(RedisConstant.STATUS_PROCESS);
-        resumeRepository.saveAndFlush(resume);
+        saveResumeWithException(resume, RedisConstant.STATUS_PROCESS);
 
         String savePath = resume.getFilePath();
         /**
@@ -80,9 +79,8 @@ public class AsyncServiceImpl implements AsyncService {
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.UnknownException);
         }
-        resume.setAnalysisStatus(RedisConstant.STATUS_SUCCESS);
         resume.setAnalysisEndTime(LocalDateTime.now());
-        resumeRepository.saveAndFlush(resume);
+        saveResumeWithException(resume, RedisConstant.STATUS_SUCCESS);
 
         String jsonString = response.getChoices().getFirst().getMessage().getContent();
         JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
@@ -99,8 +97,8 @@ public class AsyncServiceImpl implements AsyncService {
         successQuestionList(resumeId);
     }
 
-    private void saveResumeWithException(Resume resume, String statusFail) {
-        resume.setAnalysisStatus(statusFail);
+    private void saveResumeWithException(Resume resume, String status) {
+        resume.setAnalysisStatus(status);
         resumeRepository.saveAndFlush(resume);
     }
 
@@ -133,11 +131,11 @@ public class AsyncServiceImpl implements AsyncService {
         }
 
         /* successAnalysis(analysisId); */
-        analysis.setAnalysisStatus(RedisConstant.STATUS_SUCCESS);
+        saveVideoWithException(analysis, RedisConstant.STATUS_SUCCESS);
     }
 
-    private void saveVideoWithException(Analysis analysis, String statusFail) {
-        analysis.setAnalysisStatus(statusFail);
+    private void saveVideoWithException(Analysis analysis, String status) {
+        analysis.setAnalysisStatus(status);
         analysisRepository.saveAndFlush(analysis);
     }
 
