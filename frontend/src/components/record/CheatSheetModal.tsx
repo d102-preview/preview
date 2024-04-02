@@ -26,7 +26,7 @@ const CheatSheetModal = ({ question, setIsOpen }: ICheatSheetModalProps) => {
             {question.keywordList.length ? (
               question.keywordList.map((keyword, index) => (
                 <div key={index} className="rounded-xl bg-white text-black p-1 px-2">
-                  <p>{keyword}</p>
+                  <p>{keyword.keyword}</p>
                 </div>
               ))
             ) : (

@@ -8,17 +8,38 @@ export const interviewQuestionRes: APIResponse<IInterviewQuestionRes> = {
       {
         question: '1분 자기소개 부탁드립니다.',
         type: 'common',
-        keywordList: ['전공'],
+        keywordList: [
+          {
+            keyword: '전공',
+          },
+        ],
       },
       {
         question: '교내 해커톤 대회에서 수상을 하셨다고 했는데, 진행 중 가장 어려웠던 점이 무엇인가요?',
         type: 'resume',
-        keywordList: ['빅데이터', '데이터 수집', '설문조사'],
+        keywordList: [
+          {
+            keyword: '빅데이터',
+          },
+          {
+            keyword: '데이터 수집',
+          },
+          {
+            keyword: '설문조사',
+          },
+        ],
       },
       {
         question: '협업 중 어려움을 겪었던 경험에 대해 말씀해주세요.',
         type: 'resume',
-        keywordList: ['의견 충돌', '설득'],
+        keywordList: [
+          {
+            keyword: '의견 충돌',
+          },
+          {
+            keyword: '설득',
+          },
+        ],
       },
       {
         question: '평소 스트레스 관리를 어떻게 하는지 말씀해주세요.',

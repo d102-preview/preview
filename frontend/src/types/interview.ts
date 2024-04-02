@@ -17,15 +17,15 @@ export interface IInterviewAnalyzeReq {
 export interface IInterviewQuestionItem {
   question: string;
   type: interviewType;
-  keywordList: string[];
+  keywordList: IAnalyzeResKeyword[];
   id?: number;
   script?: string;
 }
 
 // // 실전 면접 키워드
-// export interface IAnalyzeResKeyword {
-//   keyword: string;
-// }
+export interface IAnalyzeResKeyword {
+  keyword: string;
+}
 
 // 실전 면접 꼬리 질문 request
 export interface IInterviewFollowupReq {
