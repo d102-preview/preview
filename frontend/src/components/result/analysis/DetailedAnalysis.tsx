@@ -1,37 +1,25 @@
 import { useRef, useState } from 'react';
-import { analysisType } from '@/types/result';
-import { formatInterviewSetTime } from '@/utils/formatDateTime';
+import { IAnalysisDetail, analysisType } from '@/types/result';
+// import { formatInterviewSetTime } from '@/utils/formatDateTime';
 import testVideo from '@/assets/video/test.mp4';
 import AnalysisTab from '../AnalysisTab';
 import ChartArea from './ChartArea';
 import { RiEmotionFill } from 'react-icons/ri';
 import { HiMiniChatBubbleOvalLeftEllipsis, HiMiniKey } from 'react-icons/hi2';
 
-// interface IResult {
-//   emotion: {
-//     ratio: {
-//       positive: number;
-//       neutral: number;
-//       negative: number;
-//     };
-//     list: number[]; // 각 프레임별 감정 분류 배열의 타입을 가정합니다.
-//   };
-//   intent: {
-//     // intent 관련 타입 정의 필요
-//   };
-// }
-
 interface IDetailedAnalysisProps {
   type: string;
   question: string;
-  // result: IResult;
-  date: Date;
+  result: IAnalysisDetail;
+  date: string;
 }
 
-const DetailedAnalysis = ({ type, question, date }: IDetailedAnalysisProps) => {
+const DetailedAnalysis = ({ type, question, result, date }: IDetailedAnalysisProps) => {
   const [activeTab, setActiveTab] = useState<analysisType>('emotion');
   const [currentTime, setCurrentTime] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const videoLenght = result.videoLength;
 
   // 동영상 재생 위치가 변경될 때 호출되는 함수
   const handleVideoTimeUpdate = () => {
@@ -45,6 +33,7 @@ const DetailedAnalysis = ({ type, question, date }: IDetailedAnalysisProps) => {
       videoRef.current.currentTime = newTime;
     }
   };
+
   return (
     <div>
       <AnalysisTab activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -57,12 +46,12 @@ const DetailedAnalysis = ({ type, question, date }: IDetailedAnalysisProps) => {
               onTimeUpdate={handleVideoTimeUpdate}
               controls
             >
-              <source src={testVideo} type="video/mp4" />
+              <source src={result.videoPath} type="video/mp4" />
               비디오를 지원하지 않는 브라우저입니다.
             </video>
             <div className="flex justify-between px-1 pt-4 pb-1">
               <span className="text-MAIN1 text-lg">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
-              <span className="text-lg text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
+              <span className="text-lg text-UNIMPORTANT_TEXT mr-1">{date}</span>
             </div>
             <span className="font-semibold text-BLACK text-2xl mx-1">Q. {question}</span>
 

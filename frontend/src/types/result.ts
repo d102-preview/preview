@@ -31,7 +31,9 @@ export interface analysisListItem {
   question: string;
   thumbnailPath: string;
   videoLength: number;
-  complete: boolean;
+  videoSize: number;
+  status: 'success' | 'process' | 'fail';
+  startTime: string;
 }
 
 // 무한스크롤
@@ -40,4 +42,39 @@ export interface IDealsResultListInfiniteReq {
   page: number;
   size: number;
   sort?: ISort;
+}
+
+// 분석 결과 상세 조회
+export interface IAnalysisDetailRes {
+  analysisDetail: IAnalysisDetail;
+}
+
+export interface IIntent {
+  category: string;
+  expression: string;
+  ratio: number;
+}
+
+export interface IEmotionMap {
+  ratio: {
+    positive: number | null;
+    negative: number | null;
+    neutral: number | null;
+  };
+  list: Record<string, number>;
+}
+
+export interface IAnalysisDetail {
+  id: number;
+  questionType: string;
+  question: string;
+  answer: string;
+  videoPath: string;
+  thumbnailPath: string;
+  keywordList: string[];
+  videoLength: number;
+  videoSize: number;
+  emotionMap: IEmotionMap;
+  intentList: IIntent[];
+  startTime: string;
 }

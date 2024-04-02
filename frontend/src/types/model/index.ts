@@ -69,7 +69,7 @@ export interface ResultItemData {
   date: string;
   question: string;
   videoLength: number;
-  complete: boolean;
+  status:  'success' | 'process' | 'fail';
 }
 
 // 회원 정보
