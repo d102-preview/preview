@@ -19,7 +19,7 @@ public class ResumeDto {
         private Long id;
         private String displayName;
         private Long fileSize;
-        private boolean complete;
+        private String analysisStatus;
     }
 
 }

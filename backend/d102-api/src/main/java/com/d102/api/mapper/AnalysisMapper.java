@@ -11,7 +11,6 @@ public interface AnalysisMapper {
 
     AnalysisDto.ListResponse toAnalysisListResponseDto(Interview interview);
 
-    @Mapping(target = "complete", expression = "java(analysis.getAnalysisEndTime() == null ? false : true)")
     AnalysisDto.AnalysisResponse toAnalysisListResponseDto(Analysis analysis);
 
 }

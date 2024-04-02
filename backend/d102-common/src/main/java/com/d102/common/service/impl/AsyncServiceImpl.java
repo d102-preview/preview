@@ -52,6 +52,8 @@ public class AsyncServiceImpl implements AsyncService {
     public void generateAndSaveQuestionList(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processQuestionList(resumeId);
+        resume.setAnalysisStatus(RedisConstant.STATUS_PROCESS);
+        resumeRepository.saveAndFlush(resume);
 
         String savePath = resume.getFilePath();
         /**
@@ -66,15 +68,19 @@ public class AsyncServiceImpl implements AsyncService {
             resumeRepository.saveAndFlush(resume);
             response = openAiApi.generateQuestionList(imageList);
         } catch (RestClientException e) {
+            saveResumeWithException(resume, RedisConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.OpenAiApiException);
         } catch (IOException e) {
+            saveResumeWithException(resume, RedisConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.Base64ConvertException);
         } catch (Exception e) {
+            saveResumeWithException(resume, RedisConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.UnknownException);
         }
+        resume.setAnalysisStatus(RedisConstant.STATUS_SUCCESS);
         resume.setAnalysisEndTime(LocalDateTime.now());
         resumeRepository.saveAndFlush(resume);
 
@@ -93,10 +99,16 @@ public class AsyncServiceImpl implements AsyncService {
         successQuestionList(resumeId);
     }
 
+    private void saveResumeWithException(Resume resume, String statusFail) {
+        resume.setAnalysisStatus(statusFail);
+        resumeRepository.saveAndFlush(resume);
+    }
+
     @Async
     public void analyzeVideo(Long analysisId) {
         Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
         /* processAnalysis(analysisId); */
+        saveVideoWithException(analysis, RedisConstant.STATUS_PROCESS);
 
         FastAiApi.Response response = null;
         try {
@@ -111,14 +123,22 @@ public class AsyncServiceImpl implements AsyncService {
                 response = fastAiApi.analyzeVideo(analysisId);
             } catch (RestClientException e) {
                 /* failAnalysis(analysisId); */
+                saveVideoWithException(analysis, RedisConstant.STATUS_FAIL);
                 throw new InvalidException(ExceptionType.FastAiApiException);
             } catch (Exception e) {
+                saveVideoWithException(analysis, RedisConstant.STATUS_FAIL);
                 /* failAnalysis(analysisId); */
                 throw new InvalidException(ExceptionType.UnknownException);
             }
         }
 
         /* successAnalysis(analysisId); */
+        analysis.setAnalysisStatus(RedisConstant.STATUS_SUCCESS);
+    }
+
+    private void saveVideoWithException(Analysis analysis, String statusFail) {
+        analysis.setAnalysisStatus(statusFail);
+        analysisRepository.saveAndFlush(analysis);
     }
 
     private void successAnalysis(Long analysisId) {
