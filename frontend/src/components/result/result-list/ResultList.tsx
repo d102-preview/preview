@@ -11,7 +11,7 @@ const ResultList = ({ type }: { type: interviewType }) => {
   const { setTarget } = useIntersectionObserver({ hasNextPage, fetchNextPage });
 
   return (
-    <div>
+    <div className="w-full">
       {data?.pages.map(page =>
         page?.data.interviewList.content.map(
           (interview: IResultListItem) =>

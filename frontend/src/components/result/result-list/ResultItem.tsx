@@ -47,7 +47,7 @@ const ResultItem = ({ id, thumbnailPath, type, date, question, videoLength, stat
           src={thumbnailPath}
           onError={onErrorImg}
           alt={`${type === 'mock' ? '모의 면접' : '실전 면접'} ${id} 분석 결과`}
-          className="bg-cover bg-center rounded-lg bg-inherit shadow-md"
+          className="w-full py-4 bg-cover bg-center rounded-lg bg-inherit shadow-md "
         />
       </div>
       <div className="flex justify-between mx-1 mt-2">
