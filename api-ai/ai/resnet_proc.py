@@ -6,154 +6,124 @@ import cv2
 import numpy as np
 import torch
 import torchvision.transforms as T
-from ai.resnet9 import ImageClassificationBase, ResNet9
 from loguru import logger
 from torchvision.models import resnet18
 
 EMOTIONS = {0: "Negative", 1: "Neutral", 2: "Positive"}
 
-__haar_cascade = cv2.CascadeClassifier(
-    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-)
-
 MODELS = {
     "ResNet9": "ai/models/ResNet9/ResNet9_epoch-198_score-0.846.pth",
-    "ResNet18": "ai/models/ResNet18/ResNet18_epoch-20_score-0.865.pth",
+    "ResNet18": "ai/models/ResNet18/resnet18_acc_0.849_2404021036.pth",
 }
 
 
-def extract_frames(path: str, msec: int = 1000) -> list:
-    """
-    영상 파일에서 msec마다 프레임을 추출하여 반환.
+class ResNet18Model:
+    def __init__(self) -> None:
+        self._classifier = cv2.CascadeClassifier(
+            cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        )
+        self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self._model = self._load_model()
 
-    Args:
-        path (str): 영상 파일 경로.
-        msec (int, optional): 프레임 간격. 기본값 1000 (1초).
+    def _load_model(self) -> resnet18:
+        model_path = os.path.join(os.getcwd(), MODELS["ResNet18"])
 
-    Returns:
-        list: 프레임 목록
-    """
-    video = cv2.VideoCapture(path)
+        if not os.path.exists(model_path):
+            msg = f"No model file on {model_path}"
+            logger.error(msg)
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), model_path)
 
-    frame_list = []
+        model = resnet18(num_classes=3)
+        model.load_state_dict(torch.load(model_path, map_location=self._device))
+        model.eval()
+        return model
 
-    success = True
-    count = 0
-    while success:
-        video.set(cv2.CAP_PROP_POS_MSEC, count * msec)
-        count += 1
+    def get_model(self) -> resnet18:
+        if self._model is None:
+            self._model = self._load_model()
+        return self._model
 
-        success, img = video.read()
-        if not success:
-            continue
+    def _to_device(self, data):
+        if isinstance(data, (list, tuple)):
+            return [self._to_device(x) for x in data]
+        return data.to(self._device, non_blocking=True)
 
-        frame_list.append(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    def extract_frames(self, path: str, msec: int = 1000) -> list:
+        """
+        영상 파일에서 msec마다 프레임을 추출하여 반환.
 
-    return frame_list
+        Args:
+            path (str): 영상 파일 경로.
+            msec (int, optional): 프레임 간격. 기본값 1000 (1초).
 
+        Returns:
+            list: 프레임 목록
+        """
+        video = cv2.VideoCapture(path)
 
-def detect_faces(
-    img: np.ndarray,
-    dsize: Tuple[int] = (224, 224),
-    classifier: cv2.CascadeClassifier = __haar_cascade,
-):
-    if img is None:
-        raise ValueError("img is required")
+        frame_list = []
 
-    faces = classifier.detectMultiScale(
-        img, scaleFactor=1.1, minNeighbors=5, minSize=dsize
-    )
+        success = True
+        count = 0
+        while success:
+            video.set(cv2.CAP_PROP_POS_MSEC, count * msec)
+            count += 1
 
-    face_img = None
+            success, img = video.read()
+            if not success:
+                continue
 
-    for x, y, w, h in faces:
-        m = max(w, h)
-        cv2.rectangle(img, (x, y), (x + m, y + m), (0, 255, 0), 2)
-        face_img = img[y : y + m, x : x + m].copy()
-        if dsize is not None:
-            face_img = cv2.resize(face_img, dsize=dsize)
+            frame_list.append(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 
-    return img, face_img
+        return frame_list
 
+    def detect_faces(self, img: np.ndarray, dsize: Tuple[int] = (224, 224)):
+        if img is None:
+            raise ValueError("img is required")
 
-def save_thumbnail(img: np.ndarray, path: str):
-    try:
-        logger.debug(f"Save thumbnail to {path}")
-
-        width = 540
-        height = int(img.shape[0] * (width / img.shape[1]))
-        thumbnail = cv2.resize(img, dsize=(width, height))
-        logger.debug(
-            f"Resize thumbnail from ({img.shape[1]}, {img.shape[0]}) to ({width}, {height})"
+        faces = self._classifier.detectMultiScale(
+            img, scaleFactor=1.1, minNeighbors=5, minSize=dsize
         )
 
-        thumbnail = cv2.cvtColor(thumbnail, cv2.COLOR_BGR2RGB)
-        cv2.imwrite(path, thumbnail)
-    except Exception as e:
-        logger.error("Failed to create a thumbnail: {}", e)
+        face_img = None
+
+        for x, y, w, h in faces:
+            m = max(w, h)
+            cv2.rectangle(img, (x, y), (x + m, y + m), (0, 255, 0), 2)
+            face_img = img[y : y + m, x : x + m].copy()
+            if dsize is not None:
+                face_img = cv2.resize(face_img, dsize=dsize)
+
+        return img, face_img
+
+    def save_thumbnail(self, img: np.ndarray, path: str):
+        try:
+            logger.debug(f"Save thumbnail to {path}")
+
+            width = 540
+            height = int(img.shape[0] * (width / img.shape[1]))
+            thumbnail = cv2.resize(img, dsize=(width, height))
+            logger.debug(
+                f"Resize thumbnail from ({img.shape[1]}, {img.shape[0]}) to ({width}, {height})"
+            )
+
+            thumbnail = cv2.cvtColor(thumbnail, cv2.COLOR_BGR2RGB)
+            cv2.imwrite(path, thumbnail)
+        except Exception as e:
+            logger.error("Failed to create a thumbnail: {}", e)
+
+    def predict(self, img: np.ndarray, dsize: Tuple[int] = (224, 224)):
+        transform = T.Compose([T.Resize(dsize), T.ToTensor()])
+        img = transform(img)
+
+        x = self._to_device(img.unsqueeze(0))
+
+        with torch.no_grad():
+            y = self._model(x)
+
+        _, preds = torch.max(y, dim=1)
+
+        return EMOTIONS[preds[0].item()]
 
 
-def get_default_device():
-    cuda = torch.cuda.is_available()
-    mps = torch.backends.mps.is_available()
-
-    if cuda:
-        return torch.device("cuda")
-    if mps:
-        return torch.device("mps")
-    else:
-        return torch.device("cpu")
-
-
-def to_device(data, device: torch.device = get_default_device()):
-    if isinstance(data, (list, tuple)):
-        return [to_device(x, device) for x in data]
-    return data.to(device, non_blocking=True)
-
-
-def get_model(name: str, device: torch.device = get_default_device()):
-    if name not in MODELS:
-        raise Exception("No such model")
-
-    model_path = os.path.join(os.getcwd(), MODELS[name])
-
-    if not os.path.exists(model_path):
-        msg = f"No model file on {model_path}"
-        logger.error(msg)
-        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), model_path)
-
-    model = None
-    if name == "ResNet9":
-        model = ResNet9(1, 7)
-    elif name == "ResNet18":
-        # Original ResNet18 uses 1,000 classes,
-        # but we trained it with 3 classes: positive, neutral, negative.
-        model = resnet18(num_classes=3)
-
-    if model is None:
-        raise Exception("Cannot load the model")
-
-    model.load_state_dict(torch.load(model_path, map_location=device))
-    model.eval()
-
-    return model
-
-
-def predict(
-    img: np.ndarray,
-    model: ImageClassificationBase,
-    device: torch.device = get_default_device(),
-    dsize: Tuple[int] = (224, 224),
-):
-    transform = T.Compose([T.Resize(dsize), T.ToTensor()])
-    img = transform(img)
-
-    x = to_device(img.unsqueeze(0), device)
-
-    model.eval()
-    with torch.no_grad():
-        y = model(x)
-
-    _, preds = torch.max(y, dim=1)
-
-    return EMOTIONS[preds[0].item()]
+resnet18_model = ResNet18Model()
