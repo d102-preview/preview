@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Flip, ToastOptions, toast } from 'react-toastify';
-import '../../../index.css';
+import './Toast.css';
 
 const defaultToastOption: ToastOptions = {
   autoClose: 2000,
