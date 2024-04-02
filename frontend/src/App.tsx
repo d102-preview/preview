@@ -11,6 +11,7 @@ import RecordPage from './pages/record/RecordPage';
 import ResultPage from './pages/result/ResultPage';
 import ResultReportPage from './pages/result/ResultReportPage';
 import SignUpPage from './pages/signup/SignupPage';
+import ResumeSelectPage from './pages/interview/ResumeSelectPage';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,14 @@ const router = createBrowserRouter([
   {
     path: '/interview',
     element: <InterviewPage />,
+  },
+  {
+    path: '/interview/resume',
+    element: (
+      <PrivateRoute>
+        <ResumeSelectPage />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/record',
