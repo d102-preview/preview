@@ -63,10 +63,16 @@ public class AsyncServiceImpl implements AsyncService {
          */
         List<byte[]> imageList = convertPdfToImage(savePath);
         OpenAiApi.Response response = null;
+        List<String> questionList = null;
+
         try {
             resume.setAnalysisReqTime(LocalDateTime.now());
             resumeRepository.saveAndFlush(resume);
             response = openAiApi.generateQuestionList(imageList);
+
+            String jsonString = response.getChoices().getFirst().getMessage().getContent();
+            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+            questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
         } catch (RestClientException e) {
             saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
             failQuestionList(resumeId);
@@ -80,12 +86,9 @@ public class AsyncServiceImpl implements AsyncService {
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.UnknownException);
         }
+
         resume.setAnalysisEndTime(LocalDateTime.now());
         saveResumeWithException(resume, TaskConstant.STATUS_SUCCESS);
-
-        String jsonString = response.getChoices().getFirst().getMessage().getContent();
-        JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-        List<String> questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
 
         /**
          * 4. Resume에 대한 questionList에 들어있는 ResumeQuestion을 저장
@@ -110,6 +113,7 @@ public class AsyncServiceImpl implements AsyncService {
         saveVideoWithException(analysis, TaskConstant.STATUS_PROCESS);
 
         FastAiApi.Response response = null;
+
         try {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
