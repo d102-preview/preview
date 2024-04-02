@@ -96,7 +96,7 @@ public class AsyncServiceImpl implements AsyncService {
     @Async
     public void analyzeVideo(Long analysisId) {
         Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
-        processAnalysis(analysisId);
+        /* processAnalysis(analysisId); */
 
         FastAiApi.Response response = null;
         try {
@@ -110,47 +110,47 @@ public class AsyncServiceImpl implements AsyncService {
             try {
                 response = fastAiApi.analyzeVideo(analysisId);
             } catch (RestClientException e) {
-                failAnalysis(analysisId);
+                /* failAnalysis(analysisId); */
                 throw new InvalidException(ExceptionType.FastAiApiException);
             } catch (Exception e) {
-                failAnalysis(analysisId);
+                /* failAnalysis(analysisId); */
                 throw new InvalidException(ExceptionType.UnknownException);
             }
         }
 
-        successAnalysis(analysisId);
+        /* successAnalysis(analysisId); */
     }
 
     private void successAnalysis(Long analysisId) {
-        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
+        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(String.valueOf(analysisId)).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
         tempAnalysisHash.setStatus(RedisConstant.STATUS_SUCCESS);
         tempAnalysisHashRepository.save(tempAnalysisHash);
     }
 
     private void failAnalysis(Long analysisId) {
-        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
+        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(String.valueOf(analysisId)).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
         tempAnalysisHash.setStatus(RedisConstant.STATUS_FAIL);
         tempAnalysisHashRepository.save(tempAnalysisHash);
     }
 
     private void processAnalysis(Long analysisId) {
-        tempAnalysisHashRepository.save(TempAnalysisHash.builder().id(analysisId).status(RedisConstant.STATUS_PROCESS).build());
+        tempAnalysisHashRepository.save(TempAnalysisHash.builder().id(String.valueOf(analysisId)).status(RedisConstant.STATUS_PROCESS).build());
     }
 
     private void successQuestionList(Long resumeId) {
-        QuestionListHash questionListHash = questionListHashRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        QuestionListHash questionListHash = questionListHashRepository.findById(String.valueOf(resumeId)).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
         questionListHash.setStatus(RedisConstant.STATUS_SUCCESS);
         questionListHashRepository.save(questionListHash);
     }
 
     private void failQuestionList(Long resumeId) {
-        QuestionListHash questionListHash = questionListHashRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        QuestionListHash questionListHash = questionListHashRepository.findById(String.valueOf(resumeId)).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
         questionListHash.setStatus(RedisConstant.STATUS_FAIL);
         questionListHashRepository.save(questionListHash);
     }
 
     private void processQuestionList(Long resumeId) {
-        questionListHashRepository.save(QuestionListHash.builder().id(resumeId).status(RedisConstant.STATUS_PROCESS).build());
+        questionListHashRepository.save(QuestionListHash.builder().id(String.valueOf(resumeId)).status(RedisConstant.STATUS_PROCESS).build());
     }
 
     private List<byte[]> convertPdfToImage(String savePath) {

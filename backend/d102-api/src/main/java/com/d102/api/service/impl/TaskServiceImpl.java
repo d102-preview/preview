@@ -20,7 +20,7 @@ public class TaskServiceImpl implements TaskService {
     private final TempAnalysisHashRepository tempAnalysisHashRepository;
 
     public Boolean checkQuestionListTask(Long resumeId) {
-        String status =  questionListHashRepository.findById(resumeId).orElse(null).getStatus();
+        String status =  questionListHashRepository.findById(String.valueOf(resumeId)).orElse(null).getStatus();
         if (StringUtils.equals(status, RedisConstant.STATUS_FAIL)) {
             throw new NotFoundException(ExceptionType.TaskNotFoundException);
         }
@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Boolean checkAnalysisTask(Long analysisId) {
-        String status =  analysisHashRepository.findById(analysisId).orElse(null).getStatus();
+        String status =  analysisHashRepository.findById(String.valueOf(analysisId)).orElse(null).getStatus();
         if (StringUtils.equals(status, RedisConstant.STATUS_FAIL)) {
             throw new NotFoundException(ExceptionType.TaskNotFoundException);
         }
