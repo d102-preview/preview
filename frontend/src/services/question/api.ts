@@ -45,14 +45,12 @@ export const getResumeQuestionListReq = async ({
 };
 
 export const getCommonQuestionList = async (): Promise<APIResponse<IQuestionListRes>> => {
-  // @TODO: 무한 스크롤로 변경하기
   const params = { page: 0, size: 10 };
   const res = await axiosCommonInstance.get(`/api/common/question/list`, { params });
   return res.data;
 };
 
 export const getResumeQuestionList = async (resumeId: number): Promise<APIResponse<IQuestionListRes>> => {
-  // @TODO: 무한 스크롤로 변경하기
   const params = { page: 0, size: 10 };
   const res = await axiosAuthInstance.get(`/api/resume/question/list/${resumeId}`, { params });
   return res.data;

@@ -1,17 +1,17 @@
 import userStore from '@/stores/userStore';
-import { interviewType } from '@/types/model';
+import { questionType } from '@/types/model';
 import Toast from '../@common/Toast/Toast';
 
 interface IQuestionTabProps {
-  activeTab: interviewType;
-  setActiveTab: (tab: interviewType) => void;
+  activeTab: questionType;
+  setActiveTab: (tab: questionType) => void;
 }
 
 const QuestionTab = ({ activeTab, setActiveTab }: IQuestionTabProps) => {
   const { isLogin } = userStore();
 
   // Tab 클릭 핸들러
-  const handleTabClick = (tabName: interviewType) => {
+  const handleTabClick = (tabName: questionType) => {
     if (!isLogin && tabName === 'resume') {
       Toast.info('로그인이 필요한 기능입니다. 로그인 후 사용해주세요.');
       return;
@@ -23,7 +23,7 @@ const QuestionTab = ({ activeTab, setActiveTab }: IQuestionTabProps) => {
   const buttonStyle = 'w-64 h-14 text-lg text-left font-semibold p-3 transition-colors duration-300 rounded-lg';
 
   // 조건부 스타일 적용
-  const getButtonClasses = (tabName: interviewType) => {
+  const getButtonClasses = (tabName: questionType) => {
     return `${buttonStyle} ${
       activeTab === tabName ? 'bg-SUB text-MAIN1' : 'bg-white text-[#D5D5D5]'
     } hover:bg-[#E9EFFD] hover:text-MAIN1`;
