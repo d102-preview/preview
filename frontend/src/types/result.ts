@@ -23,10 +23,10 @@ export interface IResultList {
 export interface IResultListItem {
   id: number;
   startTime: string;
-  analysisList: analysisListItem[];
+  analysisList: IAnalysisListItem[];
 }
 
-export interface analysisListItem {
+export interface IAnalysisListItem {
   id: number;
   question: string;
   thumbnailPath: string;

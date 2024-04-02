@@ -20,9 +20,9 @@ const ResultItem = ({ id, thumbnailPath, type, date, question, videoLength, stat
       onClick={() => navigate(`/result/${id}`)}
     >
       <div className="relative">
-        {status === 'process' && (
+        {(status === 'process' || status === null) && (
           <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-75 rounded-lg">
-            <Lottie options={analysisOptions} height={60} width={150} />
+            <Lottie options={analysisOptions} height={65} width={150} />
             <div className="text-center pt-2">
               <span className="text-white text-lg font-semibold">결과 분석 중</span>
               <p className="text-white text-sm">5분 이내에 완료됩니다.</p>
@@ -31,7 +31,7 @@ const ResultItem = ({ id, thumbnailPath, type, date, question, videoLength, stat
         )}
         {status === 'fail' && (
           <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-75 rounded-lg">
-            <Lottie options={xMarkOptions} height={70} width={70} />
+            <Lottie options={xMarkOptions} height={80} width={80} />
             <div className="text-center pt-2">
               <span className="text-white text-lg font-semibold">결과 분석 실패</span>
               <p className="text-white text-sm">1분 미만 영상은 분석이 불가능합니다.</p>

@@ -3,7 +3,7 @@ import { formatInterviewTime } from '@/utils/formatDateTime';
 import { useIntersectionObserver } from '@/hooks/@common/userIntersectionObserver';
 import { useResult } from '@/hooks/result/useResult';
 import { interviewType } from '@/types/model';
-import { IResultListItem, analysisListItem } from '@/types/result';
+import { IResultListItem, IAnalysisListItem } from '@/types/result';
 
 const ResultList = ({ type }: { type: interviewType }) => {
   const { useGetListInfinite } = useResult();
@@ -28,7 +28,7 @@ const ResultList = ({ type }: { type: interviewType }) => {
                 </div>
                 {/* 면접 영상 */}
                 <div className="grid grid-cols-3 gap-9">
-                  {interview.analysisList.map((analysis: analysisListItem) => (
+                  {interview.analysisList.map((analysis: IAnalysisListItem) => (
                     <ResultItem
                       key={analysis.id}
                       id={analysis.id}
