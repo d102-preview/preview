@@ -167,15 +167,15 @@ def create_task(
         # TODO: Replace HTTPException with custom exception
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
 
-    # Set analysis start time(`analysis_start_time`) as current time
+    # Set analysis start time(`analysis_start_time`) as current time and set status
     record.analysis_start_time = datetime.now(tz=timezone(settings.TZ))
+    record.analysis_status = Status.process.value
+
+    redis_key = f"analysisHash:{analysis_id}"
+    redis_session.hset(redis_key, "status", Status.process.value)
+    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
     maria_session.add(record)
     maria_session.commit()
-
-    # Set status
-    redis_key = f"analysisHash:{analysis_id}"
-    redis_session.hset(redis_key, "status", Status.PROCESSING.value)
-    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
 
     try:
         # Step 1: Facial Emotional Recognition
@@ -185,12 +185,14 @@ def create_task(
         _intent_recognition(record)
     except Exception as e:
         logger.error(f"Error while processing: {e}")
-        redis_session.hset(redis_key, "status", Status.FAIL.value)
+        redis_session.hset(redis_key, "status", Status.fail.value)
         redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+        record.analysis_status = Status.fail.value
     else:
         logger.info(f"Success to process id #{analysis_id}")
-        redis_session.hset(redis_key, "status", Status.SUCCESS.value)
+        redis_session.hset(redis_key, "status", Status.success.value)
         redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+        record.analysis_status = Status.success.value
     finally:
         # Update database
         record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
