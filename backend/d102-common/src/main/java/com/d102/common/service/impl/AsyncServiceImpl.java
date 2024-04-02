@@ -2,6 +2,7 @@ package com.d102.common.service.impl;
 
 import com.d102.common.constant.FileConstant;
 import com.d102.common.constant.RedisConstant;
+import com.d102.common.constant.TaskConstant;
 import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
@@ -52,7 +53,7 @@ public class AsyncServiceImpl implements AsyncService {
     public void generateAndSaveQuestionList(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processQuestionList(resumeId);
-        saveResumeWithException(resume, RedisConstant.STATUS_PROCESS);
+        saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
 
         String savePath = resume.getFilePath();
         /**
@@ -67,20 +68,20 @@ public class AsyncServiceImpl implements AsyncService {
             resumeRepository.saveAndFlush(resume);
             response = openAiApi.generateQuestionList(imageList);
         } catch (RestClientException e) {
-            saveResumeWithException(resume, RedisConstant.STATUS_FAIL);
+            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.OpenAiApiException);
         } catch (IOException e) {
-            saveResumeWithException(resume, RedisConstant.STATUS_FAIL);
+            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.Base64ConvertException);
         } catch (Exception e) {
-            saveResumeWithException(resume, RedisConstant.STATUS_FAIL);
+            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.UnknownException);
         }
         resume.setAnalysisEndTime(LocalDateTime.now());
-        saveResumeWithException(resume, RedisConstant.STATUS_SUCCESS);
+        saveResumeWithException(resume, TaskConstant.STATUS_SUCCESS);
 
         String jsonString = response.getChoices().getFirst().getMessage().getContent();
         JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
@@ -106,7 +107,7 @@ public class AsyncServiceImpl implements AsyncService {
     public void analyzeVideo(Long analysisId) {
         Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
         /* processAnalysis(analysisId); */
-        saveVideoWithException(analysis, RedisConstant.STATUS_PROCESS);
+        saveVideoWithException(analysis, TaskConstant.STATUS_PROCESS);
 
         FastAiApi.Response response = null;
         try {
@@ -121,17 +122,20 @@ public class AsyncServiceImpl implements AsyncService {
                 response = fastAiApi.analyzeVideo(analysisId);
             } catch (RestClientException e) {
                 /* failAnalysis(analysisId); */
-                saveVideoWithException(analysis, RedisConstant.STATUS_FAIL);
+                analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+                saveVideoWithException(analysis, TaskConstant.STATUS_FAIL);
                 throw new InvalidException(ExceptionType.FastAiApiException);
             } catch (Exception e) {
-                saveVideoWithException(analysis, RedisConstant.STATUS_FAIL);
+                analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+                saveVideoWithException(analysis, TaskConstant.STATUS_FAIL);
                 /* failAnalysis(analysisId); */
                 throw new InvalidException(ExceptionType.UnknownException);
             }
         }
 
+        analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
         /* successAnalysis(analysisId); */
-        saveVideoWithException(analysis, RedisConstant.STATUS_SUCCESS);
+        saveVideoWithException(analysis, TaskConstant.STATUS_SUCCESS);
     }
 
     private void saveVideoWithException(Analysis analysis, String status) {
