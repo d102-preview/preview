@@ -112,34 +112,49 @@ export const useQuestion = () => {
       queryFn: getResumeList,
     });
 
+    const intervalIds: { [resumeId: number]: NodeJS.Timeout } = {};
+
     useEffect(() => {
       const checkAndUpdateStatus = async () => {
         if (isSuccess && data?.data?.resumeList) {
-          // 모든 이력서에 대해 상태 확인
-          for (const resume of data?.data?.resumeList) {
-            if (!resume.complete) {
-              // complete가 false이면 상태 확인 함수에 resumeId 전달
-              const statusRes = await checkQuestionStatus(resume.id);
-              if (statusRes.data.complete) {
-                // 캐시 업데이트
-                queryClient.setQueryData<APIResponse<IResumeRes>>(['ResumeList'], oldData => {
-                  return {
-                    ...oldData!,
-                    data: {
-                      ...oldData!.data,
-                      resumeList: oldData!.data.resumeList.map(r =>
-                        r.id === resume.id ? { ...r, complete: true } : r,
-                      ),
-                    },
-                  };
-                });
-              }
+          data.data.resumeList.forEach(async resume => {
+            if (resume.status === 'process') {
+              // 이력서의 상태를 주기적으로 확인하는 함수
+              const checkStatusPeriodically = async (resumeId: number) => {
+                try {
+                  const statusRes = await checkQuestionStatus(resumeId);
+                  if (statusRes.data.status !== 'process') {
+                    clearInterval(intervalIds[resumeId]); // 주기적 확인 중단
+                    delete intervalIds[resumeId]; // 사용된 intervalId는 삭제
+                    // 낙관적 UI 업데이트
+                    queryClient.setQueryData<APIResponse<IResumeRes>>(['ResumeList'], oldData => ({
+                      ...oldData!,
+                      data: {
+                        ...oldData!.data,
+                        resumeList: oldData!.data.resumeList.map(r =>
+                          r.id === resumeId ? { ...r, status: statusRes.data.status } : r,
+                        ),
+                      },
+                    }));
+                  }
+                } catch (error) {
+                  console.error(`Error checking status for resume ${resume.id}:`, error);
+                }
+              };
+
+              // 이력서의 상태를 5초마다 확인합니다.
+              intervalIds[resume.id] = setInterval(() => checkStatusPeriodically(resume.id), 5000);
             }
-          }
+          });
         }
       };
 
       checkAndUpdateStatus();
+
+      // 컴포넌트가 언마운트될 때 모든 주기적 호출을 정리합니다.
+      return () => {
+        Object.values(intervalIds).forEach(clearInterval); // Cleanup on unmount
+      };
     }, [isSuccess, data, queryClient]);
 
     return { data };
