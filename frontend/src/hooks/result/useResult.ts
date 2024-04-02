@@ -1,4 +1,4 @@
-import { getResultListReq, getResultTotal } from '@/services/result/api';
+import { checkAnalysisStatus, getResultListReq, getResultTotal } from '@/services/result/api';
 import { interviewType } from '@/types/model';
 import { IDealsResultListInfiniteReq } from '@/types/result';
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
@@ -28,5 +28,14 @@ export const useResult = () => {
     });
   };
 
-  return { useGetListInfinite, useResultTotal };
+  const useGetAnalysisStatus = (analysisId: number) => {
+    return useQuery({
+      queryKey: ['analysis', analysisId],
+      queryFn: () => checkAnalysisStatus(analysisId),
+      refetchInterval: 5000, // 5초마다 다시 가져오기
+      enabled: false, // 초기에 비활성화
+    });
+  };
+
+  return { useGetListInfinite, useResultTotal, useGetAnalysisStatus };
 };
