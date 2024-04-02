@@ -1,7 +1,7 @@
-import Lottie from 'react-lottie';
 import { loadingOptions } from '@/assets/lotties/lottieOptions';
-import { formatInterviewSetTime } from '@/utils/formatDateTime';
 import { ResultItemData } from '@/types/model/index';
+import { formatInterviewSetTime } from '@/utils/formatDateTime';
+import Lottie from 'react-lottie';
 import { useNavigate } from 'react-router-dom';
 
 const ResultItem = ({ result, id, imagePath, type, date, question, time }: ResultItemData) => {
@@ -28,7 +28,7 @@ const ResultItem = ({ result, id, imagePath, type, date, question, time }: Resul
         <img
           src={imagePath}
           alt={`Profile of user ${id}`}
-          className="bg-cover bg-center rounded-lg bg-inherit shadow-md"
+          className="w-full py-4 bg-cover bg-center rounded-lg bg-inherit shadow-md "
         />
       </div>
       <div className="flex justify-between mx-1 mt-2">

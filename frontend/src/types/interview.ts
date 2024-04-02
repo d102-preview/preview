@@ -10,7 +10,7 @@ export interface IInterviewAnalyzeReq {
   question: string;
   answer: string;
   skip: boolean;
-  keywordList: IAnalyzeResKeyword[];
+  keywordList: string[];
 }
 
 // 실전 면접 질문 목록
@@ -22,7 +22,7 @@ export interface IInterviewQuestionItem {
   script?: string;
 }
 
-// 실전 면접 키워드
+// // 실전 면접 키워드
 export interface IAnalyzeResKeyword {
   keyword: string;
 }

@@ -215,13 +215,16 @@ const RecordPage = () => {
       const videoFile = convertBlobToFile(recordedBlobs, filename);
 
       const check = questionList[questionIndex];
+      console.log(check);
       const req: IInterviewAnalyzeReq = {
         interviewId: interviewSet!.data.interview.id,
         question: check!.question,
         questionType: check!.type,
         answer: stt,
         skip: skip,
-        keywordList: check!.keywordList,
+        keywordList: check!.keywordList.map(item => {
+          return item.keyword;
+        }),
       };
       const formData = new FormData();
       const json = JSON.stringify(req);
