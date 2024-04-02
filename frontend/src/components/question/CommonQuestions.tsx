@@ -20,9 +20,9 @@ const CommonQuestions = ({ type }: QuestionsProps) => {
 
   return (
     <>
-      <div>
-        <h3 className="text-lg font-semibold">공통 면접 질문</h3>
-        <p className="text-UNIMPORTANT_TEXT pt-1">총 {totalQuestions}개의 질문이 있습니다.</p>
+      <h3 className="text-lg font-semibold">공통 면접 질문</h3>
+      <p className="text-UNIMPORTANT_TEXT pt-1 mb-1">총 {totalQuestions}개의 질문이 있습니다.</p>
+      <div className="h-[calc(100%-3.5rem)] overflow-y-auto px-3">
         {data?.pages?.map(
           (page, i) =>
             page && ( // page가 정의되어 있으면 아래의 컴포넌트 렌더링 실행

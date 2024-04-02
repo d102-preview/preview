@@ -8,7 +8,6 @@ const HomeContent = () => {
       <FirstSection />
       <ServiceFunc />
       <FuncDetail />
-      {/* <HomeBottom /> */}
     </>
   );
 };

@@ -63,7 +63,7 @@ const ResultReportPage = () => {
   return (
     <>
       <Header />
-      <main className="max-w-9xl mx-auto my-10">
+      <main className="max-w-9xl mx-auto my-10 animate-showUp  min-w-[900px] max-w-[80%]">
         <div className="w-10/12 mx-auto">
           <div>
             <h3 className="text-3xl font-bold text-BLACK">프리뷰 분석 결과</h3>
