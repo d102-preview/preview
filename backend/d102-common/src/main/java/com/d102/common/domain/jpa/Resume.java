@@ -43,6 +43,9 @@ public class Resume extends BaseTime {
     @Column(name = "analysis_end_time")
     private LocalDateTime analysisEndTime;
 
+    @Column(name = "analysis_status", length = 16)
+    private String analysisStatus;
+
     @OneToMany(mappedBy = "resume", orphanRemoval = true)
     private List<ResumeQuestion> resumeQuestions;
 
