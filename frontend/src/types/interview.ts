@@ -4,13 +4,13 @@ export interface IInterviewQuestionRes {
   questionList: IInterviewQuestionItem[];
 }
 
-export interface IInterviewAnalyzeRes {
-  type: questionType;
+export interface IInterviewAnalyzeReq {
+  interviewId: number;
+  questionType: questionType;
   question: string;
   answer: string;
   skip: boolean;
-  setStartTime: string;
-  keywordList: IAnalyzeResKeyword[];
+  keywordList: string[];
 }
 
 // 실전 면접 질문 목록
@@ -18,9 +18,11 @@ export interface IInterviewQuestionItem {
   question: string;
   type: questionType;
   keywordList: IAnalyzeResKeyword[];
+  id?: number;
+  script?: string;
 }
 
-// 실전 면접 키워드
+// // 실전 면접 키워드
 export interface IAnalyzeResKeyword {
   keyword: string;
 }
@@ -38,4 +40,19 @@ export interface IInterviewFollowupRes {
 
 export interface IFollowUpQuestion {
   question: string;
+}
+
+// 면접 세트 생성 및 아이디 조회 response
+export interface IInterviewSetRes {
+  interview: IInterviewSeId;
+}
+
+// 면접 세트 생성 및 아이디 조회 request
+export interface IInterviewSetReq {
+  type: 'main' | 'mock';
+  startTime: string;
+}
+
+export interface IInterviewSeId {
+  id: number;
 }
