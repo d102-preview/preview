@@ -17,6 +17,12 @@ class AnalysisResponse(CommonResponse):
     """분석 응답"""
 
 
+class Status(Enum):
+    process = "process"
+    success = "success"
+    fail = "fail"
+
+
 class Analysis(SQLModel, table=True):
     id: int = sqlmodel.Field(primary_key=True)
 
@@ -28,6 +34,7 @@ class Analysis(SQLModel, table=True):
 
     analysis_start_time: datetime | None = sqlmodel.Field(default=None, nullable=True)
     analysis_end_time: datetime | None = sqlmodel.Field(default=None, nullable=True)
+    analysis_status: Status | None = sqlmodel.Field(default=None, nullable=True)
 
     video_length: int | None = sqlmodel.Field(default=None, nullable=True)
     fps: int | None = sqlmodel.Field(default=None, nullable=True)
@@ -35,9 +42,3 @@ class Analysis(SQLModel, table=True):
 
     emotion: str | None = sqlmodel.Field(default=None, nullable=True)
     intent: str | None = sqlmodel.Field(default=None, nullable=True)
-
-
-class Status(Enum):
-    PROCESSING = "process"
-    SUCCESS = "success"
-    FAIL = "fail"
