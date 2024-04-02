@@ -7,9 +7,9 @@ spring:
   # DB Connection Info
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/d102
+    url: jdbc:mariadb://j10d102.p.ssafy.io:3306/d102
     username: danbi
-    password: 1234
+    password: vivalavida
 
   # Jpa Setting
   jpa:

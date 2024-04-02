@@ -24,6 +24,7 @@ public interface UploadMapper {
     @Mapping(target = "resumeQuestions", ignore = true)
     @Mapping(target = "analysisReqTime", ignore = true)
     @Mapping(target = "analysisEndTime", ignore = true)
+    @Mapping(target = "analysisStatus", ignore = true)
     Resume toResume(UploadDto.ResumeRequest resumeRequest);
 
     @Mapping(target = "id", ignore = true)
@@ -34,6 +35,7 @@ public interface UploadMapper {
     @Mapping(target = "analysisReqTime", ignore = true)
     @Mapping(target = "analysisStartTime", ignore = true)
     @Mapping(target = "analysisEndTime", ignore = true)
+    @Mapping(target = "analysisStatus", ignore = true)
     @Mapping(target = "videoLength", ignore = true)
     @Mapping(target = "videoSize", ignore = true)
     @Mapping(target = "fps", ignore = true)

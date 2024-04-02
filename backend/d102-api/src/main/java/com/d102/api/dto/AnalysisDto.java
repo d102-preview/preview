@@ -26,7 +26,8 @@ public class AnalysisDto {
         private String thumbnailPath;
         private int videoLength;
         private Long videoSize;
-        private boolean complete;
+        private String status;
+        private LocalDateTime startTime;
     }
 
     @Builder
@@ -44,6 +45,7 @@ public class AnalysisDto {
         private Long videoSize;
         private EmotionResponse emotionMap;
         private List<IntentResponse> intentList;
+        private LocalDateTime startTime;
     }
 
     @Data

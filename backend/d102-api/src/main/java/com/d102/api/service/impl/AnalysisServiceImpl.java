@@ -68,6 +68,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 .videoLength(analysis.getVideoLength())
                 .emotionMap(emotionMap)
                 .intentList(intentList)
+                .startTime(analysis.getAnalysisReqTime())
                 .build();
     }
 

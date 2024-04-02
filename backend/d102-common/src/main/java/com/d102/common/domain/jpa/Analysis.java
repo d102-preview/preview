@@ -54,6 +54,9 @@ public class Analysis {
     @Column(name = "analysis_end_time")
     private LocalDateTime analysisEndTime;
 
+    @Column(name = "analysis_status", length = 16)
+    private String analysisStatus;
+
     @Column(name = "video_length")
     private Integer videoLength;
 

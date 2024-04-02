@@ -16,12 +16,12 @@ public class TaskController implements TaskControllerDocs {
 
     @GetMapping("/question/list/{resumeId}")
     public Response checkQuestionListTask(@PathVariable("resumeId") Long resumeId) {
-        return new Response(TaskConstant.COMPLETE, taskService.checkQuestionListTask(resumeId));
+        return new Response(TaskConstant.STATUS, taskService.checkQuestionListTask(resumeId));
     }
 
     @GetMapping("/analysis/{analysisId}")
     public Response checkAnalysisTask(@PathVariable("analysisId") Long analysisId) {
-        return new Response(TaskConstant.COMPLETE, taskService.checkAnalysisTask(analysisId));
+        return new Response(TaskConstant.STATUS, taskService.checkAnalysisTask(analysisId));
     }
 
 }

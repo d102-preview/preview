@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.RedisHash;
 public class AnalysisHash {
 
     @Id
-    private Long id;
+    private String id;
 
     private String status;
 

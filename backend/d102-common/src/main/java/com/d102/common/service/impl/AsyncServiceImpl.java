@@ -2,6 +2,7 @@ package com.d102.common.service.impl;
 
 import com.d102.common.constant.FileConstant;
 import com.d102.common.constant.RedisConstant;
+import com.d102.common.constant.TaskConstant;
 import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
@@ -52,6 +53,7 @@ public class AsyncServiceImpl implements AsyncService {
     public void generateAndSaveQuestionList(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processQuestionList(resumeId);
+        saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
 
         String savePath = resume.getFilePath();
         /**
@@ -61,26 +63,32 @@ public class AsyncServiceImpl implements AsyncService {
          */
         List<byte[]> imageList = convertPdfToImage(savePath);
         OpenAiApi.Response response = null;
+        List<String> questionList = null;
+
         try {
             resume.setAnalysisReqTime(LocalDateTime.now());
             resumeRepository.saveAndFlush(resume);
             response = openAiApi.generateQuestionList(imageList);
+
+            String jsonString = response.getChoices().getFirst().getMessage().getContent();
+            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+            questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
         } catch (RestClientException e) {
+            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.OpenAiApiException);
         } catch (IOException e) {
+            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.Base64ConvertException);
         } catch (Exception e) {
+            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
             failQuestionList(resumeId);
             throw new InvalidException(ExceptionType.UnknownException);
         }
-        resume.setAnalysisEndTime(LocalDateTime.now());
-        resumeRepository.saveAndFlush(resume);
 
-        String jsonString = response.getChoices().getFirst().getMessage().getContent();
-        JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-        List<String> questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
+        resume.setAnalysisEndTime(LocalDateTime.now());
+        saveResumeWithException(resume, TaskConstant.STATUS_SUCCESS);
 
         /**
          * 4. Resume에 대한 questionList에 들어있는 ResumeQuestion을 저장
@@ -93,12 +101,19 @@ public class AsyncServiceImpl implements AsyncService {
         successQuestionList(resumeId);
     }
 
+    private void saveResumeWithException(Resume resume, String status) {
+        resume.setAnalysisStatus(status);
+        resumeRepository.saveAndFlush(resume);
+    }
+
     @Async
     public void analyzeVideo(Long analysisId) {
         Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
-        processAnalysis(analysisId);
+        /* processAnalysis(analysisId); */
+        saveVideoWithException(analysis, TaskConstant.STATUS_PROCESS);
 
         FastAiApi.Response response = null;
+
         try {
             analysis.setAnalysisReqTime(LocalDateTime.now());
             analysisRepository.saveAndFlush(analysis);
@@ -110,47 +125,58 @@ public class AsyncServiceImpl implements AsyncService {
             try {
                 response = fastAiApi.analyzeVideo(analysisId);
             } catch (RestClientException e) {
-                failAnalysis(analysisId);
+                /* failAnalysis(analysisId); */
+                analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+                saveVideoWithException(analysis, TaskConstant.STATUS_FAIL);
                 throw new InvalidException(ExceptionType.FastAiApiException);
             } catch (Exception e) {
-                failAnalysis(analysisId);
+                analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+                saveVideoWithException(analysis, TaskConstant.STATUS_FAIL);
+                /* failAnalysis(analysisId); */
                 throw new InvalidException(ExceptionType.UnknownException);
             }
         }
 
-        successAnalysis(analysisId);
+        analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+        /* successAnalysis(analysisId); */
+        saveVideoWithException(analysis, TaskConstant.STATUS_SUCCESS);
+    }
+
+    private void saveVideoWithException(Analysis analysis, String status) {
+        analysis.setAnalysisStatus(status);
+        analysisRepository.saveAndFlush(analysis);
     }
 
     private void successAnalysis(Long analysisId) {
-        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
+        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(String.valueOf(analysisId)).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
         tempAnalysisHash.setStatus(RedisConstant.STATUS_SUCCESS);
         tempAnalysisHashRepository.save(tempAnalysisHash);
     }
 
     private void failAnalysis(Long analysisId) {
-        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
+        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(String.valueOf(analysisId)).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
         tempAnalysisHash.setStatus(RedisConstant.STATUS_FAIL);
         tempAnalysisHashRepository.save(tempAnalysisHash);
     }
 
     private void processAnalysis(Long analysisId) {
-        tempAnalysisHashRepository.save(TempAnalysisHash.builder().id(analysisId).status(RedisConstant.STATUS_PROCESS).build());
+        tempAnalysisHashRepository.save(TempAnalysisHash.builder().id(String.valueOf(analysisId)).status(RedisConstant.STATUS_PROCESS).build());
     }
 
     private void successQuestionList(Long resumeId) {
-        QuestionListHash questionListHash = questionListHashRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        QuestionListHash questionListHash = questionListHashRepository.findById(String.valueOf(resumeId)).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
         questionListHash.setStatus(RedisConstant.STATUS_SUCCESS);
         questionListHashRepository.save(questionListHash);
     }
 
     private void failQuestionList(Long resumeId) {
-        QuestionListHash questionListHash = questionListHashRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
+        QuestionListHash questionListHash = questionListHashRepository.findById(String.valueOf(resumeId)).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
         questionListHash.setStatus(RedisConstant.STATUS_FAIL);
         questionListHashRepository.save(questionListHash);
     }
 
     private void processQuestionList(Long resumeId) {
-        questionListHashRepository.save(QuestionListHash.builder().id(resumeId).status(RedisConstant.STATUS_PROCESS).build());
+        questionListHashRepository.save(QuestionListHash.builder().id(String.valueOf(resumeId)).status(RedisConstant.STATUS_PROCESS).build());
     }
 
     private List<byte[]> convertPdfToImage(String savePath) {
