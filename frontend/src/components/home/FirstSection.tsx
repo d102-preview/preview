@@ -35,12 +35,12 @@ const FirstSection = () => {
         transition={{ duration: 1.5 }}
       >
         <div className="w-screen h-screen absolute left-0 top-0 bottom-0 z-[-1] bg-gradient-to-r from-white/70 to-white/20"></div>
-        <div className="w-screen h-screen text-[35px] leading-14 font-extrabold text-BLACK pl-40 flex flex-col justify-center z-10">
+        <div className="w-screen h-screen text-[25px] leading-14 font-extrabold text-BLACK pl-40 flex flex-col justify-center z-10">
           <div className="font-black">
             당신의 <br /> AI 면접 파트너
           </div>
-          <img src={logo} alt="logo" width={'220px'} />
-          <div className="text-[20px] py-4">
+          <img src={logo} alt="logo" width={'270px'} />
+          <div className="text-[18px] py-4">
             AI 영상 분석을 통해 자세, 억양을 분석하고
             <br /> 피드백까지 한눈에 ! <br />
             당신만의 질문을 생성하고 피드백까지 받아보세요
