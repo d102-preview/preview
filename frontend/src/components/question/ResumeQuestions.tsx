@@ -19,15 +19,11 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
   const { name } = userStore();
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const { useGetListInfinite } = useQuestion();
-  // useGetQuestionStatus, useGetListWithStatusCheck
-  // // useGetListWithStatusCheck 훅 사용하여 업데이트된 이력서 목록 가져오기
-  // const { data: resumeListData } = useGetListWithStatusCheck();
 
-  // // 업데이트된 이력서 목록이나 초기 목록 사용
-  const [selectId, setSelectId] = useState<number>(initialResumeList[0].id);
+  const [selectId, setSelectId] = useState<number>(0);
+  const [selectedResume, setSelectedResume] = useState<ISimpleResume | null>(initialResumeList[0]);
 
-  const [selectedResume, setSelectedResume] = useState<ISimpleResume>(initialResumeList[0]);
-  // // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
+  // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
   const {
     data: resumeListData,
     fetchNextPage,
@@ -41,26 +37,11 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
     type,
   );
 
-  // const [questionList, setQuestionList] = useState<IQuestionListItem[]>([]);
-
   const { selectedQuestions, addQuestion, removeQuestion } = questionStore();
   const { setTarget } = useIntersectionObserver({
     hasNextPage,
     fetchNextPage,
   });
-
-  // // 선택된 이력서에 대한 질문 생성 상태를 확인하는 쿼리
-  // const { mutate, data: checkQuestion } = useGetQuestionStatus(selectedResume ? selectedResume.id : -1);
-
-  // useEffect(() => {
-  //   if (selectedResume && selectedResume.status === 'process') {
-  //     const intervalId = setInterval(() => mutate(), 5000);
-  //     return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 제거
-  //   } else if (selectedResume && selectedResume.status === 'success') {
-  //     console.log('하이');
-  //     refetchQuestions();
-  //   }
-  // }, [selectedResume, checkQuestion]);
 
   const totalQuestions = resumeListData?.pages[0]?.data?.questionList?.totalElements || 0;
 
