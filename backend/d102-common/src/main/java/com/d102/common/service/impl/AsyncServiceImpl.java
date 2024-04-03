@@ -110,7 +110,7 @@ public class AsyncServiceImpl implements AsyncService {
     public void analyzeVideo(Long analysisId) {
         Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
         /* processAnalysis(analysisId); */
-        /* saveVideoWithException(analysis, TaskConstant.STATUS_PROCESS); */
+        saveVideoWithException(analysis, TaskConstant.STATUS_PROCESS);
 
         FastAiApi.Response response = null;
 
