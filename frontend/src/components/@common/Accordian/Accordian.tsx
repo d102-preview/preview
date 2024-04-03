@@ -89,7 +89,7 @@ const Accordian = ({
       className={`${width} ${backgroundColor} ${borderStyle} ${borderRadius} 
       cursor-pointer box-content drop-shadow-lg ${selectedBorderStyle}`}
     >
-      <div className={`p-3 mx-3 flex items-center justify-between`} onClick={toggleOpen}>
+      <div className={`p-3.5 mx-3 flex items-center justify-between`} onClick={toggleOpen}>
         <div className={`flex items-center ${textColor} ${textSize} ${textWeight} h-8`}>
           {hasIcons &&
             (isSelected ? (
