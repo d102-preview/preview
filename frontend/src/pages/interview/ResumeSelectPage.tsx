@@ -63,18 +63,20 @@ const ResumeSelectPage = () => {
                       return (
                         <div
                           key={ele.id}
-                          onClick={() =>
-                            navigate('/record', {
-                              state: {
-                                type: 'main',
-                                startTime: getCurrentTime(),
-                                resumeId: ele.id,
-                              },
-                            })
-                          }
                           className="h-12 px-4 flex justify-between items-center mb-2  text-MAIN1 border-b hover:bg-MAIN1/10 cursor-pointer"
                         >
-                          <div className="flex items-center text-BLACK">
+                          <div
+                            onClick={() =>
+                              navigate('/record', {
+                                state: {
+                                  type: 'main',
+                                  startTime: getCurrentTime(),
+                                  resumeId: ele.id,
+                                },
+                              })
+                            }
+                            className="flex items-center text-BLACK"
+                          >
                             <FaRegFileAlt />
                             &nbsp;{ele.displayName}.pdf
                           </div>

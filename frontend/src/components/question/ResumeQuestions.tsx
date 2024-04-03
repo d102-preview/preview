@@ -3,7 +3,7 @@ import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import { ISimpleResume } from '@/types/model';
 import Lottie from 'react-lottie';
-import { robotOptions, createQuestionOptions } from '@/assets/lotties/lottieOptions';
+import { robotOptions, createQuestionOptions, noCreateQuestionOptions } from '@/assets/lotties/lottieOptions';
 import SpeechBubble from '@/components/result/SpeechBubble';
 import userStore from '@/stores/userStore';
 import { useIntersectionObserver } from '@/hooks/@common/userIntersectionObserver';
@@ -20,10 +20,16 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const { useGetListInfinite } = useQuestion();
 
-  const [selectId, setSelectId] = useState<number>(0);
-  const [selectedResume, setSelectedResume] = useState<ISimpleResume | null>(initialResumeList[0]);
+  // 초기 렌더링 시 initialResumeList가 비어있는 경우를 처리하기 위해 수정
+  const initialSelectedResume = initialResumeList.length > 0 ? initialResumeList[0] : undefined;
 
-  // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
+  // // 업데이트된 이력서 목록이나 초기 목록 사용
+  const [selectId, setSelectId] = useState<number>(initialSelectedResume ? initialSelectedResume.id : -1);
+
+  const [selectedResume, setSelectedResume] = useState<ISimpleResume | undefined>(initialResumeList[0]);
+
+  // // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
+
   const {
     data: resumeListData,
     fetchNextPage,
@@ -92,29 +98,40 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
               <MdOutlineExpandMore size="25" className="text-MAIN1" aria-hidden="true" />
             )}
           </div>
+          {dropdownOpen && (
+            <ul
+              className={`absolute w-full border ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-4 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
+            >
+              {initialResumeList.map((resume, index) => (
+                <li
+                  key={index}
+                  className={`p-4 rounded-xl hover:bg-[#E9EFFD] hover:text-MAIN1 cursor-pointer  ${selectedResume?.displayName === resume.displayName ? 'text-MAIN1' : ''}`}
+                  onClick={() => handleListItemClick(resume)}
+                >
+                  {resume.displayName}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        {dropdownOpen && (
-          <ul
-            className={`absolute w-full border ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-4 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
-          >
-            {initialResumeList.map((resume, index) => (
-              <li
-                key={index}
-                className={`p-4 rounded-xl hover:bg-[#E9EFFD] hover:text-MAIN1 cursor-pointer  ${selectedResume?.displayName === resume.displayName ? 'text-MAIN1' : ''}`}
-                onClick={() => handleListItemClick(resume)}
-              >
-                {resume.displayName}
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
       {/* 질문 생성중인 경우 */}
       {selectedResume && selectedResume.status === 'process' && (
         <div className="flex flex-col pt-3">
           <p className="text-center font-bold text-2xl text-MAIN1">질문 생성 중...</p>
           <p className="text-center text-sm text-UNIMPORTANT_TEXT">잠시만 기다려 주세요</p>
-          <Lottie options={createQuestionOptions} height={350} width={400} />
+          <p className="text-center text-sm text-UNIMPORTANT_TEXT pb-3">화면이 바뀌지 않으면 새로고침을 해주세요</p>
+          <Lottie options={createQuestionOptions} height={300} width={400} />
+        </div>
+      )}
+
+      {/* 질문 생성 불가인 경우 */}
+      {selectedResume && selectedResume.status === 'fail' && (
+        <div className="flex flex-col pt-3">
+          <p className="text-center font-bold text-2xl text-[#EA8888]">질문 생성 불가</p>
+          <p className="text-center text-sm text-UNIMPORTANT_TEXT">이력서를 삭제 후 다시 시도해주세요</p>
+          <p className="text-center text-sm text-UNIMPORTANT_TEXT pb-3">서비스 이용에 불편을 드려 죄송합니다.</p>
+          <Lottie options={noCreateQuestionOptions} height={300} width={400} />
         </div>
       )}
 

@@ -43,9 +43,8 @@ const ChartArea = ({ activeTab, currentTime, handleChartTimeUpdate, analysisDeta
         진심 어린 웃음과 긍정적인 자세로 자신을 표현해주세요.`;
         break;
       case 'neutral':
-        message = `면접 중에 무표정을 유지하는 것은 감정 표현이나 자세에 대한 신경을 쓰지 않는 것과 같습니다. 
-        ${name}님, 조금 더 표정을 다듬고 자세를 조절하여, 면접관들에게 더 나은 인상을 남길 수 있도록 노력해주세요. 
-        자신감 있고 친근한 미소는 면접을 더욱 유익하게 만들어 줄 수 있습니다.`;
+        message = `${name}님은 면접 중에 무표정이 많은 편입니다.
+        면접 중에 무표정을 유지하는 것은 감정 표현이나 자세에 대한 신경을 쓰지 않는 것과 같습니다. ${name}님, 조금 더 표정을 다듬고 자세를 조절하여, 면접관들에게 더 나은 인상을 남길 수 있도록 노력해주세요! 자신감 있고 친근한 미소는 면접을 더욱 유익하게 만들어 줄 수 있습니다.`;
         break;
 
       default:
@@ -53,7 +52,7 @@ const ChartArea = ({ activeTab, currentTime, handleChartTimeUpdate, analysisDeta
     }
 
     return message;
-  }
+  };
 
   const resultMessage = getMaxEmotion(analysisDetail);
   const answer = analysisDetail.answer;
@@ -100,7 +99,7 @@ const ChartArea = ({ activeTab, currentTime, handleChartTimeUpdate, analysisDeta
             tipTitle={'답변 준비'}
             tipContent={`면접 시 미리 준비된 답변을 사용하면 자신감을 키울 수 있고, 핵심 키워드를 활용하여 명확한 의사 전달이 가능합니다. 
               또한, 논리적으로 구성된 답변은 전문성을 강조하며 예상치 못한 질문에 대비할 수 있어요!
-              이는 면접 당일 긴장을 완화하고 심리적 안정에 도움이 되니 ${name}님 preview와 함께 암기해봐요!.`}
+              이는 면접 당일 긴장을 완화하고 심리적 안정에 도움이 되니, ${name}님! preview와 함께 암기해봐요.`}
           />
         </>
       )}

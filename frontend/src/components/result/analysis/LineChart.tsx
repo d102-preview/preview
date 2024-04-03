@@ -3,7 +3,6 @@ import { Chart, LineElement, PointElement, LinearScale, CategoryScale, Title, To
 import { ChartOptions } from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import annotationPlugin from 'chartjs-plugin-annotation';
-// import { IResult } from '@/types/result';
 
 Chart.register(LineElement, PointElement, LinearScale, CategoryScale, Title, Tooltip, Legend, annotationPlugin);
 
@@ -32,7 +31,7 @@ const LineChart = ({ title, currentTime, onTimeChange, list, videoLenght }: Line
   };
 
   const data = {
-    labels: Array.from({ length: 80 }, (_, i) => i), // 80초 분량의 라벨
+    labels: Array.from({ length: videoLenght }, (_, i) => i), // 80초 분량의 라벨
     datasets: [
       {
         // label: `프레임별 ${title}`,
@@ -80,7 +79,7 @@ const LineChart = ({ title, currentTime, onTimeChange, list, videoLenght }: Line
       x: {
         type: 'linear',
         min: 0,
-        max: videoLenght, // 비디오 길이(초 단위)
+        max: videoLenght - 1, // 비디오 길이(초 단위)
         display: true,
         ticks: {
           callback: (tickValue: string | number) => {
@@ -129,7 +128,7 @@ const LineChart = ({ title, currentTime, onTimeChange, list, videoLenght }: Line
 
   return (
     <div className="p-3">
-      <h4 className="text-2xl text-[#696969] font-bold pb-7">프레임별 {title}</h4>
+      <h4 className=" text-[#696969] font-bold pb-7">프레임별 {title}</h4>
       <Line data={data} options={options} ref={chartRef} onClick={onCanvasClick} />
     </div>
   );
