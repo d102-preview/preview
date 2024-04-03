@@ -103,7 +103,7 @@ const Accordian = ({
       cursor-pointer box-content drop-shadow-lg ${selectedBorderStyle}`}
     >
       <div className={`p-3 mx-3 flex items-center justify-between`} onClick={toggleOpen}>
-        <div className={`flex items-center ${textColor} ${textSize} ${textWeight}`} ref={titleRef}>
+        <div className={`flex items-center ${textColor} ${textSize} ${textWeight} ${titleHeight}`} ref={titleRef}>
           {hasIcons &&
             (isSelected ? (
               <LuMinusCircle
