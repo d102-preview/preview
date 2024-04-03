@@ -128,7 +128,7 @@ const LineChart = ({ title, currentTime, onTimeChange, list, videoLenght }: Line
 
   return (
     <div className="p-3">
-      <h4 className="text-2xl text-[#696969] font-bold pb-7">프레임별 {title}</h4>
+      <h4 className=" text-[#696969] font-bold pb-7">프레임별 {title}</h4>
       <Line data={data} options={options} ref={chartRef} onClick={onCanvasClick} />
     </div>
   );

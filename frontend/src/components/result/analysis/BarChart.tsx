@@ -91,9 +91,9 @@ const BarChart = ({ title, intentList }: IBarChartProps) => {
   return (
     <>
       <div>
-        <h4 className="text-2xl text-[#696969] font-bold pb-3">
+        <h4 className="text-[#696969] font-bold pb-3">
           주요 {title}
-          <span className="text-lg"> (상위 5개)</span>
+          <span className=""> (상위 5개)</span>
         </h4>
         <Bar data={data} options={options} />
       </div>
@@ -102,7 +102,7 @@ const BarChart = ({ title, intentList }: IBarChartProps) => {
           <div key={i} className="rounded-full w-fit p-4 text-center" style={{ backgroundColor: borderColor[i] }}>
             <p className="text-xs text-[#696969]">{category[i]}</p>
             <p className="text-sm">{labels[i]}</p>
-            <p className="text-xl font-bold text-BLACK pt-1">{originalData[i]}%</p>
+            <p className="text-lg font-bold text-BLACK ">{originalData[i]}%</p>
           </div>
         ))}
       </div>

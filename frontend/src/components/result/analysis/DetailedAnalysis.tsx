@@ -69,22 +69,30 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
   return (
     <div>
       <AnalysisTab activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="pt-14 px-7">
+      <div className="pt-10 px-7">
         <div className="flex gap-14">
-          <div className="w-1/2">
-            <div className="w-full bg-black">
-              <ReactPlayer url={url} controls={true} playing={true} ref={videoRef} onProgress={handleProgress} />
+          <div className=" w-1/2">
+            <div className="w-full flex justify-center bg-black">
+              <ReactPlayer
+                width={430}
+                height={280}
+                url={url}
+                controls={true}
+                playing={true}
+                ref={videoRef}
+                onProgress={handleProgress}
+              />
             </div>
             <div className="flex justify-between px-1 pt-4 pb-1">
-              <span className="text-MAIN1 text-lg">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
-              <span className="text-lg text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
+              <span className="text-MAIN1">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
+              <span className="text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
             </div>
-            <span className="font-semibold text-BLACK text-xl mx-1">Q. {question}</span>
+            <span className="font-semibold text-BLACK mx-1">Q. {question}</span>
 
             {/* 요약 */}
-            <div className="border-b-2 border-gray my-7"></div>
+            <div className="border-b-2 border-gray my-5"></div>
             <div className="py-1">
-              <div className="border-2 border-gray rounded-lg p-7 text-UNIMPORTANT_TEXT text-lg">
+              <div className="border-2 border-gray rounded-lg p-7 text-UNIMPORTANT_TEXT">
                 <div className="flex items-start  gap-3 pb-4">
                   <RiEmotionFill size={25} />
                   <p className="font-semibold">{emotionMessage}</p>
