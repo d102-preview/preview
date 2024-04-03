@@ -1,5 +1,6 @@
 import axios from 'axios';
-import setAuthorization from './interceptors';
+import refresh from './refresh';
+import setAuthorization from './setAuthorization';
 
 const axiosRequestConfig = {
   baseURL: import.meta.env.VITE_NODE_ENV === 'development' ? '' : import.meta.env.VITE_BASE_URL,
@@ -32,3 +33,7 @@ export const axiosFileInstance = axios.create(axiosFileConfig);
 axiosAuthInstance.interceptors.request.use(setAuthorization);
 axiosWithCredentialInstance.interceptors.request.use(setAuthorization);
 axiosFileInstance.interceptors.request.use(setAuthorization);
+
+axiosAuthInstance.interceptors.response.use(null, refresh);
+axiosWithCredentialInstance.interceptors.response.use(null, refresh);
+axiosFileInstance.interceptors.response.use(null, refresh);
