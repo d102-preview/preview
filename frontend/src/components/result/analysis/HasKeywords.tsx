@@ -12,7 +12,7 @@ const HasKeywords = ({ answer, keywords }: IHasKeywordsProps) => {
     );
     const parts = text.split(regex);
     return parts.map((part, index) => (
-      <span key={index} className={keywords.includes(part) ? 'text-lg text-MAIN1 font-semibold' : 'text-lg text-BLACK'}>
+      <span key={index} className={keywords.includes(part) ? 'text-MAIN1 font-semibold' : 'text-BLACK'}>
         {part}
       </span>
     ));
@@ -24,21 +24,21 @@ const HasKeywords = ({ answer, keywords }: IHasKeywordsProps) => {
 
   return (
     <div className="p-3">
-      <h4 className="text-2xl text-[#696969] font-bold pb-3">답변 내용</h4>
+      <h4 className=" text-[#696969] font-bold pb-3">답변 내용</h4>
       <div className="border rounded-lg p-7">{highlightText(answer, keywords)}</div>
 
       {keywords.length > 0 && (
         <>
           <div className="flex items-end pt-7">
-            <h4 className="text-2xl text-[#696969] font-bold mt-3">
+            <h4 className=" text-[#696969] font-bold mt-3">
               핵심 키워드
-              <span className="font-normal items-center gap-2 text-[#818181] text-lg  mx-2">
+              <span className="font-normal items-center gap-2 text-[#818181]  mx-2">
                 : 미리 작성된 핵심 키워드 <span className="text-MAIN1 font-medium ">{keywords.length}개</span> 중{' '}
                 <span className="text-MAIN1 font-medium">{includedCount}개의 키워드</span>가 포함되어 있습니다.
               </span>
             </h4>
           </div>
-          <div className="pt-1 text-lg  mt-3">
+          <div className="pt-1  mt-3">
             {keywords.map((keyword, index) => (
               <span
                 key={index}
