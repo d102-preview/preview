@@ -49,12 +49,9 @@ const Keywords = ({ initialKeywords, id, type }: IkeywordsProps) => {
     if (event.key === 'Enter' && inputValue.trim() !== '') {
       // 키워드 중복 검사
       if (!keywords.some(item => item.keyword === inputValue)) {
-        // Optimistic UI
-        const newKeyword = { id: Date.now(), keyword: inputValue }; // 임시 ID 할당
-        setKeywords(prevKeywords => [...prevKeywords, newKeyword]);
-        setInputValue('');
         setInputValue('');
 
+        // 백엔드에 전송
         postKeyword(
           {
             type,
@@ -62,10 +59,14 @@ const Keywords = ({ initialKeywords, id, type }: IkeywordsProps) => {
             keyword: { keyword: inputValue },
           },
           {
+            onSuccess: res => {
+              const newKeyword = res.data.keywordList[res.data.keywordList.length - 1];
+              if (newKeyword) {
+                setKeywords(prevKeywords => [...prevKeywords, newKeyword]);
+              }
+            },
             onError: () => {
               Toast.error('키워드 추가에 실패했습니다. 다시 시도해주세요.');
-              // 실패 시, Optimistic하게 추가된 키워드 제거
-              setKeywords(prevKeywords => prevKeywords.filter(item => item.id !== newKeyword.id));
             },
           },
         );
