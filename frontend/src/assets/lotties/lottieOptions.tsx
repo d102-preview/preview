@@ -9,6 +9,16 @@ import positive2 from '@/assets/lotties/positive2.json';
 import negative from '@/assets/lotties/negative.json';
 import neutral from '@/assets/lotties/neutral.json';
 import xMark from '@/assets/lotties/xMark.json';
+import error from '@/assets/lotties/error.json';
+
+export const errorOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: error,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
 
 export const robotOptions = {
   loop: true,
