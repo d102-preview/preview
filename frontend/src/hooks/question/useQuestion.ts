@@ -18,6 +18,7 @@ import {
   IDeleteKeywordInfo,
   IDealsListInfiniteReq,
   IResumeRes,
+  IuseGetQuestionProps,
 } from '@/types/question';
 import { APIResponse, questionType } from '@/types/model';
 import { useEffect } from 'react';
@@ -62,10 +63,11 @@ export const useQuestion = () => {
     });
   };
 
-  const useGetQuestion = ({ type, questionId }: IQeustionInfo) => {
-    return useMutation({
-      mutationKey: [`${type}Question`, questionId],
-      mutationFn: () => getQuestion({ type, questionId }),
+  const useGetQuestion = ({ type, questionId, isEnabled }: IuseGetQuestionProps) => {
+    return useQuery({
+      queryKey: [`${type}Question`, questionId],
+      queryFn: () => getQuestion({ type, questionId }),
+      enabled: isEnabled,
     });
   };
 
