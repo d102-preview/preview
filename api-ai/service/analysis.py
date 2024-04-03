@@ -4,6 +4,7 @@ import os
 from collections import Counter
 from datetime import datetime
 
+import ffmpeg
 import numpy as np
 import pandas as pd
 from ai.kobert_proc import kobert_model
@@ -39,6 +40,22 @@ def _facial_emotional_recognition(record: Analysis) -> None:
         msg = f"No target file on {video_path}"
         logger.error(msg)
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), video_path)
+
+    # Encoding and resizing using ffmpeg
+    video_path_splited = os.path.splitext(video_path)
+    video_path_encoded = "".join(
+        [video_path_splited[0], "_encoded", video_path_splited[1]]
+    )
+    logger.debug(f"Encoding and resizing to {video_path_encoded}")
+
+    (
+        ffmpeg.input(video_path)
+        .filter("scale", -1, 720)
+        .output(video_path_encoded, vcodec="libx264", crf=20, loglevel="quiet")
+        .run(overwrite_output=True)
+    )
+    video_path = video_path_encoded
+    logger.info(f"Success to encoding and resizing")
 
     logger.info(f"Start facial emotional recognition. {video_path = }")
 
@@ -167,15 +184,15 @@ def create_task(
         # TODO: Replace HTTPException with custom exception
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
 
-    # Set analysis start time(`analysis_start_time`) as current time
+    # Set analysis start time(`analysis_start_time`) as current time and set status
     record.analysis_start_time = datetime.now(tz=timezone(settings.TZ))
+    record.analysis_status = Status.process.value
+
+    redis_key = f"analysisHash:{analysis_id}"
+    redis_session.hset(redis_key, "status", Status.process.value)
+    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
     maria_session.add(record)
     maria_session.commit()
-
-    # Set status
-    redis_key = f"analysisHash:{analysis_id}"
-    redis_session.hset(redis_key, "status", Status.PROCESSING.value)
-    redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
 
     try:
         # Step 1: Facial Emotional Recognition
@@ -185,12 +202,14 @@ def create_task(
         _intent_recognition(record)
     except Exception as e:
         logger.error(f"Error while processing: {e}")
-        redis_session.hset(redis_key, "status", Status.FAIL.value)
+        redis_session.hset(redis_key, "status", Status.fail.value)
         redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+        record.analysis_status = Status.fail.value
     else:
         logger.info(f"Success to process id #{analysis_id}")
-        redis_session.hset(redis_key, "status", Status.SUCCESS.value)
+        redis_session.hset(redis_key, "status", Status.success.value)
         redis_session.expire(redis_key, settings.REDIS_EXPIRE_SECOND)
+        record.analysis_status = Status.success.value
     finally:
         # Update database
         record.analysis_end_time = datetime.now(tz=timezone(settings.TZ))
