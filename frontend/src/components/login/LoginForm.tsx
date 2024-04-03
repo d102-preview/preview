@@ -177,7 +177,8 @@ const LoginForm = () => {
   }, [loginInfo]);
 
   const handleKakao = () => {
-    Toast.error('아직 준비중인 서비스입니다.');
+    Toast.error('점검중입니다. 테스트 계정을 이용해주세요.');
+    return;
   };
 
   const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -218,9 +219,9 @@ const LoginForm = () => {
           }}
         />
       </form>
-      <div className="text-xs text-right pb-4">
+      {/* <div className="text-xs text-right pb-4">
         <span className="text-gray-400">비밀번호를 잊으셨나요?</span> 비밀번호 찾기
-      </div>
+      </div> */}
       <Button
         text="로그인"
         width="w-full"
@@ -247,13 +248,13 @@ const LoginForm = () => {
         textColor="text-[#7E6868]"
         hoverBackgroundColor="hover:bg-[#FFED99]"
       >
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center" onClick={handleKakao}>
           <img src={kakao} alt="kakao" className="w-7 mr-3" />
           카카오톡으로 시작하기
         </div>
       </Button>
 
-      <div className="text-xs text-center pt-2" onClick={handleKakao}>
+      <div className="text-xs text-center pt-2">
         아직 가입한 적이 없으신가요?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <Link to={'/signup'} className="text-[#5A8AF2] font-bold">
           회원가입 하러가기

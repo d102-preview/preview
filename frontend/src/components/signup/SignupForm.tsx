@@ -318,7 +318,8 @@ const SignupForm = () => {
   }, [signupInfo, isVerify]);
 
   const handleKakao = () => {
-    Toast.error('아직 준비중인 서비스입니다.');
+    Toast.error('점검중입니다. 테스트 계정을 이용해주세요.');
+    return;
   };
 
   const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -23,8 +23,11 @@ const LineChart = ({ title, currentTime, onTimeChange, list, videoLenght }: Line
     if (!chart) {
       return;
     }
-    const xValue = chart.scales.x.getValueForPixel(event.nativeEvent.offsetX) || 0;
-    onTimeChange(xValue);
+
+    if (event.nativeEvent && event.nativeEvent.offsetX) {
+      const xValue = chart.scales.x.getValueForPixel(event.nativeEvent.offsetX);
+      onTimeChange(xValue!);
+    }
   };
 
   const data = {
