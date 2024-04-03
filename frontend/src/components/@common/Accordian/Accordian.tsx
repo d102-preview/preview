@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { IconType } from 'react-icons';
 import { CgFileDocument } from 'react-icons/cg';
 import { LuMinusCircle, LuPlusCircle } from 'react-icons/lu';
@@ -50,6 +50,8 @@ const Accordian = ({
 }: IAccordianProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const [titleHeight, setTitleHeight] = useState('h-8');
 
   // isOpen 상태를 토글하는 함수
   const toggleOpen = () => {
@@ -84,13 +86,24 @@ const Accordian = ({
   // 선택된 상태에 따라 테두리 스타일을 조건부로 적용
   const selectedBorderStyle = isSelected && hasIcons ? 'border-2 border-MAIN1' : 'border-none';
 
+  useEffect(() => {
+    if (titleRef.current) {
+      const height = titleRef.current.clientHeight; // 제목의 실제 높이 측정
+      if (height > 32) {
+        setTitleHeight('h-auto'); // 높이를 자동으로 조정
+      } else {
+        setTitleHeight('h-8'); // 기본 높이로 설정
+      }
+    }
+  }, [titleContent]);
+
   return (
     <div
       className={`${width} ${backgroundColor} ${borderStyle} ${borderRadius} 
       cursor-pointer box-content drop-shadow-lg ${selectedBorderStyle}`}
     >
       <div className={`p-3 mx-3 flex items-center justify-between`} onClick={toggleOpen}>
-        <div className={`flex items-center ${textColor} ${textSize} ${textWeight} h-8`}>
+        <div className={`flex items-center ${textColor} ${textSize} ${textWeight} ${titleHeight}`} ref={titleRef}>
           {hasIcons &&
             (isSelected ? (
               <LuMinusCircle

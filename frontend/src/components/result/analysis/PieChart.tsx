@@ -15,6 +15,7 @@ interface IPieChartProps {
 }
 
 const PieChart = ({ title }: IPieChartProps) => {
+  const uniqueKey = new Date().getTime() + 1516;
   const data = {
     labels: ['부정', '중립', '긍정'],
     datasets: [
@@ -62,10 +63,10 @@ const PieChart = ({ title }: IPieChartProps) => {
 
   return (
     <>
-      <h4 className="text-2xl text-[#696969] font-bold p-3">감정 분석 결과</h4>
+      <h4 className="text-[#696969] font-bold p-3">감정 분석 결과</h4>
       <div className="pb-3 flex flex-col items-center">
         <div className="w-2/3">
-          <Pie data={data} options={options} />
+          <Pie data={data} options={options} key={uniqueKey} />
         </div>
       </div>
     </>

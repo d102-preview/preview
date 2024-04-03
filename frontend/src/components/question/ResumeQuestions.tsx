@@ -3,7 +3,7 @@ import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import { ISimpleResume } from '@/types/model';
 import Lottie from 'react-lottie';
-import { robotOptions, loadingOptions3 } from '@/assets/lotties/lottieOptions';
+import { robotOptions, createQuestionOptions, noCreateQuestionOptions } from '@/assets/lotties/lottieOptions';
 import SpeechBubble from '@/components/result/SpeechBubble';
 import userStore from '@/stores/userStore';
 import { useIntersectionObserver } from '@/hooks/@common/userIntersectionObserver';
@@ -19,15 +19,17 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
   const { name } = userStore();
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const { useGetListInfinite } = useQuestion();
-  // useGetQuestionStatus, useGetListWithStatusCheck
-  // // useGetListWithStatusCheck 훅 사용하여 업데이트된 이력서 목록 가져오기
-  // const { data: resumeListData } = useGetListWithStatusCheck();
+
+  // 초기 렌더링 시 initialResumeList가 비어있는 경우를 처리하기 위해 수정
+  const initialSelectedResume = initialResumeList.length > 0 ? initialResumeList[0] : undefined;
 
   // // 업데이트된 이력서 목록이나 초기 목록 사용
-  const [selectId, setSelectId] = useState<number>(initialResumeList[0].id);
+  const [selectId, setSelectId] = useState<number>(initialSelectedResume ? initialSelectedResume.id : -1);
 
-  const [selectedResume, setSelectedResume] = useState<ISimpleResume>(initialResumeList[0]);
+  const [selectedResume, setSelectedResume] = useState<ISimpleResume | undefined>(initialResumeList[0]);
+
   // // 선택된 이력서 ID에 대한 질문 목록을 가져오는 쿼리
+
   const {
     data: resumeListData,
     fetchNextPage,
@@ -41,26 +43,11 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
     type,
   );
 
-  // const [questionList, setQuestionList] = useState<IQuestionListItem[]>([]);
-
   const { selectedQuestions, addQuestion, removeQuestion } = questionStore();
   const { setTarget } = useIntersectionObserver({
     hasNextPage,
     fetchNextPage,
   });
-
-  // // 선택된 이력서에 대한 질문 생성 상태를 확인하는 쿼리
-  // const { mutate, data: checkQuestion } = useGetQuestionStatus(selectedResume ? selectedResume.id : -1);
-
-  // useEffect(() => {
-  //   if (selectedResume && selectedResume.status === 'process') {
-  //     const intervalId = setInterval(() => mutate(), 5000);
-  //     return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 제거
-  //   } else if (selectedResume && selectedResume.status === 'success') {
-  //     console.log('하이');
-  //     refetchQuestions();
-  //   }
-  // }, [selectedResume, checkQuestion]);
 
   const totalQuestions = resumeListData?.pages[0]?.data?.questionList?.totalElements || 0;
 
@@ -111,7 +98,6 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
               <MdOutlineExpandMore size="25" className="text-MAIN1" aria-hidden="true" />
             )}
           </div>
-
           {dropdownOpen && (
             <ul
               className={`absolute w-full border ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-4 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
@@ -129,13 +115,23 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
           )}
         </div>
       </div>
-
       {/* 질문 생성중인 경우 */}
       {selectedResume && selectedResume.status === 'process' && (
         <div className="flex flex-col pt-3">
           <p className="text-center font-bold text-2xl text-MAIN1">질문 생성 중...</p>
           <p className="text-center text-sm text-UNIMPORTANT_TEXT">잠시만 기다려 주세요</p>
-          <Lottie options={loadingOptions3} height={350} width={400} />
+          <p className="text-center text-sm text-UNIMPORTANT_TEXT pb-3">화면이 바뀌지 않으면 새로고침을 해주세요</p>
+          <Lottie options={createQuestionOptions} height={300} width={400} />
+        </div>
+      )}
+
+      {/* 질문 생성 불가인 경우 */}
+      {selectedResume && selectedResume.status === 'fail' && (
+        <div className="flex flex-col pt-3">
+          <p className="text-center font-bold text-2xl text-[#EA8888]">질문 생성 불가</p>
+          <p className="text-center text-sm text-UNIMPORTANT_TEXT">이력서를 삭제 후 다시 시도해주세요</p>
+          <p className="text-center text-sm text-UNIMPORTANT_TEXT pb-3">서비스 이용에 불편을 드려 죄송합니다.</p>
+          <Lottie options={noCreateQuestionOptions} height={300} width={400} />
         </div>
       )}
 

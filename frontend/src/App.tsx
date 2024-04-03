@@ -12,6 +12,7 @@ import ResultPage from './pages/result/ResultPage';
 import ResultReportPage from './pages/result/ResultReportPage';
 import SignUpPage from './pages/signup/SignupPage';
 import ResumeSelectPage from './pages/interview/ResumeSelectPage';
+import ErrorPage from './pages/error/ErrorPage';
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
         <ResultReportPage />
       </PrivateRoute>
     ),
+  },
+  {
+    path: '/*',
+    element: <ErrorPage />,
   },
 ]);
 
