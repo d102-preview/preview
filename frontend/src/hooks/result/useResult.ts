@@ -1,4 +1,5 @@
 import { checkAnalysisStatus, getDetailResult, getResultListReq } from '@/services/result/api';
+import { interviewType } from '@/types/model';
 import { IDealsResultListInfiniteReq } from '@/types/result';
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 

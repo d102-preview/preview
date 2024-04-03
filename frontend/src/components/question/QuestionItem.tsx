@@ -2,7 +2,7 @@ import Accordian from '@/components/@common/Accordian/Accordian';
 import Toast from '@/components/@common/Toast/Toast';
 import Keywords from '@/components/question/Keywords';
 import Script from '@/components/question/Script';
-import { questionType } from '@/types/model';
+import { IQuestionItem, questionType } from '@/types/model';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import userStore from '@/stores/userStore';
 import { IInterviewQuestionItem } from '@/types/interview';
