@@ -74,6 +74,10 @@ export interface IQeustionInfo {
   questionId: number;
 }
 
+export interface IuseGetQuestionProps extends IQeustionInfo {
+  isEnabled: boolean;
+}
+
 export interface IDeleteKeywordInfo {
   type: questionType;
   keywordId: number;
