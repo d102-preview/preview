@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IAnalysisDetail, analysisType } from '@/types/result';
 // import { formatInterviewSetTime } from '@/utils/formatDateTime';
 // import testVideo from '@/assets/video/test.mp4';
@@ -54,12 +54,15 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
 
   // 차트에서 새로운 시간을 설정할 때 호출되는 함수
   const handleChartTimeUpdate = (newTime: number) => {
+    console.log(typeof newTime);
+    console.log(newTime);
     setCurrentTime(newTime);
-    if (videoRef.current) {
-      videoRef.current.currentTime = newTime;
-    }
+    videoRef.current.seekTo(newTime, 'seconds');
   };
 
+  useEffect(() => {
+    console.log(currentTime);
+  }, [currentTime]);
   const url = `${import.meta.env.VITE_BASE_URL}/file/download/video?path=%2Fapp%2Ffiles%2Fvideo%2Fadmin%40d102.com%2F2024-03-29T15-28-00%2Ftest1.mp4`;
 
   // 동영상 재생 위치가 변경될 때 호출되는 함수
