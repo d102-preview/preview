@@ -23,8 +23,9 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const isQuestionPage = location.pathname === '/question';
 
   const [isOpen, setIsOpen] = useState(false);
+  const [plusClick, setPlusClick] = useState<boolean>(false);
   const { useGetQuestion } = useQuestion();
-  const { data, refetch } = useGetQuestion({ type, questionId: id, isEnabled: isOpen });
+  const { data, refetch } = useGetQuestion({ type, questionId: id, isEnabled: plusClick });
 
   const { isLogin } = userStore();
 
@@ -38,7 +39,6 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   const script = data?.data?.questionDetail?.script?.script || '';
   const keywords = data?.data?.questionDetail.keywordList || [];
 
-  const [plusClick, setPlusClick] = useState<boolean>(false);
   const handlePlusClick = () => {
     setPlusClick(true);
   };
