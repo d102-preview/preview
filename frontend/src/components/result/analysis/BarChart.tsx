@@ -97,9 +97,9 @@ const BarChart = ({ title, intentList }: IBarChartProps) => {
         </h4>
         <Bar data={data} options={options} />
       </div>
-      <div className="flex flex-wrap gap-2 justify-center py-5 items-center">
+      <div className="flex flex-wrap gap-3 justify-center py-5 items-center">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="rounded-full w-fit p-4 text-center" style={{ backgroundColor: borderColor[i] }}>
+          <div key={i} className="rounded-full w-fit p-5 text-center" style={{ backgroundColor: borderColor[i] }}>
             <p className="text-xs text-[#696969]">{category[i]}</p>
             <p className="text-sm">{labels[i]}</p>
             <p className="text-lg font-bold text-BLACK ">{originalData[i]}%</p>
