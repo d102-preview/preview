@@ -1,7 +1,9 @@
 import robot from '@/assets/lotties/robot.json';
+import analyzing from '@/assets/lotties/analyzing.json';
+import analyzing2 from '@/assets/lotties/analyzing2.json';
 import loading1 from '@/assets/lotties/loading1.json';
 import loading2 from '@/assets/lotties/loading2.json';
-import loading3 from '@/assets/lotties/loading3.json';
+import createQuestion from '@/assets/lotties/createQuestion.json';
 import positive from '@/assets/lotties/positive.json';
 import positive2 from '@/assets/lotties/positive2.json';
 import negative from '@/assets/lotties/negative.json';
@@ -11,6 +13,24 @@ export const robotOptions = {
   loop: true,
   autoplay: true,
   animationData: robot,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
+
+export const analysisOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: analyzing,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
+
+export const analysisOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: analyzing2,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice',
   },
@@ -34,10 +54,10 @@ export const loadingOptions2 = {
   },
 };
 
-export const loadingOptions3 = {
+export const createQuestionOptions = {
   loop: true,
   autoplay: true,
-  animationData: loading3,
+  animationData: createQuestion,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice',
   },

@@ -1,15 +1,43 @@
-export type analysisType =  'emotion' | 'intent' | 'keyword';
+import { IPageable, ISort } from './question';
 
-export interface IResult {
-  emotion: {
-    ratio: {
-      positive: number;
-      neutral: number;
-      negative: number;
-    };
-    list: number[]; // 각 프레임별 감정 분류 배열의 타입을 가정합니다.
-  };
-  intent: {
-    // intent 관련 타입 정의 필요
-  };
+export type analysisType = 'emotion' | 'intent' | 'keyword';
+
+export interface IResultListRes {
+  interviewList: IResultList;
+}
+
+export interface IResultList {
+  content: IResultListItem[];
+  pageable: IPageable;
+  last: boolean;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  sort: ISort;
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
+
+export interface IResultListItem {
+  id: number;
+  startTime: string;
+  analysisList: analysisListItem[];
+}
+
+export interface analysisListItem {
+  id: number;
+  question: string;
+  thumbnailPath: string;
+  videoLength: number;
+  complete: boolean;
+}
+
+// 무한스크롤
+export interface IDealsResultListInfiniteReq {
+  type: 'mock' | 'main';
+  page: number;
+  size: number;
+  sort?: ISort;
 }
