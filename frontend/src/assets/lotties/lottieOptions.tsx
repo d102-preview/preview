@@ -4,8 +4,8 @@ import analyzing2 from '@/assets/lotties/analyzing2.json';
 import loading1 from '@/assets/lotties/loading1.json';
 import loading2 from '@/assets/lotties/loading2.json';
 import createQuestion from '@/assets/lotties/createQuestion.json';
-import positive from '@/assets/lotties/positive.json';
-import positive2 from '@/assets/lotties/positive2.json';
+import noCreateQuestion from '@/assets/lotties/noCreateQuestion.json';
+import smile from '@/assets/lotties/smile.json';
 import negative from '@/assets/lotties/negative.json';
 import neutral from '@/assets/lotties/neutral.json';
 import xMark from '@/assets/lotties/xMark.json';
@@ -64,6 +64,15 @@ export const createQuestionOptions = {
   },
 };
 
+export const noCreateQuestionOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: noCreateQuestion,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
+
 export const negativeOptions = {
   loop: true,
   autoplay: true,
@@ -82,28 +91,19 @@ export const neutralOptions = {
   },
 };
 
-export const positiveOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: positive,
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice',
-  },
-};
-
-export const positiveOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: positive2,
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice',
-  },
-};
-
 export const xMarkOptions = {
   loop: true,
   autoplay: true,
   animationData: xMark,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
+
+export const smileOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: smile,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice',
   },
