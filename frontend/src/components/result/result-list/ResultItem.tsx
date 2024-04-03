@@ -38,18 +38,17 @@ const ResultItem = ({ id, thumbnailPath, type, date, question, videoLength, stat
             </div>
           </div>
         )}
-        
+
         <div className="text-xs text-white text-center bg-[#2a2a2a] p-1 w-10 rounded-md z-10 absolute right-2 bottom-2">
           <span>{formatVideoLength(videoLength)}</span>
         </div>
         <img
           width={350}
           height={250}
-          src={thumbnailPath}
+          src={`https://j10d102.p.ssafy.io/file/download/thumbnail?path=${thumbnailPath}`}
           onError={onErrorImg}
           alt={`${type === 'mock' ? '모의 면접' : '실전 면접'} ${id} 분석 결과`}
-
-          className="w-full py-4 bg-cover bg-center rounded-lg bg-inherit shadow-md "
+          className="w-full py-4 bg-cover bg-center rounded-lg bg-inherit shadow-md  "
         />
       </div>
       <div className="flex justify-between mx-1 mt-2">
