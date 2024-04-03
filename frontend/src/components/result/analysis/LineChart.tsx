@@ -1,43 +1,44 @@
 import { useRef } from 'react';
-import { Chart } from 'chart.js';
+import { Chart, LineElement, PointElement, LinearScale, CategoryScale, Title, Tooltip, Legend } from 'chart.js';
 import { ChartOptions } from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import annotationPlugin from 'chartjs-plugin-annotation';
-// import { IResult } from '@/types/result';
 
-Chart.register(annotationPlugin);
+Chart.register(LineElement, PointElement, LinearScale, CategoryScale, Title, Tooltip, Legend, annotationPlugin);
 
 interface LineChartProps {
   title: string;
   currentTime: number;
   onTimeChange: (time: number) => void;
-  // result: IResult;
+  list: Record<string, number>;
+  videoLenght: number;
 }
 
-const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
+const LineChart = ({ title, currentTime, onTimeChange, list, videoLenght }: LineChartProps) => {
   const chartRef = useRef<Chart<'line', number[], unknown> | null>(null);
+  const dataList = Object.values(list);
 
   const onCanvasClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const chart = chartRef.current;
     if (!chart) {
       return;
     }
-    const xValue = chart.scales.x.getValueForPixel(event.nativeEvent.offsetX) || 0;
-    onTimeChange(xValue);
+
+    if (event.nativeEvent && event.nativeEvent.offsetX) {
+      const xValue = chart.scales.x.getValueForPixel(event.nativeEvent.offsetX);
+      onTimeChange(xValue!);
+    }
   };
 
   const data = {
-    labels: Array.from({ length: 80 }, (_, i) => i), // 80초 분량의 라벨
+    labels: Array.from({ length: videoLenght }, (_, i) => i), // 80초 분량의 라벨
     datasets: [
       {
         // label: `프레임별 ${title}`,
-        data: [
-          0, -1, 1, 0, 1, -1, 1, -1, 0, 0, 1, -1, 0.3, 1, 1, 0.9, 1, 0, -1, 1, 1, 0, 0, -1, 1, 0, 1, -1, -1, 1, 1, 0, 1,
-          1, 0.2, 0, -1, -1, 0, 0.5, 1, 1, 1, 0, -1, 0, 1, 0, -1, 1, 0, 0, 1, -1, 1, 1, -1, 1, 0, 0, 1, -1, 0, 1, 1, 0,
-          0, -1, 1, 0, 1, -1, 1, 0, 0, 1, -1, 0, 1, 1, 0, 1, 0, -1, 1, 0.7, 1, 0.8, 1, 0, 0.5, -1, 0.5, 0.7, 1, 0,
-        ], // 가상의 데이터
+        data: dataList,
         fill: false,
         borderColor: '#5A8AF2',
+        borderWidth: 2,
         tension: 0.5,
         backgroundColor: 'rgba(90, 138, 242, 0.06)',
         pointRadius: 0,
@@ -48,7 +49,7 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
 
   const options: ChartOptions<'line'> = {
     layout: {
-      padding: 15,
+      padding: 0,
     },
     scales: {
       y: {
@@ -63,8 +64,8 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
             if (value === -1) return '부정';
           },
           font: {
-            size: 20, // 글자 크기
-            weight: 'bold', // 글자 굵기
+            size: 16,
+            weight: 'bold',
           },
           color: context => {
             const value = context.tick.value;
@@ -78,7 +79,7 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
       x: {
         type: 'linear',
         min: 0,
-        max: 80, // 비디오 길이(초 단위)
+        max: videoLenght - 1, // 비디오 길이(초 단위)
         display: true,
         ticks: {
           callback: (tickValue: string | number) => {
@@ -111,7 +112,7 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
             xMin: currentTime,
             xMax: currentTime,
             borderColor: '#AC1312',
-            borderWidth: 5,
+            borderWidth: 3,
           },
           middleLine: {
             type: 'line',
@@ -127,8 +128,8 @@ const LineChart = ({ title, currentTime, onTimeChange }: LineChartProps) => {
 
   return (
     <div className="p-3">
-      <h4 className="text-2xl text-[#696969] font-bold pb-7">프레임별 {title}</h4>
-      <Line data={data} options={options} ref={chartRef} />
+      <h4 className=" text-[#696969] font-bold pb-7">프레임별 {title}</h4>
+      <Line data={data} options={options} ref={chartRef} onClick={onCanvasClick} />
     </div>
   );
 };

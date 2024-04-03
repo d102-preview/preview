@@ -1,6 +1,7 @@
 import interview from '@/assets/lotties/interview.json';
 import question from '@/assets/lotties/question.json';
-import reoport from '@/assets/lotties/result.json';
+// import reoport from '@/assets/lotties/result.json';
+import reoport from '@/assets/lotties/analysis.json';
 import resume from '@/assets/lotties/resume.json';
 import { motion } from 'framer-motion';
 import Lottie from 'react-lottie';

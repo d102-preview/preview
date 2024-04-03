@@ -1,13 +1,13 @@
 import Textarea from '@/components/@common/Textarea/Textarea';
 import { useQuestion } from '@/hooks/question/useQuestion';
-import { ISubText, interviewType } from '@/types/model';
+import { ISubText, questionType } from '@/types/model';
 import { useState, useEffect } from 'react';
 import { MAX_SCRIPT_LENGTH } from '@/constants/constants';
 
 interface IScriptProps {
   initialScript: string;
   id: number;
-  type: interviewType;
+  type: questionType;
 }
 
 const Script = ({ initialScript, id, type }: IScriptProps) => {

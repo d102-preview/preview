@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
@@ -20,9 +20,9 @@ const client = new QueryClient();
 enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={client}>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
+      {/* <React.StrictMode> */}
+      <App />
+      {/* </React.StrictMode> */}
     </QueryClientProvider>,
   );
 });

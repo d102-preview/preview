@@ -77,27 +77,30 @@ const Resume = ({ resume }: { resume: (IResume | undefined)[] }) => {
             return (
               <div
                 key={ele.id}
-                className="h-12 px-4 mb-1 flex justify-between items-center border text-MAIN1 border-MAIN1/50 rounded-md"
+                className={`h-12 px-4 mb-1 flex justify-between items-center border ${ele.status === 'fail' ? 'text-red-500 border-red-500/50' : 'text-MAIN1 border-MAIN1/50'}  rounded-md`}
               >
-                <div className="flex items-center text-BLACK">
+                <div className={`flex items-center ${ele.status === 'fail' ? 'text-red-500' : 'text-BLACK'}`}>
                   <FaRegFileAlt />
                   &nbsp;{ele.displayName}
+                  {ele.status === 'fail' && (
+                    <span className="text-red-500 text-xs bg-red-500/10 p-1 px-2 rounded-lg ml-3">분석 실패</span>
+                  )}
                 </div>
                 <div className="flex items-center">
                   <div
-                    className="p-1 cursor-pointer hover:bg-MAIN1/10 rounded-md"
+                    className={`p-1 cursor-pointer ${ele.status === 'fail' ? 'hover:bg-red-500/10' : 'hover:bg-MAIN1/10'} rounded-md`}
                     onClick={() => handlePreviewResume(ele.id)}
                   >
                     <VscOpenPreview size={18} />
                   </div>
                   <div
-                    className="p-1 cursor-pointer hover:bg-MAIN1/10 rounded-md"
+                    className={`p-1 cursor-pointer ${ele.status === 'fail' ? 'hover:bg-red-500/10' : 'hover:bg-MAIN1/10'} rounded-md`}
                     onClick={() => handleDownloadResume(ele.id, ele.displayName)}
                   >
                     <FiDownload size={18} />
                   </div>
                   <div
-                    className="p-1 cursor-pointer  hover:bg-MAIN1/10 rounded-md"
+                    className={`p-1 cursor-pointer ${ele.status === 'fail' ? 'hover:bg-red-500/10' : 'hover:bg-MAIN1/10'} rounded-md`}
                     onClick={() => handleDeleteResume(ele.id)}
                   >
                     <AiOutlineDelete size={18} />

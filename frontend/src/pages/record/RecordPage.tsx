@@ -111,6 +111,7 @@ const RecordPage = () => {
       setStatus('preparing');
     } else if (status === 'preparing') {
       setStatus('recording');
+      setStt('');
     } else if (status === 'proceeding') {
       setStatus('uploading');
       handleStopRecording();

@@ -63,6 +63,7 @@ const ResumeSelectPage = () => {
                       return (
                         <div
                           key={ele.id}
+                          className="h-12 px-4 flex justify-between items-center mb-2  text-MAIN1 border-b hover:bg-MAIN1/10 cursor-pointer"
                           onClick={() =>
                             navigate('/record', {
                               state: {
@@ -72,16 +73,18 @@ const ResumeSelectPage = () => {
                               },
                             })
                           }
-                          className="h-12 px-4 flex justify-between items-center mb-2  text-MAIN1 border-b hover:bg-MAIN1/10 cursor-pointer"
                         >
                           <div className="flex items-center text-BLACK">
                             <FaRegFileAlt />
-                            &nbsp;{ele.displayName}.pdf
+                            &nbsp;{ele.displayName}
                           </div>
                           <div className="flex items-center">
                             <div
                               className="p-1 cursor-pointer hover:bg-MAIN1/10 rounded-md"
-                              onClick={() => handlePreviewResume(ele.id)}
+                              onClick={(e: React.MouseEvent) => {
+                                e.stopPropagation();
+                                handlePreviewResume(ele.id);
+                              }}
                             >
                               <VscOpenPreview size={18} />
                             </div>

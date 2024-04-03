@@ -3,6 +3,7 @@ import Button from '@/components/@common/Button/Button';
 import Input from '@/components/@common/Input/Input';
 import Toast from '@/components/@common/Toast/Toast';
 import { useUser } from '@/hooks/user/useUser';
+import userStore from '@/stores/userStore';
 import { IUserInfo } from '@/types/model';
 import { ChangeEvent, useState } from 'react';
 import { PiNotePencil } from 'react-icons/pi';
@@ -17,6 +18,7 @@ interface IModalType {
 const MyInfo = ({ user }: { user: IUserInfo }) => {
   const { usePatchUser } = useUser();
   const { mutate: patchUser } = usePatchUser();
+  const { name } = userStore();
 
   const [isShowModal, setIsShowModal] = useState<IModalType>({
     profile: false,
@@ -24,7 +26,7 @@ const MyInfo = ({ user }: { user: IUserInfo }) => {
   });
 
   const [isModifyName, setIsModifyName] = useState<boolean>(false);
-  const [modifyName, setModifyName] = useState<string>(user.name);
+  const [modifyName, setModifyName] = useState<string>(name);
   const [prevName, setPrevName] = useState<string>('');
 
   const handleModifyName = (e: ChangeEvent<HTMLInputElement>) => {

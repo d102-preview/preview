@@ -1,76 +1,107 @@
-import { analysisType } from '@/types/result';
-// import { IResult } from '@/types/result';
+import { IAnalysisDetail, analysisType } from '@/types/result';
 import Explanation from '../Explanation';
 import LineChart from './LineChart';
 import HasKeywords from './HasKeywords';
 import BarChart from './BarChart';
 import Emotion from './Emotion';
+import userStore from '@/stores/userStore';
 
 interface IChartAreaProps {
   activeTab: analysisType;
-  // result: IResult;
+  analysisDetail: IAnalysisDetail;
   currentTime: number;
   handleChartTimeUpdate: (time: number) => void;
+  videoLenght: number;
+  emotionMessage: string;
 }
 
-const ChartArea = ({ activeTab, currentTime, handleChartTimeUpdate }: IChartAreaProps) => {
+const ChartArea = ({ activeTab, currentTime, handleChartTimeUpdate, analysisDetail, videoLenght }: IChartAreaProps) => {
+  const { name } = userStore();
+
+  const getMaxEmotion = (analysisDetail: IAnalysisDetail): string => {
+    const ratios = analysisDetail.emotionMap.ratio;
+    let maxEmotion: string = '';
+    let maxValue: number = -Infinity;
+
+    for (const [emotion, ratio] of Object.entries(ratios)) {
+      if (typeof ratio === 'number' && ratio > maxValue) {
+        maxValue = ratio;
+        maxEmotion = emotion;
+      }
+    }
+
+    let message = '';
+    switch (maxEmotion) {
+      case 'positive':
+        message = `${name}님 면접 중에 표정이 밝은 편입니다. 긍정적인 표정을 유지하는 것이 중요합니다. 
+        자신감 있고 열정적으로 대화하며, 웃는 얼굴로 인상을 남겨주세요! 
+        긍정적인 태도는 면접관들에게 자신의 역량과 긍정적인 에너지를 전달할 수 있습니다.`;
+        break;
+      case 'negative':
+        message = `${name}님 면접 중에 부정적인 표정을 보이지 않도록 주의하세요! 
+        자세한 피드백을 받으시고 계시지만 표정이나 태도가 부정적으로 비춰질 수 있습니다. 
+        진심 어린 웃음과 긍정적인 자세로 자신을 표현해주세요.`;
+        break;
+      case 'neutral':
+        message = `${name}님은 면접 중에 무표정이 많은 편입니다.
+        면접 중에 무표정을 유지하는 것은 감정 표현이나 자세에 대한 신경을 쓰지 않는 것과 같습니다. ${name}님, 조금 더 표정을 다듬고 자세를 조절하여, 면접관들에게 더 나은 인상을 남길 수 있도록 노력해주세요! 자신감 있고 친근한 미소는 면접을 더욱 유익하게 만들어 줄 수 있습니다.`;
+        break;
+
+      default:
+        message = '감정 데이터가 유효하지 않습니다.';
+    }
+
+    return message;
+  };
+
+  const resultMessage = getMaxEmotion(analysisDetail);
+  const answer = analysisDetail.answer;
+  const keywords: string[] = analysisDetail.keywordList;
+
   return (
     <div className="p-10 shadow-lg rounded-xl">
-      {activeTab === 'emotion' ? (
+      {activeTab === 'emotion' && (
         <>
           <LineChart
             title={'감정 변화'}
             currentTime={currentTime}
             onTimeChange={handleChartTimeUpdate}
-            // result={result}
+            list={analysisDetail.emotionMap.list}
+            videoLenght={videoLenght}
           />
-          <Emotion />
+          <Emotion ratio={analysisDetail.emotionMap.ratio} />
           <Explanation
-            message={
-              '김싸피님의 움직임은 산만한 편입니다. 잘하고 계시지만 동작 처리에도 조금 더 신경 써보세요! 정확하고 자신있는 움직임은 면접에서 긍정적인 인상을 남기는 데 도움이 됩니다.'
-            }
+            message={resultMessage}
             tipTitle={'긍정적 표정'}
-            tipContent={
-              '면접에서 긍정적인 표정은 자신감을 나타내며 신뢰를 보여주는 데 도움이 됩니다. 이는 자신에 대한 확신을 보여주며, 어려움에 대처할 준비가 되어 있다는 인상을  줍니다. 또한 긍정적 분위기를 조성하여 면접 상황을 더욱 편안하게 만들어 줄 수 있고, 면접관에게 긍정적인 인상을 강화시킵니다.'
-            }
+            tipContent={`면접에서 긍정적인 표정은 자신감을 나타내며 신뢰를 보여주는 데 도움이 됩니다. 
+              이는 자신에 대한 확신을 보여주며,어려움에 대처할 준비가 되어 있다는 인상을 줍니다. 
+              또한 긍정적 분위기를 조성하여 면접 상황을 더욱 편안하게 만들어 줄 수 있고, 면접관에게 긍정적인 인상을 강화시킵니다.`}
           />
         </>
-      ) : (
-        ''
       )}
-      {activeTab === 'intent' ? (
+      {activeTab === 'intent' && (
         <>
-          <BarChart title={'답변 의도'} />
+          <BarChart title={'답변 의도'} intentList={analysisDetail.intentList} />
           <Explanation
-            message={
-              '김싸피님의 움직임은 산만한 편입니다. 잘하고 계시지만 동작 처리에도 조금 더 신경 써보세요! 정확하고 자신있는 움직임은 면접에서 긍정적인 인상을 남기는 데 도움이 됩니다.'
-            }
+            message={''}
             tipTitle={'답변 의도'}
-            tipContent={
-              '영상을 녹화하는 동안 카메라를 바라보는 머리 위치의 변화 정도를 보여주는 그래프 입니다. 특정 구간에서 값의 진폭이 크다면 해당 시점에 몸을 크게 움직인 것을 의미합니다. 전체적으로 진폭이 큰 구간이 자주 발생하면 주의산만으로 보일 수 있습니다.'
-            }
+            tipContent={`면접 준비 시 질문의 의도를 파악하고 그 의도에 맞는 답변을 준비하는 것은 매우 도움이 됩니다.
+              답변을 아무리 잘 했더라도 의도를 잘못 파악해 전혀 다른 이야기를 한다면 면접에서 좋은 점수를 받기 힘듭니다. 
+              해당 면접 문항에 대한 의도를 생각해보고 제시된 ${name}님의 주요 답변 의도와 일치하는지 확인해보세요! 
+              의도를 파악하여 질문에 명확하고 적합하게 대답함으로써  면접자의 전문성과 자신감을 보여주는 좋은 기회가 될 수 있습니다.`}
           />
         </>
-      ) : (
-        ''
       )}
-      {activeTab === 'keyword' ? (
+      {activeTab === 'keyword' && (
         <>
-          <HasKeywords
-            text={
-              '안녕하십니까. 지원자 김싸피입니다. 전 컴퓨터 공학을 전공으로 삼성 소프트웨어 아카데미 SSAFY에서 개발 능력과 협업 능력을 쌓아왔습니다. 제 강점은 유연한 사고와 원할한 소통능력이며, 항상 배우려는 자세입니다. 이러한 강점으로 SSAFY에서 인공지능을 기반으로 한 면접 서비스 프리뷰라는 프로젝트를 진행하였고 전국 최우수라는 쾌거를 이루었습니다. 또한, 제가 이 포지션에 적합한 이유는 항상 배우려는 자세로 짧은 시간동안 급진적으로 성장했기 때문입니다. 앞으로도 항상 배우려는 자세와 끊임없이 공부하는 자세로 함께 성장하는 개발자가 되겠습니다. 감사합니다.'
-            }
-            keywords={['SSAFY', '개발', '협업', '소통', '프리뷰', '삼성', '최우수', '발전', '성장', '싸피']}
-          />
+          <HasKeywords answer={answer} keywords={keywords} />
           <Explanation
             tipTitle={'답변 준비'}
-            tipContent={
-              '면접 시 미리 준비된 답변을 사용하면 자신감을 키울 수 있고, 핵심 키워드를 활용하여 명확한 의사 전달이 가능합니다. 또한, 논리적으로 구성된 답변은 전문성을 강조하며 예상치 못한 질문에 대비할 수 있습니다. 이는 면접 당일 긴장을 완화하여 자신을 안정시키는 데 도움이 됩니다.'
-            }
+            tipContent={`면접 시 미리 준비된 답변을 사용하면 자신감을 키울 수 있고, 핵심 키워드를 활용하여 명확한 의사 전달이 가능합니다. 
+              또한, 논리적으로 구성된 답변은 전문성을 강조하며 예상치 못한 질문에 대비할 수 있어요!
+              이는 면접 당일 긴장을 완화하고 심리적 안정에 도움이 되니, ${name}님! preview와 함께 암기해봐요.`}
           />
         </>
-      ) : (
-        ''
       )}
     </div>
   );
