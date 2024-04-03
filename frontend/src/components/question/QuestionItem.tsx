@@ -1,13 +1,13 @@
 import Accordian from '@/components/@common/Accordian/Accordian';
+import Toast from '@/components/@common/Toast/Toast';
 import Keywords from '@/components/question/Keywords';
 import Script from '@/components/question/Script';
-import Toast from '@/components/@common/Toast/Toast';
-import { IQuestionItem, questionType } from '@/types/model';
-import { useLocation } from 'react-router-dom';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import userStore from '@/stores/userStore';
 import { IInterviewQuestionItem } from '@/types/interview';
+import { IQuestionItem, questionType } from '@/types/model';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface IQuestionItemProps {
   question: string;
@@ -52,7 +52,7 @@ const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQues
   }, [plusClick, data]);
 
   return (
-    <div className="mb-2" onClick={handleClick}>
+    <div className="my-4" onClick={handleClick}>
       <Accordian
         titleContent={question}
         defaultOpen={false}

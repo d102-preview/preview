@@ -37,8 +37,8 @@ export const useQuestion = () => {
 
   const useGetListInfinite = (
     props: IDealsListInfiniteReq & { resumeId?: number },
-    type: questionType,
-    enabled = true,
+    type: interviewType,
+    // enabled = true,
   ) => {
     return useInfiniteQuery({
       queryKey: ['questionsInfinite', props],
@@ -58,7 +58,7 @@ export const useQuestion = () => {
         }
       },
       // resume 타입일 때 resumeId가 -1이 아니어야 하며, common 타입일 때는 항상 enabled
-      enabled: enabled && ((type === 'resume' && props.resumeId && props.resumeId !== -1) || type === 'common'),
+      // enabled: enabled && ((type === 'resume' && props.resumeId && props.resumeId !== -1) || type === 'common'),
     });
   };
 
@@ -96,12 +96,17 @@ export const useQuestion = () => {
     });
   };
 
-  const useGetQuestionStatus = (resumeId: number, options = {}) => {
-    return useQuery({
-      queryKey: ['questionStatus', resumeId],
-      queryFn: () => checkQuestionStatus(resumeId),
-      enabled: resumeId !== -1,
-      ...options,
+  const useGetQuestionStatus = (resumeId: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationKey: ['questionStatus', resumeId],
+      mutationFn: () => checkQuestionStatus(resumeId),
+      onSuccess: data => {
+        if (data.data.status === 'success') {
+          queryClient.invalidateQueries({ queryKey: ['questionsInfinite'] });
+        }
+        console.log(data);
+      },
     });
   };
 
@@ -116,8 +121,8 @@ export const useQuestion = () => {
 
     useEffect(() => {
       const checkAndUpdateStatus = async () => {
-        if (isSuccess && data?.data?.resumeList) {
-          data.data.resumeList.forEach(async resume => {
+        if (isSuccess && data) {
+          data.data.resumeList.map(resume => {
             if (resume.status === 'process') {
               // 이력서의 상태를 주기적으로 확인하는 함수
               const checkStatusPeriodically = async (resumeId: number) => {

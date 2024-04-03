@@ -26,7 +26,7 @@ export default {
           to: { opacity: 1, transform: 'translate(0px, 0px)' },
         },
         ShowUp: {
-          from: { opacity: 0, transform: 'translate(0px, 50px)' },
+          from: { opacity: 0, transform: 'translate(0px, 20px)' },
           to: { opacity: 1, transform: 'translate(0px, 0px)' },
         },
         Uploading: {
@@ -38,7 +38,7 @@ export default {
         modalOpen: 'FadeIn 0.3s ease-in-out',
         modalClose: 'FadeOut 0.3s ease-in-out',
         showLeft: 'ShowLeft 0.5s ease-in-out',
-        showUp: 'ShowUp 1.0s ease-in-out',
+        showUp: 'ShowUp 0.7s ease-in-out',
         uploading: 'Uploading 2s ease-in-out',
       },
     },

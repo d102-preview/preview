@@ -46,6 +46,7 @@ const ResultList = ({ type }: { type: interviewType }) => {
         ),
       )}
       <div ref={setTarget} className="h-[1rem]" />
+
     </div>
   );
 };
