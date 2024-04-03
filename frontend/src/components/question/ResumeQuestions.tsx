@@ -145,7 +145,7 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
         <div className="flex flex-col pt-3">
           <p className="text-center font-bold text-2xl text-MAIN1">질문 생성 중...</p>
           <p className="text-center text-sm text-UNIMPORTANT_TEXT">잠시만 기다려 주세요</p>
-          <Lottie options={loadingOptions3} height={350} width={400} />
+          <Lottie options={createQuestionOptions} height={350} width={400} />
         </div>
       )}
 
