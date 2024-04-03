@@ -19,7 +19,8 @@
 }
 
 .Toastify__toast--success {
-  background-color: #3273ff;
+  background-color: #f6f9ff;
+  color: #3273ff;
 }
 
 .Toastify__toast--error {

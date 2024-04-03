@@ -69,7 +69,7 @@ export interface ResultItemData {
   date: string;
   question: string;
   videoLength: number;
-  status:  'success' | 'process' | 'fail';
+  status: 'success' | 'process' | 'fail';
 }
 
 // 회원 정보
@@ -86,6 +86,8 @@ export interface IResume {
   id: number;
   displayName: string;
   filePath: string;
+  fileSize: string;
+  status: statusType;
 }
 
 // 이력서 정보

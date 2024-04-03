@@ -3,7 +3,7 @@ import ProfileContainer from '@/components/user/ProfileContainer/ProfileContaine
 
 const MyPage = () => {
   return (
-    <div>
+    <div className="h-screen overflow-y-scroll">
       <Header />
       <ProfileContainer />
     </div>
