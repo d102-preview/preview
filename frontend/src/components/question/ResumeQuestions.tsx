@@ -112,34 +112,22 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
             )}
           </div>
         </div>
-        <div className="flex flex-col pt-3">
-          <div>
-            <p className="text-center font-bold text-2xl text-MAIN1">질문 생성 중...</p>
-            <p className="text-center text-sm text-UNIMPORTANT_TEXT">잠시만 기다려 주세요</p>
-            <Lottie options={createQuestionOptions} height={350} width={400} />
-          </div>
-        </div>
-      </>
-    );
-  }
-          {dropdownOpen && (
-            <ul
-              className={`absolute w-full border ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-4 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
-            >
-              {initialResumeList.map((resume, index) => (
-                <li
-                  key={index}
-                  className={`p-4 rounded-xl hover:bg-[#E9EFFD] hover:text-MAIN1 cursor-pointer  ${selectedResume?.displayName === resume.displayName ? 'text-MAIN1' : ''}`}
-                  onClick={() => handleListItemClick(resume)}
-                >
-                  {resume.displayName}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        {dropdownOpen && (
+          <ul
+            className={`absolute w-full border ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-4 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
+          >
+            {initialResumeList.map((resume, index) => (
+              <li
+                key={index}
+                className={`p-4 rounded-xl hover:bg-[#E9EFFD] hover:text-MAIN1 cursor-pointer  ${selectedResume?.displayName === resume.displayName ? 'text-MAIN1' : ''}`}
+                onClick={() => handleListItemClick(resume)}
+              >
+                {resume.displayName}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-
       {/* 질문 생성중인 경우 */}
       {selectedResume && selectedResume.status === 'process' && (
         <div className="flex flex-col pt-3">
