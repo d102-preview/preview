@@ -19,7 +19,7 @@ import {
   IDealsListInfiniteReq,
   IResumeRes,
 } from '@/types/question';
-import { APIResponse, interviewType } from '@/types/model';
+import { APIResponse, questionType } from '@/types/model';
 import { useEffect } from 'react';
 
 export const useQuestion = () => {
@@ -50,9 +50,9 @@ export const useQuestion = () => {
         }
       },
       initialPageParam: 0, // 페이지는 0부터 시작하도록 설정
-      getNextPageParam: lastPage => {
+      getNextPageParam: (lastPage, allPages) => {
         if (lastPage && !lastPage.data.questionList.last) {
-          const nextPage = lastPage.data.questionList.number + 1;
+          const nextPage = allPages.length + 1;
           if (lastPage.data.questionList.last) return; // 마지막 페이지면
           return nextPage;
         }

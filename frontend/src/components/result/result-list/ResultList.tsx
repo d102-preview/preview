@@ -1,79 +1,52 @@
-import IMAGE1 from '@/assets/images/interview1.png';
-import { ResultItemData } from '@/types/model/index';
-import { formatInterviewTime } from '@/utils/formatDateTime';
 import ResultItem from './ResultItem';
+import { formatInterviewTime } from '@/utils/formatDateTime';
+import { useIntersectionObserver } from '@/hooks/@common/userIntersectionObserver';
+import { useResult } from '@/hooks/result/useResult';
+import { interviewType } from '@/types/model';
+import { IResultListItem, analysisListItem } from '@/types/result';
 
-const ResultList = () => {
-  // 더미 데이터
-  const setTime = new Date();
-  const resultItemsData: ResultItemData[] = [
-    {
-      result: 'fail',
-      id: 1,
-      imagePath: IMAGE1,
-      type: 'mock',
-      date: new Date(),
-      question: '지원자의 강점(장점)은 무엇입니까?',
-      time: '00:33',
-    },
-    {
-      result: 'fail',
-      id: 2,
-      imagePath: IMAGE1,
-      type: 'mock',
-      date: new Date(),
-      question: '지원자의 강점(장점)은 무엇입니까?',
-      time: '00:33',
-    },
-    {
-      result: 'ok',
-      id: 3,
-      imagePath: IMAGE1,
-      type: 'mock',
-      date: new Date(),
-      question: '지원자의 강점(장점)은 무엇입니까?',
-      time: '00:33',
-    },
-    {
-      result: 'ok',
-      id: 4,
-      imagePath: IMAGE1,
-      type: 'mock',
-      date: new Date(),
-      question: '지원자의 강점(장점)은 무엇입니까?',
-      time: '00:33',
-    },
-    {
-      result: 'ok',
-      id: 5,
-      imagePath: IMAGE1,
-      type: 'mock',
-      date: new Date(),
-      question: '지원자의 강점(장점)은 무엇입니까?',
-      time: '00:33',
-    },
-  ];
+const ResultList = ({ type }: { type: interviewType }) => {
+  const { useGetListInfinite } = useResult();
+  const { data, fetchNextPage, hasNextPage } = useGetListInfinite({ page: 0, size: 10, type });
+  const { setTarget } = useIntersectionObserver({ hasNextPage, fetchNextPage });
 
   return (
-    <div className="w-full">
-      <div className="flex items-center mb-3">
-        <p className="font-semibold text-[#B0B0B0] text-lg">{formatInterviewTime(setTime)}</p>
-        <div className="flex-grow border-t-2 border-[#B0B0B0)] ml-3"></div>
-      </div>
-      <div className="grid grid-cols-3 gap-9">
-        {resultItemsData.map(item => (
-          <ResultItem
-            key={item.id}
-            result={item.result}
-            id={item.id}
-            imagePath={item.imagePath}
-            type={item.type}
-            date={item.date}
-            question={item.question}
-            time={item.time}
-          />
-        ))}
-      </div>
+    <div>
+      {data?.pages.map(page =>
+        page?.data.interviewList.content.map(
+          (interview: IResultListItem) =>
+            // 조건부 렌더링: analysisList에 항목이 있으면 면접 세트를 렌더링합니다.
+            interview.analysisList.length > 0 && (
+              <div key={interview.id}>
+                {/* 면접 연습 세트 */}
+                <div className="flex items-center mb-3">
+                  <p className="font-semibold text-[#B0B0B0] text-lg mt-3">
+                    {formatInterviewTime(interview.startTime)}{' '}
+                    <span className="text-MAIN1 font-bold ml-2">{interview.analysisList.length}</span>
+                  </p>
+                  <div className="flex-grow border-t-2 border-[#B0B0B0] ml-3 mt-3"></div>
+                </div>
+                {/* 면접 영상 */}
+                <div className="grid grid-cols-3 gap-9">
+                  {interview.analysisList.map((analysis: analysisListItem) => (
+                    <ResultItem
+                      key={analysis.id}
+                      id={analysis.id}
+                      thumbnailPath={analysis.thumbnailPath}
+                      type={type}
+                      date={interview.startTime}
+                      question={analysis.question}
+                      videoLength={analysis.videoLength}
+                      complete={analysis.complete}
+                    />
+                  ))}
+                </div>
+              </div>
+            ),
+        ),
+      )}
+      <div ref={setTarget} className="h-[1rem]" />
+
     </div>
   );
 };

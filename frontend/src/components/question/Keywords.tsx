@@ -1,6 +1,6 @@
 import Toast from '@/components/@common/Toast/Toast';
 import { useQuestion } from '@/hooks/question/useQuestion';
-import { IKeywordItem, interviewType } from '@/types/model';
+import { IKeywordItem, questionType } from '@/types/model';
 import { IDeleteKeywordInfo } from '@/types/question';
 import { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
@@ -8,7 +8,7 @@ import { IoClose } from 'react-icons/io5';
 interface IkeywordsProps {
   initialKeywords: IKeywordItem[];
   id: number;
-  type: interviewType;
+  type: questionType;
 }
 
 const Keywords = ({ initialKeywords, id, type }: IkeywordsProps) => {

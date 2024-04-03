@@ -5,7 +5,7 @@ import Script from '@/components/question/Script';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import userStore from '@/stores/userStore';
 import { IInterviewQuestionItem } from '@/types/interview';
-import { interviewType } from '@/types/model';
+import { IQuestionItem, questionType } from '@/types/model';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ interface IQuestionItemProps {
   isSelected: boolean;
   onAdd: (questionObj: IInterviewQuestionItem) => void;
   onRemove: (id: number) => void;
-  type: interviewType;
+  type: questionType;
 }
 
 const QuestionItem = ({ question, id, isSelected, onAdd, onRemove, type }: IQuestionItemProps) => {

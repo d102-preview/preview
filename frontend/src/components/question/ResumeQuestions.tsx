@@ -3,7 +3,7 @@ import { MdOutlineExpandMore, MdOutlineExpandLess } from 'react-icons/md';
 import { useQuestion } from '@/hooks/question/useQuestion';
 import { ISimpleResume } from '@/types/model';
 import Lottie from 'react-lottie';
-import { robotOptions, loadingOptions3 } from '@/assets/lotties/lottieOptions';
+import { robotOptions, createQuestionOptions } from '@/assets/lotties/lottieOptions';
 import SpeechBubble from '@/components/result/SpeechBubble';
 import userStore from '@/stores/userStore';
 import { useIntersectionObserver } from '@/hooks/@common/userIntersectionObserver';
@@ -111,7 +111,17 @@ const ResumeQuestions = ({ type, resumeList: initialResumeList }: QuestionsProps
               <MdOutlineExpandMore size="25" className="text-MAIN1" aria-hidden="true" />
             )}
           </div>
-
+        </div>
+        <div className="flex flex-col pt-3">
+          <div>
+            <p className="text-center font-bold text-2xl text-MAIN1">질문 생성 중...</p>
+            <p className="text-center text-sm text-UNIMPORTANT_TEXT">잠시만 기다려 주세요</p>
+            <Lottie options={createQuestionOptions} height={350} width={400} />
+          </div>
+        </div>
+      </>
+    );
+  }
           {dropdownOpen && (
             <ul
               className={`absolute w-full border ${dropdownOpen ? 'border-MAIN1' : 'border-[#F1F5FF]'} bg-[#F1F5FF] rounded-xl shadow-2xl shadow-MAIN3 z-10 mt-4 left-0 border-2-[#F1F5FF] font-semibold text-UNIMPORTANT_TEXT`}
