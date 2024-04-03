@@ -91,18 +91,33 @@ const BarChart = ({ title, intentList }: IBarChartProps) => {
   return (
     <>
       <div>
-        <h4 className="text-2xl text-[#696969] font-bold pb-3">주요 {title}</h4>
+        <h4 className="text-[#696969] font-bold pb-3">
+          주요 {title}
+          <span className=""> (상위 5개)</span>
+        </h4>
         <Bar data={data} options={options} />
       </div>
-      <div className="flex flex-wrap gap-3 justify-center py-5 items-center">
+      <div className="flex flex-wrap gap-2 justify-center py-5 items-center">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="rounded-full w-fit p-6 text-center" style={{ backgroundColor: borderColor[i] }}>
-            <p className="text-sm text-[#696969]">{category[i]}</p>
-            <p>{labels[i]}</p>
-            <p className="text-xl font-bold text-BLACK pt-1">{originalData[i]}%</p>
+          <div key={i} className="rounded-full w-fit p-4 text-center" style={{ backgroundColor: borderColor[i] }}>
+            <p className="text-xs text-[#696969]">{category[i]}</p>
+            <p className="text-sm">{labels[i]}</p>
+            <p className="text-lg font-bold text-BLACK ">{originalData[i]}%</p>
           </div>
         ))}
       </div>
+      <p className="text-sm text-right pr-3 text-UNIMPORTANT_TEXT">
+        *{'  '}
+        <span className="underline underline-offset-4">
+          <a
+            href="https://aihub.or.kr/aihubdata/data/view.do?currMenu=&topMenu=&aihubDataSe=data&dataSetSn=71592"
+            target="_blank"
+          >
+            AI-Hub 채용면접 인터뷰 데이터
+          </a>
+        </span>
+        의 52개 중 답변 의도 중 상위 5개
+      </p>
     </>
   );
 };

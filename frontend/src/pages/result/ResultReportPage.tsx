@@ -63,14 +63,14 @@ const ResultReportPage = () => {
   return (
     <>
       <Header />
-      <main className="max-w-9xl mx-auto my-10 animate-showUp  min-w-[900px] max-w-[80%]">
+      <main className="max-w-9xl mx-auto my-10 animate-showUp min-w-[1024px] max-w-[95%]">
         <div className="w-10/12 mx-auto">
           <div>
-            <h3 className="text-3xl font-bold text-BLACK">프리뷰 분석 결과</h3>
-            <p className="text-lg text-UNIMPORTANT_TEXT">{`“${question}” 문항에 대한 ${name}님의 면접 분석 결과입니다.`}</p>
+            <h3 className="text-xl font-bold text-BLACK">프리뷰 분석 결과</h3>
+            <p className=" text-UNIMPORTANT_TEXT">{`“${question}” 문항에 대한 ${name}님의 면접 분석 결과입니다.`}</p>
           </div>
           {/* 분석 보고서 */}
-          <div className="shadow-xl p-14 my-3 rounded-lg w-full">
+          <div className="shadow-xl p-5 my-3 rounded-lg w-full">
             {/* <div className="flex items-center gap-10 pb-5">
               <div>
                 <h3 className="p-3 text-3xl font-bold text-BLACK">총평</h3>
