@@ -29,4 +29,4 @@ COPY --from=builder /app /app
 
 RUN poetry config virtualenvs.create false && \
     apt-get update && \
-    apt-get install -y libquadmath0 libgomp1 libgl1-mesa-glx libglib2.0-0
+    apt-get install -y libquadmath0 libgomp1 libgl1-mesa-glx libglib2.0-0 ffmpeg
