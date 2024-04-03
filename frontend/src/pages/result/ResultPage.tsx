@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/@common/Header/Header';
 import ResultList from '@/components/result/result-list/ResultList';
+import { useState } from 'react';
 import { interviewType } from '@/types/model';
+import Footer from '@/components/@common/Footer/Footer';
 
 const ResultPage = () => {
-  const [type, setType] = useState<interviewType>('mock');
- 
+  const [type, setType] = useState<interviewType>('main');
+
   const buttonClass = (buttonType: interviewType) =>
     `text-${type === buttonType ? 'MAIN1' : 'UNIMPORTANT_TEXT'} font-semibold border-b-2 border-${type === buttonType ? 'MAIN1' : 'UNIMPORTANT_TEXT'}`;
 
@@ -28,10 +30,11 @@ const ResultPage = () => {
             </div>
         </div>
           <div className="flex w-full">
-          <ResultList type={type} />
-         </div>
+            <ResultList type={type} />
+          </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 };

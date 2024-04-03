@@ -4,7 +4,7 @@ import QuestionTab from '@/components/question/QuestionTab';
 import ResumeQuestions from '@/components/question/ResumeQuestions';
 import SelectedQuestions from '@/components/question/SelectedQuestions';
 import { useQuestion } from '@/hooks/question/useQuestion';
-import { ISimpleResume, interviewType } from '@/types/model';
+import { ISimpleResume, questionType } from '@/types/model';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ISimpleResume, questionType } from '@/types/model';

@@ -37,7 +37,7 @@ export const useQuestion = () => {
 
   const useGetListInfinite = (
     props: IDealsListInfiniteReq & { resumeId?: number },
-    type: interviewType,
+    type: questionType,
     // enabled = true,
   ) => {
     return useInfiniteQuery({
