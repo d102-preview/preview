@@ -4,6 +4,7 @@ import os
 from collections import Counter
 from datetime import datetime
 
+import ffmpeg
 import numpy as np
 import pandas as pd
 from ai.kobert_proc import kobert_model
@@ -39,6 +40,22 @@ def _facial_emotional_recognition(record: Analysis) -> None:
         msg = f"No target file on {video_path}"
         logger.error(msg)
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), video_path)
+
+    # Encoding and resizing using ffmpeg
+    video_path_splited = os.path.splitext(video_path)
+    video_path_encoded = "".join(
+        [video_path_splited[0], "_encoded", video_path_splited[1]]
+    )
+    logger.debug(f"Encoding and resizing to {video_path_encoded}")
+
+    (
+        ffmpeg.input(video_path)
+        .filter("scale", -1, 720)
+        .output(video_path_encoded, vcodec="libx264", crf=20, loglevel="quiet")
+        .run(overwrite_output=True)
+    )
+    video_path = video_path_encoded
+    logger.info(f"Success to encoding and resizing")
 
     logger.info(f"Start facial emotional recognition. {video_path = }")
 
