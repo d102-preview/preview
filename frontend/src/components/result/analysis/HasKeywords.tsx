@@ -32,9 +32,9 @@ const HasKeywords = ({ answer, keywords }: IHasKeywordsProps) => {
           <div className="flex items-end pt-7">
             <h4 className="text-2xl text-[#696969] font-bold mt-3">
               핵심 키워드
-              <span className="items-center gap-2 text-BLACK text-lg  mx-2">
-                : 미리 작성된 핵심 키워드 <span className="text-MAIN1 font-semibold ">{keywords.length}개</span> 중{' '}
-                <span className="text-MAIN1 font-semibold">{includedCount}개의 키워드</span>가 포함되어 있습니다.
+              <span className="font-normal items-center gap-2 text-[#818181] text-lg  mx-2">
+                : 미리 작성된 핵심 키워드 <span className="text-MAIN1 font-medium ">{keywords.length}개</span> 중{' '}
+                <span className="text-MAIN1 font-medium">{includedCount}개의 키워드</span>가 포함되어 있습니다.
               </span>
             </h4>
           </div>

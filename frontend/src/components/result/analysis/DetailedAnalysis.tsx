@@ -47,11 +47,6 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
     emotionMessage = '무표정이 많습니다.';
   }
 
-  // // 동영상 재생 위치가 변경될 때 호출되는 함수
-  // const handleVideoTimeUpdate = () => {
-  //   setCurrentTime(videoRef.current?.currentTime || 0);
-  // };
-
   // 차트에서 새로운 시간을 설정할 때 호출되는 함수
   const handleChartTimeUpdate = (newTime: number) => {
     console.log(typeof newTime);
@@ -63,7 +58,8 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
   useEffect(() => {
     console.log(currentTime);
   }, [currentTime]);
-  const url = `${import.meta.env.VITE_BASE_URL}/file/download/video?path=%2Fapp%2Ffiles%2Fvideo%2Fadmin%40d102.com%2F2024-03-29T15-28-00%2Ftest1.mp4`;
+ 
+  const url = `${import.meta.env.VITE_BASE_URL}/file/download/video?path=${analysisDetail.videoPath}`;
 
   // 동영상 재생 위치가 변경될 때 호출되는 함수
   const handleProgress = () => {
@@ -76,16 +72,6 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
       <div className="pt-14 px-7">
         <div className="flex gap-14">
           <div className="w-1/2">
-            {/* <video
-              className="rounded-xl w-full shadow-lg "
-              ref={videoRef}
-              onTimeUpdate={handleVideoTimeUpdate}
-              controls
-            >
-              <source src={result.videoPath} type="video/mp4" />
-              비디오를 지원하지 않는 브라우저입니다.
-            </video> */}
-
             <ReactPlayer
               url={url}
               controls={true}
@@ -98,7 +84,7 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
               <span className="text-MAIN1 text-lg">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
               <span className="text-lg text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
             </div>
-            <span className="font-semibold text-BLACK text-2xl mx-1">Q. {question}</span>
+            <span className="font-semibold text-BLACK text-xl mx-1">Q. {question}</span>
 
             {/* 요약 */}
             <div className="border-b-2 border-gray my-7"></div>
