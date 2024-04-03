@@ -126,20 +126,20 @@ public class AsyncServiceImpl implements AsyncService {
                 response = fastAiApi.analyzeVideo(analysisId);
             } catch (RestClientException e) {
                 /* failAnalysis(analysisId); */
-                analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
-                saveVideoWithException(analysis, TaskConstant.STATUS_FAIL);
+                /* analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException)); */
+                /* saveVideoWithException(analysis, TaskConstant.STATUS_FAIL); */
                 throw new InvalidException(ExceptionType.FastAiApiException);
             } catch (Exception e) {
-                analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
-                saveVideoWithException(analysis, TaskConstant.STATUS_FAIL);
+                /* analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException)); */
+                /* saveVideoWithException(analysis, TaskConstant.STATUS_FAIL); */
                 /* failAnalysis(analysisId); */
                 throw new InvalidException(ExceptionType.UnknownException);
             }
         }
 
-        analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+        /* analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException)); */
         /* successAnalysis(analysisId); */
-        saveVideoWithException(analysis, TaskConstant.STATUS_SUCCESS);
+        /* saveVideoWithException(analysis, TaskConstant.STATUS_SUCCESS); */
     }
 
     private void saveVideoWithException(Analysis analysis, String status) {
