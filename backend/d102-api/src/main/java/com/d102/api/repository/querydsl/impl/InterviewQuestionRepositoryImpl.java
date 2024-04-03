@@ -37,7 +37,8 @@ public class InterviewQuestionRepositoryImpl implements InterviewQuestionReposit
     public List<ResumeQuestion> getResumeQuestionList(Long resumeId) {
         return jpaQueryFactory.selectFrom(resumeQuestion)
                 .where(resumeQuestion.resume.id.eq(resumeId))
-                .orderBy(makeRandom())
+                .orderBy(resumeQuestion.id.asc()) /* to simulate */
+//                .orderBy(makeRandom())
                 .limit(InterviewConstant.QUESTION_COUNT)
                 .fetch();
     }
