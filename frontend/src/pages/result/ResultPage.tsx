@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Header from '@/components/@common/Header/Header';
 import ResultList from '@/components/result/result-list/ResultList';
 import { interviewType } from '@/types/model';
-import Footer from '@/components/@common/Footer/Footer';
 
 const ResultPage = () => {
   const [type, setType] = useState<interviewType>('main');
@@ -13,9 +12,9 @@ const ResultPage = () => {
   return (
     <>
       <Header />
-      <main className="mx-auto mt-7 animate-showUp min-w-[900px] max-w-[80%]">
+      <main className="mx-auto mt-7 animate-showUp min-w-[900px] max-w-[70%]">
         <div>
-          <div className="flex justify-between pb-7">
+          <div className="flex justify-between">
             <div className="flex gap-2 text-xl font-bold">
               <h3 className="text-[#696969]">{type == 'mock' ? '모의 면접' : '실전 면접'} 분석 결과</h3>
             </div>
@@ -33,7 +32,6 @@ const ResultPage = () => {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 };
