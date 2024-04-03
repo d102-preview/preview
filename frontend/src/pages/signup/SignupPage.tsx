@@ -1,18 +1,22 @@
 import computer from '@/assets/images/computer.png';
 import logoWhite from '@/assets/images/logo_white.png';
+import Toast from '@/components/@common/Toast/Toast';
 import SignupForm from '@/components/signup/SignupForm';
-import userStore from '@/stores/userStore';
+// import userStore from '@/stores/userStore';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const { isLogin } = userStore();
+  // const { isLogin } = userStore();
 
   useEffect(() => {
-    if (isLogin) {
-      navigate('/');
-    }
+    // if (isLogin) {
+    //   navigate('/');
+    // }
+
+    Toast.error('점검중입니다. 테스트 계정을 이용해주세요.');
+    navigate(-1);
   }, []);
 
   return (
