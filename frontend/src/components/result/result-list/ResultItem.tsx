@@ -1,9 +1,9 @@
-import Lottie from 'react-lottie';
 import { analysisOptions } from '@/assets/lotties/lottieOptions';
-import { formatInterviewSetTime } from '@/utils/formatDateTime';
-import { formatVideoLength } from '@/utils/formatVideoLength';
 import { ResultItemData } from '@/types/model/index';
+import { formatInterviewSetTime } from '@/utils/formatDateTime';
+import Lottie from 'react-lottie';
 import { useNavigate } from 'react-router-dom';
+import { formatVideoLength } from '@/utils/formatVideoLength';
 
 const ResultItem = ({ id, thumbnailPath, type, date, question, videoLength, complete }: ResultItemData) => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const ResultItem = ({ id, thumbnailPath, type, date, question, videoLength, comp
           height={250}
           src={thumbnailPath}
           alt={`Profile of user ${id}`}
-          className="bg-cover bg-center rounded-lg bg-inherit shadow-md"
+          className="w-full py-4 bg-cover bg-center rounded-lg bg-inherit shadow-md "
         />
       </div>
       <div className="flex justify-between mx-1 mt-2">

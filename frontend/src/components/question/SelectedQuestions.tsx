@@ -1,23 +1,23 @@
-import { useNavigate } from 'react-router-dom';
-import Button from '../@common/Button/Button';
-import { LuMinusCircle } from 'react-icons/lu';
 import questionStore from '@/stores/questionStore';
 import { getCurrentTime } from '@/utils/getCurrentTime';
+import { LuMinusCircle } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
+import Button from '../@common/Button/Button';
 
 const SelectedQuestions = () => {
   const { selectedQuestions, removeQuestion, message } = questionStore();
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col justify-between ml-10 p-7 w-1/3 rounded-2xl shadow-lg">
-      <div>
-        <h3 className="text-xl font-semibold mb-1">선택된 질문</h3>
+    <div className="flex flex-col justify-between ml-5 p-4 rounded-2xl shadow-lg">
+      <div className="w-[380px]">
+        <h3 className="text-lg font-semibold mb-1">선택된 질문</h3>
         <p className="text-sm text-UNIMPORTANT_TEXT">총 {selectedQuestions.length}개의 질문이 선택되었습니다.</p>
         <ul>
           {selectedQuestions.map(questionObj => (
             <div
               key={questionObj.id}
-              className={`m-4 p-3 cursor-pointer box-content drop-shadow-lg w-10/12 bg-white rounded-xl flex items-center`}
+              className={`p-3 my-3 cursor-pointer box-content drop-shadow-lg bg-white rounded-xl flex items-center`}
             >
               <LuMinusCircle
                 size="35"
