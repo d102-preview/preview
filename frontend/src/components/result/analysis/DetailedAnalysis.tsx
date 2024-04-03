@@ -58,7 +58,7 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
   useEffect(() => {
     console.log(currentTime);
   }, [currentTime]);
- 
+
   const url = `${import.meta.env.VITE_BASE_URL}/file/download/video?path=${analysisDetail.videoPath}`;
 
   // 동영상 재생 위치가 변경될 때 호출되는 함수
@@ -72,14 +72,9 @@ const DetailedAnalysis = ({ type, question, analysisDetail, date }: IDetailedAna
       <div className="pt-14 px-7">
         <div className="flex gap-14">
           <div className="w-1/2">
-            <ReactPlayer
-              url={url}
-              controls={true}
-              playing={true}
-              ref={videoRef}
-              onProgress={handleProgress}
-              width={500}
-            />
+            <div className="w-full bg-black">
+              <ReactPlayer url={url} controls={true} playing={true} ref={videoRef} onProgress={handleProgress} />
+            </div>
             <div className="flex justify-between px-1 pt-4 pb-1">
               <span className="text-MAIN1 text-lg">{type == 'mock' ? '모의 면접' : '실전 면접'}</span>
               <span className="text-lg text-UNIMPORTANT_TEXT mr-1">{formatInterviewSetTime(date)}</span>
