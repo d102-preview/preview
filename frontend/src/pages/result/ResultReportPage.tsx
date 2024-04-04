@@ -12,7 +12,6 @@ import { useParams } from 'react-router-dom';
 const ResultReportPage = () => {
   const parms = useParams();
   const analysisId = Number(parms.id);
-  console.log(analysisId);
 
   const { name } = userStore();
 

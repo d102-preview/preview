@@ -28,8 +28,6 @@ const ModifyPasswordModal = ({ onClose }: { onClose: () => void }) => {
   const handleModify = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
-    console.log(passwordInfo);
-
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,15}$/g;
 
     if (!passwordInfo.changedPassword.trim().length) {
