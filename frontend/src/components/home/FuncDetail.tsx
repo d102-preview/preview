@@ -1,4 +1,8 @@
 import DetailBox from './DetailBox';
+import resume from '@/assets/images/resume.gif';
+import result from '@/assets/images/result.gif';
+import mock from '@/assets/images/mock.gif';
+import main from '@/assets/images/main.gif';
 
 interface IFunction {
   type: 'left' | 'right';
@@ -31,7 +35,7 @@ const FuncDetail = () => {
       ),
       buttonText: '이력서 등록하러 가기',
       navigateUrl: '/my',
-      video: '',
+      video: <img src={resume} className="border" />,
     },
     {
       type: 'right',
@@ -54,7 +58,7 @@ const FuncDetail = () => {
       ),
       buttonText: '면접 연습하러가기',
       navigateUrl: '/interview',
-      video: '',
+      video: <img src={mock} className="border" />,
     },
     {
       type: 'left',
@@ -69,7 +73,7 @@ const FuncDetail = () => {
       ),
       buttonText: '실전 면접 연습하러가기',
       navigateUrl: '/interview',
-      video: '',
+      video: <img src={main} className="border" />,
     },
     {
       type: 'right',
@@ -90,7 +94,7 @@ const FuncDetail = () => {
       ),
       buttonText: '기존 영상 분석 결과 확인하기',
       navigateUrl: '/result',
-      video: '',
+      video: <img src={result} className="border" />,
     },
   ];
 

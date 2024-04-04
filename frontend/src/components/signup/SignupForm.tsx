@@ -130,7 +130,6 @@ const SignupForm = () => {
       }
       case 'certifNum': {
         const certifNum = value;
-        console.log(certifNum);
 
         if (!certifNum.trim().length) {
           setSubTextAndStatus(type, '인증번호를 입력하지 않았습니다.', 'error');
@@ -209,15 +208,12 @@ const SignupForm = () => {
           },
           onError: error => {
             if (axios.isAxiosError(error)) {
-              console.log('에러 객체', error.response);
               Toast.error('인증번호를 전송하지 못했습니다. 다시 시도해주세요.');
             }
           },
         });
       },
-      onError: (error, variables) => {
-        console.log('실패', error, variables);
-
+      onError: error => {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 409) {
             setSubTextAndStatus('email', '중복된 이메일입니다.', 'error');
@@ -243,7 +239,6 @@ const SignupForm = () => {
       },
       {
         onSuccess: res => {
-          console.log('인증번호 확인 성공', res);
           if (res.data.verify) {
             Toast.success('인증되었습니다.');
             setIsVerify(true);

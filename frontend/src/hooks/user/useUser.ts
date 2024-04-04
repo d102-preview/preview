@@ -46,7 +46,6 @@ export const useUser = () => {
         Toast.success('수정되었습니다.');
       },
       onError: err => {
-        console.log(err);
         if (axios.isAxiosError(err)) {
           if (err.response?.status === 401) {
             Toast.error('기존 비밀번호와 다릅니다.');

@@ -53,8 +53,6 @@ const Resume = ({ resume }: { resume: (IResume | undefined)[] }) => {
     }
   };
 
-  // console.log(resume, resume.length, resume[0]);
-
   return (
     <>
       <div className="flex justify-between items-center pt-8 border-t-[1px]">
