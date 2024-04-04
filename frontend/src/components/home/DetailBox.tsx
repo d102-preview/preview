@@ -73,13 +73,23 @@ const DetailBox = ({ info }: { info: IDetailBox }) => {
               )}
             </motion.div>
           </motion.div>
-          <motion.div variants={videoVarients} initial="hidden" whileInView="visible" className="col-span-3">
+          <motion.div
+            variants={videoVarients}
+            initial="hidden"
+            whileInView="visible"
+            className="col-span-3 flex items-center"
+          >
             {info.video}
           </motion.div>
         </>
       ) : (
         <>
-          <motion.div variants={videoVarients} initial="hidden" whileInView="visible" className="col-span-3">
+          <motion.div
+            variants={videoVarients}
+            initial="hidden"
+            whileInView="visible"
+            className="col-span-3 flex items-center"
+          >
             {info.video}
           </motion.div>
           <motion.div

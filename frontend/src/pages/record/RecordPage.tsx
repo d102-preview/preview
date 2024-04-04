@@ -55,12 +55,10 @@ const RecordPage = () => {
 
   useEffect(() => {
     if (state) {
-      console.log(state);
       postInterviewSet({ type: state.type, startTime: state.startTime });
 
       if (state.questionList) {
         setQuestionList(state.questionList);
-        console.log(state.questionList);
       } else {
         getQuestionList(state.resumeId);
       }
@@ -149,14 +147,12 @@ const RecordPage = () => {
       mediaRecorderRef.current = new MediaRecorder(stream as MediaStream, {
         mimeType: 'video/webm; codecs=vp9',
       });
-      console.log(mediaRecorderRef.current);
 
       // 전달받은 데이터를 처리
       // 녹화된 미디어 데이터가 사용 가능할 때 트리거됩니다. (handleStopRecording 호출 시)
       mediaRecorderRef.current.ondataavailable = event => {
         if (event.data && event.data.size > 0) {
           setRecordedBlobs(prev => [...prev, event.data]);
-          console.log('데이터처리 Blob 객체 생성');
         }
       };
       mediaRecorderRef.current.start();
@@ -170,7 +166,6 @@ const RecordPage = () => {
     if (mediaRecorderRef.current) {
       // stt 중지
       stop();
-      console.log(stt);
 
       // (실전면접 + 이력서 기반 질문)이라면 꼬리 질문 생성
       if (state.type === 'main' && questionList[questionIndex].type === 'resume') {
@@ -201,8 +196,6 @@ const RecordPage = () => {
       };
       newData.splice(questionIndex, 0, req);
 
-      console.log(questionList);
-      console.log(newData);
       setQuestionList(newData);
       setIsFollowup(false);
     }
@@ -216,7 +209,6 @@ const RecordPage = () => {
       const videoFile = convertBlobToFile(recordedBlobs, filename);
 
       const check = questionList[questionIndex];
-      console.log(check);
       const req: IInterviewAnalyzeReq = {
         interviewId: interviewSet!.data.interview.id,
         question: check!.question,

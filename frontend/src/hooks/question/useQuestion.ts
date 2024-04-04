@@ -107,7 +107,6 @@ export const useQuestion = () => {
         if (data.data.status === 'success') {
           queryClient.invalidateQueries({ queryKey: ['questionsInfinite'] });
         }
-        console.log(data);
       },
     });
   };
