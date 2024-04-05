@@ -9,6 +9,7 @@ import com.d102.common.util.UserVerifier;
 import com.d102.file.dto.DownloadDto;
 import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class DownloadServiceImpl implements DownloadService {
@@ -58,6 +60,9 @@ public class DownloadServiceImpl implements DownloadService {
          * TODO: 섬네일 다운로드 시 섬네일의 소유자가 로그인한 유저인지 확인하는 로직 추가 필요
          */
         try {
+            /* MimeType 로그 출력 */
+            log.info("Thumbnail MimeType: {}", Files.probeContentType(thumbnailPath));
+
             return DownloadDto.ThumbnailResponse.builder()
                     .thumbnailType(MediaType.parseMediaType(Files.probeContentType(thumbnailPath)).toString())
                     .thumbnail(FileCopyUtils.copyToByteArray(thumbnailPath.toFile()))
