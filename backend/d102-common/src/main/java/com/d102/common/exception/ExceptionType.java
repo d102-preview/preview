@@ -18,6 +18,7 @@ public enum ExceptionType {
     FastAiApiException("INVALID", "FastAi server response failed"),
     AnalysisException("INVALID", "FastAi analysis failed"),
     AnalysisJsonException("INVALID", "Analysis json convert failed"),
+    ThreadSleepException("INVALID", "Thread sleep failed"),
 
     /* UnAuthorize exception */
     InvalidLoginUserException("UNAUTHORIZED", "Invalid email or password"),

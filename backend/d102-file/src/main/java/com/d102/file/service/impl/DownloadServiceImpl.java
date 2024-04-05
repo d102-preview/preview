@@ -9,6 +9,7 @@ import com.d102.common.util.UserVerifier;
 import com.d102.file.dto.DownloadDto;
 import com.d102.file.service.DownloadService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class DownloadServiceImpl implements DownloadService {
@@ -27,7 +29,7 @@ public class DownloadServiceImpl implements DownloadService {
     public DownloadDto.ProfileResponse downloadProfile(Path profilePath) {
         try {
             return DownloadDto.ProfileResponse.builder()
-                    .profileType(MediaType.parseMediaType(Files.probeContentType(profilePath)).toString())
+                    .profileType(Files.probeContentType(profilePath))
                     .profile(FileCopyUtils.copyToByteArray(profilePath.toFile()))
                     .build();
         } catch (IOException e) {
@@ -45,7 +47,7 @@ public class DownloadServiceImpl implements DownloadService {
             return DownloadDto.ResumeResponse.builder()
                     .resumeName(resume.getFileName())
                     .resumeLength(resume.getFileSize().toString())
-                    .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)).toString())
+                    .resumeType(Files.probeContentType(resumePath))
                     .resume(FileCopyUtils.copyToByteArray(resumePath.toFile()))
                     .build();
         } catch (Exception e) {
@@ -59,7 +61,7 @@ public class DownloadServiceImpl implements DownloadService {
          */
         try {
             return DownloadDto.ThumbnailResponse.builder()
-                    .thumbnailType(MediaType.parseMediaType(Files.probeContentType(thumbnailPath)).toString())
+                    .thumbnailType(Files.probeContentType(thumbnailPath))
                     .thumbnail(FileCopyUtils.copyToByteArray(thumbnailPath.toFile()))
                     .build();
         } catch (IOException e) {
