@@ -7,7 +7,6 @@ import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Resume;
 import com.d102.common.domain.jpa.ResumeQuestion;
 import com.d102.common.domain.redis.QuestionListHash;
-import com.d102.common.domain.redis.TempAnalysisHash;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.repository.jpa.AnalysisRepository;
@@ -52,7 +51,7 @@ public class AsyncServiceImpl implements AsyncService {
     @Async
     public void generateAndSaveQuestionList(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
-        processQuestionList(resumeId);
+        processGenerateAndSaveQuestionList(resumeId);
         saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
 
         String savePath = resume.getFilePath();
@@ -65,26 +64,38 @@ public class AsyncServiceImpl implements AsyncService {
         OpenAiApi.Response response = null;
         List<String> questionList = null;
 
-        try {
-            resume.setAnalysisReqTime(LocalDateTime.now());
-            resumeRepository.saveAndFlush(resume);
-            response = openAiApi.generateQuestionList(imageList);
+        resume.setAnalysisReqTime(LocalDateTime.now());
+        resumeRepository.saveAndFlush(resume);
 
-            String jsonString = response.getChoices().getFirst().getMessage().getContent();
-            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-            questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
-        } catch (RestClientException e) {
-            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
-            failQuestionList(resumeId);
-            throw new InvalidException(ExceptionType.OpenAiApiException);
-        } catch (IOException e) {
-            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
-            failQuestionList(resumeId);
-            throw new InvalidException(ExceptionType.Base64ConvertException);
-        } catch (Exception e) {
-            saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
-            failQuestionList(resumeId);
-            throw new InvalidException(ExceptionType.UnknownException);
+        int retryCount = 0;
+        boolean isRetry = true;
+        while (isRetry && retryCount < TaskConstant.MAX_RETRY) {
+            try {
+                response = openAiApi.generateQuestionList(imageList);
+                String jsonString = response.getChoices().getFirst().getMessage().getContent();
+                JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+                questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
+                isRetry = false;
+                Thread.sleep(TaskConstant.RETRY_INTERVAL);
+            } catch (RestClientException e) {
+                retryCount++;
+                if (retryCount >= TaskConstant.MAX_RETRY) {
+                    failGenerateAndSaveQuestionList(resumeId);
+                    handleGenerateAndSaveQuestion(resumeId, ExceptionType.OpenAiApiException);
+                }
+            } catch (IOException e) {
+                retryCount++;
+                if (retryCount >= TaskConstant.MAX_RETRY) {
+                    failGenerateAndSaveQuestionList(resumeId);
+                    handleGenerateAndSaveQuestion(resumeId, ExceptionType.PdfConvertException);
+                }
+            } catch (Exception e) {
+                retryCount++;
+                if (retryCount >= TaskConstant.MAX_RETRY) {
+                    failGenerateAndSaveQuestionList(resumeId);
+                    handleGenerateAndSaveQuestion(resumeId, ExceptionType.UnknownException);
+                }
+            }
         }
 
         resume.setAnalysisEndTime(LocalDateTime.now());
@@ -98,48 +109,45 @@ public class AsyncServiceImpl implements AsyncService {
                 .toList();
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
-        successQuestionList(resumeId);
-    }
-
-    private void saveResumeWithException(Resume resume, String status) {
-        resume.setAnalysisStatus(status);
-        resumeRepository.saveAndFlush(resume);
+        successGenerateAndSaveQuestionList(resumeId);
     }
 
     @Async
     public void analyzeVideo(Long analysisId) {
         Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
-        /* processAnalysis(analysisId); */
         saveVideoWithException(analysis, TaskConstant.STATUS_PROCESS);
 
-        FastAiApi.Response response = null;
-
-        try {
-            analysis.setAnalysisReqTime(LocalDateTime.now());
-            analysisRepository.saveAndFlush(analysis);
-            response = fastAiApi.analyzeVideo(analysisId);
-        } catch (RestClientException e1) {
-            /**
-             * FastAI 서버로부터 실패한 응답을 받았을 경우 재시도
-             */
+        /**
+         * FastAPI 서버에서 응답하는 경우에는 process, fail, success가 모두 처리되기 때문에 괜찮음
+         * 하지만 응답 자체가 실패하는 경우에 FastAPI 측에서 status를 반영시킬 수 없기 때문에 이 경우에는 Spring Boot 측에서 status를 fail로 해줄 필요가 있음
+         */
+        int retryCount = 0;
+        boolean isRetry = true;
+        while (isRetry && retryCount < TaskConstant.MAX_RETRY) {
             try {
-                response = fastAiApi.analyzeVideo(analysisId);
-            } catch (RestClientException e) {
-                /* failAnalysis(analysisId); */
-                /* analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException)); */
-                /* saveVideoWithException(analysis, TaskConstant.STATUS_FAIL); */
-                throw new InvalidException(ExceptionType.FastAiApiException);
+                analysis.setAnalysisReqTime(LocalDateTime.now());
+                analysisRepository.saveAndFlush(analysis);
+                fastAiApi.analyzeVideo(analysisId);
+                isRetry = false;
+                Thread.sleep(TaskConstant.RETRY_INTERVAL);
+            } catch (RestClientException e1) {
+                retryCount++;
+                if (retryCount >= TaskConstant.MAX_RETRY) {
+                    handleAnalyzeVideoException(analysisId, ExceptionType.FastAiApiException);
+                }
             } catch (Exception e) {
-                /* analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException)); */
-                /* saveVideoWithException(analysis, TaskConstant.STATUS_FAIL); */
-                /* failAnalysis(analysisId); */
-                throw new InvalidException(ExceptionType.UnknownException);
+                retryCount++;
+                if (retryCount >= TaskConstant.MAX_RETRY) {
+                    handleAnalyzeVideoException(analysisId, ExceptionType.UnknownException);
+                }
             }
         }
+    }
 
-        /* analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException)); */
-        /* successAnalysis(analysisId); */
-        /* saveVideoWithException(analysis, TaskConstant.STATUS_SUCCESS); */
+    private void handleAnalyzeVideoException(Long analysisId, ExceptionType exceptionType) {
+        Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new InvalidException(ExceptionType.AnalysisNotFoundException));
+        saveVideoWithException(analysis, TaskConstant.STATUS_FAIL);
+        throw new InvalidException(exceptionType);
     }
 
     private void saveVideoWithException(Analysis analysis, String status) {
@@ -147,35 +155,30 @@ public class AsyncServiceImpl implements AsyncService {
         analysisRepository.saveAndFlush(analysis);
     }
 
-    private void successAnalysis(Long analysisId) {
-        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(String.valueOf(analysisId)).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
-        tempAnalysisHash.setStatus(RedisConstant.STATUS_SUCCESS);
-        tempAnalysisHashRepository.save(tempAnalysisHash);
+    private void handleGenerateAndSaveQuestion(Long resumeId, ExceptionType exceptionType) {
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
+        saveResumeWithException(resume, TaskConstant.STATUS_FAIL);
+        throw new InvalidException(exceptionType);
     }
 
-    private void failAnalysis(Long analysisId) {
-        TempAnalysisHash tempAnalysisHash = tempAnalysisHashRepository.findById(String.valueOf(analysisId)).orElseThrow(() -> new InvalidException(ExceptionType.TempAnalysisHashNotFoundException));
-        tempAnalysisHash.setStatus(RedisConstant.STATUS_FAIL);
-        tempAnalysisHashRepository.save(tempAnalysisHash);
+    private void saveResumeWithException(Resume resume, String status) {
+        resume.setAnalysisStatus(status);
+        resumeRepository.saveAndFlush(resume);
     }
 
-    private void processAnalysis(Long analysisId) {
-        tempAnalysisHashRepository.save(TempAnalysisHash.builder().id(String.valueOf(analysisId)).status(RedisConstant.STATUS_PROCESS).build());
-    }
-
-    private void successQuestionList(Long resumeId) {
+    private void successGenerateAndSaveQuestionList(Long resumeId) {
         QuestionListHash questionListHash = questionListHashRepository.findById(String.valueOf(resumeId)).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
         questionListHash.setStatus(RedisConstant.STATUS_SUCCESS);
         questionListHashRepository.save(questionListHash);
     }
 
-    private void failQuestionList(Long resumeId) {
+    private void failGenerateAndSaveQuestionList(Long resumeId) {
         QuestionListHash questionListHash = questionListHashRepository.findById(String.valueOf(resumeId)).orElseThrow(() -> new InvalidException(ExceptionType.QuestionListHashNotFoundException));
         questionListHash.setStatus(RedisConstant.STATUS_FAIL);
         questionListHashRepository.save(questionListHash);
     }
 
-    private void processQuestionList(Long resumeId) {
+    private void processGenerateAndSaveQuestionList(Long resumeId) {
         questionListHashRepository.save(QuestionListHash.builder().id(String.valueOf(resumeId)).status(RedisConstant.STATUS_PROCESS).build());
     }
 
