@@ -17,6 +17,7 @@ import com.d102.common.repository.redis.TempAnalysisHashRepository;
 import com.d102.common.service.AsyncService;
 import com.d102.common.util.FastAiApi;
 import com.d102.common.util.OpenAiApi;
+import com.d102.common.util.ThreadHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
@@ -76,25 +77,27 @@ public class AsyncServiceImpl implements AsyncService {
                 JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
                 questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
                 isRetry = false;
-                Thread.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (RestClientException e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
                     handleGenerateAndSaveQuestion(resumeId, ExceptionType.OpenAiApiException);
                 }
+                ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (IOException e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
                     handleGenerateAndSaveQuestion(resumeId, ExceptionType.PdfConvertException);
                 }
+                ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (Exception e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
                     handleGenerateAndSaveQuestion(resumeId, ExceptionType.UnknownException);
                 }
+                ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             }
         }
 
@@ -129,17 +132,18 @@ public class AsyncServiceImpl implements AsyncService {
                 analysisRepository.saveAndFlush(analysis);
                 fastAiApi.analyzeVideo(analysisId);
                 isRetry = false;
-                Thread.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (RestClientException e1) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     handleAnalyzeVideoException(analysisId, ExceptionType.FastAiApiException);
                 }
+                ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (Exception e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     handleAnalyzeVideoException(analysisId, ExceptionType.UnknownException);
                 }
+                ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             }
         }
     }
