@@ -6,6 +6,7 @@ import com.d102.common.constant.TaskConstant;
 import com.d102.common.exception.ExceptionType;
 import com.d102.common.exception.custom.InvalidException;
 import com.d102.common.util.OpenAiApi;
+import com.d102.common.util.ThreadHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -27,17 +28,18 @@ public class FollowUpQuestionServiceImpl implements FollowUpQuestionService {
                 response = openAiApi.generateFollowUpQuestion(requestDto.getQuestion(), requestDto.getAnswer());
                 question = response.getChoices().getFirst().getMessage().getContent();
                 isRetry = false;
-                Thread.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (RestClientException e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     throw new InvalidException(ExceptionType.OpenAiApiException);
                 }
+                ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (Exception e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     throw new InvalidException(ExceptionType.UnknownException);
                 }
+                ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             }
         }
 
