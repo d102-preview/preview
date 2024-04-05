@@ -64,7 +64,7 @@ public class DownloadServiceImpl implements DownloadService {
             log.info("Thumbnail MimeType: {}", Files.probeContentType(thumbnailPath));
 
             return DownloadDto.ThumbnailResponse.builder()
-                    .thumbnailType(MediaType.parseMediaType(Files.probeContentType(thumbnailPath)).toString())
+                    .thumbnailType(Files.probeContentType(thumbnailPath))
                     .thumbnail(FileCopyUtils.copyToByteArray(thumbnailPath.toFile()))
                     .build();
         } catch (IOException e) {
