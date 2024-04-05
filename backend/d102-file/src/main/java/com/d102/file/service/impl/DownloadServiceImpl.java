@@ -29,7 +29,7 @@ public class DownloadServiceImpl implements DownloadService {
     public DownloadDto.ProfileResponse downloadProfile(Path profilePath) {
         try {
             return DownloadDto.ProfileResponse.builder()
-                    .profileType(MediaType.parseMediaType(Files.probeContentType(profilePath)).toString())
+                    .profileType(Files.probeContentType(profilePath))
                     .profile(FileCopyUtils.copyToByteArray(profilePath.toFile()))
                     .build();
         } catch (IOException e) {
@@ -47,7 +47,7 @@ public class DownloadServiceImpl implements DownloadService {
             return DownloadDto.ResumeResponse.builder()
                     .resumeName(resume.getFileName())
                     .resumeLength(resume.getFileSize().toString())
-                    .resumeType(MediaType.parseMediaType(Files.probeContentType(resumePath)).toString())
+                    .resumeType(Files.probeContentType(resumePath))
                     .resume(FileCopyUtils.copyToByteArray(resumePath.toFile()))
                     .build();
         } catch (Exception e) {
@@ -60,9 +60,6 @@ public class DownloadServiceImpl implements DownloadService {
          * TODO: 섬네일 다운로드 시 섬네일의 소유자가 로그인한 유저인지 확인하는 로직 추가 필요
          */
         try {
-            /* MimeType 로그 출력 */
-            log.info("Thumbnail MimeType: {}", Files.probeContentType(thumbnailPath));
-
             return DownloadDto.ThumbnailResponse.builder()
                     .thumbnailType(Files.probeContentType(thumbnailPath))
                     .thumbnail(FileCopyUtils.copyToByteArray(thumbnailPath.toFile()))
