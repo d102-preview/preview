@@ -17,7 +17,7 @@ import com.d102.common.repository.redis.QuestionListHashRepository;
 import com.d102.common.repository.redis.TempAnalysisHashRepository;
 import com.d102.common.response.Response;
 import com.d102.common.service.AsyncService;
-import com.d102.common.service.TaskService;
+import com.d102.common.service.SseService;
 import com.d102.common.util.FastAiApi;
 import com.d102.common.util.OpenAiApi;
 import com.d102.common.util.ThreadHelper;
@@ -51,7 +51,7 @@ public class AsyncServiceImpl implements AsyncService {
     private final AnalysisRepository analysisRepository;
     private final OpenAiApi openAiApi;
     private final FastAiApi fastAiApi;
-    private final TaskService taskService;
+    private final SseService sseService;
 
     @Async
     public void generateAndSaveQuestionList(Long resumeId, String email) {
@@ -117,7 +117,7 @@ public class AsyncServiceImpl implements AsyncService {
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
         successGenerateAndSaveQuestionList(resumeId);
-        taskService.sendNotification(email, new Response(ResumeConstant.RESUME, resume.getDisplayName()));
+        sseService.sendNotification(email, new Response(ResumeConstant.RESUME, resume.getDisplayName()));
     }
 
     @Async
