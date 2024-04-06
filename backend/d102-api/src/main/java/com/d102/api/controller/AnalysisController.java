@@ -3,7 +3,6 @@ package com.d102.api.controller;
 import com.d102.api.controller.docs.AnalysisControllerDocs;
 import com.d102.api.service.AnalysisService;
 import com.d102.common.constant.AnalysisConstant;
-import com.d102.common.constant.InterviewType;
 import com.d102.common.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

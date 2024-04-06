@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -66,7 +67,8 @@ public class AsyncServiceImpl implements AsyncService {
          * 3. 변환한 List<byte[]>를 OpenAiApi에 전달하여 질문 생성
          */
         String savePath = resume.getFilePath();
-        List<byte[]> imageList = convertPdfToImage(savePath);
+        /* List<byte[]> imageList = convertPdfToImage(savePath); */
+        String text = convertPdfToText(savePath);
         OpenAiApi.Response response = null;
         List<String> questionList = null;
 
@@ -77,7 +79,8 @@ public class AsyncServiceImpl implements AsyncService {
         boolean isRetry = true;
         while (isRetry && retryCount < TaskConstant.MAX_RETRY) {
             try {
-                response = openAiApi.generateQuestionList(imageList);
+                /* response = openAiApi.generateQuestionListByImage(imageList); */
+                response = openAiApi.generateQuestionListByText(text);
                 String jsonString = response.getChoices().getFirst().getMessage().getContent();
                 JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
                 questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
@@ -89,14 +92,14 @@ public class AsyncServiceImpl implements AsyncService {
                     handleGenerateAndSaveQuestion(resumeId, ExceptionType.OpenAiApiException);
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
-            } catch (IOException e) {
+            } /* catch (IOException e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
                     handleGenerateAndSaveQuestion(resumeId, ExceptionType.PdfConvertException);
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
-            } catch (Exception e) {
+            } */ catch (Exception e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
@@ -208,6 +211,14 @@ public class AsyncServiceImpl implements AsyncService {
                 imageList.add(imageBytes);
             }
             return imageList;
+        } catch (IOException e) {
+            throw new InvalidException(ExceptionType.PdfConvertException);
+        }
+    }
+
+    private String convertPdfToText(String savePath) {
+        try (PDDocument document = PDDocument.load(new File(savePath))) {
+            return new PDFTextStripper().getText(document);
         } catch (IOException e) {
             throw new InvalidException(ExceptionType.PdfConvertException);
         }
