@@ -56,6 +56,7 @@ public class AsyncServiceImpl implements AsyncService {
     @Async
     public void generateAndSaveQuestionList(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
+        String email = resume.getUser().getEmail();
         processGenerateAndSaveQuestionList(resumeId);
         saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
 
@@ -117,7 +118,7 @@ public class AsyncServiceImpl implements AsyncService {
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
         successGenerateAndSaveQuestionList(resumeId);
-        taskService.sendNotification(resume.getUser().getEmail(), new Response(ResumeConstant.RESUME, resume.getDisplayName()));
+        taskService.sendNotification(email, new Response(ResumeConstant.RESUME, resume.getDisplayName()));
     }
 
     @Async
