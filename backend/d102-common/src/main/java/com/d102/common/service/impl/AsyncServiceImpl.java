@@ -60,12 +60,12 @@ public class AsyncServiceImpl implements AsyncService {
         processGenerateAndSaveQuestionList(resumeId);
         saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
 
-        String savePath = resume.getFilePath();
         /**
          * 1. savePath에서 pdf 파일을 읽어내서 이미지로 변환하고 imagePathList를 생성
          * 2. imagePathList에서 List<byte[]>로 변환
          * 3. 변환한 List<byte[]>를 OpenAiApi에 전달하여 질문 생성
          */
+        String savePath = resume.getFilePath();
         List<byte[]> imageList = convertPdfToImage(savePath);
         OpenAiApi.Response response = null;
         List<String> questionList = null;
@@ -83,7 +83,6 @@ public class AsyncServiceImpl implements AsyncService {
                 questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
                 isRetry = false;
             } catch (RestClientException e) {
-                log.info("RestClientException: {}", e);
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
@@ -91,7 +90,6 @@ public class AsyncServiceImpl implements AsyncService {
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (IOException e) {
-                log.info("IOException: {}", e);
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
@@ -99,7 +97,6 @@ public class AsyncServiceImpl implements AsyncService {
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (Exception e) {
-                log.info("Exception: {}", e);
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
@@ -121,6 +118,10 @@ public class AsyncServiceImpl implements AsyncService {
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
         successGenerateAndSaveQuestionList(resumeId);
+
+        /**
+         * TODO: open-in-view 옵션을 false로 지정하면 여기에서 resume.getUser().getEmail()을 사용했을 때 no session이 발생하는데 이유 파악 필요
+         */
         sseService.sendNotification(email, new Response(ResumeConstant.RESUME, resume.getDisplayName()));
     }
 
@@ -199,15 +200,13 @@ public class AsyncServiceImpl implements AsyncService {
         try (PDDocument document = PDDocument.load(new File(savePath))) {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             List<byte[]> imageList = new ArrayList<>();
-
             for (int i = 0; i < document.getNumberOfPages(); i++) {
-                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, FileConstant.RESUME_RENDER_DPI, ImageType.RGB);
+                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, FileConstant.RESUME_RENDER_DPI, ImageType.GRAY);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(imageObject, FileConstant.RESUME_RENDER_EXTENSION, baos);
                 byte[] imageBytes = baos.toByteArray();
                 imageList.add(imageBytes);
             }
-
             return imageList;
         } catch (IOException e) {
             throw new InvalidException(ExceptionType.PdfConvertException);
