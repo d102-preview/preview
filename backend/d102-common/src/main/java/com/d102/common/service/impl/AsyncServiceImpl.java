@@ -91,6 +91,7 @@ public class AsyncServiceImpl implements AsyncService {
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (IOException e) {
+                log.info("IOException: {}", e);
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
@@ -98,6 +99,7 @@ public class AsyncServiceImpl implements AsyncService {
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
             } catch (Exception e) {
+                log.info("Exception: {}", e);
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
