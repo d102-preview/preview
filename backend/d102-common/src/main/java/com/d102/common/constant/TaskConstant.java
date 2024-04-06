@@ -8,7 +8,7 @@ public class TaskConstant {
     public static final String STATUS_PROCESS = "process";
     public static final String STATUS_SUCCESS = "success";
     public static final String STATUS_FAIL = "fail";
-    public static final int MAX_RETRY = 1;
+    public static final int MAX_RETRY = 5;
     public static final int RETRY_INTERVAL = 2000;
 
 }
