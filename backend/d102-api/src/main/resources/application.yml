@@ -19,7 +19,7 @@ spring:
     properties:
       format_sql: true
     show-sql: false
-    open-in-view: true
+    open-in-view: false
 
   # Redis Connection Info
   redis:
@@ -71,8 +71,10 @@ logging:
     org.hibernate.type.descriptor.sql: trace
 
 cors:
-  origins: >
-    http://localhost:5173
+  origin:
+    list: >
+      http://localhost:3000,
+      http://localhost:5173
 
 jwt:
   access-token-key: 40/22SrNuOvYU5HcMI/KVYCfdjn9Au2Rav345b1vf45b1xws

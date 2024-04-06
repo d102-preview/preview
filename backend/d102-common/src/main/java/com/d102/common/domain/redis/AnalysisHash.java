@@ -1,4 +1,4 @@
-package com.d102.api.domain.redis;
+package com.d102.common.domain.redis;
 
 import com.d102.common.constant.RedisConstant;
 import lombok.*;
