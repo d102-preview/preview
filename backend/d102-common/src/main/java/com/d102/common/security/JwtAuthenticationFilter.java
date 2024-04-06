@@ -33,10 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private JwtAuthenticationFilter(JwtManager jwtManager) {
         this.jwtManager = jwtManager;
-        List<RequestMatcher> matchers = Arrays.stream(SecurityConfig.PERMIT_URL_ARRAY)
+        List<RequestMatcher> matcherList = Arrays.stream(SecurityConfig.PERMIT_URL_LIST)
                 .map(AntPathRequestMatcher::new)
                 .collect(Collectors.toList());
-        this.permitMatcher = new OrRequestMatcher(matchers);
+        this.permitMatcher = new OrRequestMatcher(matcherList);
     }
 
     @Override

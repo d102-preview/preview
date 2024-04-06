@@ -4,7 +4,7 @@ import com.d102.common.domain.jpa.Resume;
 
 public interface AsyncService {
 
-    void generateAndSaveQuestionList(Long resumeId);
+    void generateAndSaveQuestionList(Long resumeId, String email);
 
     void analyzeVideo(Long analysisId);
 

@@ -2,6 +2,7 @@ package com.d102.common.service.impl;
 
 import com.d102.common.constant.FileConstant;
 import com.d102.common.constant.RedisConstant;
+import com.d102.common.constant.ResumeConstant;
 import com.d102.common.constant.TaskConstant;
 import com.d102.common.domain.jpa.Analysis;
 import com.d102.common.domain.jpa.Resume;
@@ -14,20 +15,23 @@ import com.d102.common.repository.jpa.ResumeQuestionRepository;
 import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.redis.QuestionListHashRepository;
 import com.d102.common.repository.redis.TempAnalysisHashRepository;
+import com.d102.common.response.Response;
 import com.d102.common.service.AsyncService;
+import com.d102.common.service.SseService;
 import com.d102.common.util.FastAiApi;
 import com.d102.common.util.OpenAiApi;
 import com.d102.common.util.ThreadHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -37,6 +41,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AsyncServiceImpl implements AsyncService {
@@ -48,20 +53,22 @@ public class AsyncServiceImpl implements AsyncService {
     private final AnalysisRepository analysisRepository;
     private final OpenAiApi openAiApi;
     private final FastAiApi fastAiApi;
+    private final SseService sseService;
 
     @Async
-    public void generateAndSaveQuestionList(Long resumeId) {
+    public void generateAndSaveQuestionList(Long resumeId, String email) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processGenerateAndSaveQuestionList(resumeId);
         saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
 
-        String savePath = resume.getFilePath();
         /**
          * 1. savePath에서 pdf 파일을 읽어내서 이미지로 변환하고 imagePathList를 생성
          * 2. imagePathList에서 List<byte[]>로 변환
          * 3. 변환한 List<byte[]>를 OpenAiApi에 전달하여 질문 생성
          */
-        List<byte[]> imageList = convertPdfToImage(savePath);
+        String savePath = resume.getFilePath();
+        /* List<byte[]> imageList = convertPdfToImage(savePath); */
+        String text = convertPdfToText(savePath);
         OpenAiApi.Response response = null;
         List<String> questionList = null;
 
@@ -72,7 +79,8 @@ public class AsyncServiceImpl implements AsyncService {
         boolean isRetry = true;
         while (isRetry && retryCount < TaskConstant.MAX_RETRY) {
             try {
-                response = openAiApi.generateQuestionList(imageList);
+                /* response = openAiApi.generateQuestionListByImage(imageList); */
+                response = openAiApi.generateQuestionListByText(text);
                 String jsonString = response.getChoices().getFirst().getMessage().getContent();
                 JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
                 questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
@@ -84,14 +92,14 @@ public class AsyncServiceImpl implements AsyncService {
                     handleGenerateAndSaveQuestion(resumeId, ExceptionType.OpenAiApiException);
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
-            } catch (IOException e) {
+            } /* catch (IOException e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
                     handleGenerateAndSaveQuestion(resumeId, ExceptionType.PdfConvertException);
                 }
                 ThreadHelper.sleep(TaskConstant.RETRY_INTERVAL);
-            } catch (Exception e) {
+            } */ catch (Exception e) {
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
@@ -113,6 +121,11 @@ public class AsyncServiceImpl implements AsyncService {
         resumeQuestionRepository.saveAllAndFlush(resumeQuestionList);
 
         successGenerateAndSaveQuestionList(resumeId);
+
+        /**
+         * TODO: open-in-view 옵션을 false로 지정하면 여기에서 resume.getUser().getEmail()을 사용했을 때 no session이 발생하는데 이유 파악 필요
+         */
+        sseService.sendNotification(email, new Response(ResumeConstant.RESUME, resume.getDisplayName()));
     }
 
     @Async
@@ -190,16 +203,22 @@ public class AsyncServiceImpl implements AsyncService {
         try (PDDocument document = PDDocument.load(new File(savePath))) {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             List<byte[]> imageList = new ArrayList<>();
-
             for (int i = 0; i < document.getNumberOfPages(); i++) {
-                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, FileConstant.RESUME_RENDER_DPI, ImageType.RGB);
+                BufferedImage imageObject = pdfRenderer.renderImageWithDPI(i, FileConstant.RESUME_RENDER_DPI, ImageType.GRAY);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(imageObject, FileConstant.RESUME_RENDER_EXTENSION, baos);
                 byte[] imageBytes = baos.toByteArray();
                 imageList.add(imageBytes);
             }
-
             return imageList;
+        } catch (IOException e) {
+            throw new InvalidException(ExceptionType.PdfConvertException);
+        }
+    }
+
+    private String convertPdfToText(String savePath) {
+        try (PDDocument document = PDDocument.load(new File(savePath))) {
+            return new PDFTextStripper().getText(document);
         } catch (IOException e) {
             throw new InvalidException(ExceptionType.PdfConvertException);
         }
