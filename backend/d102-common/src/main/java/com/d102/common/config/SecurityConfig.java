@@ -25,7 +25,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    public static final String[] PERMIT_URL_ARRAY = {
+    public static final String[] PERMIT_URL_LIST = {
             /* api */
             "/email/**",
             /* "/auth/**", */
@@ -40,14 +40,16 @@ public class SecurityConfig {
             "/download/profile/**",
             "/download/thumbnail/**",
             "/download/video/**",
+            /* sse */
+            "/task/sse/v2",
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    @Value("${cors.origins}")
-    List<String> origins;
+    @Value("${cors.origin.list}")
+    List<String> originList;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -66,7 +68,7 @@ public class SecurityConfig {
 
         /* authorization */
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(PERMIT_URL_ARRAY).permitAll()
+                        .requestMatchers(PERMIT_URL_LIST).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -79,7 +81,7 @@ public class SecurityConfig {
         /* cors */
         http.cors(cors->cors.configurationSource(request -> {
             CorsConfiguration corsConfig = new CorsConfiguration();
-            corsConfig.setAllowedOrigins(origins);
+            corsConfig.setAllowedOrigins(originList);
             corsConfig.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
             corsConfig.setAllowedHeaders(List.of("*"));
             corsConfig.addExposedHeader("Authorization");
