@@ -19,7 +19,7 @@ spring:
     properties:
       format_sql: true
     show-sql: false
-    open-in-view: false
+    open-in-view: true
 
   # Redis Connection Info
   redis:
