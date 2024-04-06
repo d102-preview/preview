@@ -11,7 +11,7 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private OctetStreamMessageConverter octetStreamMessageConverter;
+    private final OctetStreamMessageConverter octetStreamMessageConverter;
 
     @Autowired
     public WebConfig(OctetStreamMessageConverter octetStreamMessageConverter) {
