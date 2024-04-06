@@ -24,13 +24,13 @@ import com.d102.common.util.ThreadHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -40,6 +40,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AsyncServiceImpl implements AsyncService {
@@ -82,6 +83,7 @@ public class AsyncServiceImpl implements AsyncService {
                 questionList = jsonObject.entrySet().stream().map(entry -> entry.getValue().getAsString()).toList();
                 isRetry = false;
             } catch (RestClientException e) {
+                log.info("RestClientException: {}", e);
                 retryCount++;
                 if (retryCount >= TaskConstant.MAX_RETRY) {
                     failGenerateAndSaveQuestionList(resumeId);
