@@ -22,14 +22,14 @@ public class SseController implements SseControllerDocs {
     private final SseService sseService;
     private final SecurityHelper securityHelper;
 
-    @GetMapping(value = "/sse/v1", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/v1", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connectSseV1() {
         return ResponseEntity.ok()
                 .header("X-Accel-Buffering", "no")
                 .body(sseService.connectSseV1());
     }
 
-    @GetMapping(value = "/sse/v2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/v2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connectSseV2(@RequestParam("email") String email) {
         return ResponseEntity.ok()
                 .header("X-Accel-Buffering", "no")
