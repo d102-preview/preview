@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 async function enableMocking() {
   if (import.meta.env.VITE_NODE_ENV !== 'development') {
-    console.log('Sad');
+    // console.log('Sad');
     return;
   }
   const { worker } = await import('./mocks/browser.ts');

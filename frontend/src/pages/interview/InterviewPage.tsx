@@ -11,8 +11,8 @@ const InterviewPage = () => {
   return (
     <>
       <Header />
-      <main className="max-w-5xl mx-auto animate-showUp">
-        <div className="flex flex-row justify-around items-center pt-20 gap-10 min-w-[1040px]">
+      <main className="max-w-5xl mx-auto animate-showUp h-[calc(100vh-95px)]">
+        <div className="h-full flex flex-row justify-around items-center gap-10 min-w-[1040px]">
           <InterviewStartItem
             tittle="실전 면접"
             imgSrc={IMAGE1}

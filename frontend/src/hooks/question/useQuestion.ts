@@ -30,7 +30,7 @@ export const useQuestion = () => {
 
   const useGetRusmeQuestionList = (resumeId: number) => {
     return useQuery({
-      queryKey: ['ResumeQuestionList', resumeId],
+      queryKey: ['questionsInfinite', 'ResumeQuestionList', resumeId],
       queryFn: () => getResumeQuestionList(resumeId),
       enabled: resumeId !== -1, // enabled 값이 0 false이면 쿼리가 자동적으로 실행되는 것을 막을 수 있음
     });

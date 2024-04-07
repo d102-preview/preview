@@ -13,6 +13,11 @@ import ResultReportPage from './pages/result/ResultReportPage';
 import SignUpPage from './pages/signup/SignupPage';
 import ResumeSelectPage from './pages/interview/ResumeSelectPage';
 import ErrorPage from './pages/error/ErrorPage';
+import { useEffect } from 'react';
+import Toast from './components/@common/Toast/Toast';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import userStore from './stores/userStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
   {
@@ -86,6 +91,49 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const { isLogin } = userStore();
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (isLogin) {
+      // eventSource 객체 생성
+      const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASE_URL + '/file/sse/v1', {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('PREVIEW_ACCESS_TOKEN'),
+          Connetction: 'keep-alive',
+          'Content-Type': 'text/event-stream',
+        },
+        heartbeatTimeout: 86400000,
+      });
+
+      // eventSource Connection 됐을때
+      eventSource.onopen = () => {};
+
+      // eventSource 에러 시 할 일
+      eventSource.onerror = async event => {
+        console.log(event);
+        eventSource.close();
+      };
+
+      eventSource.addEventListener('preview', async function (event: any) {
+        const data = JSON.parse(event.data);
+
+        if (data && data.data.resume) {
+          queryClient.invalidateQueries({ queryKey: ['ResumeList'] });
+          queryClient.invalidateQueries({ queryKey: ['questionsInfinite'] });
+          Toast.success(`'${data.data.resume}'` + ' 질문이 생성되었습니다.');
+        }
+      });
+
+      eventSource.onmessage = async event => {
+        console.log(event);
+      };
+
+      return () => {
+        eventSource.close();
+      };
+    }
+  }, [isLogin]);
+
   return (
     <>
       <ToastContainer />

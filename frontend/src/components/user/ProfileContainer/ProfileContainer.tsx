@@ -12,8 +12,8 @@ const ProfileContainer = () => {
   if (isError) return <div>에러</div>;
 
   return (
-    <div className="w-[40%] min-w-[400px] h-[calc(100vh-3.5rem)] mx-auto py-10 animate-showUp">
-      <h1 className="text-2xl py-6">프로필</h1>
+    <div className="w-[40%] min-w-[400px] h-[calc(100vh-95px)] mx-auto py-20 animate-showUp">
+      <h1 className="text-2xl py-6 font-bold">프로필</h1>
       <MyInfo user={data.data.user} />
       <Resume resume={data.data.user.resumeList} />
       <EtcButton />
