@@ -85,7 +85,7 @@ public class UploadServiceImpl implements UploadService {
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
         resumeRepository.saveAndFlush(resume);
 
-        asyncService.generateAndSaveQuestionList(resume.getId(), securityHelper.getLoginUsername());
+        asyncService.generateQuestionListByText(resume.getId(), securityHelper.getLoginUsername());
 
         return uploadMapper.toResumeResponseDto(resume);
     }

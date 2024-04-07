@@ -32,7 +32,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -57,7 +56,7 @@ public class AsyncServiceImpl implements AsyncService {
     private final SseService sseService;
 
     @Async
-    public void generateAndSaveQuestionList(Long resumeId, String email) {
+    public void generateQuestionListByText(Long resumeId, String email) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processGenerateAndSaveQuestionList(resumeId);
         saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
@@ -80,8 +79,6 @@ public class AsyncServiceImpl implements AsyncService {
         boolean isRetry = true;
         while (isRetry && retryCount < TaskConstant.MAX_RETRY) {
             try {
-                log.info("#################################################");
-                log.info("retryCount: {}", retryCount);
                 /* response = openAiApi.generateQuestionListByImage(imageList); */
                 response = openAiApi.generateQuestionListByText(text);
                 String jsonString = response.getChoices().getFirst().getMessage().getContent();
