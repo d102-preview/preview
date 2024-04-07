@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import Toast from './components/@common/Toast/Toast';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import userStore from './stores/userStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,7 @@ const router = createBrowserRouter([
 
 function App() {
   const { isLogin } = userStore();
+  const queryClient = useQueryClient();
   useEffect(() => {
     if (isLogin) {
       // eventSource 객체 생성
@@ -116,6 +118,8 @@ function App() {
         const data = JSON.parse(event.data);
 
         if (data && data.data.resume) {
+          queryClient.invalidateQueries({ queryKey: ['ResumeList'] });
+          queryClient.invalidateQueries({ queryKey: ['questionsInfinite'] });
           Toast.success(`'${data.data.resume}'` + ' 질문이 생성되었습니다.');
         }
       });
