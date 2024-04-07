@@ -80,6 +80,8 @@ public class AsyncServiceImpl implements AsyncService {
         boolean isRetry = true;
         while (isRetry && retryCount < TaskConstant.MAX_RETRY) {
             try {
+                log.info("#################################################");
+                log.info("retryCount: {}", retryCount);
                 /* response = openAiApi.generateQuestionListByImage(imageList); */
                 response = openAiApi.generateQuestionListByText(text);
                 String jsonString = response.getChoices().getFirst().getMessage().getContent();
