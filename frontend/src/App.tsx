@@ -112,13 +112,12 @@ function App() {
         eventSource.close();
       };
 
-      eventSource.addEventListener('preview', async function (event) {
+      eventSource.addEventListener('preview', async function (event: any) {
         const data = JSON.parse(event.data);
 
         if (data && data.data.resume) {
           Toast.success(`'${data.data.resume}'` + ' 질문이 생성되었습니다.');
         }
-        console.log(data);
       });
 
       eventSource.onmessage = async event => {
