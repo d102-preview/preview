@@ -51,6 +51,15 @@ public interface TaskControllerDocs {
     })
     ResponseEntity<SseEmitter> connectSseV2(@NotNull(message = "not null") String email);
 
+    @Operation(summary = "SSE 테스트", description = "SSE 테스트를 위한 API를 호출한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공시 SSE 테스트 결과를 반환한다.",
+                    content = @Content(schemaProperties = {
+                            @SchemaProperty(name = "result", schema = @Schema(defaultValue = "ok", description = "요청 성공"))
+                    }))
+    })
+    Response sendNotification();
+
 
     class CompleteResponse { public Boolean complete; }
 

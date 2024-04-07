@@ -5,6 +5,7 @@ import com.d102.api.service.TaskService;
 import com.d102.common.constant.TaskConstant;
 import com.d102.common.response.Response;
 import com.d102.common.service.SseService;
+import com.d102.common.util.SecurityHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class TaskController implements TaskControllerDocs {
 
     private final TaskService taskService;
     private final SseService sseService;
+    private final SecurityHelper securityHelper;
 
     @GetMapping("/question/list/{resumeId}")
     public Response checkQuestionListTask(@PathVariable("resumeId") Long resumeId) {
@@ -41,6 +43,12 @@ public class TaskController implements TaskControllerDocs {
         return ResponseEntity.ok()
                 .header("X-Accel-Buffering", "no")
                 .body(sseService.connectSseV2(email));
+    }
+
+    @GetMapping(value = "/send")
+    public Response sendNotification() {
+        sseService.sendNotification(securityHelper.getLoginUsername(), new Response(TaskConstant.SSE_TEST, TaskConstant.STATUS_SUCCESS));
+        return new Response();
     }
 
 }

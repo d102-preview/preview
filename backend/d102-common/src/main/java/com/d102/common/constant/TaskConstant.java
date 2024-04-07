@@ -4,6 +4,7 @@ public class TaskConstant {
 
     public static final Long SSE_TIMEOUT = 1000L * 60 * 60 * 24;
     public static final String SSE_EVENT = "preview";
+    public static final String SSE_TEST = "test";
     public static final String STATUS = "status";
     public static final String STATUS_PROCESS = "process";
     public static final String STATUS_SUCCESS = "success";
