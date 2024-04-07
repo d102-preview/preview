@@ -7,11 +7,13 @@ import com.d102.common.response.Response;
 import com.d102.common.service.SseService;
 import com.d102.common.util.SecurityHelper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SseServiceImpl implements SseService {
@@ -50,14 +52,20 @@ public class SseServiceImpl implements SseService {
     }
 
     public void sendNotification(String email, Response response) {
+        log.info("=========================== Service Notification Before =============================");
+        log.info("sendNotification email: {}, response: {}", email, response);
         SseEmitter sseEmitter = sseEmitterMap.get(email);
+        log.info("sendNotification sseEmitter: {}", sseEmitter);
         if (sseEmitter != null) {
             try {
+                log.info("sendNotification sseEmitter send: {}", response);
                 sseEmitter.send(SseEmitter.event().name(TaskConstant.SSE_EVENT).data(response));
             } catch (Exception e) {
+                log.error("sendNotification sseEmitter send error: {}", e);
                 throw new InvalidException(ExceptionType.SseSendException);
             }
         }
+        log.info("=========================== Service Notification After =============================");
     }
 
 }
