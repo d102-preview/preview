@@ -1,4 +1,4 @@
-package com.d102.common.service.impl;
+package com.d102.file.service.impl;
 
 import com.d102.common.constant.FileConstant;
 import com.d102.common.constant.RedisConstant;
@@ -16,11 +16,11 @@ import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.redis.QuestionListHashRepository;
 import com.d102.common.repository.redis.TempAnalysisHashRepository;
 import com.d102.common.response.Response;
-import com.d102.common.service.AsyncService;
-import com.d102.common.service.SseService;
 import com.d102.common.util.FastAiApi;
 import com.d102.common.util.OpenAiApi;
 import com.d102.common.util.ThreadHelper;
+import com.d102.file.service.AsyncService;
+import com.d102.file.service.SseService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public class AsyncServiceImpl implements AsyncService {
     private final SseService sseService;
 
     @Async
-    public void generateAndSaveQuestionList(Long resumeId, String email) {
+    public void generateQuestionListByText(Long resumeId, String email) {
         Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new InvalidException(ExceptionType.ResumeNotFoundException));
         processGenerateAndSaveQuestionList(resumeId);
         saveResumeWithException(resume, TaskConstant.STATUS_PROCESS);
