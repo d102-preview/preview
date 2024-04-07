@@ -56,6 +56,12 @@ public class SseServiceImpl implements SseService {
         log.info("sendNotification email: {}, response: {}", email, response);
         SseEmitter sseEmitter = sseEmitterMap.get(email);
         log.info("sendNotification sseEmitter: {}", sseEmitter);
+        /**
+         * log sseEmitter key-value
+         */
+        for (Map.Entry<String, SseEmitter> entry : sseEmitterMap.entrySet()) {
+            log.info("sendNotification sseEmitterMap key: {}, value: {}", entry.getKey(), entry.getValue());
+        }
         if (sseEmitter != null) {
             try {
                 log.info("sendNotification sseEmitter send: {}", response);
