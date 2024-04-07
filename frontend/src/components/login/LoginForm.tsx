@@ -137,7 +137,7 @@ const LoginForm = () => {
       {
         onSuccess: res => {
           Toast.success('로그인에 성공했습니다.');
-          login(res.data.user.name, res.data.user.profileImageUrl);
+          login(res.data.user.name, res.data.user.profileImageUrl, res.data.user.email);
           navigate('/');
         },
 
