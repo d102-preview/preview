@@ -1,4 +1,4 @@
-package com.d102.common.service;
+package com.d102.file.service;
 
 import com.d102.common.response.Response;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

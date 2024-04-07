@@ -41,7 +41,7 @@ public class SecurityConfig {
             "/download/thumbnail/**",
             "/download/video/**",
             /* sse */
-            "/task/sse/v2",
+            "/sse/v2",
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
