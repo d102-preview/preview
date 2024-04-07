@@ -1,6 +1,4 @@
-package com.d102.common.service;
-
-import com.d102.common.domain.jpa.Resume;
+package com.d102.file.service;
 
 public interface AsyncService {
 
