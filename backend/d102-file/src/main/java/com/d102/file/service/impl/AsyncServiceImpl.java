@@ -1,4 +1,4 @@
-package com.d102.common.service.impl;
+package com.d102.file.service.impl;
 
 import com.d102.common.constant.FileConstant;
 import com.d102.common.constant.RedisConstant;
@@ -16,11 +16,11 @@ import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.redis.QuestionListHashRepository;
 import com.d102.common.repository.redis.TempAnalysisHashRepository;
 import com.d102.common.response.Response;
-import com.d102.common.service.AsyncService;
-import com.d102.common.service.SseService;
 import com.d102.common.util.FastAiApi;
 import com.d102.common.util.OpenAiApi;
 import com.d102.common.util.ThreadHelper;
+import com.d102.file.service.AsyncService;
+import com.d102.file.service.SseService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +32,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
