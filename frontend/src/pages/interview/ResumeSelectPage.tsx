@@ -44,8 +44,8 @@ const ResumeSelectPage = () => {
   return (
     <>
       <Header />
-      <div className="w-[45rem]  min-w-[45rem] h-[calc(100vh-3.5rem)] mx-auto py-20 animate-showUp">
-        <div className="h-full">
+      <div className="w-[45rem]  min-w-[45rem] h-[calc(100vh-80px)] mx-auto animate-showUp">
+        <div className="h-full flex flex-col justify-center">
           <h1 className="text-3xl font-bold">이력서를 선택해주세요</h1>
           <p className="text-sm pt-3">이력서에 기반한 질문을 제공합니다</p>
           <div className="flex pt-16">
