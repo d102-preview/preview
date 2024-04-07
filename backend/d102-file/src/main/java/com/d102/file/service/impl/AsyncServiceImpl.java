@@ -126,11 +126,7 @@ public class AsyncServiceImpl implements AsyncService {
         /**
          * TODO: open-in-view 옵션을 false로 지정하면 여기에서 resume.getUser().getEmail()을 사용했을 때 no session이 발생하는데 이유 파악 필요
          */
-        log.info("######################## SSE Notification Before ########################");
-        log.info("Email: {} Resume: {} QuestionList: {}", email, resume.getDisplayName(), questionList);
         sseService.sendNotification(email, new Response(ResumeConstant.RESUME, resume.getDisplayName()));
-        log.info("######################## SSE Notification After ########################");
-        log.info("Email: {} Resume: {} QuestionList: {}", email, resume.getDisplayName(), questionList);
     }
 
     @Async

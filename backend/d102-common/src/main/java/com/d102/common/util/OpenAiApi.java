@@ -76,7 +76,7 @@ public class OpenAiApi {
     }
 
     private HttpEntity<String> generateQuestionListByText(StringBuilder contentJson, HttpHeaders headers) {
-        String payloadTemplate = "{ \"model\": \"gpt-4\", " +
+        String payloadTemplate = "{ \"model\": \"gpt-4-turbo-preview\", " +
                 "\"messages\": [ " +
                 "%s ] }";
 
@@ -86,7 +86,7 @@ public class OpenAiApi {
     }
 
     private HttpEntity<String> getFollowUpQuestionHttpEntity(StringBuilder questionAndAnswerJson, HttpHeaders headers) {
-        String payloadTemplate = "{ \"model\": \"gpt-4\", " +
+        String payloadTemplate = "{ \"model\": \"gpt-4-turbo-preview\", " +
                 "\"messages\": [ " +
                 "%s ] }";
 
