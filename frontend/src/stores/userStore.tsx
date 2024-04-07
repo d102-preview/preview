@@ -5,7 +5,8 @@ interface IUserState {
   isLogin: boolean;
   name: string;
   profileUrl: string;
-  login: (name: string, profileUrl: string) => void;
+  email: string;
+  login: (name: string, profileUrl: string, email: string) => void;
   logout: () => void;
   updateProfile: (profileUrl: string) => void;
 }
@@ -16,9 +17,10 @@ const userStore = create(
       isLogin: false,
       name: '',
       profileUrl: '',
-      login: (name, profileUrl) => set({ isLogin: true, name: name, profileUrl: profileUrl }),
+      email: '',
+      login: (name, profileUrl, email) => set({ isLogin: true, name: name, profileUrl: profileUrl, email: email }),
       logout: () => {
-        set({ isLogin: false, name: '', profileUrl: '' });
+        set({ isLogin: false, name: '', profileUrl: '', email: '' });
         localStorage.setItem('PREVIEW_ACCESS_TOKEN', '');
       },
       updateProfile: profileUrl => set({ profileUrl: profileUrl }),
