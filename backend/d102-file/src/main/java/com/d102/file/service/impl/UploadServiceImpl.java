@@ -14,7 +14,7 @@ import com.d102.common.repository.jpa.AnalysisRepository;
 import com.d102.common.repository.jpa.InterviewRepository;
 import com.d102.common.repository.jpa.ResumeRepository;
 import com.d102.common.repository.jpa.UserRepository;
-import com.d102.common.service.AsyncService;
+import com.d102.file.service.AsyncService;
 import com.d102.common.util.FastAiApi;
 import com.d102.common.util.SecurityHelper;
 import com.d102.common.util.TimeConverter;
@@ -24,11 +24,9 @@ import com.d102.file.service.UploadService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +34,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -88,7 +85,7 @@ public class UploadServiceImpl implements UploadService {
         resume.setUser(userRepository.findByEmail(securityHelper.getLoginUsername()).orElseThrow(() -> new NotFoundException(ExceptionType.UserNotFoundException)));
         resumeRepository.saveAndFlush(resume);
 
-        asyncService.generateAndSaveQuestionList(resume.getId());
+        asyncService.generateQuestionListByText(resume.getId(), securityHelper.getLoginUsername());
 
         return uploadMapper.toResumeResponseDto(resume);
     }
