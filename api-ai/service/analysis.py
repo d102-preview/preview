@@ -63,7 +63,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     )
     video_path = video_path_encoded
     logger.info(
-        f"Success to encoding and resizing: {timedelta(second=(time.time() - st))}"
+        f"Success to encoding and resizing: {timedelta(seconds=(time.time() - st))}"
     )
 
     logger.info(f"Start facial emotional recognition. {video_path = }")
@@ -72,7 +72,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     st = time.time()
     frame_list = resnet18_model.extract_frames(video_path, msec=(1000 // settings.FPS))
     logger.debug(
-        f"{len(frame_list)} frames are extracted from the input video: {timedelta(second=(time.time() - st))}"
+        f"{len(frame_list)} frames are extracted from the input video: {timedelta(seconds=(time.time() - st))}"
     )
 
     # Save thumbnail and update record
@@ -96,7 +96,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     cnt_none = len([x for x in face_list if x is None])
     cnt_face = len(face_list) - cnt_none
     logger.debug(
-        f"{cnt_face} faces / {len(frame_list)} frames: {timedelta(second=(time.time() - st))}"
+        f"{cnt_face} faces / {len(frame_list)} frames: {timedelta(seconds=(time.time() - st))}"
     )
 
     # Count by emotion for calculate ratio
@@ -113,7 +113,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
 
         predict_list.append(pred)
 
-    logger.info(f"Process {cnt_face} faces: {timedelta(second=(time.time() - st))}")
+    logger.info(f"Process {cnt_face} faces: {timedelta(seconds=(time.time() - st))}")
 
     # Calculate ratio
     ratio_values = np.array(list(cnt_emotion.values()))
