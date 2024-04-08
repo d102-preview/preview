@@ -1,8 +1,9 @@
 import errno
 import json
 import os
+import time
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import ffmpeg
 import numpy as np
@@ -48,20 +49,31 @@ def _facial_emotional_recognition(record: Analysis) -> None:
     )
     logger.debug(f"Encoding and resizing to {video_path_encoded}")
 
+    st = time.time()
     (
         ffmpeg.input(video_path)
         .filter("scale", -1, 720)
-        .output(video_path_encoded, vcodec="libx264", crf=20, loglevel="quiet")
+        .output(
+            video_path_encoded,
+            video_bitrate="1500k",
+            vcodec="libx264",
+            loglevel="quiet",
+        )
         .run(overwrite_output=True)
     )
     video_path = video_path_encoded
-    logger.info(f"Success to encoding and resizing")
+    logger.info(
+        f"Success to encoding and resizing: {timedelta(seconds=(time.time() - st))}"
+    )
 
     logger.info(f"Start facial emotional recognition. {video_path = }")
 
     # Extract frames
+    st = time.time()
     frame_list = resnet18_model.extract_frames(video_path, msec=(1000 // settings.FPS))
-    logger.debug(f"{len(frame_list)} frames are extracted from the input video")
+    logger.debug(
+        f"{len(frame_list)} frames are extracted from the input video: {timedelta(seconds=(time.time() - st))}"
+    )
 
     # Save thumbnail and update record
     thumbnail_path = record.video_path.replace(".mp4", ".jpg")
@@ -72,22 +84,26 @@ def _facial_emotional_recognition(record: Analysis) -> None:
             str(settings.DATA_HOME), thumbnail_path.replace("/app/files/", "")
         )
     logger.debug(f"{thumbnail_path = }")
-    resnet18_model.save_thumbnail(frame_list[0], thumbnail_path)
+    resnet18_model.save_thumbnail(frame_list[5], thumbnail_path)
 
     # Detect face from the frames
     face_list = []
+    st = time.time()
     for img in frame_list:
         _, face_img = resnet18_model.detect_faces(img, (224, 224))
         face_list.append(face_img)
 
     cnt_none = len([x for x in face_list if x is None])
     cnt_face = len(face_list) - cnt_none
-    logger.debug(f"{cnt_face} faces / {len(frame_list)} frames")
+    logger.debug(
+        f"{cnt_face} faces / {len(frame_list)} frames: {timedelta(seconds=(time.time() - st))}"
+    )
 
     # Count by emotion for calculate ratio
     cnt_emotion = {}
 
     predict_list = []
+    st = time.time()
     for img in face_list:
         pred = None
         if img is not None:
@@ -97,7 +113,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
 
         predict_list.append(pred)
 
-    logger.info(f"Process {cnt_face} faces")
+    logger.info(f"Process {cnt_face} faces: {timedelta(seconds=(time.time() - st))}")
 
     # Calculate ratio
     ratio_values = np.array(list(cnt_emotion.values()))
