@@ -11,7 +11,7 @@ import neutral from '@/assets/lotties/neutral.json';
 import xMark from '@/assets/lotties/xMark.json';
 import error from '@/assets/lotties/error.json';
 import main from '@/assets/lotties/main.json';
-import mock from '@/assets/lotties/mock.json';
+import mock from '@/assets/lotties/mock2.json';
 
 export const errorOptions = {
   loop: true,
