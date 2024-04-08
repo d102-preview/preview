@@ -84,7 +84,7 @@ def _facial_emotional_recognition(record: Analysis) -> None:
             str(settings.DATA_HOME), thumbnail_path.replace("/app/files/", "")
         )
     logger.debug(f"{thumbnail_path = }")
-    resnet18_model.save_thumbnail(frame_list[0], thumbnail_path)
+    resnet18_model.save_thumbnail(frame_list[5], thumbnail_path)
 
     # Detect face from the frames
     face_list = []
