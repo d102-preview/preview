@@ -84,6 +84,8 @@ class ResNet18Model:
         faces = self._classifier.detectMultiScale(
             img, scaleFactor=1.1, minNeighbors=5, minSize=dsize
         )
+        if len(faces) == 0:
+            return None, None
 
         face_img = None
 
