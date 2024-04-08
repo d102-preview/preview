@@ -1,8 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 import InterviewStartItem from './InterviewStartItem';
 import Button from '../@common/Button/Button';
-import mainImage from '@/assets/images/interview1.png';
-import mockImage from '@/assets/images/interview2.png';
+import main from '@/assets/lotties/main.json';
+import mock from '@/assets/lotties/mock.json';
 
 const meta = {
   title: 'interview/StartItem',
@@ -17,7 +17,14 @@ type Story = StoryObj<typeof meta>;
 export const MainInterview: Story = {
   args: {
     tittle: '실전 면접',
-    imgSrc: mainImage,
+    animationOptions: {
+      loop: true,
+      autoplay: true,
+      animationData: main,
+      rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+      },
+    },
     subTitle: '내 면접 실력을 알고 싶다면?',
     advantageList: [
       '내 이력서를 기반으로 한 면접 시뮬레이션',
@@ -42,7 +49,14 @@ export const MainInterview: Story = {
 export const MockInterview: Story = {
   args: {
     tittle: '면접 연습',
-    imgSrc: mockImage,
+    animationOptions: {
+      loop: true,
+      autoplay: true,
+      animationData: mock,
+      rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+      },
+    },
     subTitle: '내 면접 실력을 쌓고쌓고쌓고 싶다면?',
     advantageList: [
       '실제 면접과 유사한 환경에서의 면접 연습',
