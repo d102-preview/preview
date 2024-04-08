@@ -10,6 +10,8 @@ import negative from '@/assets/lotties/negative.json';
 import neutral from '@/assets/lotties/neutral.json';
 import xMark from '@/assets/lotties/xMark.json';
 import error from '@/assets/lotties/error.json';
+import main from '@/assets/lotties/main.json';
+import mock from '@/assets/lotties/mock.json';
 
 export const errorOptions = {
   loop: true,
@@ -114,6 +116,24 @@ export const smileOptions = {
   loop: true,
   autoplay: true,
   animationData: smile,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
+
+export const mainOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: main,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
+
+export const mockOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: mock,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice',
   },

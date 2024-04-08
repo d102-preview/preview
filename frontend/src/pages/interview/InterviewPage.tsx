@@ -1,5 +1,4 @@
-import IMAGE1 from '@/assets/images/interview1.png';
-import IMAGE2 from '@/assets/images/interview2.png';
+import { mainOptions, mockOptions } from '@/assets/lotties/lottieOptions';
 import Button from '@/components/@common/Button/Button';
 import Header from '@/components/@common/Header/Header';
 import InterviewStartItem from '@/components/interview/InterviewStartItem';
@@ -15,7 +14,7 @@ const InterviewPage = () => {
         <div className="h-full flex flex-row justify-around items-center gap-10 min-w-[1040px]">
           <InterviewStartItem
             tittle="실전 면접"
-            imgSrc={IMAGE1}
+            animationOptions={mainOptions}
             subTitle="내 면접 실력을 알고 싶다면?"
             advantageList={[
               '내 이력서를 기반으로 한 면접 시뮬레이션',
@@ -37,7 +36,7 @@ const InterviewPage = () => {
           </InterviewStartItem>
           <InterviewStartItem
             tittle="면접 연습"
-            imgSrc={IMAGE2}
+            animationOptions={mockOptions}
             subTitle="내 면접 실력을 쌓고 싶다면?"
             advantageList={[
               '실제 면접과 유사한 환경에서의 면접 연습',
