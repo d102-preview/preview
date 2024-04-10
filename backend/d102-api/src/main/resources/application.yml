@@ -1,47 +1,22 @@
-# Configuration File (Local)
+spring:
+  profiles:
+    active: local
+    group:
+      local: local, common
+      prod: prod, common
 
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+
+# Server
 server:
   port: 8081
   servlet:
     context-path: /api
-
-spring:
-  # DB Connection Info
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/d102
-    username: danbi
-    password: 1234
-
-  # Jpa Setting
-  jpa:
-    hibernate:
-      ddl-auto: none # none, create, update, create-drop
-    defer-datasource-initialization: true
-    properties:
-      format_sql: true
-    show-sql: false
-    open-in-view: true
-
-  # Redis Connection Info
-  redis:
-    host: localhost
-    port: 6379
-    password: 1234
-
-  # SMTP Info
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: secret
-    password: secret
-    properties:
-      mail:
-        smtp:
-          auth: true
-          timeout: 5000
-          starttls:
-            enable: true
 
 # Swagger
 springdoc:
@@ -60,37 +35,3 @@ springdoc:
       version: 0.0.1
   override-with-generic-response: false
   use-fqn: true
-
-# logging
-logging:
-  level:
-    root: INFO
-    web: DEBUG
-    com.d102.api: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web.cors: DEBUG
-    org.hibernate.sql: DEBUG
-    org.hibernate.type.descriptor.sql: trace
-
-cors:
-  origin:
-    list: >
-      http://localhost:3000,
-      http://localhost:5173
-
-jwt:
-  access-token-key: 40/22SrNuOvYU5HcMI/KVYCfdjn9Au2Rav345b1vf45b1xws
-  refresh-token-key: ZuLXKJgsW29iW2uB5V9xxh0QW8Xihxdm0VP31zginC412xc431c
-  access-token-validity-in-seconds: 86400
-  refresh-token-validity-in-seconds: 604800
-
-download:
-  profile:
-    base-url: http://localhost:8082/file/download/profile?path=
-
-open-ai:
-  url: https://api.openai.com/v1/chat/completions
-  secret-key: secret
-
-fast-ai:
-  url: http://localhost:8000/ai/analysis/
