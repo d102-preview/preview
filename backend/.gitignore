@@ -4,6 +4,9 @@
 ### application-prod ###
 application-prod.yml
 
+### application-local ###
+application-local.yml
+
 ### Gradle ###
 .gradle
 **/build/
