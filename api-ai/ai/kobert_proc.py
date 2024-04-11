@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 import torch
 from kobert_tokenizer import KoBERTTokenizer
-from loguru import logger
 from torch import nn
 from torch.utils.data import Dataset
 from transformers import BertModel
@@ -182,7 +181,7 @@ class KobertModel:
 
         answer = None
 
-        for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(
+        for _, (token_ids, valid_length, segment_ids, label) in enumerate(
             test_dataloader
         ):
             token_ids = token_ids.long().to(self._device)
