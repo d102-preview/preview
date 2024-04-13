@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export TAG=0.0.1
-export REGISTRY=j10d102.p.ssafy.io:5000
+export REGISTRY=j10d102.p.ssafy.io
 
 export IMG_NAME=api-ai
 
