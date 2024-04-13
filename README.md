@@ -58,16 +58,20 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 <img src="./exec/img/backend.png" alt="backend" width="650px"/>
 <br/>
 
+### AI
+
+<img src="./exec/img/ai.png" alt="ai" width="650px"/>
+<br/>
+
 ### Infra
 
 <img src="./exec/img/infra.png" alt="infra" width="650px"/>
-
 <br/>
 
 ### Tools
 
 <img src="./exec/img/tool.png" alt="tool" width="650px"/>
-
+<br/>
 <br/>
 
 <div id="3"></div>
@@ -97,8 +101,8 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 ### 이력서 업로드 및 이력서 기반 질문 생성
 
-- 이력서 등록 시 이력서 조회, 미리보기, 다운로드 기능 제공
-- 등록한 이력서를 기반으로 질문리스트에서 질문 조회 가능
+-   이력서 등록 시 이력서 조회, 미리보기, 다운로드 기능 제공
+-   등록한 이력서를 기반으로 질문리스트에서 질문 조회 가능
 
 <img src="./frontend/src/assets/images/resume.gif" alt="이력서" width="800px" />
 
@@ -106,8 +110,8 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 ### 면접 연습 모드
 
-- 질문 리스트 중 3개의 질문을 선택 후 면접 진행
-- 면접 연습 진행 중 키워드, 스크립트 조회 가능
+-   질문 리스트 중 3개의 질문을 선택 후 면접 진행
+-   면접 연습 진행 중 키워드, 스크립트 조회 가능
 
 <img src="./frontend/src/assets/images/mock.gif" alt="면접 연습" width="800px" />
 
@@ -115,9 +119,9 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 ### 실전 면접 모드
 
-- 이력서 기반 질문이나 공통 질문 중 랜덤 질문으로 면접 진행
-- 이전 답변에 대한 무작위 꼬리질문 제공
-- 면접 진행 중 키워드, 스크립트 조회 불가
+-   이력서 기반 질문이나 공통 질문 중 랜덤 질문으로 면접 진행
+-   이전 답변에 대한 무작위 꼬리질문 제공
+-   면접 진행 중 키워드, 스크립트 조회 불가
 
 <img src="./frontend/src/assets/images/main.gif" alt="실전 면접" width="800px" />
 
@@ -125,8 +129,8 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 ### 분석 결과 조회
 
-- 하나의 면접 질문에 대한 답변 분석 결과 제공
-- 감정 부석, 답변 의도, 키워드 포함 여부 조회 가능
+-   하나의 면접 질문에 대한 답변 분석 결과 제공
+-   감정 부석, 답변 의도, 키워드 포함 여부 조회 가능
 
 <img src="./frontend/src/assets/images/result.gif" alt="실전 면접" width="800px" />
 
@@ -170,6 +174,6 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 ### 5. [포팅메뉴얼]()
 
-- [AI 포팅메뉴얼](https://github.com/d102-preview/preview/blob/main/exec/01.%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC-api-ai.md)
-- [Backend 포팅메뉴얼](https://github.com/d102-preview/preview/blob/main/exec/01.%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC-backend.md)
-- [Frontend 포팅메뉴얼](https://github.com/d102-preview/preview/blob/main/exec/01.%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC-frontend.md)
+-   [AI 포팅메뉴얼](https://github.com/d102-preview/preview/blob/main/exec/01.%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC-api-ai.md)
+-   [Backend 포팅메뉴얼](https://github.com/d102-preview/preview/blob/main/exec/01.%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC-backend.md)
+-   [Frontend 포팅메뉴얼](https://github.com/d102-preview/preview/blob/main/exec/01.%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC-frontend.md)
