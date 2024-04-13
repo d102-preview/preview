@@ -5,11 +5,10 @@ services:
     container_name: frontend
     networks:
       - d102-network
-    image: nginx:latest
+    image: ${REGISTRY}/frontend:${TAG}
     restart: always
     volumes:
       - /home/jenkins/deploy/frontend/conf.d:/etc/nginx/conf.d
-      - /home/jenkins/deploy/frontend/dist:/usr/share/nginx/html
     environment:
       TZ: "Asia/Seoul"
 

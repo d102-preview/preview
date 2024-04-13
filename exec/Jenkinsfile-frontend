@@ -30,6 +30,23 @@ pipeline {
       }
     }
 
+    stage('Build and Push Images') {
+      steps {
+        sh 'cd exec/ && chmod +x docker-build-push-frontend.sh && ./docker-build-push-frontend.sh'
+      }
+    }
+
+    stage('Copy .env to Deploy Directory') {
+      steps {
+        script {
+          // backend와 동일하게 사용 가능해서 우선 그대로 사용
+          withCredentials([file(credentialsId: 'be_env_docker_compose', variable: 'DC_ENV')]) {
+            sh 'cd exec/ && chmod +x copy-docker-compose-env-fe.sh && ./copy-docker-compose-env-fe.sh'
+          }
+        }
+      }
+    }
+
     stage('Deploy Frontend') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
         sshPublisher(
@@ -40,13 +57,6 @@ pipeline {
               configName: 'application', 
               verbose: true,
               transfers: [
-                sshTransfer(
-                  sourceFiles: 'frontend/dist/**',
-                  removePrefix: 'frontend/dist/',
-                  // remote의 경우에는 system의 remote directory가 앞에 prefix로 붙음
-                  // "/home"으로 해서 사용자에 따라 다르게 갈 수 있도록 했음
-                  remoteDirectory: '/jenkins/deploy/frontend/dist'
-                ),
                 sshTransfer(
                   sourceFiles: 'exec/deploy-frontend/**',
                   removePrefix: 'exec/deploy-frontend/',

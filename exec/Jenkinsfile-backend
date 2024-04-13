@@ -53,7 +53,7 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                  sourceFiles: 'exec/deploy-backend/*',
+                  sourceFiles: 'exec/deploy-backend/**',
                   removePrefix: 'exec/deploy-backend/',
                   remoteDirectory: '/jenkins/deploy/backend',
                   execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
