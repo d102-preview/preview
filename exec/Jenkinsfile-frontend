@@ -23,8 +23,8 @@ pipeline {
       steps {
         script {
           withCredentials([file(credentialsId: 'front_profile', variable: 'PROD_ENV')]) {
-            sh 'cd exec/ && chmod +x project-setup-frontend.sh && ./project-setup-frontend.sh'
-            sh 'cd exec/ && chmod +x project-build-frontend.sh && ./project-build-frontend.sh'
+            sh 'cd exec/ && chmod +x project-setup-fe.sh && ./project-setup-fe.sh'
+            sh 'cd exec/ && chmod +x project-build-fe.sh && ./project-build-fe.sh'
           }
         }
       }
@@ -32,7 +32,7 @@ pipeline {
 
     stage('Build and Push Images') {
       steps {
-        sh 'cd exec/ && chmod +x docker-build-push-frontend.sh && ./docker-build-push-frontend.sh'
+        sh 'cd exec/ && chmod +x docker-build-push-fe.sh && ./docker-build-push-fe.sh'
       }
     }
 

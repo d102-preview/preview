@@ -19,8 +19,8 @@ pipeline {
       steps {
         script {
           withCredentials([file(credentialsId: 'back_profile', variable: 'PROD_YML')]) {
-            sh 'cd exec/ && chmod +x project-setup-backend.sh && ./project-setup-backend.sh'
-            sh 'cd exec/ && chmod +x project-build-backend.sh && ./project-build-backend.sh'
+            sh 'cd exec/ && chmod +x project-setup-be.sh && ./project-setup-be.sh'
+            sh 'cd exec/ && chmod +x project-build-be.sh && ./project-build-be.sh'
           }
         }
       }
@@ -28,7 +28,7 @@ pipeline {
     
     stage('Build and Push Images') {
       steps {
-        sh 'cd exec/ && chmod +x docker-build-push-backend.sh && ./docker-build-push-backend.sh'
+        sh 'cd exec/ && chmod +x docker-build-push-be.sh && ./docker-build-push-be.sh'
       }
     }
 
@@ -36,7 +36,7 @@ pipeline {
       steps {
         script {
           withCredentials([file(credentialsId: 'be_env_docker_compose', variable: 'DC_ENV')]) {
-            sh 'cd exec/ && chmod +x copy-docker-compose-env.sh && ./copy-docker-compose-env.sh'
+            sh 'cd exec/ && chmod +x copy-docker-compose-env-be.sh && ./copy-docker-compose-env-be.sh'
           }
         }
       }
