@@ -130,6 +130,8 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 <img src="./frontend/src/assets/images/result.gif" alt="실전 면접" width="800px" />
 
+<br/>
+
 <div id="6"></div>
 
 ## 👨🏻‍💻 개발 팀 소개
