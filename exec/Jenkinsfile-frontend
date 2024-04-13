@@ -67,9 +67,11 @@ pipeline {
                       sourceFiles: 'exec/deploy-frontend/**',
                       removePrefix: 'exec/deploy-frontend/',
                       remoteDirectory: '/jenkins/deploy/frontend',
-                      execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
-                                    ./stop-frontend.sh; \
-                                    ./start-frontend.sh'
+                      execCommand: """
+                                  cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh
+                                  """
                     )
                   ]
                 )
