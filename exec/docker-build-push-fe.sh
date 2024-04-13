@@ -10,5 +10,3 @@ docker build -t $REGISTRY/$IMG_NAME:$TAG ../frontend
 docker login $REGISTRY -u $USERNAME -p $PASSWORD
 
 docker push $REGISTRY/$IMG_NAME:$TAG
-
-docker rmi $REGISTRY/$IMG_NAME:$TAG
