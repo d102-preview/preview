@@ -7,8 +7,8 @@ export IMG_NAME=api-ai
 
 docker login $REGISTRY -u $USERNAME -p $PASSWORD
 
-docker build -t "$REGISTRY/$IMG_NAME:$TAG" ../api-ai
+docker build -t $REGISTRY/$IMG_NAME:$TAG ../api-ai
 
-docker push "$REGISTRY/$IMG_NAME:$TAG"
+docker push $REGISTRY/$IMG_NAME:$TAG
 
-docker rmi "$REGISTRY/$IMG_NAME:$TAG"
+docker rmi $REGISTRY/$IMG_NAME:$TAG
