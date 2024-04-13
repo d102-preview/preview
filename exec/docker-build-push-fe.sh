@@ -1,10 +1,12 @@
 #!/bin/bash 
 
 export TAG=0.0.1
-export REGISTRY=localhost:5000
+export REGISTRY=j10d102.p.ssafy.io:5000
 
-docker build -t $REGISTRY/frontend:$TAG ../frontend
+export IMG_NAME=frontend
 
-docker push $REGISTRY/frontend:$TAG
+docker build -t $REGISTRY/$IMG_NAME:$TAG ../frontend
 
-docker rmi $REGISTRY/frontend:$TAG
+docker push $REGISTRY/$IMG_NAME:$TAG
+
+docker rmi $REGISTRY/$IMG_NAME:$TAG

@@ -1,13 +1,16 @@
 #!/bin/bash 
 
 export TAG=0.0.1
-export REGISTRY=localhost:5000
+export REGISTRY=j10d102.p.ssafy.io:5000
 
-docker build -t $REGISTRY/backend-api:$TAG ../backend/d102-api
-docker build -t $REGISTRY/backend-file:$TAG ../backend/d102-file
+export IMG_NAME_API=backend-api
+export IMG_NAME_FILE=backend-file
 
-docker push $REGISTRY/backend-api:$TAG
-docker push $REGISTRY/backend-file:$TAG
+docker build -t $REGISTRY/$IMG_NAME_API:$TAG ../backend/d102-api
+docker build -t $REGISTRY/$IMG_NAME_FILE:$TAG ../backend/d102-file
 
-docker rmi $REGISTRY/backend-api:$TAG
-docker rmi $REGISTRY/backend-file:$TAG
+docker push $REGISTRY/$IMG_NAME_API:$TAG
+docker push $REGISTRY/$IMG_NAME_FILE:$TAG
+
+docker rmi $REGISTRY/$IMG_NAME_API:$TAG
+docker rmi $REGISTRY/$IMG_NAME_FILE:$TAG

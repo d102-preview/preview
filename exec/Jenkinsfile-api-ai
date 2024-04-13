@@ -45,8 +45,8 @@ pipeline {
                     removePrefix: 'exec/deploy-api-ai/',
                     remoteDirectory: '/jenkins/deploy/api-ai',
                     execCommand: 'cd /home/jenkins/deploy/api-ai && chmod 755 *.sh; \
-                                  ./stop-ai.sh; \
-                                  ./start-ai.sh'
+                                  ./stop-api-ai.sh; \
+                                  ./start-api-ai.sh'
                 ),
                 sshTransfer(
                     execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
