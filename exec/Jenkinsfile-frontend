@@ -70,7 +70,6 @@ pipeline {
                       remoteDirectory: '/jenkins/deploy/frontend',
                       execCommand: """
                                   cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
-                                  docker login j10d102.p.ssafy.io -u ${USERNAME} -p ${PASSWORD}; \
                                   ./stop-frontend.sh; \
                                   ./start-frontend.sh
                                   """
