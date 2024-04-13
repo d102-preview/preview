@@ -53,27 +53,29 @@ pipeline {
 
     stage('Deploy Frontend') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
-        withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-          sshPublisher(
-            continueOnError: false,
-            failOnError: true,
-            publishers: [
-              sshPublisherDesc(
-                configName: 'application', 
-                verbose: true,
-                transfers: [
-                  sshTransfer(
-                    sourceFiles: 'exec/deploy-frontend/**',
-                    removePrefix: 'exec/deploy-frontend/',
-                    remoteDirectory: '/jenkins/deploy/frontend',
-                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
-                                  ./stop-frontend.sh; \
-                                  ./start-frontend.sh'
-                  )
-                ]
-              )
-            ]
-          )
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sshPublisher(
+              continueOnError: false,
+              failOnError: true,
+              publishers: [
+                sshPublisherDesc(
+                  configName: 'application', 
+                  verbose: true,
+                  transfers: [
+                    sshTransfer(
+                      sourceFiles: 'exec/deploy-frontend/**',
+                      removePrefix: 'exec/deploy-frontend/',
+                      remoteDirectory: '/jenkins/deploy/frontend',
+                      execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                    ./stop-frontend.sh; \
+                                    ./start-frontend.sh'
+                    )
+                  ]
+                )
+              ]
+            )
+          }
         }
       }
     }
