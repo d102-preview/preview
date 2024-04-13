@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Private learning file
+02.inference.ipynb
+05.inference.ipynb
+
 # Distribution / packaging
 .Python
 build/
