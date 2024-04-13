@@ -32,7 +32,11 @@ pipeline {
 
     stage('Build and Push Images') {
       steps {
-        sh 'cd exec/ && chmod +x docker-build-push-fe.sh && ./docker-build-push-fe.sh'
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sh 'cd exec/ && chmod +x docker-build-push-fe.sh && ./docker-build-push-fe.sh'
+          }
+        }
       }
     }
 
