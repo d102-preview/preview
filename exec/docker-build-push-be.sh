@@ -14,4 +14,4 @@ docker build -t $REGISTRY/$IMG_NAME_FILE:$TAG ../backend/d102-file
 docker push $REGISTRY/$IMG_NAME_API:$TAG
 docker push $REGISTRY/$IMG_NAME_FILE:$TAG
 
-docker prune -a -f
+docker system prune -a -f
