@@ -46,6 +46,7 @@ pipeline {
         script {
           withCredentials([file(credentialsId: 'fe_env_docker_compose', variable: 'DC_ENV')]) {
             sh 'cd exec/ && chmod +x copy-docker-compose-env-fe.sh && ./copy-docker-compose-env-fe.sh'
+            sh 'sleep 10'
           }
         }
       }
