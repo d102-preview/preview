@@ -5,6 +5,8 @@ export REGISTRY=j10d102.p.ssafy.io
 
 export IMG_NAME=api-ai
 
+docker login $REGISTRY -u $USERNAME -p $PASSWORD
+
 docker build -t "$REGISTRY/$IMG_NAME:$TAG" ../api-ai
 
 docker push "$REGISTRY/$IMG_NAME:$TAG"

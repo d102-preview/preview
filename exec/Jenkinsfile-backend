@@ -2,6 +2,7 @@ pipeline {
   agent any
   
   environment {
+    HOME = "${env.WORKSPACE}"
     GRADLE_USER_HOME = "$WORKSPACE/.gradle"
     CI = false
 
@@ -28,7 +29,11 @@ pipeline {
     
     stage('Build and Push Images') {
       steps {
-        sh 'cd exec/ && chmod +x docker-build-push-be.sh && ./docker-build-push-be.sh'
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sh 'cd exec/ && chmod +x docker-build-push-be.sh && ./docker-build-push-be.sh'
+          }
+        }
       }
     }
 
@@ -44,31 +49,41 @@ pipeline {
 
     stage('Deploy Backend') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
-        sshPublisher(
-          continueOnError: false,
-          failOnError: true,
-          publishers: [
-            sshPublisherDesc(
-              configName: 'application', 
-              verbose: true,
-              transfers: [
-                sshTransfer(
-                  sourceFiles: 'exec/deploy-backend/**',
-                  removePrefix: 'exec/deploy-backend/',
-                  remoteDirectory: '/jenkins/deploy/backend',
-                  execCommand: 'cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
-                                ./stop-backend.sh; \
-                                ./start-backend.sh'
-                ),
-                sshTransfer(
-                  execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
-                                ./stop-frontend.sh; \
-                                ./start-frontend.sh'
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sshPublisher(
+              continueOnError: false,
+              failOnError: true,
+              publishers: [
+                sshPublisherDesc(
+                  configName: 'application', 
+                  verbose: true,
+                  transfers: [
+                    sshTransfer(
+                      sourceFiles: 'exec/deploy-backend/**',
+                      removePrefix: 'exec/deploy-backend/',
+                      remoteDirectory: '/jenkins/deploy/backend',
+                      execCommand: """
+                                  docker login j10d102.p.ssafy.io -u ${USERNAME} -p ${PASSWORD}; \
+                                  cd /home/jenkins/deploy/backend && chmod 755 *.sh; \
+                                  ./stop-backend.sh; \
+                                  ./start-backend.sh'
+                                  """
+                    ),
+                    sshTransfer(
+                      execCommand: """
+                                  docker login j10d102.p.ssafy.io -u ${USERNAME} -p ${PASSWORD}; \
+                                  cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                  ./stop-frontend.sh; \
+                                  ./start-frontend.sh'
+                                  """
+                    )
+                  ]
                 )
               ]
             )
-          ]
-        )
+          }
+        }
       }
     }
 

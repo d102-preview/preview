@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   environment {
+    HOME = "${env.WORKSPACE}"
     CI = false
 
     GIT_MESSAGE = """${sh(
@@ -16,7 +17,11 @@ pipeline {
   stages {
     stage('Build and Push Images') {
       steps {
-        sh 'cd exec/ && chmod +x docker-build-push-ai.sh && ./docker-build-push-ai.sh'
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sh 'cd exec/ && chmod +x docker-build-push-ai.sh && ./docker-build-push-ai.sh'
+          }
+        }
       }
     }
 
@@ -32,31 +37,41 @@ pipeline {
 
     stage('Deploy API-AI') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
-        sshPublisher(
-          continueOnError: false,
-          failOnError: true,
-          publishers: [
-            sshPublisherDesc(
-              configName: 'application',
-              verbose: true,
-              transfers: [
-                sshTransfer(
-                    sourceFiles: 'exec/deploy-api-ai/*',
-                    removePrefix: 'exec/deploy-api-ai/',
-                    remoteDirectory: '/jenkins/deploy/api-ai',
-                    execCommand: 'cd /home/jenkins/deploy/api-ai && chmod 755 *.sh; \
-                                  ./stop-api-ai.sh; \
-                                  ./start-api-ai.sh'
-                ),
-                sshTransfer(
-                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sshPublisher(
+              continueOnError: false,
+              failOnError: true,
+              publishers: [
+                sshPublisherDesc(
+                  configName: 'application',
+                  verbose: true,
+                  transfers: [
+                    sshTransfer(
+                      sourceFiles: 'exec/deploy-api-ai/*',
+                      removePrefix: 'exec/deploy-api-ai/',
+                      remoteDirectory: '/jenkins/deploy/api-ai',
+                      execCommand: """
+                                docker login j10d102.p.ssafy.io -u ${USERNAME} -p ${PASSWORD}; \
+                                cd /home/jenkins/deploy/api-ai && chmod 755 *.sh; \
+                                ./stop-api-ai.sh; \
+                                ./start-api-ai.sh'
+                                """
+                    ),
+                    sshTransfer(
+                      execCommand: """
+                                  docker login j10d102.p.ssafy.io -u ${USERNAME} -p ${PASSWORD}; \
+                                  cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
                                   ./stop-frontend.sh; \
                                   ./start-frontend.sh'
+                                  """
+                    )
+                  ]
                 )
               ]
             )
-          ]
-        )
+          }
+        }
       }
     }
 
