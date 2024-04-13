@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  nginx:
+  frontend:
     container_name: frontend
     networks:
       - d102-network

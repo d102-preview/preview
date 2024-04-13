@@ -39,8 +39,7 @@ pipeline {
     stage('Copy .env to Deploy Directory') {
       steps {
         script {
-          // backend와 동일하게 사용 가능해서 우선 그대로 사용
-          withCredentials([file(credentialsId: 'be_env_docker_compose', variable: 'DC_ENV')]) {
+          withCredentials([file(credentialsId: 'fe_env_docker_compose', variable: 'DC_ENV')]) {
             sh 'cd exec/ && chmod +x copy-docker-compose-env-fe.sh && ./copy-docker-compose-env-fe.sh'
           }
         }
