@@ -11,4 +11,4 @@ docker build -t $REGISTRY/$IMG_NAME:$TAG ../frontend
 
 docker push $REGISTRY/$IMG_NAME:$TAG
 
-docker rmi $REGISTRY/$IMG_NAME:$TAG
+docker prune -a -f
