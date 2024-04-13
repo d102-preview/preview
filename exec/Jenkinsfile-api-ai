@@ -55,7 +55,7 @@ pipeline {
                                 docker login j10d102.p.ssafy.io -u ${USERNAME} -p ${PASSWORD}; \
                                 cd /home/jenkins/deploy/api-ai && chmod 755 *.sh; \
                                 ./stop-api-ai.sh; \
-                                ./start-api-ai.sh'
+                                ./start-api-ai.sh
                                 """
                     ),
                     sshTransfer(
@@ -63,7 +63,7 @@ pipeline {
                                   docker login j10d102.p.ssafy.io -u ${USERNAME} -p ${PASSWORD}; \
                                   cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
                                   ./stop-frontend.sh; \
-                                  ./start-frontend.sh'
+                                  ./start-frontend.sh
                                   """
                     )
                   ]
