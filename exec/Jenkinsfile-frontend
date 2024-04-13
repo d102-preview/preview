@@ -6,6 +6,8 @@ pipeline {
     NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
     CI = false
 
+    DOCKER_CREDS = credentials('docker_registry_id_pw')
+
     GIT_MESSAGE = """${sh(
         script: 'git show -s --pretty="* Commit %h by %cn <%ce>%n* Title: %s%n* Date: %cI"',
         returnStdout: true
@@ -53,28 +55,26 @@ pipeline {
 
     stage('Deploy Frontend') {
       steps([$class: 'BapSshPromotionPublisherPlugin']) {
-        withCredentials([usernamePassword(credentialsId: 'docker_registry_id_pw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-          sshPublisher(
-            continueOnError: false,
-            failOnError: true,
-            publishers: [
-              sshPublisherDesc(
-                configName: 'application', 
-                verbose: true,
-                transfers: [
-                  sshTransfer(
-                    sourceFiles: 'exec/deploy-frontend/**',
-                    removePrefix: 'exec/deploy-frontend/',
-                    remoteDirectory: '/jenkins/deploy/frontend',
-                    execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
-                                  ./stop-frontend.sh; \
-                                  ./start-frontend.sh'
-                  )
-                ]
-              )
-            ]
-          )
-        }
+        sshPublisher(
+          continueOnError: false,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'application', 
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                  sourceFiles: 'exec/deploy-frontend/**',
+                  removePrefix: 'exec/deploy-frontend/',
+                  remoteDirectory: '/jenkins/deploy/frontend',
+                  execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
+                                ./stop-frontend.sh; \
+                                ./start-frontend.sh'
+                )
+              ]
+            )
+          ]
+        )
       }
     }
 
