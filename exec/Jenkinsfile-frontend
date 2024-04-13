@@ -48,7 +48,7 @@ pipeline {
                   remoteDirectory: '/jenkins/deploy/frontend/dist'
                 ),
                 sshTransfer(
-                  sourceFiles: 'exec/deploy-frontend/*',
+                  sourceFiles: 'exec/deploy-frontend/**',
                   removePrefix: 'exec/deploy-frontend/',
                   remoteDirectory: '/jenkins/deploy/frontend',
                   execCommand: 'cd /home/jenkins/deploy/frontend && chmod 755 *.sh; \
