@@ -2,4 +2,4 @@
 
 docker compose pull
 docker compose up -d
-docker system prune -f
+docker system prune -a -f
