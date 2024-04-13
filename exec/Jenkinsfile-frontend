@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   environment {
+    HOME = "${env.WORKSPACE}"
     NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
     CI = false
 
