@@ -140,7 +140,7 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 ## 👨🏻‍💻 개발 팀 소개
 
-|             <img src="https://github.com/cheesecat47.png" width="150">              |   <img src="https://github.com/danbeeS2.png" width="150">   | <img src="https://github.com/ho97s.png" width="150">  |  <img src="https://github.com/hyun812.png" width="150">   |   <img src="https://github.com/rosielsh.png" width="150">   |   <img src="https://github.com/ubermensch100326.png" width="150">   |
+|             <img src="https://github.com/cheesecat47.png" width="150">              |   <img src="https://github.com/danbeeS2.png" width="150">   | <img src="https://github.com/ho97s.png" width="150">  |  <img src="https://github.com/hyun812.png" width="150">   |   <img src="https://github.com/rosielsh.png" width="150">   |       <img src="https://github.com/choihojo.png" width="150">       |
 | :---------------------------------------------------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------------: | :---------------------------------------------------------: | :-----------------------------------------------------------------: |
 | [신주용<br>@cheesecat47](https://github.com/cheesecat47)<br/>`BE` `AI`<br/>`Leader` | [박단비<br>@danbeeS2](https://github.com/danbeeS2)<br/>`FE` | [서준호<br>@ho97s](https://github.com/ho97s)<br/>`BE` | [이승현<br>@hyun812](https://github.com/hyun812)<br/>`FE` | [이수화<br>@rosielsh](https://github.com/rosielsh)<br/>`FE` | [최호조<br>@choihojo](https://github.com/choihojo)<br/>`BE` `Infra` |
 
