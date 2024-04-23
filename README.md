@@ -3,7 +3,11 @@
   <br />
   <h2>당신의 AI 면접 파트너, preview</h2>
 
-<h4>SSAFY 특화 PJT D102 4반에 내린 단비팀</h4>
+<div>SSAFY 특화 PJT D102 4반에 내린 단비팀</div>
+<b>🏆 삼성 청년 SW 아카데미(SSAFY) 특화 프로젝트 최우수상 수상 🏆</b>
+
+<br/>
+<br/>
 
 <p align='center'>
     <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/d102-preview/preview&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false"/>
@@ -140,9 +144,9 @@ preview를 통해 당신만의 질문을 생성하고 피드백까지 받아보�
 
 ## 👨🏻‍💻 개발 팀 소개
 
-|             <img src="https://github.com/cheesecat47.png" width="150">              |   <img src="https://github.com/danbeeS2.png" width="150">   | <img src="https://github.com/ho97s.png" width="150">  |  <img src="https://github.com/hyun812.png" width="150">   |   <img src="https://github.com/rosielsh.png" width="150">   |       <img src="https://github.com/choihojo.png" width="150">       |
+|             <img src="https://github.com/cheesecat47.png" width="150">              |   <img src="https://github.com/danbeeS2.png" width="150">   | <img src="https://github.com/hoing97s.png" width="150">  |  <img src="https://github.com/hyun812.png" width="150">   |   <img src="https://github.com/rosielsh.png" width="150">   |       <img src="https://github.com/choihojo.png" width="150">       |
 | :---------------------------------------------------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------------: | :---------------------------------------------------------: | :-----------------------------------------------------------------: |
-| [신주용<br>@cheesecat47](https://github.com/cheesecat47)<br/>`BE` `AI`<br/>`Leader` | [박단비<br>@danbeeS2](https://github.com/danbeeS2)<br/>`FE` | [서준호<br>@ho97s](https://github.com/ho97s)<br/>`BE` | [이승현<br>@hyun812](https://github.com/hyun812)<br/>`FE` | [이수화<br>@rosielsh](https://github.com/rosielsh)<br/>`FE` | [최호조<br>@choihojo](https://github.com/choihojo)<br/>`BE` `Infra` |
+| [신주용<br>@cheesecat47](https://github.com/cheesecat47)<br/>`BE` `AI`<br/>`Leader` | [박단비<br>@danbeeS2](https://github.com/danbeeS2)<br/>`FE` | [서준호<br>@hoing97s](https://github.com/hoing97s)<br/>`BE` | [이승현<br>@hyun812](https://github.com/hyun812)<br/>`FE` | [이수화<br>@rosielsh](https://github.com/rosielsh)<br/>`FE` | [최호조<br>@choihojo](https://github.com/choihojo)<br/>`BE` `Infra` |
 
 <br />
 
